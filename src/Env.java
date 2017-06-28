@@ -1,4 +1,7 @@
 //  Env.java
+//
+//  Overall environment for the market simulation.  
+//
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -76,47 +79,11 @@ public class Env extends SimState {
    
     //
     //  Env()
-    //     Constructor; argument list imposed by MASON
+    //     Constructor. argument list imposed by MASON
     //
     
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
-    }
-
-    //
-    //  openRead
-    //     Open a file and catch exceptions
-    //
-
-    public static FileReader openRead(String name) {
-        FileReader fr ;
-        try {
-            fr = new FileReader(name); 
-            return fr;
-            } 
-        catch (IOException ex) {
-            System.out.println("Error reading: "+name);
-            System.exit(0);
-        } 
-        return null ;
-    }
-
-    // 
-    //  openWrite
-    //     Open a file for writing and catch exceptions
-    //
-
-    public static PrintWriter openWrite(String name) {
-        PrintWriter pw;
-        try {
-            pw = new PrintWriter(name); 
-            return pw;
-            } 
-        catch (IOException ex) {
-            System.out.println("Error opening "+name+" for writing");
-            System.exit(0);
-        } 
-        return null ;
     }
 
     //
@@ -172,7 +139,7 @@ public class Env extends SimState {
         fileProps = args[0] ;
         props = new Properties() ;
         try {
-           props.load(openRead(fileProps)); 
+           props.load(Util.openRead(fileProps)); 
         } catch (IOException ex) {
            System.out.println("Error reading the property file");
            System.exit(0);
@@ -206,10 +173,10 @@ public class Env extends SimState {
         //  Open and initialize output and log files
         //
 
-        out = openWrite(stem+"_out.csv");
+        out = Util.openWrite(stem+"_out.csv");
         out.write("Population,ID,Prob,P,Q");
 
-        log = openWrite(stem+"_log.txt");
+        log = Util.openWrite(stem+"_log.txt");
         log.println(
            "Scenario Settings:\n" +
            "   Network map: "+fileConfig+"\n"+
@@ -257,7 +224,7 @@ public class Env extends SimState {
         Agent cur_agent;
         String items[];
 
-        br = new BufferedReader(openRead(fileConfig));
+        br = new BufferedReader(Util.openRead(fileConfig));
         br.readLine();
         
         //initiate the arraylist of agents

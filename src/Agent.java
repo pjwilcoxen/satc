@@ -283,7 +283,7 @@ public class Agent implements Steppable {
 	String line = "";
 	String cvsSplitBy = ",";
         
-        br = new BufferedReader(Env.openRead(Env.fileDraws));
+        br = new BufferedReader(Util.openRead(Env.fileDraws));
         br.readLine();
         
         line = br.readLine();
