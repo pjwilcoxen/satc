@@ -66,12 +66,12 @@ public class Agent implements Steppable {
     int[] bl;
     //indicates the upper and lower level around the balance prices considering transaction cost
     int[][] p_c;
-    //indicates the parent node
+
+    //  Parent and list of children
+
     Agent Parent;
-    //indicates the kid nodes
-    ArrayList<Agent> Children;
-    //indicates the number of kids
-    int childrenSize;
+    ArrayList<Agent> children;
+
 
     public Bid[] getAggD(int drop) {
         return aggD.get(drop);
@@ -91,11 +91,7 @@ public class Agent implements Steppable {
 
     public void setParent(Agent Parent) {
         this.Parent = Parent;
-        Parent.appendChildren(this);
-    }
-
-    public int getBidSize() {
-        return bidSize;
+        Parent.children.add(this);
     }
 
     public void setBidSize(int bidSize) {
@@ -111,23 +107,6 @@ public class Agent implements Steppable {
         this.bids = bids;
     }
 
-    public void appendChildren(Agent k) {
-        Children.add(k);
-        childrenSize++;
-    }
-
-    public Agent getChildren(int i) {
-        return Children.get(i);
-    }
-
-    public void setChildrenSize(int childrenSize) {
-        this.childrenSize = childrenSize;
-    }
-
-    public int getChildrenSize() {
-        return childrenSize;
-    }
-        
     public int getBl(int drop) {
         return bl[drop];
     }
@@ -136,65 +115,25 @@ public class Agent implements Steppable {
         this.bl[drop] = bl;
     }
         
-    public void setQueueSizeD(int queueSize, int drop) {
-        queueSizeD[drop] = queueSize;
+    //
+    //  clearQueuesD
+    //
+
+    private void clearQueuesD() {
+        for (int i = 0; i < 4; i++) 
+            queueSizeD[i] = 0;
     }
 
-    public int getQueueSizeD(int drop) {
-        return queueSizeD[drop];
-    }
-        
     public Bid[][] getQueueD(int drop) {
         return queueD.get(drop);
     }
 
-    
     public int getType() {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-    
-    public int getSd_type() {
-        return sd_type;
-    }
-
-    public void setSd_type(int sd_type) {
-        this.sd_type = sd_type;
-    }
-
-    public double getLoad() {
-        return load;
-    }
-
-    public double getElast() {
-        return elast;
-    }
-
-    public void setLoad(double load) {
-        this.load = load;
-    }
-
-    public void setElast(double elast) {
-        this.elast = elast;
-    }
-        
-    public void setUp_id(int up_id) {
-        this.up_id = up_id;
-    }
-
     public int getUp_id() {
         return up_id;
-    }
-
-    public void setOwn_id(int down_id) {
-        own_id = down_id;
-    }
-
-    public int getOwn_id() {
-        return own_id;
     }
 
     public int[] getP_c(int drop) {
@@ -228,9 +167,8 @@ public class Agent implements Steppable {
         this.own_id = own_id;
 
         time = 0;
-        childrenSize = 0;
         Parent = mkt;
-        Children = new ArrayList<>();
+        children = new ArrayList<>();
         e = (Env) state;
         bl = new int[4];
         ran = new int[3][];
@@ -239,7 +177,7 @@ public class Agent implements Steppable {
         cap  = e.transCap;
 
         if (mkt != null) {
-            mkt.appendChildren(this);
+            mkt.children.add(this);
         }
 
         queueSizeD = new int[4];
@@ -256,9 +194,7 @@ public class Agent implements Steppable {
         aggD.add(new Bid[maxbids]);
         aggD.add(new Bid[maxbids]);
 
-        for (int i = 0; i < 4; i++) {
-            setQueueSizeD(0, i);
-        }
+        clearQueuesD();
 
     }
     
@@ -280,8 +216,8 @@ public class Agent implements Steppable {
         ArrayList<double[]> loads = new ArrayList<double[]>();
   
         BufferedReader br = null;
-	String line = "";
-	String cvsSplitBy = ",";
+	     String line = "";
+        String cvsSplitBy = ",";
         
         br = new BufferedReader(Util.openRead(Env.fileDraws));
         br.readLine();
@@ -326,7 +262,7 @@ public class Agent implements Steppable {
         for(int j = 0 ; j < 4 ; j ++){
             aggBidD = getQueueD(j)[0];
             //call aggregate function by the number of each queue's size
-            for(int i=1 ; i < getQueueSizeD(j) ; i++)
+            for(int i=1 ; i < queueSizeD[j] ; i++)
                 aggBidD = aggregateDemand(aggBidD, getQueueD(j)[i]);
             //populate the agg arraylist 
             agg.add(aggBidD);
@@ -608,9 +544,9 @@ public class Agent implements Steppable {
             double[] tmp = new double[2];
             try {
                 //find random values from the input file "testdraw.csv"
-                tmp = findnewLoad();
-                setLoad(tmp[0]);
-                setElast(tmp[1]);
+                tmp   = findnewLoad();
+                load  = tmp[0];
+                elast = tmp[1];
 
             } catch (IOException ex) {
                 Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
@@ -620,24 +556,24 @@ public class Agent implements Steppable {
             //initiate the numbber of spteps to create curve
             int step = (int) (runiform() * maxstep + 2);
             //call draw function based on the type (demand/supply) of end users
-            if (getSd_type() == 0) {
-                setBids(drawDemand(getLoad(), getElast(), step));
+            if (sd_type == 0) {
+                setBids(drawDemand(load, elast, step));
             } else {
-                setBids(drawSupply(getLoad(), getElast(), step));
+                setBids(drawSupply(load, elast, step));
             }
 
             //set the number of steps in each curve
             setBidSize(3 * step);
             //populate the parents queues for different cases of dropped nodes 
-            e.dbus.toQueue(getBids(), 0, Parent.getOwn_id(), getSd_type());
-            if (getArrayIndex(Parent.getRan()[0], getOwn_id() % 100) < 0) {
-                e.dbus.toQueue(getBids(), 1, Parent.getOwn_id(), getSd_type());
+            e.dbus.toQueue(getBids(), 0, Parent.own_id, sd_type);
+            if (getArrayIndex(Parent.getRan()[0], own_id % 100) < 0) {
+                e.dbus.toQueue(getBids(), 1, Parent.own_id, sd_type);
             }
-            if (getArrayIndex(Parent.getRan()[1], getOwn_id() % 100) < 0) {
-                e.dbus.toQueue(getBids(), 2, Parent.getOwn_id(), getSd_type());
+            if (getArrayIndex(Parent.getRan()[1], own_id % 100) < 0) {
+                e.dbus.toQueue(getBids(), 2, Parent.own_id, sd_type);
             }
-            if (getArrayIndex(Parent.getRan()[2], getOwn_id() % 100) < 0) {
-                e.dbus.toQueue(getBids(), 3, Parent.getOwn_id(), getSd_type());
+            if (getArrayIndex(Parent.getRan()[2], own_id % 100) < 0) {
+                e.dbus.toQueue(getBids(), 3, Parent.own_id, sd_type);
             }
     }
 
@@ -660,14 +596,11 @@ public class Agent implements Steppable {
             for (int i = 0; i < 4; i++) {
                 tmp = addCost(agg.get(i), cost, i);
                 if (tmp != null) {
-                    e.dbus.toQueue(addCapacity(tmp, cap), i, Parent.getOwn_id(), 0);
+                    e.dbus.toQueue(addCapacity(tmp, cap), i, Parent.own_id, 0);
                 }
             }
 
-            //set the size of queues to zeto 
-            for (int i = 0; i < 4; i++) {
-                setQueueSizeD(0, i);
-            }
+            clearQueuesD();
 
     }
 
@@ -702,25 +635,25 @@ public class Agent implements Steppable {
                 //write the balance prices on csv file for each case of dropped nodes
                 switch (j) {
                     case 0:
-                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",0,"
+                        Env.out.write("\n" + (runTime + 1) + "," + own_id + ",0,"
                                 + getBl(j) + "," + 0);
                         Env.log.println("node_id: " + own_id  +  " Balance Price: " + bl
                                                     + " Prob: 0");
                         break;
                     case 1:
-                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",1,"
+                        Env.out.write("\n" + (runTime + 1) + "," + own_id + ",1,"
                                 + getBl(j) + "," + 0);
                         Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 1");
                         break;
                     case 2:
-                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",5,"
+                        Env.out.write("\n" + (runTime + 1) + "," + own_id + ",5,"
                                 + getBl(j) + "," + 0);
                         Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 5");
                         break;
                     case 3:
-                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",10,"
+                        Env.out.write("\n" + (runTime + 1) + "," + own_id + ",10,"
                                 + getBl(j) + "," + 0);
                         Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 10");
@@ -729,10 +662,7 @@ public class Agent implements Steppable {
 
             }
 
-            //set the size of queues to zero
-            for (int i = 0; i < 4; i++) {
-                setQueueSizeD(0, i);
-            }
+            clearQueuesD();
 
             //add the population number
             runTime++;
@@ -741,20 +671,26 @@ public class Agent implements Steppable {
     //Fifth cycle: report the balace price from the root node to middle nodes
     private void do_report_mid() {
         
+            int child_id;
+
             Env.log.println("node "+own_id);
 
             //report the balance prices to kid nodes
-            for (int i = 0; i < getChildrenSize(); i++) {
-                e.dbus.toQueue(getBl(0), 0, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(getBl(1), 1, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(getBl(2), 2, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(getBl(3), 3, getChildren(i).getOwn_id(), 0);
+
+            for (Agent child: children) {
+                child_id = child.own_id;
+                e.dbus.toQueue(getBl(0), 0, child_id, 0);
+                e.dbus.toQueue(getBl(1), 1, child_id, 0);
+                e.dbus.toQueue(getBl(2), 2, child_id, 0);
+                e.dbus.toQueue(getBl(3), 3, child_id, 0);
             }
 
     }
 
     //sixth cycle: report the balance prices from the middle nodes to end users
     private void do_report_end() {
+
+            int child_id;
 
             Env.log.println("node "+own_id);
 
@@ -782,22 +718,24 @@ public class Agent implements Steppable {
             }
 
             //write the balance prices on csv file for each case of dropped nodes
-            Env.out.write("\n" + runTime + "," + getOwn_id() + ",0,"
+            Env.out.write("\n" + runTime + "," + own_id + ",0,"
                     + report[0] + "," + 0);
-            Env.out.write("\n" + runTime + "," + getOwn_id() + ",1,"
+            Env.out.write("\n" + runTime + "," + own_id + ",1,"
                     + report[1] + "," + 0);
-            Env.out.write("\n" + runTime + "," + getOwn_id() + ",5,"
+            Env.out.write("\n" + runTime + "," + own_id + ",5,"
                     + report[2] + "," + 0);
-            Env.out.write("\n" + runTime + "," + getOwn_id() + ",10,"
+            Env.out.write("\n" + runTime + "," + own_id + ",10,"
                     + report[3] + "," + 0);
 
 
             //set the kid nodes balance prices
-            for (int i = 0; i < getChildrenSize(); i++) {
-                e.dbus.toQueue(report[0], 0, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(report[1], 1, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(report[2], 2, getChildren(i).getOwn_id(), 0);
-                e.dbus.toQueue(report[3], 3, getChildren(i).getOwn_id(), 0);
+
+            for(Agent child: children) {
+                child_id = child.own_id ;
+                e.dbus.toQueue(report[0], 0, child_id, 0);
+                e.dbus.toQueue(report[1], 1, child_id, 0);
+                e.dbus.toQueue(report[2], 2, child_id, 0);
+                e.dbus.toQueue(report[3], 3, child_id, 0);
             }
 
     }
@@ -818,19 +756,19 @@ public class Agent implements Steppable {
             }
             
             //report the excess demands for each cased of dropped nodes
-            Env.out.write("\n" + runTime + "," + getOwn_id() + ",0,"
+            Env.out.write("\n" + runTime + "," + own_id + ",0,"
                     + getBl(0) + "," + ex[0]);
 
-            if (getArrayIndex(Parent.getRan()[0], getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + getOwn_id() + ",1,"
+            if (getArrayIndex(Parent.getRan()[0], own_id % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + own_id + ",1,"
                         + getBl(1) + "," + ex[1]);
             
-            if (getArrayIndex(Parent.getRan()[1], getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + getOwn_id() + ",5,"
+            if (getArrayIndex(Parent.getRan()[1], own_id % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + own_id + ",5,"
                         + getBl(2) + "," + ex[2]);
             
-            if (getArrayIndex(Parent.getRan()[2], getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + getOwn_id() + ",10,"
+            if (getArrayIndex(Parent.getRan()[2], own_id % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + own_id + ",10,"
                         + getBl(3) + "," + ex[3]);
             
 
