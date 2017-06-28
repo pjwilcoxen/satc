@@ -78,7 +78,7 @@ public class Agent implements Steppable {
     }
 
     public void setAggD(Bid[] agg, int drop) {
-        this.aggD.set(drop, agg);
+        aggD.set(drop, agg);
     }
 
     public int[][] getRan() {
@@ -112,12 +112,12 @@ public class Agent implements Steppable {
     }
 
     public void appendChildren(Agent k) {
-        this.Children.add(k);
-        this.childrenSize++;
+        Children.add(k);
+        childrenSize++;
     }
 
     public Agent getChildren(int i) {
-        return this.Children.get(i);
+        return Children.get(i);
     }
 
     public void setChildrenSize(int childrenSize) {
@@ -137,7 +137,7 @@ public class Agent implements Steppable {
     }
         
     public void setQueueSizeD(int queueSize, int drop) {
-        this.queueSizeD[drop] = queueSize;
+        queueSizeD[drop] = queueSize;
     }
 
     public int getQueueSizeD(int drop) {
@@ -190,7 +190,7 @@ public class Agent implements Steppable {
     }
 
     public void setOwn_id(int down_id) {
-        this.own_id = down_id;
+        own_id = down_id;
     }
 
     public int getOwn_id() {
@@ -202,17 +202,17 @@ public class Agent implements Steppable {
     }
 
     public void setP_c(int p0, int p1, int drop) {
-        this.p_c[drop][0] = p0;
-        this.p_c[drop][1] = p1;
+        p_c[drop][0] = p0;
+        p_c[drop][1] = p1;
     }
 
     public void appendQueueD(Bid[] bids, int drop) {
         
         Bid[][] tmp = new Bid[maxbids][];
-        tmp = this.queueD.get(drop);
-        tmp[this.queueSizeD[drop]] = bids;
-        this.queueD.set(drop, tmp);
-        this.queueSizeD[drop]++;
+        tmp = queueD.get(drop);
+        tmp[queueSizeD[drop]] = bids;
+        queueD.set(drop, tmp);
+        queueSizeD[drop]++;
     }
 
     private double runiform() {
@@ -244,17 +244,17 @@ public class Agent implements Steppable {
 
         queueSizeD = new int[4];
       
-        this.queueD = new ArrayList<>();
-        this.queueD.add(new Bid[100][maxbids]);
-        this.queueD.add(new Bid[100][maxbids]);
-        this.queueD.add(new Bid[100][maxbids]);
-        this.queueD.add(new Bid[100][maxbids]);
+        queueD = new ArrayList<>();
+        queueD.add(new Bid[100][maxbids]);
+        queueD.add(new Bid[100][maxbids]);
+        queueD.add(new Bid[100][maxbids]);
+        queueD.add(new Bid[100][maxbids]);
 
-        this.aggD = new ArrayList<>();
-        this.aggD.add(new Bid[maxbids]);
-        this.aggD.add(new Bid[maxbids]);
-        this.aggD.add(new Bid[maxbids]);
-        this.aggD.add(new Bid[maxbids]);
+        aggD = new ArrayList<>();
+        aggD.add(new Bid[maxbids]);
+        aggD.add(new Bid[maxbids]);
+        aggD.add(new Bid[maxbids]);
+        aggD.add(new Bid[maxbids]);
 
         for (int i = 0; i < 4; i++) {
             setQueueSizeD(0, i);
@@ -288,7 +288,7 @@ public class Agent implements Steppable {
         
         line = br.readLine();
         //skip demand rows if the end user is a seller node
-        if(this.sd_type == 0)
+        if(sd_type == 0)
             while (!(line.split(cvsSplitBy)[1].equals("\"D\""))){
                 line = br.readLine();
             }
@@ -324,10 +324,10 @@ public class Agent implements Steppable {
         
         //call aggregate function on each queue based on number of drops
         for(int j = 0 ; j < 4 ; j ++){
-            aggBidD = this.getQueueD(j)[0];
+            aggBidD = getQueueD(j)[0];
             //call aggregate function by the number of each queue's size
-            for(int i=1 ; i < this.getQueueSizeD(j) ; i++)
-                aggBidD = aggregateDemand(aggBidD, this.getQueueD(j)[i]);
+            for(int i=1 ; i < getQueueSizeD(j) ; i++)
+                aggBidD = aggregateDemand(aggBidD, getQueueD(j)[i]);
             //populate the agg arraylist 
             agg.add(aggBidD);
         }
@@ -358,9 +358,9 @@ public class Agent implements Steppable {
                 int mid = (int)((bids[i-1].getPtice()+bids[i].getPtice())/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
-                    this.setP_c(0,mid+c, drop);
+                    setP_c(0,mid+c, drop);
                 else
-                    this.setP_c(mid-c,mid+c, drop);
+                    setP_c(mid-c,mid+c, drop);
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
                     tmp[i] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),bids[i].getQ_max());
@@ -369,9 +369,9 @@ public class Agent implements Steppable {
             }else{
                 //set the two upper and lower limits around the balance price
                 if((bids[i-1].getPtice()-c) < 0)
-                    this.setP_c(0,bids[i-1].getPtice()+c, drop);
+                    setP_c(0,bids[i-1].getPtice()+c, drop);
                 else
-                    this.setP_c(bids[i-1].getPtice()-c,bids[i-1].getPtice()+c, drop);
+                    setP_c(bids[i-1].getPtice()-c,bids[i-1].getPtice()+c, drop);
                 //divide the middle step to two steps with +c/-c prices
                 tmp[i] = new Bid(bids[i].getPtice()-c,0,bids[i].getQ_max());
                 tmp[i+1] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),0);
@@ -418,23 +418,23 @@ public class Agent implements Steppable {
     private int findReportPrice(int drop) {
         int report = 0;
         //if the whole balance price is between local balance price +c/-c
-        if ((getBl(drop) >= this.getP_c(drop)[0]) && (getBl(drop) <= this.getP_c(drop)[1])) {
-            report = (int) ((this.getP_c(drop)[0] + this.getP_c(drop)[1]) / 2);
+        if ((getBl(drop) >= getP_c(drop)[0]) && (getBl(drop) <= getP_c(drop)[1])) {
+            report = (int) ((getP_c(drop)[0] + getP_c(drop)[1]) / 2);
 //            Env.log.println("No Capacity limit 0! " + report + " prob: " + drop);
         } else {
             //if the whole balance price is more than local balance price +c
-            if (getBl(drop) > this.getP_c(drop)[1]) {
+            if (getBl(drop) > getP_c(drop)[1]) {
                 int i, p = 0;
                 //skip the bids with more quantity than (-1) * cap & less price than the balance price
-                for (i = 0; ((this.getAggD(drop)[i] != null)
-                        && (this.getAggD(drop)[i].getPtice() <= getBl(drop))
-                            && (this.getAggD(drop)[i].getQ_max() >= ((-1) * cap))); i++)
-                                p = this.getAggD(drop)[i].getPtice();
+                for (i = 0; ((getAggD(drop)[i] != null)
+                        && (getAggD(drop)[i].getPtice() <= getBl(drop))
+                            && (getAggD(drop)[i].getQ_max() >= ((-1) * cap))); i++)
+                                p = getAggD(drop)[i].getPtice();
 
-                if (this.getAggD(drop)[i] == null) {
+                if (getAggD(drop)[i] == null) {
                     report = p;
                 //if the target step passed the cap line
-                } else if (this.getAggD(drop)[i].getQ_max() < ((-1) * cap)) {
+                } else if (getAggD(drop)[i].getQ_max() < ((-1) * cap)) {
                         if(getBl(drop) <= p + cost) {
                             report = getBl(drop) - cost;
 //                            Env.log.println("No Capacity limit 1! " + report + " prob: " + drop);
@@ -452,21 +452,21 @@ public class Agent implements Steppable {
                 }
                 
             //if the whole balance price is less than local balance price +c    
-            } else if (getBl(drop) < this.getP_c(drop)[0]) {
+            } else if (getBl(drop) < getP_c(drop)[0]) {
                 int i, p = 0;
                 //skip the bids with more quantity than cap
-                for (i = 0; ((this.getAggD(drop)[i] != null)
-                        && (this.getAggD(drop)[i].getQ_min() >= cap)); i++)
-                             p = this.getAggD(drop)[i].getPtice();
-                if (this.getAggD(drop)[i] == null) {
+                for (i = 0; ((getAggD(drop)[i] != null)
+                        && (getAggD(drop)[i].getQ_min() >= cap)); i++)
+                             p = getAggD(drop)[i].getPtice();
+                if (getAggD(drop)[i] == null) {
                     report = p;
                 } else {
-                    if (getBl(drop) > this.getAggD(drop)[i].getPtice() - cost) {
+                    if (getBl(drop) > getAggD(drop)[i].getPtice() - cost) {
                         report = getBl(drop) + cost;
 //                        Env.log.println("No Capacity limit 2! " + report + " prob: " + drop);
                     //put limit equal to cap
                     } else {
-                        report = this.getAggD(drop)[i].getPtice();
+                        report = getAggD(drop)[i].getPtice();
 //                        Env.log.println("Capacity limited 2! " + report + " prob: " + drop);
                     }
                 }
@@ -598,7 +598,7 @@ public class Agent implements Steppable {
                 }
             }
             //set the random variable
-            this.setRan(ran);
+            setRan(ran);
     }
 
     //Second step: create net demand curves for the end users
@@ -629,15 +629,15 @@ public class Agent implements Steppable {
             //set the number of steps in each curve
             setBidSize(3 * step);
             //populate the parents queues for different cases of dropped nodes 
-            this.e.dbus.toQueue(getBids(), 0, this.Parent.getOwn_id(), this.getSd_type());
-            if (getArrayIndex(this.Parent.getRan()[0], this.getOwn_id() % 100) < 0) {
-                this.e.dbus.toQueue(getBids(), 1, this.Parent.getOwn_id(), this.getSd_type());
+            e.dbus.toQueue(getBids(), 0, Parent.getOwn_id(), getSd_type());
+            if (getArrayIndex(Parent.getRan()[0], getOwn_id() % 100) < 0) {
+                e.dbus.toQueue(getBids(), 1, Parent.getOwn_id(), getSd_type());
             }
-            if (getArrayIndex(this.Parent.getRan()[1], this.getOwn_id() % 100) < 0) {
-                this.e.dbus.toQueue(getBids(), 2, this.Parent.getOwn_id(), this.getSd_type());
+            if (getArrayIndex(Parent.getRan()[1], getOwn_id() % 100) < 0) {
+                e.dbus.toQueue(getBids(), 2, Parent.getOwn_id(), getSd_type());
             }
-            if (getArrayIndex(this.Parent.getRan()[2], this.getOwn_id() % 100) < 0) {
-                this.e.dbus.toQueue(getBids(), 3, this.Parent.getOwn_id(), this.getSd_type());
+            if (getArrayIndex(Parent.getRan()[2], getOwn_id() % 100) < 0) {
+                e.dbus.toQueue(getBids(), 3, Parent.getOwn_id(), getSd_type());
             }
     }
 
@@ -652,21 +652,21 @@ public class Agent implements Steppable {
 
             //set the agg vectors as class variable
             for (int i = 0; i < 4; i++) {
-                this.setAggD(agg.get(i), i);
+                setAggD(agg.get(i), i);
             }
 
             Bid[] tmp = null;
             //call addCost and addCapacity functions to consider transaction costs and capacity constrains
             for (int i = 0; i < 4; i++) {
-                tmp = this.addCost(agg.get(i), cost, i);
+                tmp = addCost(agg.get(i), cost, i);
                 if (tmp != null) {
-                    this.e.dbus.toQueue(this.addCapacity(tmp, cap), i, this.Parent.getOwn_id(), 0);
+                    e.dbus.toQueue(addCapacity(tmp, cap), i, Parent.getOwn_id(), 0);
                 }
             }
 
             //set the size of queues to zeto 
             for (int i = 0; i < 4; i++) {
-                this.setQueueSizeD(0, i);
+                setQueueSizeD(0, i);
             }
 
     }
@@ -702,27 +702,27 @@ public class Agent implements Steppable {
                 //write the balance prices on csv file for each case of dropped nodes
                 switch (j) {
                     case 0:
-                        Env.out.write("\n" + (runTime + 1) + "," + this.getOwn_id() + ",0,"
-                                + this.getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + this.own_id  +  " Balance Price: " + bl
+                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",0,"
+                                + getBl(j) + "," + 0);
+                        Env.log.println("node_id: " + own_id  +  " Balance Price: " + bl
                                                     + " Prob: 0");
                         break;
                     case 1:
-                        Env.out.write("\n" + (runTime + 1) + "," + this.getOwn_id() + ",1,"
-                                + this.getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + this.own_id + " Balance Price: " + bl
+                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",1,"
+                                + getBl(j) + "," + 0);
+                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 1");
                         break;
                     case 2:
-                        Env.out.write("\n" + (runTime + 1) + "," + this.getOwn_id() + ",5,"
-                                + this.getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + this.own_id + " Balance Price: " + bl
+                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",5,"
+                                + getBl(j) + "," + 0);
+                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 5");
                         break;
                     case 3:
-                        Env.out.write("\n" + (runTime + 1) + "," + this.getOwn_id() + ",10,"
-                                + this.getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + this.own_id + " Balance Price: " + bl
+                        Env.out.write("\n" + (runTime + 1) + "," + getOwn_id() + ",10,"
+                                + getBl(j) + "," + 0);
+                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 10");
                         break;
                 }
@@ -731,7 +731,7 @@ public class Agent implements Steppable {
 
             //set the size of queues to zero
             for (int i = 0; i < 4; i++) {
-                this.setQueueSizeD(0, i);
+                setQueueSizeD(0, i);
             }
 
             //add the population number
@@ -745,10 +745,10 @@ public class Agent implements Steppable {
 
             //report the balance prices to kid nodes
             for (int i = 0; i < getChildrenSize(); i++) {
-                this.e.dbus.toQueue(getBl(0), 0, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(getBl(1), 1, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(getBl(2), 2, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(getBl(3), 3, this.getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(getBl(0), 0, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(getBl(1), 1, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(getBl(2), 2, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(getBl(3), 3, getChildren(i).getOwn_id(), 0);
             }
 
     }
@@ -766,7 +766,7 @@ public class Agent implements Steppable {
                     bl = getAggD(j)[i].getPtice();
                     min = getAggD(j)[i].getQ_min();
                 }
-                Env.log.println("node_id: " + this.own_id  + " balance price: " + bl);
+                Env.log.println("node_id: " + own_id  + " balance price: " + bl);
             }
             
             int[] report = new int[4];
@@ -782,22 +782,22 @@ public class Agent implements Steppable {
             }
 
             //write the balance prices on csv file for each case of dropped nodes
-            Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",0,"
+            Env.out.write("\n" + runTime + "," + getOwn_id() + ",0,"
                     + report[0] + "," + 0);
-            Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",1,"
+            Env.out.write("\n" + runTime + "," + getOwn_id() + ",1,"
                     + report[1] + "," + 0);
-            Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",5,"
+            Env.out.write("\n" + runTime + "," + getOwn_id() + ",5,"
                     + report[2] + "," + 0);
-            Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",10,"
+            Env.out.write("\n" + runTime + "," + getOwn_id() + ",10,"
                     + report[3] + "," + 0);
 
 
             //set the kid nodes balance prices
             for (int i = 0; i < getChildrenSize(); i++) {
-                this.e.dbus.toQueue(report[0], 0, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(report[1], 1, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(report[2], 2, this.getChildren(i).getOwn_id(), 0);
-                this.e.dbus.toQueue(report[3], 3, this.getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(report[0], 0, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(report[1], 1, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(report[2], 2, getChildren(i).getOwn_id(), 0);
+                e.dbus.toQueue(report[3], 3, getChildren(i).getOwn_id(), 0);
             }
 
     }
@@ -810,7 +810,7 @@ public class Agent implements Steppable {
             //find the excess demand for the four cases of dropped nodes
             for (int i = 0; i < 4; i++) {
                 //report 0 in case of no balance point
-                if (this.getBl(i) <= -1) {
+                if (getBl(i) <= -1) {
                     ex[i] = 0;
                 } else {
                     ex[i] = findExcessDemand(getBl(i));
@@ -818,20 +818,20 @@ public class Agent implements Steppable {
             }
             
             //report the excess demands for each cased of dropped nodes
-            Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",0,"
-                    + this.getBl(0) + "," + ex[0]);
+            Env.out.write("\n" + runTime + "," + getOwn_id() + ",0,"
+                    + getBl(0) + "," + ex[0]);
 
-            if (getArrayIndex(this.Parent.getRan()[0], this.getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",1,"
-                        + this.getBl(1) + "," + ex[1]);
+            if (getArrayIndex(Parent.getRan()[0], getOwn_id() % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + getOwn_id() + ",1,"
+                        + getBl(1) + "," + ex[1]);
             
-            if (getArrayIndex(this.Parent.getRan()[1], this.getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",5,"
-                        + this.getBl(2) + "," + ex[2]);
+            if (getArrayIndex(Parent.getRan()[1], getOwn_id() % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + getOwn_id() + ",5,"
+                        + getBl(2) + "," + ex[2]);
             
-            if (getArrayIndex(this.Parent.getRan()[2], this.getOwn_id() % 100 + 1) < 0) 
-                Env.out.write("\n" + runTime + "," + this.getOwn_id() + ",10,"
-                        + this.getBl(3) + "," + ex[3]);
+            if (getArrayIndex(Parent.getRan()[2], getOwn_id() % 100 + 1) < 0) 
+                Env.out.write("\n" + runTime + "," + getOwn_id() + ",10,"
+                        + getBl(3) + "," + ex[3]);
             
 
         }
