@@ -1,0 +1,308 @@
+Scenario Settings:
+   Network map: netmap.csv
+   Draws of agents: testdraw.csv
+   Transmission cost: 2
+   Transmission cap: 2500
+   Populations: 10
+   Seed imposed: 123456
+
+*** population 0
+*** stage INIT_DROPS
+node 201
+initiate random list of users to drop
+node 202
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 52 Prob: 0
+node_id: 203 Balance Price: 47 Prob: 1
+node_id: 203 Balance Price: 55 Prob: 5
+node_id: 203 Balance Price: 45 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 27
+node_id: 201 balance price: 26
+node_id: 201 balance price: 26
+node_id: 201 balance price: 24
+node 202
+node_id: 202 balance price: 212
+node_id: 202 balance price: 207
+node_id: 202 balance price: 239
+node_id: 202 balance price: 194
+*** stage CALC_LOADS
+*** population 1
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 58 Prob: 0
+node_id: 203 Balance Price: 55 Prob: 1
+node_id: 203 Balance Price: 46 Prob: 5
+node_id: 203 Balance Price: 62 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 25
+node_id: 201 balance price: 24
+node_id: 201 balance price: 22
+node_id: 201 balance price: 28
+node 202
+node_id: 202 balance price: 250
+node_id: 202 balance price: 245
+node_id: 202 balance price: 223
+node_id: 202 balance price: 239
+*** stage CALC_LOADS
+*** population 2
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 45 Prob: 0
+node_id: 203 Balance Price: 47 Prob: 1
+node_id: 203 Balance Price: 45 Prob: 5
+node_id: 203 Balance Price: 45 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 26
+node_id: 201 balance price: 24
+node_id: 201 balance price: 23
+node 202
+node_id: 202 balance price: 203
+node_id: 202 balance price: 199
+node_id: 202 balance price: 182
+node_id: 202 balance price: 183
+*** stage CALC_LOADS
+*** population 3
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 57 Prob: 0
+node_id: 203 Balance Price: 58 Prob: 1
+node_id: 203 Balance Price: 56 Prob: 5
+node_id: 203 Balance Price: 66 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 220
+node_id: 202 balance price: 217
+node_id: 202 balance price: 217
+node_id: 202 balance price: 253
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 25
+node_id: 201 balance price: 24
+node_id: 201 balance price: 27
+*** stage CALC_LOADS
+*** population 4
+*** stage INIT_DROPS
+node 201
+initiate random list of users to drop
+node 202
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 56 Prob: 0
+node_id: 203 Balance Price: 55 Prob: 1
+node_id: 203 Balance Price: 58 Prob: 5
+node_id: 203 Balance Price: 67 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 221
+node_id: 202 balance price: 221
+node_id: 202 balance price: 238
+node_id: 202 balance price: 281
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 23
+node_id: 201 balance price: 24
+node_id: 201 balance price: 26
+*** stage CALC_LOADS
+*** population 5
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 50 Prob: 0
+node_id: 203 Balance Price: 54 Prob: 1
+node_id: 203 Balance Price: 47 Prob: 5
+node_id: 203 Balance Price: 55 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 217
+node_id: 202 balance price: 216
+node_id: 202 balance price: 221
+node_id: 202 balance price: 216
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 25
+node_id: 201 balance price: 23
+node_id: 201 balance price: 25
+*** stage CALC_LOADS
+*** population 6
+*** stage INIT_DROPS
+node 201
+initiate random list of users to drop
+node 202
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 59 Prob: 0
+node_id: 203 Balance Price: 61 Prob: 1
+node_id: 203 Balance Price: 53 Prob: 5
+node_id: 203 Balance Price: 64 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 224
+node_id: 202 balance price: 223
+node_id: 202 balance price: 215
+node_id: 202 balance price: 223
+node 201
+node_id: 201 balance price: 23
+node_id: 201 balance price: 25
+node_id: 201 balance price: 22
+node_id: 201 balance price: 27
+*** stage CALC_LOADS
+*** population 7
+*** stage INIT_DROPS
+node 201
+initiate random list of users to drop
+node 202
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 53 Prob: 0
+node_id: 203 Balance Price: 56 Prob: 1
+node_id: 203 Balance Price: 53 Prob: 5
+node_id: 203 Balance Price: 60 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 25
+node_id: 201 balance price: 22
+node_id: 201 balance price: 30
+node 202
+node_id: 202 balance price: 264
+node_id: 202 balance price: 261
+node_id: 202 balance price: 279
+node_id: 202 balance price: 220
+*** stage CALC_LOADS
+*** population 8
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 51 Prob: 0
+node_id: 203 Balance Price: 54 Prob: 1
+node_id: 203 Balance Price: 47 Prob: 5
+node_id: 203 Balance Price: 55 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 236
+node_id: 202 balance price: 228
+node_id: 202 balance price: 221
+node_id: 202 balance price: 215
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 25
+node_id: 201 balance price: 22
+node_id: 201 balance price: 27
+*** stage CALC_LOADS
+*** population 9
+*** stage INIT_DROPS
+node 202
+initiate random list of users to drop
+node 201
+initiate random list of users to drop
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 47 Prob: 0
+node_id: 203 Balance Price: 50 Prob: 1
+node_id: 203 Balance Price: 47 Prob: 5
+node_id: 203 Balance Price: 58 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 26
+node_id: 201 balance price: 24
+node_id: 201 balance price: 27
+node 202
+node_id: 202 balance price: 245
+node_id: 202 balance price: 233
+node_id: 202 balance price: 221
+node_id: 202 balance price: 251
+*** stage CALC_LOADS

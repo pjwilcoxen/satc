@@ -1,0 +1,5 @@
+netmap    : netmap.csv
+draws     : testdraw.csv
+transcost : 2
+transcap  : 3000 
+seed      : 123456
