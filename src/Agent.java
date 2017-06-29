@@ -56,20 +56,20 @@ public class Agent implements Steppable {
     double elast;
     
     //vector of bids drawn from initial load, elast, and number of steps
-    Bid[] bids;
+    Bidstep[] bids;
 	
     //vectors of the id number of droped nodes 
     int[][] ran;
     
-    //inidicates the queue variable for Bid type filled by childNodes 
+    //inidicates the queue variable for Bidstep type filled by childNodes 
     //Four vactors for different cases of dropped nodes    
-    ArrayList<Bid[][]> queueD;
+    ArrayList<Bidstep[][]> queueD;
     
     //indicates the size of each vector of queueD
     int[] queueSizeD;
     
     //indicates the aggregated net demands for each case of dropped nodes    
-    ArrayList<Bid[]> aggD;
+    ArrayList<Bidstep[]> aggD;
     
     //indicates the balance price for each case of dropped nodes    
     int[] bl;
@@ -90,11 +90,11 @@ public class Agent implements Steppable {
     ArrayList<Agent> children;
 
 
-    private Bid[] getAggD(int drop) {
+    private Bidstep[] getAggD(int drop) {
         return aggD.get(drop);
     }
 
-    private void setAggD(Bid[] agg, int drop) {
+    private void setAggD(Bidstep[] agg, int drop) {
         aggD.set(drop, agg);
     }
 
@@ -141,8 +141,8 @@ public class Agent implements Steppable {
         p_c[drop][1] = p1;
     }
 
-    public void appendQueueD(Bid[] bids, int drop) {
-        Bid tmp[][];
+    public void appendQueueD(Bidstep[] bids, int drop) {
+        Bidstep tmp[][];
         tmp = queueD.get(drop);
         tmp[queueSizeD[drop]] = bids;
         queueD.set(drop, tmp);
@@ -178,16 +178,16 @@ public class Agent implements Steppable {
         queueSizeD = new int[4];
       
         queueD = new ArrayList<>();
-        queueD.add(new Bid[100][maxbids]);
-        queueD.add(new Bid[100][maxbids]);
-        queueD.add(new Bid[100][maxbids]);
-        queueD.add(new Bid[100][maxbids]);
+        queueD.add(new Bidstep[100][maxbids]);
+        queueD.add(new Bidstep[100][maxbids]);
+        queueD.add(new Bidstep[100][maxbids]);
+        queueD.add(new Bidstep[100][maxbids]);
 
         aggD = new ArrayList<>();
-        aggD.add(new Bid[maxbids]);
-        aggD.add(new Bid[maxbids]);
-        aggD.add(new Bid[maxbids]);
-        aggD.add(new Bid[maxbids]);
+        aggD.add(new Bidstep[maxbids]);
+        aggD.add(new Bidstep[maxbids]);
+        aggD.add(new Bidstep[maxbids]);
+        aggD.add(new Bidstep[maxbids]);
 
         clearQueuesD();
     }
@@ -245,12 +245,12 @@ public class Agent implements Steppable {
     
      
     //call aggragate function  on the queue
-    private ArrayList<Bid[]> runsim(){
+    private ArrayList<Bidstep[]> runsim(){
 
-        Bid aggBidD[];
+        Bidstep aggBidD[];
         
         //initiate an arraylist for the aggregated vectors
-        ArrayList<Bid[]> agg = new ArrayList<>();
+        ArrayList<Bidstep[]> agg = new ArrayList<>();
         
         //call aggregate function on each queue based on number of drops
         for(int j = 0 ; j < 4 ; j ++){
@@ -267,23 +267,23 @@ public class Agent implements Steppable {
     }
 
     //change the step prices considering transation cost
-    private Bid[] addCost(Bid[] bids, int c, int drop) {
-        Bid[] tmp = new Bid[maxbids];
+    private Bidstep[] addCost(Bidstep[] bids, int c, int drop) {
+        Bidstep[] tmp = new Bidstep[maxbids];
         int i;
         //decrease the price level of steps with positive quantity
         for(i = 0; (bids[i] != null) && (bids[i].getQ_min() >= 0); i++ )
-            tmp[i] = new Bid(bids[i].getPtice()-c,bids[i].getQ_min(),bids[i].getQ_max());
+            tmp[i] = new Bidstep(bids[i].getP()-c,bids[i].getQ_min(),bids[i].getQ_max());
         
         //if there is no step with positive quantity 
         if(i == 0){
                 for(; bids[i] != null ; i++)
-                    tmp[i] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),bids[i].getQ_max());
+                    tmp[i] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),bids[i].getQ_max());
         }
         if(bids[i] != null ){
             //if theere is a vertical overlaop with y axis
             if(bids[i].getQ_max() == 0){
                 //set the two upper and lower limits around the balance price
-                int mid = ((bids[i-1].getPtice()+bids[i].getPtice())/2);
+                int mid = ((bids[i-1].getP()+bids[i].getP())/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
                     setP_c(0,mid+c, drop);
@@ -291,22 +291,22 @@ public class Agent implements Steppable {
                     setP_c(mid-c,mid+c, drop);
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
-                    tmp[i] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),bids[i].getQ_max());
+                    tmp[i] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),bids[i].getQ_max());
             
             //if a horizontal step indicate the balance price
             }else{
                 //set the two upper and lower limits around the balance price
-                if((bids[i-1].getPtice()-c) < 0)
-                    setP_c(0,bids[i-1].getPtice()+c, drop);
+                if((bids[i-1].getP()-c) < 0)
+                    setP_c(0,bids[i-1].getP()+c, drop);
                 else
-                    setP_c(bids[i-1].getPtice()-c,bids[i-1].getPtice()+c, drop);
+                    setP_c(bids[i-1].getP()-c,bids[i-1].getP()+c, drop);
                 //divide the middle step to two steps with +c/-c prices
-                tmp[i] = new Bid(bids[i].getPtice()-c,0,bids[i].getQ_max());
-                tmp[i+1] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),0);
+                tmp[i] = new Bidstep(bids[i].getP()-c,0,bids[i].getQ_max());
+                tmp[i+1] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),0);
                 i++;
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++)
-                    tmp[i+1] = new Bid(bids[i].getPtice()+c,bids[i].getQ_min(),bids[i].getQ_max());
+                    tmp[i+1] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),bids[i].getQ_max());
             
             }
         }
@@ -316,27 +316,27 @@ public class Agent implements Steppable {
     }
 
     //put capacity constrain on the net demand
-    private Bid [] addCapacity(Bid[] bids, int cap) {
-        Bid[] tmp = new Bid[maxbids];
+    private Bidstep [] addCapacity(Bidstep[] bids, int cap) {
+        Bidstep[] tmp = new Bidstep[maxbids];
         int i, j=0;
         
         //skip the steps with more quantity than cap
         for(i =0; bids[i].getQ_min() >= cap; i++);
         if(bids[i] == null)
-            return new Bid[0];
+            return new Bidstep[0];
         //set the right corner step
         if(bids[i].getQ_max() > cap){
-            tmp[j++]= new Bid(bids[i].getPtice(),bids[i].getQ_min(),cap);
+            tmp[j++]= new Bidstep(bids[i].getP(),bids[i].getQ_min(),cap);
             i++;
         }
         //consider the steps between two capacity limits
         for(;(bids[i] != null) && (bids[i].getQ_min() >= ((-1)*(cap))); i++)
-            tmp[j++] = new Bid(bids[i].getPtice(),bids[i].getQ_min(),bids[i].getQ_max());
+            tmp[j++] = new Bidstep(bids[i].getP(),bids[i].getQ_min(),bids[i].getQ_max());
         if (bids[i] == null) 
             return tmp;
         //set the left corner step
         else
-            tmp[j] = new Bid(bids[i].getPtice(),((-1)*(cap)),bids[i].getQ_max());
+            tmp[j] = new Bidstep(bids[i].getP(),((-1)*(cap)),bids[i].getQ_max());
         
         return tmp;
         
@@ -355,9 +355,9 @@ public class Agent implements Steppable {
                 int i, p = 0;
                 //skip the bids with more quantity than (-1) * cap & less price than the balance price
                 for (i = 0; ((getAggD(drop)[i] != null)
-                        && (getAggD(drop)[i].getPtice() <= getBl(drop))
+                        && (getAggD(drop)[i].getP() <= getBl(drop))
                             && (getAggD(drop)[i].getQ_max() >= ((-1) * cap))); i++)
-                                p = getAggD(drop)[i].getPtice();
+                                p = getAggD(drop)[i].getP();
 
                 if (getAggD(drop)[i] == null) {
                     report = p;
@@ -385,16 +385,16 @@ public class Agent implements Steppable {
                 //skip the bids with more quantity than cap
                 for (i = 0; ((getAggD(drop)[i] != null)
                         && (getAggD(drop)[i].getQ_min() >= cap)); i++)
-                             p = getAggD(drop)[i].getPtice();
+                             p = getAggD(drop)[i].getP();
                 if (getAggD(drop)[i] == null) {
                     report = p;
                 } else {
-                    if (getBl(drop) > getAggD(drop)[i].getPtice() - cost) {
+                    if (getBl(drop) > getAggD(drop)[i].getP() - cost) {
                         report = getBl(drop) + cost;
 //                        Env.log.println("No Capacity limit 2! " + report + " prob: " + drop);
                     //put limit equal to cap
                     } else {
-                        report = getAggD(drop)[i].getPtice();
+                        report = getAggD(drop)[i].getP();
 //                        Env.log.println("Capacity limited 2! " + report + " prob: " + drop);
                     }
                 }
@@ -410,13 +410,13 @@ public class Agent implements Steppable {
      */
      private int findExcessDemand(int price){
         int i;
-        for(i = 0;(bids[i] != null)  && (bids[i].getPtice() < price); i++);
+        for(i = 0;(bids[i] != null)  && (bids[i].getP() < price); i++);
           
         if(bids[i] == null) 
              Env.log.println("error price: " + price);
                 
         int q;
-        if(bids[i].getPtice() == price)  //where the balance price is the same as step price
+        if(bids[i].getP() == price)  //where the balance price is the same as step price
             q = bids[i].getQ_min();
         else                                  //where the balance price is between two steps
             q = bids[i].getQ_max();
@@ -589,8 +589,8 @@ public class Agent implements Steppable {
 
             Env.log.println("node "+own_id);
 
-            ArrayList<Bid[]> agg;
-            Bid tmp[];
+            ArrayList<Bidstep[]> agg;
+            Bidstep tmp[];
             
             //call rusim to aggregate the net demands
             agg = runsim();
@@ -617,7 +617,7 @@ public class Agent implements Steppable {
 
             Env.log.println("node "+own_id);
 
-            ArrayList<Bid[]> agg;
+            ArrayList<Bidstep[]> agg;
             
             //call runsim to aggregate the net demands
             agg = runsim();
@@ -627,7 +627,7 @@ public class Agent implements Steppable {
                 int i, bl = 0, min =1;
                 for (i = 0; ((agg.get(j)[i] != null)
                         && (agg.get(j)[i].getQ_max() >= 0)); i++) {
-                    bl = agg.get(j)[i].getPtice();
+                    bl = agg.get(j)[i].getP();
                     min = agg.get(j)[i].getQ_min();
                 }
 
@@ -717,7 +717,7 @@ public class Agent implements Steppable {
                 int i, bl = 0;
                 for (i = 0; ((getAggD(j)[i] != null)
                         && (getAggD(j)[i].getQ_max() >= 0)); i++) {
-                    bl = getAggD(j)[i].getPtice();
+                    bl = getAggD(j)[i].getP();
                 }
                 Env.log.println("node_id: " + own_id  + " balance price: " + bl);
             }
@@ -798,22 +798,22 @@ public class Agent implements Steppable {
     /**
      * Create demand curves based on initial load, elasticity, and number of steps
      */
-    private Bid[] drawDemand(double Q40, double elst, int step){
-        Bid [] result = new Bid[maxbids/*step*//*+1*/];
+    private Bidstep[] drawDemand(double Q40, double elst, int step){
+        Bidstep [] result = new Bidstep[maxbids/*step*//*+1*/];
         
         int iniprice= 40 +  (int) (runiform() * 12 - 6);
         int p0 = iniprice/step;
         int p1 = iniprice*2/step;
         int q1= (int) (Q40 * pow((double)p0/iniprice,elst));
         int q2=(int)(Q40 * pow((double)p1/iniprice,elst));
-        result[0]  = new Bid(p0, q2, q1);
+        result[0]  = new Bidstep(p0, q2, q1);
         
         //create the number of steps below the price=40
         for(int i =1 ; i < step; i ++){
             p1 = iniprice*(i+1)/step;
             q1= q2;
             q2= (int) (Q40 * pow((double)p1/iniprice,elst));
-            result[i]  = new Bid(p1, q2, q1);
+            result[i]  = new Bidstep(p1, q2, q1);
         }
         
         //create twice the number of steps upper the proce = 40
@@ -821,7 +821,7 @@ public class Agent implements Steppable {
             p1 = iniprice + (360*i)/(2*step);
             q1= q2;
             q2= (int) (Q40 * pow((double)p1/iniprice,elst));
-            result[step + i - 1]  = new Bid(p1, q2, q1);
+            result[step + i - 1]  = new Bidstep(p1, q2, q1);
         }
         
         return result;
@@ -830,8 +830,8 @@ public class Agent implements Steppable {
     /**
      * Create supply curves with reverse quantities in comparison to demand curve
      */
-    private Bid[] drawSupply(double Q40, double elst, int step){
-        Bid [] result = new Bid[maxbids/*step*//*+1*/];
+    private Bidstep[] drawSupply(double Q40, double elst, int step){
+        Bidstep [] result = new Bidstep[maxbids/*step*//*+1*/];
         int iniprice= 40 + (int) (runiform() * 12 - 6);
         
         int p0 = iniprice/step;
@@ -839,14 +839,14 @@ public class Agent implements Steppable {
 
         int q1=(int)((-1) * (Q40 * pow((double)p0/iniprice,elst)));
         int q2=(int)((-1) * (Q40 * pow((double)p1/iniprice,elst)));
-        result[0]  = new Bid(p0, q1, q2);
+        result[0]  = new Bidstep(p0, q1, q2);
         
         //create the number of steps below the price=40
         for(int i =1 ; i < step; i ++){
             p1 = iniprice*(i+1)/step;
             q1= q2;
             q2= (int) ((-1) * (Q40 * pow((double)p1/iniprice,elst)));
-            result[i]  = new Bid(p1, q1, q2);
+            result[i]  = new Bidstep(p1, q1, q2);
         }
         
         //create twice the number of steps upper the proce = 40
@@ -854,7 +854,7 @@ public class Agent implements Steppable {
             p1 = iniprice+ 360*i/(2*step);
             q1= q2;
             q2= (int) ((-1) * (Q40 * pow((double)p1/iniprice,elst)));
-            result[step + i - 1]  = new Bid(p1, q1, q2);
+            result[step + i - 1]  = new Bidstep(p1, q1, q2);
         }
         
         return result;
@@ -863,8 +863,8 @@ public class Agent implements Steppable {
     /**
      * Aggregate two net demand curves
      */
-    private Bid[] aggregateDemand(Bid[] bid1, Bid[] bid2) {
-        Bid [] aggBid = new Bid[maxbids];
+    private Bidstep[] aggregateDemand(Bidstep[] bid1, Bidstep[] bid2) {
+        Bidstep [] aggBid = new Bidstep[maxbids];
         
         int i =0, j =0, k = 0;
         int min = 0, sd;
@@ -873,17 +873,17 @@ public class Agent implements Steppable {
         while((bid1[i]!= null)&&(bid2[j]!=null)){
             
             //initiate the aggregate step considering the minimum price level and sum of the right corners as the max quantity
-            aggBid[k] = new Bid(minBid(bid1[i], bid2[j]).getPtice()
+            aggBid[k] = new Bidstep(minBid(bid1[i], bid2[j]).getP()
                                             ,0,bid1[i].getQ_max() + bid2[j].getQ_max());
             
             
-            if(bid1[i].getPtice() < bid2[j].getPtice()){
+            if(bid1[i].getP() < bid2[j].getP()){
                     //if it is the fist step
                     if(k == 0)
                         aggBid[k].setQ_min(bid1[i].getQ_min() + bid2[j].getQ_max());
                     i++;
                     
-            }else if(bid1[i].getPtice() > bid2[j].getPtice()){
+            }else if(bid1[i].getP() > bid2[j].getP()){
                     //initiate the left corner of the first step
                     if(k == 0)
                         aggBid[k].setQ_min(bid1[i].getQ_max() + bid2[j].getQ_min());
@@ -911,8 +911,8 @@ public class Agent implements Steppable {
     /**
      * Find the minimum price between two input bids
      */
-    private Bid minBid(Bid bid1, Bid bid2) {
-        if(bid1.getPtice() < bid2.getPtice())
+    private Bidstep minBid(Bidstep bid1, Bidstep bid2) {
+        if(bid1.getP() < bid2.getP())
             return bid1;
         else    
             return bid2;

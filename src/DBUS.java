@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class DBUS {
 
     Env e;
-    ArrayList<Bid[]> queueD;
+    ArrayList<Bidstep[]> queueD;
     int [] bl;
     
     //
@@ -16,10 +16,10 @@ public class DBUS {
     public DBUS(Env e){
         this.e = e;
         queueD = new ArrayList<>();
-        queueD.add(new Bid[200]);
-        queueD.add(new Bid[200]);
-        queueD.add(new Bid[200]);
-        queueD.add(new Bid[200]);
+        queueD.add(new Bidstep[200]);
+        queueD.add(new Bidstep[200]);
+        queueD.add(new Bidstep[200]);
+        queueD.add(new Bidstep[200]);
         bl = new int[4];
     }
     
@@ -28,7 +28,7 @@ public class DBUS {
     //     That is, DBUS sends messages but leaves it up to the
     //     recipient to figure out what to do with them
 
-    public void toQueue(Bid[] bids, int drop, int to, int sd_type) {
+    public void toQueue(Bidstep[] bids, int drop, int to, int sd_type) {
         queueD.set(drop, bids);
         e.listAgent.get(to - 1).appendQueueD(/*this.queueD.get(drop)*/bids, drop);
         
