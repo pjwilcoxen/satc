@@ -1,33 +1,28 @@
-//  Agent.java
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sim.engine.SimState;
 import sim.engine.Steppable;
-
-import static java.lang.Integer.min;
 import static java.lang.Math.pow;
 
+/**
+ * General purpose Agent class
+ */
 public class Agent implements Steppable {
-     
-    public static final String vers = "2.0";
+    
+    public static final String VER = "2.0";
 
-    //indicates the number of each run including difinite number of steps
+    //indicates the number of each run including definite number of steps
     static int runTime = 0;
 
     //indicates the transition cost
-    static int cost = 1;
+    int cost;
+
     //indicates the capacity constraint
-    static int cap = 2500; //2000;
+    int cap; 
    
     static int maxstep = 14;
     static int maxbids = 400;
@@ -35,41 +30,51 @@ public class Agent implements Steppable {
     //inherits from Env class
     Env e;
         
-    //indicates local time, which is increased in every step
-    int time;
     //indicates the type of node (end user = 3, middle node = 2, root node = 1)
     int type;
+    
     //indicates parents' id
     int up_id;
+    
     //indicates own id
     int own_id;
+    
     //indicates supply or demand type
     int sd_type;
+    
     //indicates initial load for end user extracted from "testdraw.csv"
-    double load;
     //indicates the elasticity of end user extracted from "testdraw.csv" 
+    double load;
     double elast;
+    
     //indicates the vector of bids drawn from initial load, elast, and number of steps
     Bid[] bids;
+	
     //indicates the total number of bid elements
     int bidSize;
-    //indicates the three vectors including the id number of droped nodes 
+    
+	//indicates the three vectors including the id number of droped nodes 
     int[][] ran;
-    //inidicates the queue variable for Bid type filled by childNodes 
+    
+	//inidicates the queue variable for Bid type filled by childNodes 
     //Four vactors for different cases of dropped nodes    
     ArrayList<Bid[][]> queueD;
-    //indicates the size of each vector of queueD
+    
+	//indicates the size of each vector of queueD
     int[] queueSizeD;
-    //indicates the aggregated net demands for each case of dropped nodes    
+    
+	//indicates the aggregated net demands for each case of dropped nodes    
     ArrayList<Bid[]> aggD;
-    //indicates the balance price for each case of dropped nodes    
+    
+	//indicates the balance price for each case of dropped nodes    
     int[] bl;
-    //indicates the upper and lower level around the balance prices considering transaction cost
+    
+	//indicates the upper and lower level around the balance prices considering transaction cost
     int[][] p_c;
 
     //  Parent and list of children
 
-    Agent Parent;
+    Agent parent;
     ArrayList<Agent> children;
 
 
@@ -85,26 +90,13 @@ public class Agent implements Steppable {
         return ran;
     }
 
-    public void setRan(int[][] ran) {
-        this.ran = ran;
-    }
-
     public void setParent(Agent Parent) {
-        this.Parent = Parent;
+        this.parent = Parent;
         Parent.children.add(this);
     }
 
     public void setBidSize(int bidSize) {
         this.bidSize = bidSize;
-    }
-
-
-    public Bid[] getBids() {
-        return bids;
-    }
-
-    public void setBids(Bid[] bids) {
-        this.bids = bids;
     }
 
     public int getBl(int drop) {
@@ -122,10 +114,6 @@ public class Agent implements Steppable {
     private void clearQueuesD() {
         for (int i = 0; i < 4; i++) 
             queueSizeD[i] = 0;
-    }
-
-    public Bid[][] getQueueD(int drop) {
-        return queueD.get(drop);
     }
 
     public int getType() {
@@ -146,8 +134,7 @@ public class Agent implements Steppable {
     }
 
     public void appendQueueD(Bid[] bids, int drop) {
-        
-        Bid[][] tmp = new Bid[maxbids][];
+        Bid tmp[][];
         tmp = queueD.get(drop);
         tmp[queueSizeD[drop]] = bids;
         queueD.set(drop, tmp);
@@ -166,15 +153,15 @@ public class Agent implements Steppable {
         this.up_id = up_id;
         this.own_id = own_id;
 
-        time = 0;
-        Parent = mkt;
+        parent   = mkt;
         children = new ArrayList<>();
-        e = (Env) state;
-        bl = new int[4];
-        ran = new int[3][];
-        p_c = new int[4][2];
-        cost = e.transCost ;
-        cap  = e.transCap;
+        
+        e    = (Env) state;
+        bl   = new int[4];
+        ran  = new int[3][];
+        p_c  = new int[4][2];
+        cost = Env.transCost ;
+        cap  = Env.transCap;
 
         if (mkt != null) {
             mkt.children.add(this);
@@ -195,7 +182,6 @@ public class Agent implements Steppable {
         aggD.add(new Bid[maxbids]);
 
         clearQueuesD();
-
     }
     
         
@@ -213,10 +199,9 @@ public class Agent implements Steppable {
 
     //Populate the bids from the input csv file
     public double[] findnewLoad() throws FileNotFoundException, IOException{
-        ArrayList<double[]> loads = new ArrayList<double[]>();
   
-        BufferedReader br = null;
-	     String line = "";
+        BufferedReader br;
+	String line;
         String cvsSplitBy = ",";
         
         br = new BufferedReader(Util.openRead(Env.fileDraws));
@@ -225,10 +210,10 @@ public class Agent implements Steppable {
         line = br.readLine();
         //skip demand rows if the end user is a seller node
         if(sd_type == 0)
-            while (!(line.split(cvsSplitBy)[1].equals("\"D\""))){
+            while (line!=null && !(line.split(cvsSplitBy)[1].equals("\"D\""))){
                 line = br.readLine();
             }
-      
+        
         //define a random value
         int max = 9858;//based on the length of input file
         int min = 0;
@@ -246,6 +231,7 @@ public class Agent implements Steppable {
         lds[0] =  Double.parseDouble(values[2]);
         lds[1] =  Double.parseDouble(values[3]);
 
+        br.close();
         return lds;
     }
     
@@ -253,17 +239,17 @@ public class Agent implements Steppable {
     //call aggragate function  on the queue
     public ArrayList<Bid[]> runsim(){
 
-        Bid[] aggBidD = new Bid[maxbids];
+        Bid aggBidD[];
         
         //initiate an arraylist for the aggregated vectors
         ArrayList<Bid[]> agg = new ArrayList<>();
         
         //call aggregate function on each queue based on number of drops
         for(int j = 0 ; j < 4 ; j ++){
-            aggBidD = getQueueD(j)[0];
+            aggBidD = queueD.get(j)[0];
             //call aggregate function by the number of each queue's size
             for(int i=1 ; i < queueSizeD[j] ; i++)
-                aggBidD = aggregateDemand(aggBidD, getQueueD(j)[i]);
+                aggBidD = aggregateDemand(aggBidD, queueD.get(j)[i]);
             //populate the agg arraylist 
             agg.add(aggBidD);
         }
@@ -291,7 +277,7 @@ public class Agent implements Steppable {
             //if theere is a vertical overlaop with y axis
             if(bids[i].getQ_max() == 0){
                 //set the two upper and lower limits around the balance price
-                int mid = (int)((bids[i-1].getPtice()+bids[i].getPtice())/2);
+                int mid = ((bids[i-1].getPtice()+bids[i].getPtice())/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
                     setP_c(0,mid+c, drop);
@@ -355,7 +341,7 @@ public class Agent implements Steppable {
         int report = 0;
         //if the whole balance price is between local balance price +c/-c
         if ((getBl(drop) >= getP_c(drop)[0]) && (getBl(drop) <= getP_c(drop)[1])) {
-            report = (int) ((getP_c(drop)[0] + getP_c(drop)[1]) / 2);
+            report = ((getP_c(drop)[0] + getP_c(drop)[1]) / 2);
 //            Env.log.println("No Capacity limit 0! " + report + " prob: " + drop);
         } else {
             //if the whole balance price is more than local balance price +c
@@ -413,30 +399,34 @@ public class Agent implements Steppable {
         return report;
     }
 
-    //calculate the net demand considering the balance price
-     public int findExcessDemand(int price){
+    /**
+     * Calculate the net demand considering the balance price
+     */
+     private int findExcessDemand(int price){
         int i;
-        for(i = 0;(getBids()[i] != null)  && (getBids()[i].getPtice() < price); i++);
+        for(i = 0;(bids[i] != null)  && (bids[i].getPtice() < price); i++);
           
-        if(getBids()[i] == null) 
+        if(bids[i] == null) 
              Env.log.println("error price: " + price);
                 
         int q;
-        if(getBids()[i].getPtice() == price)  //where the balance price is the same as step price
-            q = getBids()[i].getQ_min();
+        if(bids[i].getPtice() == price)  //where the balance price is the same as step price
+            q = bids[i].getQ_min();
         else                                  //where the balance price is between two steps
-            q = getBids()[i].getQ_max();
+            q = bids[i].getQ_max();
        
-        return q;
-        
+        return q; 
      }
 
 
-    //
-    //  General step function -- calls subtype specific 
-    //  functions in preparation for subclassing
-    //
-
+    /**
+     *  General step function
+     * 
+     * Calls subtype specific functions in preparation for subclassing
+     *
+     * @param state Mason state
+     */
+    @Override
     public void step(SimState state) {
         switch (type) {
             case 1: 
@@ -452,13 +442,8 @@ public class Agent implements Steppable {
                 break;
           
             default:
-                System.out.println("Unexpected agent type in step");
-                System.exit(0);
+                throw new RuntimeException("Unexpected agent type in step");
        }
-
-        // increment internal time counter
-
-        time++ ;
     }
 
     private void step_top() {
@@ -469,6 +454,9 @@ public class Agent implements Steppable {
 
             case REPORT_MID:
                 do_report_mid();
+                break;
+                
+            default:
                 break;
        }
     }
@@ -486,6 +474,9 @@ public class Agent implements Steppable {
             case REPORT_END:
                 do_report_end();
                 break;
+                
+            default:
+                break;
         }
     }
 
@@ -497,6 +488,9 @@ public class Agent implements Steppable {
 
             case CALC_LOADS:
                 do_calc_load();
+                break;
+                
+            default:
                 break;
         }
     }
@@ -510,11 +504,13 @@ public class Agent implements Steppable {
 
             //initiate three vector for the random ids
             int[][] ran = new int[3][];
+            
             //initiate the vectors for three case of 1, 5, and 10 drops
             ran[0] = new int[1];
             for (int i = 0; i < 1; i++) {
                 ran[0][i] = (int) (runiform() * 100 + 1);
             }
+            
             ran[1] = new int[5];
             for (int i = 0; i < 5; i++) {
                 int tmp = (int) (runiform() * 100 + 1);
@@ -524,6 +520,7 @@ public class Agent implements Steppable {
                     i--;
                 }
             }
+            
             ran[2] = new int[10];
             for (int i = 0; i < 10; i++) {
                 int tmp = (int) (runiform() * 100 + 1);
@@ -533,47 +530,52 @@ public class Agent implements Steppable {
                     i--;
                 }
             }
+            
             //set the random variable
-            setRan(ran);
+            this.ran = ran;
     }
 
-    //Second step: create net demand curves for the end users
+    /**
+     * Create net demand curves for the end users
+     */
     private void do_init_load() {
 
             //initiate the initial load and elasticity
-            double[] tmp = new double[2];
+            double tmp[];
+            
+            //find random values from the input file "testdraw.csv"
             try {
-                //find random values from the input file "testdraw.csv"
                 tmp   = findnewLoad();
                 load  = tmp[0];
                 elast = tmp[1];
-
             } catch (IOException ex) {
                 Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-                System.exit(0);
+                throw new RuntimeException("Exception finding load");
             }
 
-            //initiate the numbber of spteps to create curve
+            //initiate the number of steps to create curve
             int step = (int) (runiform() * maxstep + 2);
+
             //call draw function based on the type (demand/supply) of end users
             if (sd_type == 0) {
-                setBids(drawDemand(load, elast, step));
+                bids = drawDemand(load, elast, step);
             } else {
-                setBids(drawSupply(load, elast, step));
+                bids = drawSupply(load, elast, step);
             }
 
             //set the number of steps in each curve
             setBidSize(3 * step);
+
             //populate the parents queues for different cases of dropped nodes 
-            e.dbus.toQueue(getBids(), 0, Parent.own_id, sd_type);
-            if (getArrayIndex(Parent.getRan()[0], own_id % 100) < 0) {
-                e.dbus.toQueue(getBids(), 1, Parent.own_id, sd_type);
+            e.dbus.toQueue(bids, 0, parent.own_id, sd_type);
+            if (getArrayIndex(parent.getRan()[0], own_id % 100) < 0) {
+                e.dbus.toQueue(bids, 1, parent.own_id, sd_type);
             }
-            if (getArrayIndex(Parent.getRan()[1], own_id % 100) < 0) {
-                e.dbus.toQueue(getBids(), 2, Parent.own_id, sd_type);
+            if (getArrayIndex(parent.getRan()[1], own_id % 100) < 0) {
+                e.dbus.toQueue(bids, 2, parent.own_id, sd_type);
             }
-            if (getArrayIndex(Parent.getRan()[2], own_id % 100) < 0) {
-                e.dbus.toQueue(getBids(), 3, Parent.own_id, sd_type);
+            if (getArrayIndex(parent.getRan()[2], own_id % 100) < 0) {
+                e.dbus.toQueue(bids, 3, parent.own_id, sd_type);
             }
     }
 
@@ -581,8 +583,9 @@ public class Agent implements Steppable {
 
             Env.log.println("node "+own_id);
 
-            ArrayList<double[]> dbids = new ArrayList<double[]>();
-            ArrayList<Bid[]> agg = new ArrayList<>();
+            ArrayList<Bid[]> agg;
+            Bid tmp[];
+            
             //call rusim to aggregate the net demands
             agg = runsim();
 
@@ -591,13 +594,10 @@ public class Agent implements Steppable {
                 setAggD(agg.get(i), i);
             }
 
-            Bid[] tmp = null;
             //call addCost and addCapacity functions to consider transaction costs and capacity constrains
             for (int i = 0; i < 4; i++) {
                 tmp = addCost(agg.get(i), cost, i);
-                if (tmp != null) {
-                    e.dbus.toQueue(addCapacity(tmp, cap), i, Parent.own_id, 0);
-                }
+                e.dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id, 0);
             }
 
             clearQueuesD();
@@ -609,7 +609,8 @@ public class Agent implements Steppable {
 
             Env.log.println("node "+own_id);
 
-            ArrayList<Bid[]> agg = new ArrayList<>();
+            ArrayList<Bid[]> agg;
+            
             //call runsim to aggregate the net demands
             agg = runsim();
 
@@ -658,6 +659,10 @@ public class Agent implements Steppable {
                         Env.log.println("node_id: " + own_id + " Balance Price: " + bl
                                                     + " Prob: 10");
                         break;
+                        
+                    default:
+                        throw new RuntimeException("Unexpected case in do_agg_mid()");
+                        
                 }
 
             }
@@ -696,11 +701,10 @@ public class Agent implements Steppable {
 
             //find the balance price for each case of dropped nodes
             for (int j = 0; j < 4; j++) {
-                int i, bl = 0, min =1;
+                int i, bl = 0;
                 for (i = 0; ((getAggD(j)[i] != null)
                         && (getAggD(j)[i].getQ_max() >= 0)); i++) {
                     bl = getAggD(j)[i].getPtice();
-                    min = getAggD(j)[i].getQ_min();
                 }
                 Env.log.println("node_id: " + own_id  + " balance price: " + bl);
             }
@@ -759,23 +763,25 @@ public class Agent implements Steppable {
             Env.out.write("\n" + runTime + "," + own_id + ",0,"
                     + getBl(0) + "," + ex[0]);
 
-            if (getArrayIndex(Parent.getRan()[0], own_id % 100 + 1) < 0) 
+            if (getArrayIndex(parent.getRan()[0], own_id % 100 + 1) < 0) 
                 Env.out.write("\n" + runTime + "," + own_id + ",1,"
                         + getBl(1) + "," + ex[1]);
             
-            if (getArrayIndex(Parent.getRan()[1], own_id % 100 + 1) < 0) 
+            if (getArrayIndex(parent.getRan()[1], own_id % 100 + 1) < 0) 
                 Env.out.write("\n" + runTime + "," + own_id + ",5,"
                         + getBl(2) + "," + ex[2]);
             
-            if (getArrayIndex(Parent.getRan()[2], own_id % 100 + 1) < 0) 
+            if (getArrayIndex(parent.getRan()[2], own_id % 100 + 1) < 0) 
                 Env.out.write("\n" + runTime + "," + own_id + ",10,"
                         + getBl(3) + "," + ex[3]);
             
 
         }
 
-    //create demand curves based on initial load, elasticity, and number of steps
-    public Bid[] drawDemand(double Q40, double elst, int step){
+    /**
+     * Create demand curves based on initial load, elasticity, and number of steps
+     */
+    private Bid[] drawDemand(double Q40, double elst, int step){
         Bid [] result = new Bid[maxbids/*step*//*+1*/];
         
         int iniprice= 40 +  (int) (runiform() * 12 - 6);
@@ -804,8 +810,10 @@ public class Agent implements Steppable {
         return result;
     }
     
-    //create supply curves with reverse quantities in comparison to demand curve
-    public Bid[] drawSupply(double Q40, double elst, int step){
+    /**
+     * Create supply curves with reverse quantities in comparison to demand curve
+     */
+    private Bid[] drawSupply(double Q40, double elst, int step){
         Bid [] result = new Bid[maxbids/*step*//*+1*/];
         int iniprice= 40 + (int) (runiform() * 12 - 6);
         
@@ -836,7 +844,7 @@ public class Agent implements Steppable {
     }
     
     //aggregate two net demand curves
-    public Bid[] aggregateDemand(Bid[] bid1, Bid[] bid2) {
+    private Bid[] aggregateDemand(Bid[] bid1, Bid[] bid2) {
         Bid [] aggBid = new Bid[maxbids];
         
         int i =0, j =0, k = 0;

@@ -5,7 +5,6 @@
 //     or create subclasses for types.
 
 import java.util.ArrayList;
-import sim.engine.SimState;
 
 public class DBUS {
 

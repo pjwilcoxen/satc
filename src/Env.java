@@ -4,9 +4,7 @@
 //
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,8 +16,8 @@ import sim.engine.SimState;
         
 public class Env extends SimState {
 
-    public static final String usage = "Usage: java -jar market.jar <runfile>";
-    public static final String vers  = "2.0";
+    public static final String USAGE = "Usage: java -jar market.jar <runfile>";
+    public static final String VER  = "2.0";
 
     //
     // Information loaded from the run file
@@ -32,11 +30,11 @@ public class Env extends SimState {
     //    numPop     -- number of populations to draw
     //
     
-    public static String fileConfig ;
-    public static String fileDraws  ;
-    public static int    transCost = 1 ;
-    public static int    transCap  = 2500 ;
-    public static int    numPop    = 10 ;
+    private   static String fileConfig ;
+    protected static String fileDraws  ;
+    protected static int    transCost = 1 ;
+    protected static int    transCap  = 2500 ;
+    private   static int    numPop    = 10 ;
 
     //
     // Handle random number generation centrally so we can
@@ -131,8 +129,8 @@ public class Env extends SimState {
 
         if( args.length != 1 ) {
             System.out.println("Error: expected 1 argument but found "+args.length+".");
-            System.out.println(usage);
-            System.out.println("Versions: Env="+Env.vers+", Agent="+Agent.vers);
+            System.out.println(USAGE);
+            System.out.println("Versions: Env="+Env.VER+", Agent="+Agent.VER);
             System.exit(0);
         }
 
@@ -146,7 +144,7 @@ public class Env extends SimState {
         }
 
         stem = fileProps;
-        ext = stem.lastIndexOf(".");
+        ext = stem.lastIndexOf('.');
         if( ext>0 )stem = stem.substring(0,ext);
 
         fileConfig = props.getProperty("netmap","netmap.csv") ;
@@ -212,13 +210,13 @@ public class Env extends SimState {
 	}
     
     //create Agents based on the input csv file
-    public void makeAgents() throws FileNotFoundException, IOException{
+    public void makeAgents() throws FileNotFoundException, IOException {
     
-        dbus = new DBUS((Env) this);
+        dbus = new DBUS(this);
 
         //read the topology of the graph
-        BufferedReader br = null;
-        String line = "";
+        BufferedReader br;
+        String line;
             
         int cur_id, cur_type, cur_sd, cur_upid ;
         Agent cur_agent;
@@ -228,7 +226,7 @@ public class Env extends SimState {
         br.readLine();
         
         //initiate the arraylist of agents
-        listAgent = new ArrayList<Agent>();
+        listAgent = new ArrayList<>();
 
         line = br.readLine();
 
@@ -254,9 +252,15 @@ public class Env extends SimState {
             }
             schedule.scheduleRepeating(a);
         }
-}
+        
+        br.close();
+    }
 
- public void start(){
+    /**
+     *  Start the simulation
+     */
+    @Override
+    public void start(){
 	 super.start();
             try {
                 makeAgents();
@@ -265,11 +269,15 @@ public class Env extends SimState {
             } catch (IOException ex) {
                 Logger.getLogger(Env.class.getName()).log(Level.SEVERE, null, ex);
             }
- }
+    }
 
- public void finish() {
-    System.out.println("Simulation complete");
-    exit();
- }
+    /**
+     *  Finish the simulation
+     */
+    @Override
+    public void finish() {
+       System.out.println("Simulation complete");
+       exit();
+    }
  
 }

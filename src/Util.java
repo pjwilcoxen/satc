@@ -7,13 +7,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Utility routines
+ */
 public class Util {
 
-    //
-    //  openRead
-    //     Open a file and catch exceptions
-    //
-
+    /**
+     * Open a file and catch exceptions
+     * 
+     * @param  name File name to open for reading
+     * @return Open FileReader
+     */
     public static FileReader openRead(String name) {
         FileReader fr ;
         try {
@@ -21,17 +25,16 @@ public class Util {
             return fr;
             } 
         catch (IOException ex) {
-            System.out.println("Error reading: "+name);
-            System.exit(0);
+            throw new RuntimeException("Error reading: "+name);
         } 
-        return null ;
     }
 
-    // 
-    //  openWrite
-    //     Open a file for writing and catch exceptions
-    //
-
+    /** 
+     * Open a file for writing and catch exceptions
+     * 
+     * @param  name Filename to open for writing
+     * @return Open PrintWriter
+     */
     public static PrintWriter openWrite(String name) {
         PrintWriter pw;
         try {
@@ -39,9 +42,7 @@ public class Util {
             return pw;
             } 
         catch (IOException ex) {
-            System.out.println("Error opening "+name+" for writing");
-            System.exit(0);
+            throw new RuntimeException("Error opening "+name+" for writing");
         } 
-        return null ;
     }
 }
