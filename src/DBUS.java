@@ -1,11 +1,8 @@
-// DBUS.java
-
-//  Check:
-//     Add features such as "type", "hashed", "encrypted", etc.
-//     or create subclasses for types.
-
 import java.util.ArrayList;
 
+/**
+ * Basic communications bus
+ */
 public class DBUS {
 
     Env e;
@@ -15,7 +12,7 @@ public class DBUS {
     //
     //  Constructor
     //
-
+    
     public DBUS(Env e){
         this.e = e;
         queueD = new ArrayList<>();
@@ -26,18 +23,6 @@ public class DBUS {
         bl = new int[4];
     }
     
-    //  Check: not used elsewhere?
-
-    public Bid[] getQueueD(int drop) {
-        return queueD.get(drop);
-    }
-   
-    //  Check: not used elsewhere?
-
-    public int getBl(int drop) {
-        return bl[drop];
-    }
-   
     //  Check: 
     //     Add a message object and collapse these methods to one.
     //     That is, DBUS sends messages but leaves it up to the

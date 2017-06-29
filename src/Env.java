@@ -1,8 +1,3 @@
-//  Env.java
-//
-//  Overall environment for the market simulation.  
-//
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,10 +8,13 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sim.engine.SimState;
-        
+
+/**
+ * Main simulation environment 
+ */
 public class Env extends SimState {
 
-    public static final String USAGE = "Usage: java -jar market.jar <runfile>";
+    private static final String USAGE = "Usage: java -jar market.jar <runfile>";
     public static final String VER  = "2.0";
 
     //
@@ -63,14 +61,9 @@ public class Env extends SimState {
     // Other variables
     //
 
-    public int n = 100; //The number of agents
-    double[][] queueS;
-    int queueSizeS;
-    double[][] queueD;
-    int queueSizeD;
-
     public static PrintWriter out;
     public static PrintWriter log;
+    static int pop;
 
     ArrayList<Agent> listAgent;
     DBUS dbus;
@@ -84,41 +77,40 @@ public class Env extends SimState {
         super( rgen_seed != -1 ? rgen_seed : seed );
     }
 
-    //
-    //  runiform()
-    //     Centralized random number generator that can be
-    //     initialized with a specified seed.
-    //
-
+    /**
+     * Centralized random number generator
+     * 
+     * Can be initialized with a specified seed
+     */
     public static double runiform() {
        return rgen.nextDouble() ;
     }
-       
-    //
-    //  getIntProp()
-    //     Look up a property and return an integer
-    //
-
+    
+    /**
+     * Get the current population number
+     * 
+     * @return Number of this population
+     */
+    static public int getPop() {
+        return pop;
+    }
+    
+    /**
+     * Look up a property and return an integer
+     * 
+     * @param prop Properties object
+     * @param key  Key to look up
+     * @param def  Default to use if key is absent
+     */
     private static int getIntProp(Properties prop, String key, String def) {
         String val = prop.getProperty(key,def) ;
         val = val.trim();
         return Integer.parseInt(val);
     }
 
-    //
-    //  exit()
-    //     Close files and tidy up.
-
-    public static void exit() {
-       out.close();
-       log.close();
-       System.exit(0);
-    }
-
-    //
-    //  main()
-    //
-
+    /**
+     * Entry point for the simulation
+     */
     public static void main(String[] args) {
         
         String fileProps;
@@ -195,7 +187,7 @@ public class Env extends SimState {
 
         enviro.start();
 
-        for( int pop=0 ; pop<numPop ; pop++ ) {
+        for( pop=1 ; pop<=numPop ; pop++ ) {
            System.out.println("Starting population "+pop);
            log.println("*** population "+pop);
 
@@ -210,7 +202,7 @@ public class Env extends SimState {
 	}
     
     //create Agents based on the input csv file
-    public void makeAgents() throws FileNotFoundException, IOException {
+    private void makeAgents() throws FileNotFoundException, IOException {
     
         dbus = new DBUS(this);
 
@@ -248,7 +240,7 @@ public class Env extends SimState {
 
         for (Agent a : listAgent ) {
             if (a.getType() != 1) {
-                a.setParent( listAgent.get(a.getUp_id() - 1));
+                a.setParent( listAgent.get(a.getPar_id() - 1));
             }
             schedule.scheduleRepeating(a);
         }
@@ -277,7 +269,9 @@ public class Env extends SimState {
     @Override
     public void finish() {
        System.out.println("Simulation complete");
-       exit();
+       out.close();
+       log.close();
+       System.exit(0);
     }
  
 }

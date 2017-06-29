@@ -6,7 +6,7 @@ Scenario Settings:
    Populations: 10
    Seed imposed: 123456
 
-*** population 0
+*** population 1
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
@@ -39,7 +39,7 @@ node_id: 202 balance price: 207
 node_id: 202 balance price: 239
 node_id: 202 balance price: 194
 *** stage CALC_LOADS
-*** population 1
+*** population 2
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
@@ -69,7 +69,7 @@ node_id: 202 balance price: 245
 node_id: 202 balance price: 223
 node_id: 202 balance price: 239
 *** stage CALC_LOADS
-*** population 2
+*** population 3
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
@@ -99,7 +99,7 @@ node_id: 202 balance price: 199
 node_id: 202 balance price: 182
 node_id: 202 balance price: 183
 *** stage CALC_LOADS
-*** population 3
+*** population 4
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
@@ -129,7 +129,7 @@ node_id: 201 balance price: 25
 node_id: 201 balance price: 24
 node_id: 201 balance price: 27
 *** stage CALC_LOADS
-*** population 4
+*** population 5
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
@@ -159,7 +159,7 @@ node_id: 201 balance price: 23
 node_id: 201 balance price: 24
 node_id: 201 balance price: 26
 *** stage CALC_LOADS
-*** population 5
+*** population 6
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
@@ -190,7 +190,7 @@ node_id: 201 balance price: 25
 node_id: 201 balance price: 23
 node_id: 201 balance price: 25
 *** stage CALC_LOADS
-*** population 6
+*** population 7
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
@@ -220,7 +220,7 @@ node_id: 201 balance price: 25
 node_id: 201 balance price: 22
 node_id: 201 balance price: 27
 *** stage CALC_LOADS
-*** population 7
+*** population 8
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
@@ -251,7 +251,7 @@ node_id: 202 balance price: 261
 node_id: 202 balance price: 279
 node_id: 202 balance price: 220
 *** stage CALC_LOADS
-*** population 8
+*** population 9
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
@@ -281,7 +281,7 @@ node_id: 201 balance price: 25
 node_id: 201 balance price: 22
 node_id: 201 balance price: 27
 *** stage CALC_LOADS
-*** population 9
+*** population 10
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop

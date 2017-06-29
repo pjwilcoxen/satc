@@ -1,9 +1,5 @@
-//  Bid.java
-
 /**
- *
- * @author VahidKh
- *
+ * Building block of bid class
  */
 public class Bid {
     public int ptice;
@@ -39,8 +35,5 @@ public class Bid {
         this.q_min = q_min;
         this.q_max = q_max;
     }
-    
-    
-    
     
 }
