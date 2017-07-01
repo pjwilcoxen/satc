@@ -43,7 +43,6 @@ public class Env extends SimState {
     private static Random rgen;
     private static long rgen_seed = -1;
 
-
     //
     // Stages per simulation
     //
@@ -209,7 +208,9 @@ public class Env extends SimState {
         enviro.finish();
 	}
     
-    //create Agents based on the input csv file
+    /**
+     * Create agents based on the input network map
+     */
     private void makeAgents() throws FileNotFoundException, IOException {
     
         BufferedReader br;
@@ -220,7 +221,7 @@ public class Env extends SimState {
         String items[];
         DBUS dbus;
 
-        //read the topology of the graph
+        //read the topology of the network and build the list of agents
 
         listAgent = new ArrayList<>();
 
@@ -232,7 +233,7 @@ public class Env extends SimState {
             cur_type  = Integer.parseInt(rec.get("type"));
             cur_sd    = Integer.parseInt(rec.get("sd_type"));
             cur_upid  = Integer.parseInt(rec.get("up_id"));
-            cur_dbus  = rec.get("dbus");                      // reserved
+            cur_dbus  = rec.get("dbus");
             cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
             cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
