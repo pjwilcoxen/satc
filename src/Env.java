@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.csv.*;
 import sim.engine.SimState;
 
 /**
@@ -41,6 +42,7 @@ public class Env extends SimState {
 
     private static Random rgen;
     private static long rgen_seed = -1;
+
 
     //
     // Stages per simulation
@@ -204,35 +206,33 @@ public class Env extends SimState {
     //create Agents based on the input csv file
     private void makeAgents() throws FileNotFoundException, IOException {
     
-        dbus = new DBUS(this);
-
-        //read the topology of the graph
         BufferedReader br;
-        String line;
-            
-        int cur_id, cur_type, cur_sd, cur_upid ;
+        CSVParser csvReader;
+        int cur_id, cur_type, cur_sd, cur_upid, cur_cost, cur_cap ;
+        String cur_dbus;
         Agent cur_agent;
         String items[];
 
-        br = new BufferedReader(Util.openRead(fileConfig));
-        br.readLine();
-        
-        //initiate the arraylist of agents
+        dbus = new DBUS(this);
+
+        //read the topology of the graph
+
         listAgent = new ArrayList<>();
 
-        line = br.readLine();
+        br = new BufferedReader(Util.openRead(fileConfig));
+        csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
 
-        // instantiate the agents based on the input csv file    
+        for(CSVRecord rec: csvReader) {
+            cur_id    = Integer.parseInt(rec.get("id"));
+            cur_type  = Integer.parseInt(rec.get("type"));
+            cur_sd    = Integer.parseInt(rec.get("sd_type"));
+            cur_upid  = Integer.parseInt(rec.get("up_id"));
+            cur_dbus  = rec.get("dbus");                      // reserved
+            cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
+            cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
-        while (line != null) {
-            items     = line.split(",");
-            cur_id    = Integer.parseInt(items[0]);
-            cur_type  = Integer.parseInt(items[1]);
-            cur_sd    = Integer.parseInt(items[2]);
-            cur_upid  = Integer.parseInt(items[3]);
             cur_agent = new Agent(this,null,cur_type,cur_upid,cur_id,cur_sd);
             listAgent.add(cur_agent);
-            line = br.readLine();
         }
         
         // link each agent to its parent now that all are instantiated and
