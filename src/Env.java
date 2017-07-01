@@ -67,8 +67,7 @@ public class Env extends SimState {
     public static PrintWriter log;
     static int pop;
 
-    ArrayList<Agent> listAgent;
-    DBUS dbus;
+    static ArrayList<Agent> listAgent;
    
     //
     //  Env()
@@ -108,6 +107,13 @@ public class Env extends SimState {
         String val = prop.getProperty(key,def) ;
         val = val.trim();
         return Integer.parseInt(val);
+    }
+
+    /**
+     * Find and return an agent given its id
+     */
+    public static Agent getAgent(int own_id) {
+       return listAgent.get(own_id-1);
     }
 
     /**
@@ -212,8 +218,7 @@ public class Env extends SimState {
         String cur_dbus;
         Agent cur_agent;
         String items[];
-
-        dbus = new DBUS(this);
+        DBUS dbus;
 
         //read the topology of the graph
 
@@ -232,6 +237,12 @@ public class Env extends SimState {
             cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
             cur_agent = new Agent(this,null,cur_type,cur_upid,cur_id,cur_sd);
+            
+            dbus = DBUS.find(cur_dbus);
+            if( dbus == null )dbus = new DBUS(cur_dbus);
+
+            cur_agent.dbus = dbus;
+
             listAgent.add(cur_agent);
         }
         

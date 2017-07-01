@@ -1,26 +1,31 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Basic communications bus
  */
 public class DBUS {
 
-    Env e;
-    ArrayList<Bidstep[]> queueD;
-    int [] bl;
+    private static Hashtable<String, DBUS> busList = new Hashtable<>();
     
+    String name;
+
+    /**
+     * Find a bus by name or return null
+     */
+    public static DBUS find(String name) {
+        return busList.get(name);
+    }
+
     //
     //  Constructor
     //
     
-    public DBUS(Env e){
-        this.e = e;
-        queueD = new ArrayList<>();
-        queueD.add(new Bidstep[200]);
-        queueD.add(new Bidstep[200]);
-        queueD.add(new Bidstep[200]);
-        queueD.add(new Bidstep[200]);
-        bl = new int[4];
+    public DBUS(String name){
+        if( busList.containsKey(name) )
+            throw new RuntimeException("Redundant dbus instantiation");
+        this.name = name; 
+        busList.put(name,this);
     }
     
     //  Check: 
@@ -29,14 +34,12 @@ public class DBUS {
     //     recipient to figure out what to do with them
 
     public void toQueue(Bidstep[] bids, int drop, int to, int sd_type) {
-        queueD.set(drop, bids);
-        e.listAgent.get(to - 1).appendQueueD(/*this.queueD.get(drop)*/bids, drop);
+        Env.getAgent(to).appendQueueD(bids, drop);
         
     }     
       
     public void toQueue(int bl, int drop, int to, int sd_type) {
-        this.bl[drop] = bl;
-        e.listAgent.get(to-1).setBl(this.bl[drop], drop);
+        Env.getAgent(to).setBl(bl, drop);
     }
     
 }

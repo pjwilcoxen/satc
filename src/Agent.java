@@ -77,6 +77,9 @@ public class Agent implements Steppable {
     //indicates the upper and lower level around the balance prices considering transaction cost
     int[][] p_c;
 
+    //data bus this agent uses to communicate with its parent
+    DBUS dbus;
+
     //  Parent and list of children
 
     /**
@@ -570,15 +573,15 @@ public class Agent implements Steppable {
             }
 
             //populate the parents queues for different cases of dropped nodes 
-            e.dbus.toQueue(bids, 0, parent.own_id, sd_type);
+            dbus.toQueue(bids, 0, parent.own_id, sd_type);
             if (getArrayIndex(parent.getRan()[0], own_id % 100) < 0) {
-                e.dbus.toQueue(bids, 1, parent.own_id, sd_type);
+                dbus.toQueue(bids, 1, parent.own_id, sd_type);
             }
             if (getArrayIndex(parent.getRan()[1], own_id % 100) < 0) {
-                e.dbus.toQueue(bids, 2, parent.own_id, sd_type);
+                dbus.toQueue(bids, 2, parent.own_id, sd_type);
             }
             if (getArrayIndex(parent.getRan()[2], own_id % 100) < 0) {
-                e.dbus.toQueue(bids, 3, parent.own_id, sd_type);
+                dbus.toQueue(bids, 3, parent.own_id, sd_type);
             }
     }
 
@@ -603,7 +606,7 @@ public class Agent implements Steppable {
             //call addCost and addCapacity functions to consider transaction costs and capacity constrains
             for (int i = 0; i < 4; i++) {
                 tmp = addCost(agg.get(i), cost, i);
-                e.dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id, 0);
+                dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id, 0);
             }
 
             clearQueuesD();
@@ -688,6 +691,7 @@ public class Agent implements Steppable {
     private void do_report_mid() {
         
             int child_id;
+            DBUS child_bus;
 
             Env.log.println("node "+own_id);
 
@@ -695,10 +699,10 @@ public class Agent implements Steppable {
 
             for (Agent child: children) {
                 child_id = child.own_id;
-                e.dbus.toQueue(getBl(0), 0, child_id, 0);
-                e.dbus.toQueue(getBl(1), 1, child_id, 0);
-                e.dbus.toQueue(getBl(2), 2, child_id, 0);
-                e.dbus.toQueue(getBl(3), 3, child_id, 0);
+                child.dbus.toQueue(getBl(0), 0, child_id, 0);
+                child.dbus.toQueue(getBl(1), 1, child_id, 0);
+                child.dbus.toQueue(getBl(2), 2, child_id, 0);
+                child.dbus.toQueue(getBl(3), 3, child_id, 0);
             }
 
     }
@@ -750,10 +754,10 @@ public class Agent implements Steppable {
 
             for(Agent child: children) {
                 child_id = child.own_id ;
-                e.dbus.toQueue(report[0], 0, child_id, 0);
-                e.dbus.toQueue(report[1], 1, child_id, 0);
-                e.dbus.toQueue(report[2], 2, child_id, 0);
-                e.dbus.toQueue(report[3], 3, child_id, 0);
+                child.dbus.toQueue(report[0], 0, child_id, 0);
+                child.dbus.toQueue(report[1], 1, child_id, 0);
+                child.dbus.toQueue(report[2], 2, child_id, 0);
+                child.dbus.toQueue(report[3], 3, child_id, 0);
             }
 
     }
