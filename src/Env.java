@@ -75,6 +75,11 @@ public class Env extends SimState {
     
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
+        try {
+            readDraws();
+        } catch (Exception e) {
+           throw new RuntimeException("Could not read file of draws");
+        }
     }
 
     /**
@@ -114,6 +119,14 @@ public class Env extends SimState {
     public static Agent getAgent(int own_id) {
        return listAgent.get(own_id-1);
     }
+
+    class Draw {
+       int n;
+       String type;
+       double load;
+       double elast;
+    }
+    static ArrayList<Draw> drawList = new ArrayList<>();
 
     /**
      * Entry point for the simulation
@@ -259,6 +272,30 @@ public class Env extends SimState {
         
         br.close();
     }
+
+    /**
+     * Read the list of draws of random agent characteristics
+     */
+    private void readDraws() throws FileNotFoundException, IOException {
+        BufferedReader br;
+        CSVParser csvReader;
+        Draw draw;
+
+        br = new BufferedReader(Util.openRead(Env.fileDraws));
+        csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
+ 
+        for(CSVRecord rec: csvReader) {
+            draw = new Draw();
+            draw.n     = Integer.parseInt(rec.get("n"));
+            draw.type  = rec.get("type");
+            draw.load  = Double.parseDouble(rec.get("load"));
+            draw.elast = Double.parseDouble(rec.get("elast"));
+            drawList.add(draw);
+        } 
+
+        br.close();
+    }
+
 
     /**
      *  Start the simulation

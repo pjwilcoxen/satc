@@ -208,42 +208,41 @@ public class Agent implements Steppable {
             return k;
         }
 
-    //Populate the bids from the input csv file
-    private double[] findnewLoad() throws FileNotFoundException, IOException{
-  
-        BufferedReader br;
-	String line;
-        String cvsSplitBy = ",";
+    /**
+     * Populate the bids from the input csv file
+     */
+    private void drawLoad() {
+ 
+        int max = 9858; 
+        int rand;
+        int row;
         
-        br = new BufferedReader(Util.openRead(Env.fileDraws));
-        br.readLine();
-        
-        line = br.readLine();
-        //skip demand rows if the end user is a seller node
-        if(sd_type == 0)
-            while (line!=null && !(line.split(cvsSplitBy)[1].equals("\"D\""))){
-                line = br.readLine();
-            }
-        
-        //define a random value
-        int max = 9858;//based on the length of input file
-        int min = 0;
-        int random;
-        random= (int)(runiform() * max + min);
-        
-        //skip the input lines before the random id
-        int tmp =0;
-        for(int i =0 ; i < random; i++)
-            line = br.readLine();   
-         
-        //pull out the elasticity and initial load from the random row
-        String[] values = line.split(cvsSplitBy);
-        double[] lds = new double[2];
-        lds[0] =  Double.parseDouble(values[2]);
-        lds[1] =  Double.parseDouble(values[3]);
+        // generate a random number of input lines to skip
+        // max was originally hard-coded and is left that 
+        // way for compatibility
 
-        br.close();
-        return lds;
+        rand = (int)(runiform() * max);
+        
+        row = 0;
+        for(Env.Draw draw: Env.drawList) {
+
+            // skip supply curves if we need a demand
+
+            if(sd_type == 0 && draw.type.equals("S") )
+                continue;
+        
+            // if we've hit the right row grab the data and return
+
+            if( row == rand ) {
+                this.load  = draw.load;
+                this.elast = draw.elast;
+                return;
+            }
+
+            row++;
+        }
+
+        throw new RuntimeException("Fault in drawLoad");
     }
     
      
@@ -552,15 +551,8 @@ public class Agent implements Steppable {
             //initiate the initial load and elasticity
             double tmp[];
             
-            //find random values from the input file "testdraw.csv"
-            try {
-                tmp   = findnewLoad();
-                load  = tmp[0];
-                elast = tmp[1];
-            } catch (IOException ex) {
-                Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-                throw new RuntimeException("Exception finding load");
-            }
+            //find random load and elast from the input file "testdraw.csv"
+            drawLoad();
 
             //initiate the number of steps to create curve
             int step = (int) (runiform() * maxstep + 2);
