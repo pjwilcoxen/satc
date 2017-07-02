@@ -32,6 +32,11 @@ public class Agent implements Steppable {
      */
     static int maxstep = 14;
     
+    /**
+     * Actual number of steps used, for reference
+     */
+    int steps;
+
     // not needed?
     static int maxbids = 400;
 
@@ -209,7 +214,7 @@ public class Agent implements Steppable {
         }
 
     /**
-     * Populate the bids from the input csv file
+     * Build the agent's net demand curve
      */
     private void drawLoad() {
  
@@ -229,8 +234,18 @@ public class Agent implements Steppable {
         else
            draw = Env.drawListS.get(rand);
         
-        this.load  = draw.load;
-        this.elast = draw.elast;
+        load  = draw.load;
+        elast = draw.elast;
+
+        //number of steps to create curve
+        steps = (int) (runiform() * maxstep + 2);
+
+        //call draw function based on the type of end user
+        if (sd_type.equals("D")) {
+            bids = drawDemand();
+        } else {
+            bids = drawSupply();
+        }
     }
     
      
@@ -536,21 +551,8 @@ public class Agent implements Steppable {
      */
     private void do_init_load() {
 
-            //initiate the initial load and elasticity
-            double tmp[];
-            
-            //find random load and elast from the input file "testdraw.csv"
+            //build a random net demand for this agent
             drawLoad();
-
-            //initiate the number of steps to create curve
-            int step = (int) (runiform() * maxstep + 2);
-
-            //call draw function based on the type (demand/supply) of end users
-            if (sd_type.equals("D")) {
-                bids = drawDemand(load, elast, step);
-            } else {
-                bids = drawSupply(load, elast, step);
-            }
 
             //populate the parents queues for different cases of dropped nodes 
             dbus.toQueue(bids, 0, parent.own_id);
@@ -782,30 +784,30 @@ public class Agent implements Steppable {
     /**
      * Create demand curves based on initial load, elasticity, and number of steps
      */
-    private Bidstep[] drawDemand(double Q40, double elst, int step){
-        Bidstep [] result = new Bidstep[maxbids/*step*//*+1*/];
+    private Bidstep[] drawDemand(){
+        Bidstep [] result = new Bidstep[maxbids];
         
         int iniprice= 40 +  (int) (runiform() * 12 - 6);
-        int p0 = iniprice/step;
-        int p1 = iniprice*2/step;
-        int q1= (int) (Q40 * pow((double)p0/iniprice,elst));
-        int q2=(int)(Q40 * pow((double)p1/iniprice,elst));
+        int p0 = iniprice/steps;
+        int p1 = iniprice*2/steps;
+        int q1= (int) (load * pow((double)p0/iniprice,elast));
+        int q2=(int)(load * pow((double)p1/iniprice,elast));
         result[0]  = new Bidstep(p0, q2, q1);
         
         //create the number of steps below the price=40
-        for(int i =1 ; i < step; i ++){
-            p1 = iniprice*(i+1)/step;
+        for(int i =1 ; i < steps; i ++){
+            p1 = iniprice*(i+1)/steps;
             q1= q2;
-            q2= (int) (Q40 * pow((double)p1/iniprice,elst));
+            q2= (int) (load * pow((double)p1/iniprice,elast));
             result[i]  = new Bidstep(p1, q2, q1);
         }
         
         //create twice the number of steps upper the proce = 40
-        for(int i =1 ; i < 2*step; i ++){
-            p1 = iniprice + (360*i)/(2*step);
+        for(int i =1 ; i < 2*steps; i ++){
+            p1 = iniprice + (360*i)/(2*steps);
             q1= q2;
-            q2= (int) (Q40 * pow((double)p1/iniprice,elst));
-            result[step + i - 1]  = new Bidstep(p1, q2, q1);
+            q2= (int) (load * pow((double)p1/iniprice,elast));
+            result[steps + i - 1]  = new Bidstep(p1, q2, q1);
         }
         
         return result;
@@ -814,31 +816,31 @@ public class Agent implements Steppable {
     /**
      * Create supply curves with reverse quantities in comparison to demand curve
      */
-    private Bidstep[] drawSupply(double Q40, double elst, int step){
-        Bidstep [] result = new Bidstep[maxbids/*step*//*+1*/];
+    private Bidstep[] drawSupply(){
+        Bidstep [] result = new Bidstep[maxbids];
         int iniprice= 40 + (int) (runiform() * 12 - 6);
         
-        int p0 = iniprice/step;
-        int p1 = (iniprice*2)/step;
+        int p0 = iniprice/steps;
+        int p1 = (iniprice*2)/steps;
 
-        int q1=(int)((-1) * (Q40 * pow((double)p0/iniprice,elst)));
-        int q2=(int)((-1) * (Q40 * pow((double)p1/iniprice,elst)));
+        int q1=(int)((-1) * (load * pow((double)p0/iniprice,elast)));
+        int q2=(int)((-1) * (load * pow((double)p1/iniprice,elast)));
         result[0]  = new Bidstep(p0, q1, q2);
         
         //create the number of steps below the price=40
-        for(int i =1 ; i < step; i ++){
-            p1 = iniprice*(i+1)/step;
+        for(int i =1 ; i < steps; i ++){
+            p1 = iniprice*(i+1)/steps;
             q1= q2;
-            q2= (int) ((-1) * (Q40 * pow((double)p1/iniprice,elst)));
+            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
             result[i]  = new Bidstep(p1, q1, q2);
         }
         
         //create twice the number of steps upper the proce = 40
-        for(int i =1 ; i < 2*step ; i++){
-            p1 = iniprice+ 360*i/(2*step);
+        for(int i =1 ; i < 2*steps ; i++){
+            p1 = iniprice+ 360*i/(2*steps);
             q1= q2;
-            q2= (int) ((-1) * (Q40 * pow((double)p1/iniprice,elst)));
-            result[step + i - 1]  = new Bidstep(p1, q1, q2);
+            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
+            result[steps + i - 1]  = new Bidstep(p1, q1, q2);
         }
         
         return result;
