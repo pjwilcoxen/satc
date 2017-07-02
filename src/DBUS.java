@@ -33,12 +33,12 @@ public class DBUS {
     //     That is, DBUS sends messages but leaves it up to the
     //     recipient to figure out what to do with them
 
-    public void toQueue(Bidstep[] bids, int drop, int to, int sd_type) {
+    public void toQueue(Bidstep[] bids, int drop, int to) {
         Env.getAgent(to).appendQueueD(bids, drop);
         
     }     
       
-    public void toQueue(int bl, int drop, int to, int sd_type) {
+    public void toQueue(int bl, int drop, int to) {
         Env.getAgent(to).setBl(bl, drop);
     }
     
