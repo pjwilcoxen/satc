@@ -763,22 +763,11 @@ public class Agent implements Steppable {
 
             int pop = Env.getPop();    
 
-            //report the excess demands for each cased of dropped nodes
-            Env.out.write("\n" + pop + "," + own_id + ",0,"
-                    + getBl(0) + "," + ex[0]);
-
-            if (getArrayIndex(parent.getRan()[0], own_id % 100 + 1) < 0) 
-                Env.out.write("\n" + pop + "," + own_id + ",1,"
-                        + getBl(1) + "," + ex[1]);
-            
-            if (getArrayIndex(parent.getRan()[1], own_id % 100 + 1) < 0) 
-                Env.out.write("\n" + pop + "," + own_id + ",5,"
-                        + getBl(2) + "," + ex[2]);
-            
-            if (getArrayIndex(parent.getRan()[2], own_id % 100 + 1) < 0) 
-                Env.out.write("\n" + pop + "," + own_id + ",10,"
-                        + getBl(3) + "," + ex[3]);
-
+            //report the excess demands for every node
+            Env.out.write("\n"+pop+","+own_id+ ",0,"+getBl(0)+","+ex[0]);
+            Env.out.write("\n"+pop+","+own_id+ ",1,"+getBl(1)+","+ex[1]);
+            Env.out.write("\n"+pop+","+own_id+ ",5,"+getBl(2)+","+ex[2]);
+            Env.out.write("\n"+pop+","+own_id+",10,"+getBl(3)+","+ex[3]);
         }
 
     /**
