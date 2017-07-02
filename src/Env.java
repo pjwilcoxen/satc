@@ -228,8 +228,8 @@ public class Env extends SimState {
     
         BufferedReader br;
         CSVParser csvReader;
-        int cur_id, cur_type, cur_sd, cur_upid, cur_cost, cur_cap ;
-        String cur_dbus;
+        int cur_id, cur_type, cur_upid, cur_cost, cur_cap ;
+        String cur_sd, cur_dbus;
         Agent cur_agent;
         String items[];
         DBUS dbus;
@@ -244,7 +244,7 @@ public class Env extends SimState {
         for(CSVRecord rec: csvReader) {
             cur_id    = Integer.parseInt(rec.get("id"));
             cur_type  = Integer.parseInt(rec.get("type"));
-            cur_sd    = Integer.parseInt(rec.get("sd_type"));
+            cur_sd    = rec.get("sd_type");
             cur_upid  = Integer.parseInt(rec.get("up_id"));
             cur_dbus  = rec.get("dbus");
             cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved

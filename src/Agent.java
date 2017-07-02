@@ -48,7 +48,7 @@ public class Agent implements Steppable {
     int par_id;
     
     //indicates supply or demand type
-    int sd_type;
+    String sd_type;
     
     //indicates initial load for end user extracted from "testdraw.csv"
     //indicates the elasticity of end user extracted from "testdraw.csv" 
@@ -156,7 +156,7 @@ public class Agent implements Steppable {
         return Env.runiform() ;
     }
 
-    public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, int sd_type) {
+    public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, String sd_type) {
         super();
 
         this.type = type;
@@ -228,7 +228,7 @@ public class Agent implements Steppable {
 
             // skip supply curves if we need a demand
 
-            if(sd_type == 0 && draw.type.equals("S") )
+            if(sd_type.equals("D") && draw.type.equals("S") )
                 continue;
         
             // if we've hit the right row grab the data and return
@@ -558,7 +558,7 @@ public class Agent implements Steppable {
             int step = (int) (runiform() * maxstep + 2);
 
             //call draw function based on the type (demand/supply) of end users
-            if (sd_type == 0) {
+            if (sd_type.equals("D")) {
                 bids = drawDemand(load, elast, step);
             } else {
                 bids = drawSupply(load, elast, step);
