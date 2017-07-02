@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -510,6 +511,8 @@ public class Agent implements Steppable {
 
     private void do_init_drops() {
         
+            int rand;
+
             Env.log.println("node "+own_id);
             Env.log.println("initiate random list of users to drop");
 
@@ -519,14 +522,21 @@ public class Agent implements Steppable {
             //initiate the vectors for three case of 1, 5, and 10 drops
             ran[0] = new int[1];
             for (int i = 0; i < 1; i++) {
-                ran[0][i] = (int) (runiform() * 100 + 1);
+                rand = (int) (runiform() * 100 + 1);
+                ran[0][i] = rand;
+                for(Agent kid: children)
+                    if( rand == (kid.own_id % 100) ) 
+                        Env.setBlock("1",kid);
             }
             
             ran[1] = new int[5];
             for (int i = 0; i < 5; i++) {
-                int tmp = (int) (runiform() * 100 + 1);
-                if (getArrayIndex(ran[1], tmp) < 0) {
-                    ran[1][i] = tmp;
+                rand = (int) (runiform() * 100 + 1);
+                if (getArrayIndex(ran[1], rand) < 0) {
+                    ran[1][i] = rand;
+                    for(Agent kid: children)
+                        if( rand == (kid.own_id % 100) ) 
+                            Env.setBlock("5",kid);
                 } else {
                     i--;
                 }
@@ -534,9 +544,12 @@ public class Agent implements Steppable {
             
             ran[2] = new int[10];
             for (int i = 0; i < 10; i++) {
-                int tmp = (int) (runiform() * 100 + 1);
-                if (getArrayIndex(ran[2], tmp) < 0) {
-                    ran[2][i] = tmp;
+                rand = (int) (runiform() * 100 + 1);
+                if (getArrayIndex(ran[2], rand) < 0) {
+                    ran[2][i] = rand;
+                    for(Agent kid: children)
+                        if( rand == (kid.own_id % 100) ) 
+                            Env.setBlock("10",kid);
                 } else {
                     i--;
                 }
@@ -544,6 +557,12 @@ public class Agent implements Steppable {
             
             //set the random variable
             this.ran = ran;
+
+        for(int i=0 ; i<3 ; i++) 
+           Env.log.println("ran["+i+"] "+Arrays.toString(ran[i]));
+
+        for(String dos: Env.dos_runs) 
+           Env.log.println("dos "+dos+" dropped "+Env.blockList.get(dos));
     }
 
     /**
@@ -555,16 +574,9 @@ public class Agent implements Steppable {
             drawLoad();
 
             //populate the parents queues for different cases of dropped nodes 
-            dbus.toQueue(bids, 0, parent.own_id);
-            if (getArrayIndex(parent.getRan()[0], own_id % 100) < 0) {
-                dbus.toQueue(bids, 1, parent.own_id);
-            }
-            if (getArrayIndex(parent.getRan()[1], own_id % 100) < 0) {
-                dbus.toQueue(bids, 2, parent.own_id);
-            }
-            if (getArrayIndex(parent.getRan()[2], own_id % 100) < 0) {
-                dbus.toQueue(bids, 3, parent.own_id);
-            }
+            for(int i=0 ; i<Env.dos_runs.length ; i++)
+                if( ! Env.isBlocked(Env.dos_runs[i],this) ) 
+                    dbus.toQueue(bids, i, parent.own_id);
     }
 
     /**
@@ -746,28 +758,30 @@ public class Agent implements Steppable {
 
     /**
      * Calculate actual loads at the leaf nodes
+     *
+     * Report net demand as 0 if no price was found
      */
     private void do_calc_load() {
             
-            //initiate the excess demand vector
-            int[] ex = new int[4];
-            //find the excess demand for the four cases of dropped nodes
-            for (int i = 0; i < 4; i++) {
-                //report 0 in case of no balance point
-                if (getBl(i) <= -1) {
-                    ex[i] = 0;
-                } else {
-                    ex[i] = findExcessDemand(getBl(i));
-                }
-            }
-
             int pop = Env.getPop();    
 
-            //report the excess demands for every node
-            Env.out.write("\n"+pop+","+own_id+ ",0,"+getBl(0)+","+ex[0]);
-            Env.out.write("\n"+pop+","+own_id+ ",1,"+getBl(1)+","+ex[1]);
-            Env.out.write("\n"+pop+","+own_id+ ",5,"+getBl(2)+","+ex[2]);
-            Env.out.write("\n"+pop+","+own_id+",10,"+getBl(3)+","+ex[3]);
+            int ex;
+            int bl;
+            int i;
+            String dos;
+
+            for(i=0 ; i<Env.dos_runs.length ; i++) {
+            
+                dos = Env.dos_runs[i];
+                bl  = getBl(i);
+
+                if (bl <= -1) 
+                    ex = 0;
+                else
+                    ex = findExcessDemand(bl);
+
+                Env.out.write("\n"+pop+","+own_id+","+dos+","+bl+","+ex);
+            }
         }
 
     /**

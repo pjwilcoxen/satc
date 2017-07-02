@@ -10,8 +10,22 @@ Scenario Settings:
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
+ran[0] [42]
+ran[1] [100, 26, 71, 8, 54]
+ran[2] [42, 53, 90, 68, 45, 12, 13, 63, 32, 10]
+dos 0 dropped []
+dos 1 dropped [42]
+dos 5 dropped [26, 71, 8, 54]
+dos 10 dropped [42, 53, 90, 68, 45, 12, 13, 63, 32, 10]
 node 202
 initiate random list of users to drop
+ran[0] [17]
+ran[1] [96, 65, 74, 62, 64]
+ran[2] [85, 23, 17, 19, 3, 91, 7, 27, 47, 2]
+dos 0 dropped []
+dos 1 dropped [42, 117]
+dos 5 dropped [26, 71, 8, 54, 196, 165, 174, 162, 164]
+dos 10 dropped [42, 53, 90, 68, 45, 12, 13, 63, 32, 10, 185, 123, 117, 119, 103, 191, 107, 127, 147, 102]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -43,8 +57,22 @@ node_id: 202 balance price: 194
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [21]
+ran[1] [71, 58, 67, 84, 59]
+ran[2] [99, 27, 45, 59, 78, 2, 47, 54, 37, 70]
+dos 0 dropped []
+dos 1 dropped [121]
+dos 5 dropped [171, 158, 167, 184, 159]
+dos 10 dropped [199, 127, 145, 159, 178, 102, 147, 154, 137, 170]
 node 201
 initiate random list of users to drop
+ran[0] [65]
+ran[1] [4, 40, 45, 42, 11]
+ran[2] [77, 71, 34, 97, 74, 49, 88, 11, 57, 29]
+dos 0 dropped []
+dos 1 dropped [121, 65]
+dos 5 dropped [171, 158, 167, 184, 159, 4, 40, 45, 42, 11]
+dos 10 dropped [199, 127, 145, 159, 178, 102, 147, 154, 137, 170, 77, 71, 34, 97, 74, 49, 88, 11, 57, 29]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -73,8 +101,22 @@ node_id: 202 balance price: 239
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [87]
+ran[1] [5, 43, 60, 85, 33]
+ran[2] [88, 77, 78, 52, 13, 83, 99, 23, 57, 10]
+dos 0 dropped []
+dos 1 dropped [187]
+dos 5 dropped [105, 143, 160, 185, 133]
+dos 10 dropped [188, 177, 178, 152, 113, 183, 199, 123, 157, 110]
 node 201
 initiate random list of users to drop
+ran[0] [98]
+ran[1] [70, 62, 23, 94, 55]
+ran[2] [82, 27, 67, 64, 78, 23, 11, 2, 45, 57]
+dos 0 dropped []
+dos 1 dropped [187, 98]
+dos 5 dropped [105, 143, 160, 185, 133, 70, 62, 23, 94, 55]
+dos 10 dropped [188, 177, 178, 152, 113, 183, 199, 123, 157, 110, 82, 27, 67, 64, 78, 23, 11, 2, 45, 57]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -103,8 +145,22 @@ node_id: 202 balance price: 183
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [70]
+ran[1] [88, 100, 33, 5, 14]
+ran[2] [51, 46, 24, 25, 19, 69, 98, 10, 27, 86]
+dos 0 dropped []
+dos 1 dropped [170]
+dos 5 dropped [188, 133, 105, 114]
+dos 10 dropped [151, 146, 124, 125, 119, 169, 198, 110, 127, 186]
 node 201
 initiate random list of users to drop
+ran[0] [75]
+ran[1] [6, 9, 84, 44, 66]
+ran[2] [94, 76, 97, 64, 61, 86, 95, 6, 25, 10]
+dos 0 dropped []
+dos 1 dropped [170, 75]
+dos 5 dropped [188, 133, 105, 114, 6, 9, 84, 44, 66]
+dos 10 dropped [151, 146, 124, 125, 119, 169, 198, 110, 127, 186, 94, 76, 97, 64, 61, 86, 95, 6, 25, 10]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -133,8 +189,22 @@ node_id: 201 balance price: 27
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
+ran[0] [13]
+ran[1] [11, 54, 79, 86, 8]
+ran[2] [44, 92, 73, 87, 96, 41, 89, 12, 52, 25]
+dos 0 dropped []
+dos 1 dropped [13]
+dos 5 dropped [11, 54, 79, 86, 8]
+dos 10 dropped [44, 92, 73, 87, 96, 41, 89, 12, 52, 25]
 node 202
 initiate random list of users to drop
+ran[0] [69]
+ran[1] [29, 23, 74, 97, 40]
+ran[2] [82, 31, 56, 62, 95, 76, 15, 63, 98, 52]
+dos 0 dropped []
+dos 1 dropped [13, 169]
+dos 5 dropped [11, 54, 79, 86, 8, 129, 123, 174, 197, 140]
+dos 10 dropped [44, 92, 73, 87, 96, 41, 89, 12, 52, 25, 182, 131, 156, 162, 195, 176, 115, 163, 198, 152]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -163,8 +233,22 @@ node_id: 201 balance price: 26
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [19]
+ran[1] [45, 58, 91, 53, 5]
+ran[2] [67, 28, 75, 97, 11, 24, 49, 33, 100, 83]
+dos 0 dropped []
+dos 1 dropped [119]
+dos 5 dropped [145, 158, 191, 153, 105]
+dos 10 dropped [167, 128, 175, 197, 111, 124, 149, 133, 183]
 node 201
 initiate random list of users to drop
+ran[0] [84]
+ran[1] [67, 45, 25, 53, 23]
+ran[2] [16, 17, 67, 1, 89, 56, 5, 99, 68, 62]
+dos 0 dropped []
+dos 1 dropped [119, 84]
+dos 5 dropped [145, 158, 191, 153, 105, 67, 45, 25, 53, 23]
+dos 10 dropped [167, 128, 175, 197, 111, 124, 149, 133, 183, 16, 17, 67, 1, 89, 56, 5, 99, 68, 62]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -193,8 +277,22 @@ node_id: 201 balance price: 25
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
+ran[0] [68]
+ran[1] [41, 27, 100, 46, 66]
+ran[2] [13, 63, 83, 87, 94, 57, 62, 95, 71, 38]
+dos 0 dropped []
+dos 1 dropped [68]
+dos 5 dropped [41, 27, 46, 66]
+dos 10 dropped [13, 63, 83, 87, 94, 57, 62, 95, 71, 38]
 node 202
 initiate random list of users to drop
+ran[0] [76]
+ran[1] [11, 88, 10, 28, 23]
+ran[2] [21, 89, 80, 29, 14, 15, 37, 94, 49, 56]
+dos 0 dropped []
+dos 1 dropped [68, 176]
+dos 5 dropped [41, 27, 46, 66, 111, 188, 110, 128, 123]
+dos 10 dropped [13, 63, 83, 87, 94, 57, 62, 95, 71, 38, 121, 189, 180, 129, 114, 115, 137, 194, 149, 156]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -223,8 +321,22 @@ node_id: 201 balance price: 27
 *** stage INIT_DROPS
 node 201
 initiate random list of users to drop
+ran[0] [91]
+ran[1] [98, 38, 44, 1, 47]
+ran[2] [78, 84, 5, 65, 71, 99, 28, 91, 68, 58]
+dos 0 dropped []
+dos 1 dropped [91]
+dos 5 dropped [98, 38, 44, 1, 47]
+dos 10 dropped [78, 84, 5, 65, 71, 99, 28, 91, 68, 58]
 node 202
 initiate random list of users to drop
+ran[0] [60]
+ran[1] [70, 3, 98, 74, 2]
+ran[2] [61, 52, 23, 13, 17, 78, 8, 26, 32, 20]
+dos 0 dropped []
+dos 1 dropped [91, 160]
+dos 5 dropped [98, 38, 44, 1, 47, 170, 103, 198, 174, 102]
+dos 10 dropped [78, 84, 5, 65, 71, 99, 28, 91, 68, 58, 161, 152, 123, 113, 117, 178, 108, 126, 132, 120]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -254,8 +366,22 @@ node_id: 202 balance price: 220
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [86]
+ran[1] [39, 100, 33, 29, 3]
+ran[2] [100, 68, 30, 20, 18, 34, 28, 61, 14, 84]
+dos 0 dropped []
+dos 1 dropped [186]
+dos 5 dropped [139, 133, 129, 103]
+dos 10 dropped [168, 130, 120, 118, 134, 128, 161, 114, 184]
 node 201
 initiate random list of users to drop
+ran[0] [67]
+ran[1] [91, 18, 21, 35, 30]
+ran[2] [40, 4, 80, 19, 41, 73, 66, 58, 95, 81]
+dos 0 dropped []
+dos 1 dropped [186, 67]
+dos 5 dropped [139, 133, 129, 103, 91, 18, 21, 35, 30]
+dos 10 dropped [168, 130, 120, 118, 134, 128, 161, 114, 184, 40, 4, 80, 19, 41, 73, 66, 58, 95, 81]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -284,8 +410,22 @@ node_id: 201 balance price: 27
 *** stage INIT_DROPS
 node 202
 initiate random list of users to drop
+ran[0] [16]
+ran[1] [83, 67, 28, 4, 8]
+ran[2] [99, 80, 19, 79, 59, 69, 4, 11, 55, 88]
+dos 0 dropped []
+dos 1 dropped [116]
+dos 5 dropped [183, 167, 128, 104, 108]
+dos 10 dropped [199, 180, 119, 179, 159, 169, 104, 111, 155, 188]
 node 201
 initiate random list of users to drop
+ran[0] [66]
+ran[1] [12, 73, 32, 78, 19]
+ran[2] [73, 93, 92, 15, 9, 13, 21, 74, 99, 26]
+dos 0 dropped []
+dos 1 dropped [116, 66]
+dos 5 dropped [183, 167, 128, 104, 108, 12, 73, 32, 78, 19]
+dos 10 dropped [199, 180, 119, 179, 159, 169, 104, 111, 155, 188, 73, 93, 92, 15, 9, 13, 21, 74, 99, 26]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201

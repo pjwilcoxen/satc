@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -58,6 +59,12 @@ public class Env extends SimState {
     };
     public static Stage stageNow;
 
+    /**
+     * Lists of agents to block under DOS runs
+     */
+    public static Hashtable<String, ArrayList<Integer>> blockList = new Hashtable<>();
+    public static final String dos_runs[] = { "0", "1", "5", "10" };
+
     //
     // Other variables
     //
@@ -75,6 +82,8 @@ public class Env extends SimState {
     
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
+        for(String dos: dos_runs)
+           blockList.put(dos, new ArrayList<Integer>());
         try {
             readDraws();
         } catch (Exception e) {
@@ -127,6 +136,20 @@ public class Env extends SimState {
     }
     static ArrayList<Draw> drawListD = new ArrayList<>();
     static ArrayList<Draw> drawListS = new ArrayList<>();
+
+    /** 
+     * Add an agent to a block list
+     */
+    public static void setBlock(String run, Agent agent) {
+       blockList.get(run).add(agent.own_id);
+    }   
+
+    /**
+     * Check whether an agent is on a block list
+     */
+    public static boolean isBlocked(String run, Agent agent) {
+       return blockList.get(run).contains(agent.own_id);
+    }
 
     /**
      * Entry point for the simulation
@@ -210,6 +233,9 @@ public class Env extends SimState {
         for( pop=1 ; pop<=numPop ; pop++ ) {
            System.out.println("Starting population "+pop);
            log.println("*** population "+pop);
+
+           for(String dos: dos_runs)
+              blockList.get(dos).clear();
 
            for( Stage s : Stage.values() ) {
               log.println("*** stage "+s);
