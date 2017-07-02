@@ -223,26 +223,14 @@ public class Agent implements Steppable {
 
         rand = (int)(runiform() * max);
         
-        row = 0;
-        for(Env.Draw draw: Env.drawList) {
-
-            // skip supply curves if we need a demand
-
-            if(sd_type.equals("D") && draw.type.equals("S") )
-                continue;
+        Env.Draw draw;
+        if( sd_type.equals("D") )
+           draw = Env.drawListD.get(rand);
+        else
+           draw = Env.drawListS.get(rand);
         
-            // if we've hit the right row grab the data and return
-
-            if( row == rand ) {
-                this.load  = draw.load;
-                this.elast = draw.elast;
-                return;
-            }
-
-            row++;
-        }
-
-        throw new RuntimeException("Fault in drawLoad");
+        this.load  = draw.load;
+        this.elast = draw.elast;
     }
     
      

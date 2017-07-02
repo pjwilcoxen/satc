@@ -122,11 +122,11 @@ public class Env extends SimState {
 
     class Draw {
        int n;
-       String type;
        double load;
        double elast;
     }
-    static ArrayList<Draw> drawList = new ArrayList<>();
+    static ArrayList<Draw> drawListD = new ArrayList<>();
+    static ArrayList<Draw> drawListS = new ArrayList<>();
 
     /**
      * Entry point for the simulation
@@ -280,6 +280,7 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         Draw draw;
+        String sd_type;
 
         br = new BufferedReader(Util.openRead(Env.fileDraws));
         csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
@@ -287,10 +288,13 @@ public class Env extends SimState {
         for(CSVRecord rec: csvReader) {
             draw = new Draw();
             draw.n     = Integer.parseInt(rec.get("n"));
-            draw.type  = rec.get("type");
+            sd_type    = rec.get("type");
             draw.load  = Double.parseDouble(rec.get("load"));
             draw.elast = Double.parseDouble(rec.get("elast"));
-            drawList.add(draw);
+            if( sd_type.equals("D") )
+               drawListD.add(draw);
+            else
+               drawListS.add(draw);
         } 
 
         br.close();
