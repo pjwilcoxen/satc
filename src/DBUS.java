@@ -31,20 +31,11 @@ public class DBUS {
         busList.put(name,this);
     }
     
-    //  Check: 
-    //     Add a message object and collapse these methods to one.
-    //     That is, DBUS sends messages but leaves it up to the
-    //     recipient to figure out what to do with them
-
-    public void toQueue(Bidstep[] bids, int drop, int to) {
-        Env.getAgent(to).appendQueueD(bids, drop);
-        
-    }     
-      
-    public void toQueue(int bl, int drop, int to) {
-        Env.getAgent(to).setBl(bl, drop);
-    }
-   
+    /**
+     * Send a message
+     *
+     * @param msg Message to send
+     */
     public void send(Msg msg) {
         Env.getAgent(msg.to).deliver(msg);
     }
