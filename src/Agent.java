@@ -529,13 +529,13 @@ public class Agent implements Steppable {
      */
     private void do_init_load() {
 
-            //build a random net demand for this agent
-            drawLoad();
+        //build a random net demand for this agent
+        drawLoad();
 
-            //populate the parents queues for different cases of dropped nodes 
-            for(int i=0 ; i<Env.dos_runs.length ; i++)
-                if( ! Env.isBlocked(Env.dos_runs[i],this) ) 
-                    dbus.toQueue(bids, i, parent.own_id);
+        //populate the parents queues for different cases of dropped nodes 
+        for(int i=0 ; i<Env.dos_runs.length ; i++)
+            if( ! Env.isBlocked(Env.dos_runs[i],this) ) 
+                dbus.toQueue(bids, i, parent.own_id);
     }
 
     /**
@@ -543,26 +543,26 @@ public class Agent implements Steppable {
      */
     private void do_agg_end() {
 
-            Env.log.println("node "+own_id);
+        Env.log.println("node "+own_id);
 
-            ArrayList<Bidstep[]> agg;
-            Bidstep tmp[];
-            
-            //call rusim to aggregate the net demands
-            agg = runsim();
+        ArrayList<Bidstep[]> agg;
+        Bidstep tmp[];
+        
+        //call rusim to aggregate the net demands
+        agg = runsim();
 
-            //set the agg vectors as class variable
-            for (int i = 0; i < 4; i++) {
-                setAggD(agg.get(i), i);
-            }
+        //set the agg vectors as class variable
+        for (int i = 0; i < 4; i++) {
+            setAggD(agg.get(i), i);
+        }
 
-            //call addCost and addCapacity functions to consider transaction costs and capacity constrains
-            for (int i = 0; i < 4; i++) {
-                tmp = addCost(agg.get(i), cost, i);
-                dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id);
-            }
+        //call addCost and addCapacity functions to consider transaction costs and capacity constrains
+        for (int i = 0; i < 4; i++) {
+            tmp = addCost(agg.get(i), cost, i);
+            dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id);
+        }
 
-            clearQueuesD();
+        clearQueuesD();
 
     }
 
@@ -571,71 +571,67 @@ public class Agent implements Steppable {
      */
     private void do_agg_mid() {
 
-            Env.log.println("node "+own_id);
+        Env.log.println("node "+own_id);
 
-            ArrayList<Bidstep[]> agg;
-            
-            //call runsim to aggregate the net demands
-            agg = runsim();
+        ArrayList<Bidstep[]> agg;
+        
+        //call runsim to aggregate the net demands
+        agg = runsim();
 
-            //find the balance price for each case of dropped nodes
-            for (int j = 0; j < 4; j++) {
-                int i, bl = 0, min =1;
-                for (i = 0; ((agg.get(j)[i] != null)
-                        && (agg.get(j)[i].getQ_max() >= 0)); i++) {
-                    bl = agg.get(j)[i].getP();
-                    min = agg.get(j)[i].getQ_min();
-                }
-
-                //if there is not any balance point- report -1 as price
-                if ((i == 0) || ((agg.get(j)[i] == null)&&(min > 0))) {
-                    bl = -1;
-                    Env.log.println("failed at drop: " + j);
-                }
-
-                //set the balance price as the class variable
-                setBl(bl, j);
-                
-                int pop = Env.getPop();
-                
-                //write the balance prices on csv file for each case of dropped nodes
-                switch (j) {
-                    case 0:
-                        Env.out.write("\n" + pop + "," + own_id + ",0,"
-                                + getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + own_id  +  " Balance Price: " + bl
-                                                    + " Prob: 0");
-                        break;
-                    case 1:
-                        Env.out.write("\n" + pop + "," + own_id + ",1,"
-                                + getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                    + " Prob: 1");
-                        break;
-                    case 2:
-                        Env.out.write("\n" + pop + "," + own_id + ",5,"
-                                + getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                    + " Prob: 5");
-                        break;
-                    case 3:
-                        Env.out.write("\n" + pop + "," + own_id + ",10,"
-                                + getBl(j) + "," + 0);
-                        Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                    + " Prob: 10");
-                        break;
-                        
-                    default:
-                        throw new RuntimeException("Unexpected case in do_agg_mid()");
-                        
-                }
-
+        //find the balance price for each case of dropped nodes
+        for (int j = 0; j < 4; j++) {
+            int i, bl = 0, min =1;
+            for (i = 0; ((agg.get(j)[i] != null)
+                    && (agg.get(j)[i].getQ_max() >= 0)); i++) {
+                bl = agg.get(j)[i].getP();
+                min = agg.get(j)[i].getQ_min();
             }
 
-            clearQueuesD();
+            //if there is not any balance point- report -1 as price
+            if ((i == 0) || ((agg.get(j)[i] == null)&&(min > 0))) {
+                bl = -1;
+                Env.log.println("failed at drop: " + j);
+            }
 
-            //increment agent's view of time
-            myTime++;
+            //set the balance price as the class variable
+            setBl(bl, j);
+            
+            int pop = Env.getPop();
+            
+            //write the balance prices on csv file for each case of dropped nodes
+            switch (j) {
+                case 0:
+                    Env.printResult(this,"0",bl,0);
+                    Env.log.println("node_id: " + own_id  +  " Balance Price: " + bl
+                                                + " Prob: 0");
+                    break;
+                case 1:
+                    Env.printResult(this,"1",bl,0);
+                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
+                                                + " Prob: 1");
+                    break;
+                case 2:
+                    Env.printResult(this,"5",bl,0);
+                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
+                                                + " Prob: 5");
+                    break;
+                case 3:
+                    Env.printResult(this,"10",bl,0);
+                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
+                                                + " Prob: 10");
+                    break;
+                    
+                default:
+                    throw new RuntimeException("Unexpected case in do_agg_mid()");
+                    
+            }
+
+        }
+
+        clearQueuesD();
+
+        //increment agent's view of time
+        myTime++;
     }
 
     /**
@@ -643,20 +639,20 @@ public class Agent implements Steppable {
      */
     private void do_report_mid() {
         
-            int child_id;
-            DBUS child_bus;
+        int child_id;
+        DBUS child_bus;
 
-            Env.log.println("node "+own_id);
+        Env.log.println("node "+own_id);
 
-            //report the balance prices to kid nodes
+        //report the balance prices to kid nodes
 
-            for (Agent child: children) {
-                child_id = child.own_id;
-                child.dbus.toQueue(getBl(0), 0, child_id);
-                child.dbus.toQueue(getBl(1), 1, child_id);
-                child.dbus.toQueue(getBl(2), 2, child_id);
-                child.dbus.toQueue(getBl(3), 3, child_id);
-            }
+        for (Agent child: children) {
+            child_id = child.own_id;
+            child.dbus.toQueue(getBl(0), 0, child_id);
+            child.dbus.toQueue(getBl(1), 1, child_id);
+            child.dbus.toQueue(getBl(2), 2, child_id);
+            child.dbus.toQueue(getBl(3), 3, child_id);
+        }
 
     }
 
@@ -665,54 +661,39 @@ public class Agent implements Steppable {
      */
     private void do_report_end() {
 
-            int child_id;
+        int child_id;
 
-            Env.log.println("node "+own_id);
+        Env.log.println("node "+own_id);
 
-            //find the balance price for each case of dropped nodes
-            for (int j = 0; j < 4; j++) {
-                int i, bl = 0;
-                for (i = 0; ((getAggD(j)[i] != null)
-                        && (getAggD(j)[i].getQ_max() >= 0)); i++) {
-                    bl = getAggD(j)[i].getP();
-                }
-                Env.log.println("node_id: " + own_id  + " balance price: " + bl);
+        //find the balance price for each case of dropped nodes
+        for (int j = 0; j < 4; j++) {
+            int i, bl = 0;
+            for (i = 0; ((getAggD(j)[i] != null)
+                    && (getAggD(j)[i].getQ_max() >= 0)); i++) {
+                bl = getAggD(j)[i].getP();
             }
-            
-            int[] report = new int[4];
-            //set the report values for each case of dropped nodes
-            for (int drop = 0; drop < 4; drop++) {
-                //report -1 in the case of no balance point
-                if (getBl(drop) <= -1) {
-                    report[drop] = -1;
-                //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
-                } else {
-                    report[drop] = findReportPrice(drop);
-                }
+            Env.log.println("node_id: " + own_id  + " balance price: " + bl);
+        }
+        
+        int[] report = new int[4];
+        //set the report values for each case of dropped nodes
+        for (int drop = 0; drop < 4; drop++) {
+            //report -1 in the case of no balance point
+            if (getBl(drop) <= -1) {
+                report[drop] = -1;
+            //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
+            } else {
+                report[drop] = findReportPrice(drop);
             }
+        }
 
-            int pop = Env.getPop();    
+        //write the balance prices on csv file for each case and report to children 
 
-            //write the balance prices on csv file for each case of dropped nodes
-            Env.out.write("\n" + pop + "," + own_id + ",0,"
-                    + report[0] + "," + 0);
-            Env.out.write("\n" + pop + "," + own_id + ",1,"
-                    + report[1] + "," + 0);
-            Env.out.write("\n" + pop + "," + own_id + ",5,"
-                    + report[2] + "," + 0);
-            Env.out.write("\n" + pop + "," + own_id + ",10,"
-                    + report[3] + "," + 0);
-
-            //set the child node balance prices
-
-            for(Agent child: children) {
-                child_id = child.own_id ;
-                child.dbus.toQueue(report[0], 0, child_id);
-                child.dbus.toQueue(report[1], 1, child_id);
-                child.dbus.toQueue(report[2], 2, child_id);
-                child.dbus.toQueue(report[3], 3, child_id);
-            }
-
+        for(int i=0 ; i<Env.dos_runs.length ; i++) {
+            Env.printResult(this,Env.dos_runs[i],report[i],0);
+            for(Agent child: children) 
+                child.dbus.toQueue(report[i], i, child.own_id);
+        }
     }
 
     /**
@@ -722,26 +703,26 @@ public class Agent implements Steppable {
      */
     private void do_calc_load() {
             
-            int pop = Env.getPop();    
+        int pop = Env.getPop();    
 
-            int ex;
-            int bl;
-            int i;
-            String dos;
+        int ex;
+        int bl;
+        int i;
+        String dos;
 
-            for(i=0 ; i<Env.dos_runs.length ; i++) {
-            
-                dos = Env.dos_runs[i];
-                bl  = getBl(i);
+        for(i=0 ; i<Env.dos_runs.length ; i++) {
+        
+            dos = Env.dos_runs[i];
+            bl  = getBl(i);
 
-                if (bl <= -1) 
-                    ex = 0;
-                else
-                    ex = findExcessDemand(bl);
+            if (bl <= -1) 
+                ex = 0;
+            else
+                ex = findExcessDemand(bl);
 
-                Env.out.write("\n"+pop+","+own_id+","+dos+","+bl+","+ex);
-            }
+            Env.printResult(this,dos,bl,ex);
         }
+    }
 
     /**
      * Create demand curves based on initial load, elasticity, and number of steps

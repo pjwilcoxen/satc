@@ -69,8 +69,9 @@ public class Env extends SimState {
     // Other variables
     //
 
-    public static PrintWriter out;
+    static PrintWriter out;
     public static PrintWriter log;
+    public static CSVPrinter csvPrinter;
     static int pop;
 
     static ArrayList<Agent> listAgent;
@@ -207,7 +208,6 @@ public class Env extends SimState {
         //
 
         out = Util.openWrite(stem+"_out.csv");
-        out.write("Population,ID,Prob,P,Q");
 
         log = Util.openWrite(stem+"_log.txt");
         log.println(
@@ -326,13 +326,32 @@ public class Env extends SimState {
         br.close();
     }
 
+    /**
+     * Print out results
+     */
+    public static void printResult(Agent agent, String dos, int p, int q) {
+
+        String header[] = {"population","id","dos","p","q"};
+        CSVFormat csvFormat ;
+
+        try {
+           if( csvPrinter == null ) {
+              csvFormat  = CSVFormat.DEFAULT.withHeader(header);
+              csvPrinter = new CSVPrinter(out,csvFormat);
+           }
+           csvPrinter.printRecord( pop, agent.own_id, dos, p, q );      
+        }
+        catch (IOException e) {
+           throw new RuntimeException("Error writing to output file");
+        }
+    }
 
     /**
      *  Start the simulation
      */
     @Override
     public void start(){
-	 super.start();
+	     super.start();
             try {
                 makeAgents();
             } catch (FileNotFoundException ex) {
