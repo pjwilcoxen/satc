@@ -1,17 +1,19 @@
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * Basic communications bus
  */
 public class DBUS {
 
-    private static Hashtable<String, DBUS> busList = new Hashtable<>();
+    private static final HashMap<String, DBUS> busList = new HashMap<>();
     
     String name;
 
     /**
      * Find a bus by name or return null
+     * 
+     * @param name Name of bus
+     * @return Bus instance
      */
     public static DBUS find(String name) {
         return busList.get(name);

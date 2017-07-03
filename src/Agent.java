@@ -115,7 +115,10 @@ public class Agent implements Steppable {
     public void setBl(int bl, int drop) {
         this.bl[drop] = bl;
     }
-        
+     
+    public void setDBUS(DBUS dbus) {
+        this.dbus = dbus;
+    }
     //
     //  clearQueuesD
     //
@@ -192,19 +195,6 @@ public class Agent implements Steppable {
         clearQueuesD();
     }
     
-        
-    //pull out the index of specific value in the given vector (arr)
-    private int getArrayIndex(int[] arr, int value) {
-            int k=-1;
-            for(int i=0; (arr != null) && (i<arr.length);i++){
-                if(arr[i]==value){
-                    k=i;
-                    break;
-                }
-            }
-            return k;
-        }
-
     /**
      * Build the agent's net demand curve
      */
@@ -679,8 +669,6 @@ public class Agent implements Steppable {
      */
     private void do_calc_load() {
             
-        int pop = Env.getPop();    
-
         int ex;
         int bl;
         int i;

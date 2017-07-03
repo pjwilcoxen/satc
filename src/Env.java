@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -62,7 +62,7 @@ public class Env extends SimState {
     /**
      * Lists of agents to block under DOS runs
      */
-    public static Hashtable<String, ArrayList<Integer>> blockList = new Hashtable<>();
+    public static final HashMap<String, ArrayList<Integer>> blockList = new HashMap<>();
     public static final String dos_runs[] = { "0", "1", "5", "10" };
 
     //
@@ -84,10 +84,10 @@ public class Env extends SimState {
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
         for(String dos: dos_runs)
-           blockList.put(dos, new ArrayList<Integer>());
+           blockList.put(dos, new ArrayList<>());
         try {
             readDraws();
-        } catch (Exception e) {
+        } catch (IOException e) {
            throw new RuntimeException("Could not read file of draws");
         }
     }
@@ -96,6 +96,8 @@ public class Env extends SimState {
      * Centralized random number generator
      * 
      * Can be initialized with a specified seed
+     * 
+     * @return Uniform random number
      */
     public static double runiform() {
        return rgen.nextDouble() ;
@@ -125,6 +127,9 @@ public class Env extends SimState {
 
     /**
      * Find and return an agent given its id
+     * 
+     * @param own_id ID number of the agent
+     * @return Agent's instance
      */
     public static Agent getAgent(int own_id) {
        return listAgent.get(own_id-1);
@@ -140,6 +145,9 @@ public class Env extends SimState {
 
     /** 
      * Add an agent to a block list
+     * 
+     * @param run DOS run where the block should be set
+     * @param agent Agent that should be blocked
      */
     public static void setBlock(String run, Agent agent) {
        blockList.get(run).add(agent.own_id);
@@ -147,6 +155,10 @@ public class Env extends SimState {
 
     /**
      * Check whether an agent is on a block list
+     * 
+     * @param run DOS run of interest
+     * @param agent Agent to be checked
+     * @return True if the agent is blocked in the indicated DOS run
      */
     public static boolean isBlocked(String run, Agent agent) {
        return blockList.get(run).contains(agent.own_id);
@@ -281,7 +293,7 @@ public class Env extends SimState {
             dbus = DBUS.find(cur_dbus);
             if( dbus == null )dbus = new DBUS(cur_dbus);
 
-            cur_agent.dbus = dbus;
+            cur_agent.setDBUS(dbus);
 
             listAgent.add(cur_agent);
         }
@@ -313,7 +325,6 @@ public class Env extends SimState {
  
         for(CSVRecord rec: csvReader) {
             draw = new Draw();
-            draw.n     = Integer.parseInt(rec.get("n"));
             sd_type    = rec.get("type");
             draw.load  = Double.parseDouble(rec.get("load"));
             draw.elast = Double.parseDouble(rec.get("elast"));
