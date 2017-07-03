@@ -64,6 +64,7 @@ public class Env extends SimState {
      */
     public static final HashMap<String, ArrayList<Integer>> blockList = new HashMap<>();
     public static final String dos_runs[] = { "0", "1", "5", "10" };
+    public static String thisDOS = "0";
 
     //
     // Other variables

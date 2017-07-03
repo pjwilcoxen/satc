@@ -20,14 +20,14 @@ public class Msg {
         this.type  = Types.NONE;
     }
 
-    public void setBody(Bidstep bids[]) {
+    public void setDemand(Bidstep bids[]) {
         assert type == Types.NONE;
         assert bids != null;
         this.bids = bids;
         type = Types.DEMAND;
     }
 
-    public void setBody(int price) {
+    public void setPrice(int price) {
         assert type == Types.NONE;
         this.price = price;
         type = Types.PRICE;
@@ -35,6 +35,10 @@ public class Msg {
 
     public boolean isDemand() {
         return type == Types.DEMAND;
+    }
+
+    public boolean isPrice() {
+        return type == Types.PRICE;
     }
 
     public Bidstep[] getDemand() {
