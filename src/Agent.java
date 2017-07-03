@@ -375,52 +375,56 @@ public class Agent implements Steppable {
 
         //if the whole balance price is between local balance price +c/-c
         if ((pr >= pc0) && (pr <= pc1)) {
-            report = ((pc0 + pc1) / 2);
-        } else {
-            //if the whole balance price is more than local balance price +c
-            if (pr > pc1) {
-                p = 0;
-                //skip the bids with more quantity than (-1) * cap & less price than the balance price
-                for (i = 0; ((agg[i] != null)
-                        && (agg[i].getP() <= pr)
-                            && (agg[i].getQ_max() >= ((-1) * cap))); i++)
-                                p = agg[i].getP();
-
-                if (agg[i] == null) {
-                    report = p;
-                //if the target step passed the cap line
-                } else if (agg[i].getQ_max() < ((-1) * cap)) {
-                        if(pr <= p + cost) {
-                            report = pr - cost;
-                        }else{
-                            report = p;
-                        }
-                        
-                    //put limit equal to cap
-                } else {
-                        report = pr - cost;
-                }
-                
-            //if the whole balance price is less than local balance price +c    
-            } else if (pr < pc0) {
-                p = 0;
-                //skip the bids with more quantity than cap
-                for (i = 0; ((agg[i] != null)
-                        && (agg[i].getQ_min() >= cap)); i++)
-                             p = agg[i].getP();
-                if (agg[i] == null) {
-                    report = p;
-                } else {
-                    if (pr > agg[i].getP() - cost) {
-                        report = pr + cost;
-                    //put limit equal to cap
-                    } else {
-                        report = agg[i].getP();
-                    }
-                }
-            }
-
+            return ((pc0 + pc1) / 2);
         }
+		
+        //if the whole balance price is more than local balance price +c
+        if (pr > pc1) {
+            p = 0;
+
+            //skip the bids with more quantity than (-1) * cap & less price than the balance price
+            for (i = 0; ((agg[i] != null)
+                        && (agg[i].getP() <= pr)
+                        && (agg[i].getQ_max() >= ((-1) * cap))); i++)
+                            p = agg[i].getP();
+
+            if (agg[i] == null) {
+                return p;
+            }
+            
+            //if the target step passed the cap line
+            if (agg[i].getQ_max() < ((-1) * cap)) {
+                if(pr <= p + cost) 
+                    return pr - cost;
+                else
+                    return p;
+            }
+            
+            //put limit equal to cap
+            return pr - cost;
+        } 
+		
+        //if the whole balance price is less than local balance price +c    
+		if (pr < pc0) {
+            p = 0;
+
+            //skip the bids with more quantity than cap
+            for (i = 0; ((agg[i] != null)
+                    && (agg[i].getQ_min() >= cap)); i++)
+                         p = agg[i].getP();
+
+            if (agg[i] == null) {
+                return p;
+            } 
+            
+            if (pr > agg[i].getP() - cost) 
+                return pr + cost;
+
+            //put limit equal to cap
+            return agg[i].getP();
+        }
+
+		assert false;
         return report;
     }
 
