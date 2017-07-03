@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,6 +84,8 @@ public class Agent implements Steppable {
     //data bus this agent uses to communicate with its parent
     DBUS dbus;
 
+    ArrayDeque<Msg> msgs = new ArrayDeque<>();
+
     //  Parent and list of children
 
     /**
@@ -155,6 +158,10 @@ public class Agent implements Steppable {
 
     private double runiform() {
         return Env.runiform() ;
+    }
+
+    public void deliver(Msg msg) {
+        msgs.add(msg);
     }
 
     public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, String sd_type) {

@@ -19,10 +19,11 @@ public class DBUS {
         return busList.get(name);
     }
 
-    //
-    //  Constructor
-    //
-    
+    /**
+	 * Construct a new DBUS instance
+	 *
+	 * @param name Name of the bus
+	 */
     public DBUS(String name){
         if( busList.containsKey(name) )
             throw new RuntimeException("Redundant dbus instantiation");
@@ -43,5 +44,8 @@ public class DBUS {
     public void toQueue(int bl, int drop, int to) {
         Env.getAgent(to).setBl(bl, drop);
     }
-    
+   
+    public void send(Msg msg) {
+        Env.getAgent(msg.to).deliver(msg);
+    }
 }
