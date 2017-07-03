@@ -187,6 +187,18 @@ public class Agent implements Steppable {
         return selected;
     }
 
+    /**
+     * Broadcast a price to all children
+     */
+    private void reportPrice(int price,int dos_id) {
+        for (Agent child: children) {
+            Msg msg = new Msg(this,child.own_id);
+            msg.setPrice(price);
+            msg.dos_id = dos_id;
+            child.dbus.send(msg);
+            }
+    }
+ 
     public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, String sd_type) {
         super();
 
@@ -649,23 +661,11 @@ public class Agent implements Steppable {
      */
     private void do_report_mid() {
         
-        int child_id;
-        DBUS child_bus;
-
         Env.log.println("node "+own_id);
 
-        //report the balance prices to kid nodes
-
-        for (Agent child: children) {
-            child_id = child.own_id;
-            for(int i=0 ; i<4 ; i++ ) {
-                Msg msg = new Msg(this,child_id);
-                msg.setPrice(getBl(i));
-                msg.dos_id = i;
-                dbus.send(msg);
-            }
+        for(int i=0 ; i<4 ; i++ ) {
+            reportPrice(getBl(i),i);
         }
-
     }
 
     /**
@@ -706,12 +706,7 @@ public class Agent implements Steppable {
 
         for(int i=0 ; i<Env.dos_runs.length ; i++) {
             Env.printResult(this,Env.dos_runs[i],report[i],0);
-            for(Agent child: children) {
-                Msg msg = new Msg(this,child.own_id);
-                msg.setPrice(report[i]);
-                msg.dos_id = i;
-                child.dbus.send(msg);
-            }
+            reportPrice(report[i],i);
         }
     }
 
