@@ -13,11 +13,17 @@ public class Msg {
     Bidstep bids[];
     int price;
 
-    public Msg(Agent agent,int from,int to) {
+    public int dos_id;
+
+    public Msg(Agent agent,int to) {
         this.agent = agent;
-        this.from  = from;
+        this.from  = agent.own_id;
         this.to    = to;
         this.type  = Types.NONE;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
     }
 
     public void setDemand(Bidstep bids[]) {
@@ -50,5 +56,4 @@ public class Msg {
         assert type == Types.PRICE;
         return price;
     }
-
 }

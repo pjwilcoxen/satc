@@ -241,6 +241,17 @@ public class Agent implements Steppable {
     //call aggragate function  on the queue
     private ArrayList<Bidstep[]> runsim(){
 
+        ArrayList<Msg> used = new ArrayList<>();
+
+        for(Msg msg: msgs) 
+            if( msg.isDemand() ) {
+                appendQueueD(msg.getDemand(),msg.dos_id);
+                used.add(msg);
+            }
+
+        for(Msg msg: used)
+            msgs.remove(msg);
+
         Bidstep aggBidD[];
         
         //initiate an arraylist for the aggregated vectors
@@ -530,8 +541,13 @@ public class Agent implements Steppable {
 
         //populate the parents queues for different cases of dropped nodes 
         for(int i=0 ; i<Env.dos_runs.length ; i++)
-            if( ! Env.isBlocked(Env.dos_runs[i],this) ) 
-                dbus.toQueue(bids, i, parent.own_id);
+            if( ! Env.isBlocked(Env.dos_runs[i],this) ) {
+                //dbus.toQueue(bids, i, parent.own_id);
+                Msg msg = new Msg(this,parent.own_id);
+                msg.setDemand(bids);
+                msg.dos_id = i;
+                dbus.send(msg);
+            }
     }
 
     /**
@@ -555,7 +571,12 @@ public class Agent implements Steppable {
         //call addCost and addCapacity functions to consider transaction costs and capacity constrains
         for (int i = 0; i < 4; i++) {
             tmp = addCost(agg.get(i), cost, i);
-            dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id);
+            //dbus.toQueue(addCapacity(tmp, cap), i, parent.own_id);
+            tmp = addCapacity(tmp, cap);
+            Msg msg = new Msg(this,parent.own_id);
+            msg.setDemand(tmp);
+            msg.dos_id = i;
+            dbus.send(msg);
         }
 
         clearQueuesD();
@@ -621,10 +642,16 @@ public class Agent implements Steppable {
 
         for (Agent child: children) {
             child_id = child.own_id;
-            child.dbus.toQueue(getBl(0), 0, child_id);
-            child.dbus.toQueue(getBl(1), 1, child_id);
-            child.dbus.toQueue(getBl(2), 2, child_id);
-            child.dbus.toQueue(getBl(3), 3, child_id);
+//            child.dbus.toQueue(getBl(0), 0, child_id);
+//            child.dbus.toQueue(getBl(1), 1, child_id);
+//            child.dbus.toQueue(getBl(2), 2, child_id);
+//            child.dbus.toQueue(getBl(3), 3, child_id);
+            for(int i=0 ; i<4 ; i++ ) {
+                Msg msg = new Msg(this,child_id);
+                msg.setPrice(getBl(i));
+                msg.dos_id = i;
+                dbus.send(msg);
+            }
         }
 
     }
@@ -635,6 +662,17 @@ public class Agent implements Steppable {
     private void do_report_end() {
 
         int child_id;
+
+        ArrayList<Msg> used = new ArrayList<>();
+
+        for(Msg msg: msgs) 
+            if( msg.isPrice() ) {
+                setBl(msg.getPrice(),msg.dos_id);
+                used.add(msg);
+            }
+
+        for(Msg msg: used)
+            msgs.remove(msg);
 
         Env.log.println("node "+own_id);
 
@@ -664,8 +702,13 @@ public class Agent implements Steppable {
 
         for(int i=0 ; i<Env.dos_runs.length ; i++) {
             Env.printResult(this,Env.dos_runs[i],report[i],0);
-            for(Agent child: children) 
-                child.dbus.toQueue(report[i], i, child.own_id);
+            for(Agent child: children) {
+                //child.dbus.toQueue(report[i], i, child.own_id);
+                Msg msg = new Msg(this,child.own_id);
+                msg.setPrice(report[i]);
+                msg.dos_id = i;
+                child.dbus.send(msg);
+            }
         }
     }
 
@@ -676,6 +719,17 @@ public class Agent implements Steppable {
      */
     private void do_calc_load() {
             
+        ArrayList<Msg> used = new ArrayList<>();
+
+        for(Msg msg: msgs) 
+            if( msg.isPrice() ) {
+                setBl(msg.getPrice(),msg.dos_id);
+                used.add(msg);
+            }
+
+        for(Msg msg: used)
+            msgs.remove(msg);
+
         int ex;
         int bl;
         int i;
