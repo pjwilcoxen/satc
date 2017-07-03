@@ -59,7 +59,8 @@ public class Agent implements Steppable {
     //indicates the elasticity of end user extracted from "testdraw.csv" 
     double load;
     double elast;
-    
+    double blockDraw;
+
     //vector of bids drawn from initial load, elast, and number of steps
     Bidstep[] bids;
 	
@@ -504,22 +505,20 @@ public class Agent implements Steppable {
         int i,n;
         int rand;
         int block_id;
+        double cutoff;
         Agent block_kid;
 
         Env.log.println("node "+own_id);
         Env.log.println("initialize blocked nodes for DOS runs");
 
+        for(Agent kid: children)
+           kid.blockDraw = 100.0*runiform();
+           
         for(String dos: Env.dos_runs) {
-            n = Integer.parseInt(dos);
-            while( n>0 ) {
-                rand = (int) (runiform() * 100 + 1);
-                for(Agent kid: children)
-                    if( rand == (kid.own_id % 100) ) {
-                        Env.setBlock(dos,kid);
-                        n--;
-                        break;
-                }
-            }
+            cutoff = Double.parseDouble(dos);
+            for(Agent kid: children)
+                if( kid.blockDraw < cutoff ) 
+                    Env.setBlock(dos,kid);
             Env.log.println("dos "+dos+" dropped "+Env.blockList.get(dos));
         }
     }
