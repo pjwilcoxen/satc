@@ -596,36 +596,13 @@ public class Agent implements Steppable {
             //set the balance price as the class variable
             setBl(bl, j);
             
-            int pop = Env.getPop();
-            
-            //write the balance prices on csv file for each case of dropped nodes
-            switch (j) {
-                case 0:
-                    Env.printResult(this,"0",bl,0);
-                    Env.log.println("node_id: " + own_id  +  " Balance Price: " + bl
-                                                + " Prob: 0");
-                    break;
-                case 1:
-                    Env.printResult(this,"1",bl,0);
-                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                + " Prob: 1");
-                    break;
-                case 2:
-                    Env.printResult(this,"5",bl,0);
-                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                + " Prob: 5");
-                    break;
-                case 3:
-                    Env.printResult(this,"10",bl,0);
-                    Env.log.println("node_id: " + own_id + " Balance Price: " + bl
-                                                + " Prob: 10");
-                    break;
-                    
-                default:
-                    throw new RuntimeException("Unexpected case in do_agg_mid()");
-                    
-            }
+            // write the balance prices to the csv file
 
+            String dos = Env.dos_runs[j];
+            Env.printResult(this,dos,bl,0);
+
+            // write a log message
+            Env.log.println("node_id: "+own_id+" Balance Price: "+bl+" Prob: "+dos);
         }
 
         clearQueuesD();
