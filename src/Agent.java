@@ -365,60 +365,59 @@ public class Agent implements Steppable {
     //find the actual price for the end users considering transaction cost and capacity limit
     private int findReportPrice(int drop) {
         int report = 0;
+        int i;
+        int p;
+
+        int pr = getBl(drop);
+        int pc0 = getP_c(drop)[0];
+        int pc1 = getP_c(drop)[1];
+        Bidstep[] agg = getAggD(drop);
+
         //if the whole balance price is between local balance price +c/-c
-        if ((getBl(drop) >= getP_c(drop)[0]) && (getBl(drop) <= getP_c(drop)[1])) {
-            report = ((getP_c(drop)[0] + getP_c(drop)[1]) / 2);
-//            Env.log.println("No Capacity limit 0! " + report + " prob: " + drop);
+        if ((pr >= pc0) && (pr <= pc1)) {
+            report = ((pc0 + pc1) / 2);
         } else {
             //if the whole balance price is more than local balance price +c
-            if (getBl(drop) > getP_c(drop)[1]) {
-                int i, p = 0;
+            if (pr > pc1) {
+                p = 0;
                 //skip the bids with more quantity than (-1) * cap & less price than the balance price
-                for (i = 0; ((getAggD(drop)[i] != null)
-                        && (getAggD(drop)[i].getP() <= getBl(drop))
-                            && (getAggD(drop)[i].getQ_max() >= ((-1) * cap))); i++)
-                                p = getAggD(drop)[i].getP();
+                for (i = 0; ((agg[i] != null)
+                        && (agg[i].getP() <= pr)
+                            && (agg[i].getQ_max() >= ((-1) * cap))); i++)
+                                p = agg[i].getP();
 
-                if (getAggD(drop)[i] == null) {
+                if (agg[i] == null) {
                     report = p;
                 //if the target step passed the cap line
-                } else if (getAggD(drop)[i].getQ_max() < ((-1) * cap)) {
-                        if(getBl(drop) <= p + cost) {
-                            report = getBl(drop) - cost;
-//                            Env.log.println("No Capacity limit 1! " + report + " prob: " + drop);
+                } else if (agg[i].getQ_max() < ((-1) * cap)) {
+                        if(pr <= p + cost) {
+                            report = pr - cost;
                         }else{
                             report = p;
-//                            Env.log.println("Capacity limited 1! " + report + " prob: " + drop);
                         }
                         
                     //put limit equal to cap
                 } else {
-                        report = getBl(drop) - cost;
-//                        Env.log.println("No Capacity limit 1! " + report + " prob: " + drop);
-                                                 
-                        
+                        report = pr - cost;
                 }
                 
             //if the whole balance price is less than local balance price +c    
-            } else if (getBl(drop) < getP_c(drop)[0]) {
-                int i, p = 0;
+            } else if (pr < pc0) {
+                p = 0;
                 //skip the bids with more quantity than cap
-                for (i = 0; ((getAggD(drop)[i] != null)
-                        && (getAggD(drop)[i].getQ_min() >= cap)); i++)
-                             p = getAggD(drop)[i].getP();
-                if (getAggD(drop)[i] == null) {
+                for (i = 0; ((agg[i] != null)
+                        && (agg[i].getQ_min() >= cap)); i++)
+                             p = agg[i].getP();
+                if (agg[i] == null) {
                     report = p;
                 } else {
-                    if (getBl(drop) > getAggD(drop)[i].getP() - cost) {
-                        report = getBl(drop) + cost;
-//                        Env.log.println("No Capacity limit 2! " + report + " prob: " + drop);
+                    if (pr > agg[i].getP() - cost) {
+                        report = pr + cost;
                     //put limit equal to cap
                     } else {
-                        report = getAggD(drop)[i].getP();
-//                        Env.log.println("Capacity limited 2! " + report + " prob: " + drop);
+                        report = agg[i].getP();
                     }
                 }
-
             }
 
         }
