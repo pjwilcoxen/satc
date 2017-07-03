@@ -20,3 +20,6 @@ clean :
 
 check :
 	ver -d $(OUTS) $(TXTS)
+
+restore :
+	git checkout $(OUTS) $(TXTS)
