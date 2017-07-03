@@ -9,23 +9,17 @@ Scenario Settings:
 *** population 1
 *** stage INIT_DROPS
 node 201
-initiate random list of users to drop
-ran[0] [42]
-ran[1] [100, 26, 71, 8, 54]
-ran[2] [42, 53, 90, 68, 45, 12, 13, 63, 32, 10]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
 dos 1 dropped [42]
-dos 5 dropped [26, 71, 8, 54]
-dos 10 dropped [42, 53, 90, 68, 45, 12, 13, 63, 32, 10]
+dos 5 dropped [26, 71, 8, 54, 42]
+dos 10 dropped [53, 90, 68, 45, 12, 13, 63, 32, 10, 17]
 node 202
-initiate random list of users to drop
-ran[0] [17]
-ran[1] [96, 65, 74, 62, 64]
-ran[2] [85, 23, 17, 19, 3, 91, 7, 27, 47, 2]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [42, 117]
-dos 5 dropped [26, 71, 8, 54, 196, 165, 174, 162, 164]
-dos 10 dropped [42, 53, 90, 68, 45, 12, 13, 63, 32, 10, 185, 123, 117, 119, 103, 191, 107, 127, 147, 102]
+dos 1 dropped [42, 196]
+dos 5 dropped [26, 71, 8, 54, 42, 165, 174, 162, 164, 185]
+dos 10 dropped [53, 90, 68, 45, 12, 13, 63, 32, 10, 17, 123, 117, 119, 103, 191, 103, 107, 127, 147, 102]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
@@ -33,8 +27,8 @@ node 201
 *** stage AGG_MID
 node 203
 node_id: 203 Balance Price: 52 Prob: 0
-node_id: 203 Balance Price: 47 Prob: 1
-node_id: 203 Balance Price: 55 Prob: 5
+node_id: 203 Balance Price: 55 Prob: 1
+node_id: 203 Balance Price: 46 Prob: 5
 node_id: 203 Balance Price: 45 Prob: 10
 *** stage REPORT_MID
 node 203
@@ -42,34 +36,180 @@ node 203
 node 201
 node_id: 201 balance price: 27
 node_id: 201 balance price: 26
-node_id: 201 balance price: 26
+node_id: 201 balance price: 25
 node_id: 201 balance price: 24
 node 202
 node_id: 202 balance price: 212
-node_id: 202 balance price: 207
-node_id: 202 balance price: 239
+node_id: 202 balance price: 256
 node_id: 202 balance price: 194
+node_id: 202 balance price: 199
 *** stage CALC_LOADS
 *** population 2
 *** stage INIT_DROPS
 node 202
-initiate random list of users to drop
-ran[0] [21]
-ran[1] [71, 58, 67, 84, 59]
-ran[2] [99, 27, 45, 59, 78, 2, 47, 54, 37, 70]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
 dos 1 dropped [121]
 dos 5 dropped [171, 158, 167, 184, 159]
-dos 10 dropped [199, 127, 145, 159, 178, 102, 147, 154, 137, 170]
+dos 10 dropped [199, 127, 145, 159, 178, 102, 178, 147, 154, 127]
 node 201
-initiate random list of users to drop
-ran[0] [65]
-ran[1] [4, 40, 45, 42, 11]
-ran[2] [77, 71, 34, 97, 74, 49, 88, 11, 57, 29]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [121, 65]
-dos 5 dropped [171, 158, 167, 184, 159, 4, 40, 45, 42, 11]
-dos 10 dropped [199, 127, 145, 159, 178, 102, 147, 154, 137, 170, 77, 71, 34, 97, 74, 49, 88, 11, 57, 29]
+dos 1 dropped [121, 37]
+dos 5 dropped [171, 158, 167, 184, 159, 70, 65, 4, 40, 45]
+dos 10 dropped [199, 127, 145, 159, 178, 102, 178, 147, 154, 127, 42, 11, 77, 71, 34, 97, 74, 49, 88, 11]
+*** stage INIT_LOADS
+*** stage AGG_END
+node 201
+node 202
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 55 Prob: 0
+node_id: 203 Balance Price: 54 Prob: 1
+node_id: 203 Balance Price: 49 Prob: 5
+node_id: 203 Balance Price: 66 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 23
+node_id: 201 balance price: 22
+node_id: 201 balance price: 27
+node 202
+node_id: 202 balance price: 221
+node_id: 202 balance price: 220
+node_id: 202 balance price: 218
+node_id: 202 balance price: 220
+*** stage CALC_LOADS
+*** population 3
+*** stage INIT_DROPS
+node 202
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [140]
+dos 5 dropped [122, 187, 105, 143, 160]
+dos 10 dropped [185, 133, 188, 177, 178, 152, 113, 183, 199, 123]
+node 201
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [140, 77]
+dos 5 dropped [122, 187, 105, 143, 160, 57, 10, 98, 70, 62]
+dos 10 dropped [185, 133, 188, 177, 178, 152, 113, 183, 199, 123, 23, 94, 55, 82, 27, 67, 64, 78, 23, 11]
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 47 Prob: 0
+node_id: 203 Balance Price: 47 Prob: 1
+node_id: 203 Balance Price: 46 Prob: 5
+node_id: 203 Balance Price: 54 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 26
+node_id: 201 balance price: 25
+node_id: 201 balance price: 26
+node 202
+node_id: 202 balance price: 180
+node_id: 202 balance price: 173
+node_id: 202 balance price: 161
+node_id: 202 balance price: 181
+*** stage CALC_LOADS
+*** population 4
+*** stage INIT_DROPS
+node 202
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [121]
+dos 5 dropped [194, 171, 170, 188, 133]
+dos 10 dropped [105, 114, 151, 146, 124, 125, 119, 169, 198, 110]
+node 201
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [121, 27]
+dos 5 dropped [194, 171, 170, 188, 133, 86, 75, 6, 9, 84]
+dos 10 dropped [105, 114, 151, 146, 124, 125, 119, 169, 198, 110, 44, 66, 94, 76, 97, 64, 61, 86, 95, 64]
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 54 Prob: 0
+node_id: 203 Balance Price: 54 Prob: 1
+node_id: 203 Balance Price: 61 Prob: 5
+node_id: 203 Balance Price: 64 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 253
+node_id: 202 balance price: 252
+node_id: 202 balance price: 257
+node_id: 202 balance price: 274
+node 201
+node_id: 201 balance price: 24
+node_id: 201 balance price: 23
+node_id: 201 balance price: 26
+node_id: 201 balance price: 30
+*** stage CALC_LOADS
+*** population 5
+*** stage INIT_DROPS
+node 201
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [17]
+dos 5 dropped [3, 4, 13, 11, 54]
+dos 10 dropped [79, 86, 8, 44, 92, 73, 87, 96, 41, 89]
+node 202
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [17, 112]
+dos 5 dropped [3, 4, 13, 11, 54, 152, 125, 169, 129, 123]
+dos 10 dropped [79, 86, 8, 44, 92, 73, 87, 96, 41, 89, 174, 197, 140, 182, 131, 156, 162, 195, 176, 195]
+*** stage INIT_LOADS
+*** stage AGG_END
+node 202
+node 201
+*** stage AGG_MID
+node 203
+node_id: 203 Balance Price: 58 Prob: 0
+node_id: 203 Balance Price: 57 Prob: 1
+node_id: 203 Balance Price: 47 Prob: 5
+node_id: 203 Balance Price: 77 Prob: 10
+*** stage REPORT_MID
+node 203
+*** stage REPORT_END
+node 202
+node_id: 202 balance price: 223
+node_id: 202 balance price: 221
+node_id: 202 balance price: 218
+node_id: 202 balance price: 305
+node 201
+node_id: 201 balance price: 22
+node_id: 201 balance price: 21
+node_id: 201 balance price: 20
+node_id: 201 balance price: 31
+*** stage CALC_LOADS
+*** population 6
+*** stage INIT_DROPS
+node 202
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [116]
+dos 5 dropped [183, 151, 164, 146, 119]
+dos 10 dropped [119, 145, 158, 191, 153, 105, 167, 128, 175, 197]
+node 201
+initialize blocked nodes for DOS runs
+dos 0 dropped []
+dos 1 dropped [116, 11]
+dos 5 dropped [183, 151, 164, 146, 119, 24, 49, 33, 83, 84]
+dos 10 dropped [119, 145, 158, 191, 153, 105, 167, 128, 175, 197, 67, 45, 25, 53, 23, 16, 17, 67, 1, 89]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -77,307 +217,113 @@ node 202
 *** stage AGG_MID
 node 203
 node_id: 203 Balance Price: 58 Prob: 0
-node_id: 203 Balance Price: 55 Prob: 1
-node_id: 203 Balance Price: 46 Prob: 5
-node_id: 203 Balance Price: 62 Prob: 10
-*** stage REPORT_MID
-node 203
-*** stage REPORT_END
-node 201
-node_id: 201 balance price: 25
-node_id: 201 balance price: 24
-node_id: 201 balance price: 22
-node_id: 201 balance price: 28
-node 202
-node_id: 202 balance price: 250
-node_id: 202 balance price: 245
-node_id: 202 balance price: 223
-node_id: 202 balance price: 239
-*** stage CALC_LOADS
-*** population 3
-*** stage INIT_DROPS
-node 202
-initiate random list of users to drop
-ran[0] [87]
-ran[1] [5, 43, 60, 85, 33]
-ran[2] [88, 77, 78, 52, 13, 83, 99, 23, 57, 10]
-dos 0 dropped []
-dos 1 dropped [187]
-dos 5 dropped [105, 143, 160, 185, 133]
-dos 10 dropped [188, 177, 178, 152, 113, 183, 199, 123, 157, 110]
-node 201
-initiate random list of users to drop
-ran[0] [98]
-ran[1] [70, 62, 23, 94, 55]
-ran[2] [82, 27, 67, 64, 78, 23, 11, 2, 45, 57]
-dos 0 dropped []
-dos 1 dropped [187, 98]
-dos 5 dropped [105, 143, 160, 185, 133, 70, 62, 23, 94, 55]
-dos 10 dropped [188, 177, 178, 152, 113, 183, 199, 123, 157, 110, 82, 27, 67, 64, 78, 23, 11, 2, 45, 57]
-*** stage INIT_LOADS
-*** stage AGG_END
-node 202
-node 201
-*** stage AGG_MID
-node 203
-node_id: 203 Balance Price: 45 Prob: 0
-node_id: 203 Balance Price: 47 Prob: 1
-node_id: 203 Balance Price: 45 Prob: 5
-node_id: 203 Balance Price: 45 Prob: 10
-*** stage REPORT_MID
-node 203
-*** stage REPORT_END
-node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 26
-node_id: 201 balance price: 24
-node_id: 201 balance price: 23
-node 202
-node_id: 202 balance price: 203
-node_id: 202 balance price: 199
-node_id: 202 balance price: 182
-node_id: 202 balance price: 183
-*** stage CALC_LOADS
-*** population 4
-*** stage INIT_DROPS
-node 202
-initiate random list of users to drop
-ran[0] [70]
-ran[1] [88, 100, 33, 5, 14]
-ran[2] [51, 46, 24, 25, 19, 69, 98, 10, 27, 86]
-dos 0 dropped []
-dos 1 dropped [170]
-dos 5 dropped [188, 133, 105, 114]
-dos 10 dropped [151, 146, 124, 125, 119, 169, 198, 110, 127, 186]
-node 201
-initiate random list of users to drop
-ran[0] [75]
-ran[1] [6, 9, 84, 44, 66]
-ran[2] [94, 76, 97, 64, 61, 86, 95, 6, 25, 10]
-dos 0 dropped []
-dos 1 dropped [170, 75]
-dos 5 dropped [188, 133, 105, 114, 6, 9, 84, 44, 66]
-dos 10 dropped [151, 146, 124, 125, 119, 169, 198, 110, 127, 186, 94, 76, 97, 64, 61, 86, 95, 6, 25, 10]
-*** stage INIT_LOADS
-*** stage AGG_END
-node 202
-node 201
-*** stage AGG_MID
-node 203
-node_id: 203 Balance Price: 57 Prob: 0
-node_id: 203 Balance Price: 58 Prob: 1
-node_id: 203 Balance Price: 56 Prob: 5
-node_id: 203 Balance Price: 66 Prob: 10
+node_id: 203 Balance Price: 56 Prob: 1
+node_id: 203 Balance Price: 57 Prob: 5
+node_id: 203 Balance Price: 58 Prob: 10
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
+node_id: 202 balance price: 240
+node_id: 202 balance price: 233
 node_id: 202 balance price: 220
-node_id: 202 balance price: 217
-node_id: 202 balance price: 217
-node_id: 202 balance price: 253
+node_id: 202 balance price: 305
 node 201
-node_id: 201 balance price: 24
 node_id: 201 balance price: 25
-node_id: 201 balance price: 24
-node_id: 201 balance price: 27
-*** stage CALC_LOADS
-*** population 5
-*** stage INIT_DROPS
-node 201
-initiate random list of users to drop
-ran[0] [13]
-ran[1] [11, 54, 79, 86, 8]
-ran[2] [44, 92, 73, 87, 96, 41, 89, 12, 52, 25]
-dos 0 dropped []
-dos 1 dropped [13]
-dos 5 dropped [11, 54, 79, 86, 8]
-dos 10 dropped [44, 92, 73, 87, 96, 41, 89, 12, 52, 25]
-node 202
-initiate random list of users to drop
-ran[0] [69]
-ran[1] [29, 23, 74, 97, 40]
-ran[2] [82, 31, 56, 62, 95, 76, 15, 63, 98, 52]
-dos 0 dropped []
-dos 1 dropped [13, 169]
-dos 5 dropped [11, 54, 79, 86, 8, 129, 123, 174, 197, 140]
-dos 10 dropped [44, 92, 73, 87, 96, 41, 89, 12, 52, 25, 182, 131, 156, 162, 195, 176, 115, 163, 198, 152]
-*** stage INIT_LOADS
-*** stage AGG_END
-node 202
-node 201
-*** stage AGG_MID
-node 203
-node_id: 203 Balance Price: 56 Prob: 0
-node_id: 203 Balance Price: 55 Prob: 1
-node_id: 203 Balance Price: 58 Prob: 5
-node_id: 203 Balance Price: 67 Prob: 10
-*** stage REPORT_MID
-node 203
-*** stage REPORT_END
-node 202
-node_id: 202 balance price: 221
-node_id: 202 balance price: 221
-node_id: 202 balance price: 238
-node_id: 202 balance price: 281
-node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 23
 node_id: 201 balance price: 24
 node_id: 201 balance price: 26
-*** stage CALC_LOADS
-*** population 6
-*** stage INIT_DROPS
-node 202
-initiate random list of users to drop
-ran[0] [19]
-ran[1] [45, 58, 91, 53, 5]
-ran[2] [67, 28, 75, 97, 11, 24, 49, 33, 100, 83]
-dos 0 dropped []
-dos 1 dropped [119]
-dos 5 dropped [145, 158, 191, 153, 105]
-dos 10 dropped [167, 128, 175, 197, 111, 124, 149, 133, 183]
-node 201
-initiate random list of users to drop
-ran[0] [84]
-ran[1] [67, 45, 25, 53, 23]
-ran[2] [16, 17, 67, 1, 89, 56, 5, 99, 68, 62]
-dos 0 dropped []
-dos 1 dropped [119, 84]
-dos 5 dropped [145, 158, 191, 153, 105, 67, 45, 25, 53, 23]
-dos 10 dropped [167, 128, 175, 197, 111, 124, 149, 133, 183, 16, 17, 67, 1, 89, 56, 5, 99, 68, 62]
-*** stage INIT_LOADS
-*** stage AGG_END
-node 201
-node 202
-*** stage AGG_MID
-node 203
-node_id: 203 Balance Price: 50 Prob: 0
-node_id: 203 Balance Price: 54 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
-node_id: 203 Balance Price: 55 Prob: 10
-*** stage REPORT_MID
-node 203
-*** stage REPORT_END
-node 202
-node_id: 202 balance price: 217
-node_id: 202 balance price: 216
-node_id: 202 balance price: 221
-node_id: 202 balance price: 216
-node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 25
-node_id: 201 balance price: 23
-node_id: 201 balance price: 25
+node_id: 201 balance price: 22
 *** stage CALC_LOADS
 *** population 7
 *** stage INIT_DROPS
 node 201
-initiate random list of users to drop
-ran[0] [68]
-ran[1] [41, 27, 100, 46, 66]
-ran[2] [13, 63, 83, 87, 94, 57, 62, 95, 71, 38]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [68]
-dos 5 dropped [41, 27, 46, 66]
-dos 10 dropped [13, 63, 83, 87, 94, 57, 62, 95, 71, 38]
+dos 1 dropped [14]
+dos 5 dropped [3, 84, 41, 41, 80]
+dos 10 dropped [68, 41, 27, 46, 66, 13, 63, 83, 87, 94]
 node 202
-initiate random list of users to drop
-ran[0] [76]
-ran[1] [11, 88, 10, 28, 23]
-ran[2] [21, 89, 80, 29, 14, 15, 37, 94, 49, 56]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [68, 176]
-dos 5 dropped [41, 27, 46, 66, 111, 188, 110, 128, 123]
-dos 10 dropped [13, 63, 83, 87, 94, 57, 62, 95, 71, 38, 121, 189, 180, 129, 114, 115, 137, 194, 149, 156]
+dos 1 dropped [14, 157]
+dos 5 dropped [3, 84, 41, 41, 80, 162, 195, 171, 157, 138]
+dos 10 dropped [68, 41, 27, 46, 66, 13, 63, 83, 87, 94, 176, 111, 188, 110, 128, 123, 121, 189, 180, 129]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 202
 node 201
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 59 Prob: 0
-node_id: 203 Balance Price: 61 Prob: 1
-node_id: 203 Balance Price: 53 Prob: 5
+node_id: 203 Balance Price: 60 Prob: 0
+node_id: 203 Balance Price: 59 Prob: 1
+node_id: 203 Balance Price: 64 Prob: 5
 node_id: 203 Balance Price: 64 Prob: 10
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 224
-node_id: 202 balance price: 223
-node_id: 202 balance price: 215
-node_id: 202 balance price: 223
+node_id: 202 balance price: 206
+node_id: 202 balance price: 202
+node_id: 202 balance price: 220
+node_id: 202 balance price: 177
 node 201
-node_id: 201 balance price: 23
 node_id: 201 balance price: 25
-node_id: 201 balance price: 22
-node_id: 201 balance price: 27
+node_id: 201 balance price: 24
+node_id: 201 balance price: 26
+node_id: 201 balance price: 28
 *** stage CALC_LOADS
 *** population 8
 *** stage INIT_DROPS
 node 201
-initiate random list of users to drop
-ran[0] [91]
-ran[1] [98, 38, 44, 1, 47]
-ran[2] [78, 84, 5, 65, 71, 99, 28, 91, 68, 58]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [91]
-dos 5 dropped [98, 38, 44, 1, 47]
-dos 10 dropped [78, 84, 5, 65, 71, 99, 28, 91, 68, 58]
+dos 1 dropped [44]
+dos 5 dropped [19, 91, 50, 17, 69]
+dos 10 dropped [91, 98, 38, 44, 1, 38, 47, 78, 84, 5]
 node 202
-initiate random list of users to drop
-ran[0] [60]
-ran[1] [70, 3, 98, 74, 2]
-ran[2] [61, 52, 23, 13, 17, 78, 8, 26, 32, 20]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [91, 160]
-dos 5 dropped [98, 38, 44, 1, 47, 170, 103, 198, 174, 102]
-dos 10 dropped [78, 84, 5, 65, 71, 99, 28, 91, 68, 58, 161, 152, 123, 113, 117, 178, 108, 126, 132, 120]
+dos 1 dropped [44, 165]
+dos 5 dropped [19, 91, 50, 17, 69, 171, 199, 128, 191, 168]
+dos 10 dropped [91, 98, 38, 44, 1, 38, 47, 78, 84, 5, 158, 160, 170, 103, 198, 174, 102, 161, 152, 123]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
 node 202
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 53 Prob: 0
-node_id: 203 Balance Price: 56 Prob: 1
-node_id: 203 Balance Price: 53 Prob: 5
-node_id: 203 Balance Price: 60 Prob: 10
+node_id: 203 Balance Price: 60 Prob: 0
+node_id: 203 Balance Price: 59 Prob: 1
+node_id: 203 Balance Price: 67 Prob: 5
+node_id: 203 Balance Price: 62 Prob: 10
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
+node_id: 201 balance price: 23
+node_id: 201 balance price: 23
 node_id: 201 balance price: 24
 node_id: 201 balance price: 25
-node_id: 201 balance price: 22
-node_id: 201 balance price: 30
 node 202
-node_id: 202 balance price: 264
-node_id: 202 balance price: 261
-node_id: 202 balance price: 279
-node_id: 202 balance price: 220
+node_id: 202 balance price: 203
+node_id: 202 balance price: 197
+node_id: 202 balance price: 225
+node_id: 202 balance price: 185
 *** stage CALC_LOADS
 *** population 9
 *** stage INIT_DROPS
 node 202
-initiate random list of users to drop
-ran[0] [86]
-ran[1] [39, 100, 33, 29, 3]
-ran[2] [100, 68, 30, 20, 18, 34, 28, 61, 14, 84]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [186]
-dos 5 dropped [139, 133, 129, 103]
-dos 10 dropped [168, 130, 120, 118, 134, 128, 161, 114, 184]
+dos 1 dropped [164]
+dos 5 dropped [127, 131, 160, 191, 184]
+dos 10 dropped [165, 101, 186, 139, 133, 129, 103, 168, 130, 120]
 node 201
-initiate random list of users to drop
-ran[0] [67]
-ran[1] [91, 18, 21, 35, 30]
-ran[2] [40, 4, 80, 19, 41, 73, 66, 58, 95, 81]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [186, 67]
-dos 5 dropped [139, 133, 129, 103, 91, 18, 21, 35, 30]
-dos 10 dropped [168, 130, 120, 118, 134, 128, 161, 114, 184, 40, 4, 80, 19, 41, 73, 66, 58, 95, 81]
+dos 1 dropped [164, 18]
+dos 5 dropped [127, 131, 160, 191, 184, 34, 28, 61, 14, 84]
+dos 10 dropped [165, 101, 186, 139, 133, 129, 103, 168, 130, 120, 67, 91, 18, 21, 35, 30, 40, 4, 80, 19]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
@@ -385,64 +331,58 @@ node 202
 *** stage AGG_MID
 node 203
 node_id: 203 Balance Price: 51 Prob: 0
-node_id: 203 Balance Price: 54 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
-node_id: 203 Balance Price: 55 Prob: 10
+node_id: 203 Balance Price: 48 Prob: 1
+node_id: 203 Balance Price: 48 Prob: 5
+node_id: 203 Balance Price: 46 Prob: 10
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 236
-node_id: 202 balance price: 228
-node_id: 202 balance price: 221
-node_id: 202 balance price: 215
+node_id: 202 balance price: 167
+node_id: 202 balance price: 162
+node_id: 202 balance price: 177
+node_id: 202 balance price: 150
 node 201
 node_id: 201 balance price: 24
-node_id: 201 balance price: 25
+node_id: 201 balance price: 23
 node_id: 201 balance price: 22
-node_id: 201 balance price: 27
+node_id: 201 balance price: 22
 *** stage CALC_LOADS
 *** population 10
 *** stage INIT_DROPS
 node 202
-initiate random list of users to drop
-ran[0] [16]
-ran[1] [83, 67, 28, 4, 8]
-ran[2] [99, 80, 19, 79, 59, 69, 4, 11, 55, 88]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [116]
-dos 5 dropped [183, 167, 128, 104, 108]
-dos 10 dropped [199, 180, 119, 179, 159, 169, 104, 111, 155, 188]
+dos 1 dropped [157]
+dos 5 dropped [114, 198, 167, 188, 119]
+dos 10 dropped [143, 115, 116, 183, 183, 167, 128, 104, 108, 199]
 node 201
-initiate random list of users to drop
-ran[0] [66]
-ran[1] [12, 73, 32, 78, 19]
-ran[2] [73, 93, 92, 15, 9, 13, 21, 74, 99, 26]
+initialize blocked nodes for DOS runs
 dos 0 dropped []
-dos 1 dropped [116, 66]
-dos 5 dropped [183, 167, 128, 104, 108, 12, 73, 32, 78, 19]
-dos 10 dropped [199, 180, 119, 179, 159, 169, 104, 111, 155, 188, 73, 93, 92, 15, 9, 13, 21, 74, 99, 26]
+dos 1 dropped [157, 80]
+dos 5 dropped [114, 198, 167, 188, 119, 19, 79, 59, 69, 4]
+dos 10 dropped [143, 115, 116, 183, 183, 167, 128, 104, 108, 199, 11, 55, 88, 66, 12, 73, 32, 78, 19, 73]
 *** stage INIT_LOADS
 *** stage AGG_END
 node 201
 node 202
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 47 Prob: 0
-node_id: 203 Balance Price: 50 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
-node_id: 203 Balance Price: 58 Prob: 10
+node_id: 203 Balance Price: 63 Prob: 0
+node_id: 203 Balance Price: 63 Prob: 1
+node_id: 203 Balance Price: 64 Prob: 5
+node_id: 203 Balance Price: 63 Prob: 10
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 24
 node_id: 201 balance price: 26
-node_id: 201 balance price: 24
+node_id: 201 balance price: 27
+node_id: 201 balance price: 26
 node_id: 201 balance price: 27
 node 202
-node_id: 202 balance price: 245
-node_id: 202 balance price: 233
-node_id: 202 balance price: 221
-node_id: 202 balance price: 251
+node_id: 202 balance price: 281
+node_id: 202 balance price: 272
+node_id: 202 balance price: 305
+node_id: 202 balance price: 267
 *** stage CALC_LOADS

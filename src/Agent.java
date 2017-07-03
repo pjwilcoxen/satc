@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,9 +63,6 @@ public class Agent implements Steppable {
     //vector of bids drawn from initial load, elast, and number of steps
     Bidstep[] bids;
 	
-    //vectors of the id number of droped nodes 
-    int[][] ran;
-    
     //inidicates the queue variable for Bidstep type filled by childNodes 
     //Four vactors for different cases of dropped nodes    
     ArrayList<Bidstep[][]> queueD;
@@ -98,17 +94,12 @@ public class Agent implements Steppable {
      */
     ArrayList<Agent> children;
 
-
     private Bidstep[] getAggD(int drop) {
         return aggD.get(drop);
     }
 
     private void setAggD(Bidstep[] agg, int drop) {
         aggD.set(drop, agg);
-    }
-
-    private int[][] getRan() {
-        return ran;
     }
 
     public void setParent(Agent Parent) {
@@ -175,7 +166,6 @@ public class Agent implements Steppable {
         
         e    = (Env) state;
         bl   = new int[4];
-        ran  = new int[3][];
         p_c  = new int[4][2];
         cost = Env.transCost ;
         cap  = Env.transCap;
@@ -511,58 +501,27 @@ public class Agent implements Steppable {
 
     private void do_init_drops() {
         
-            int rand;
+        int i,n;
+        int rand;
+        int block_id;
+        Agent block_kid;
 
-            Env.log.println("node "+own_id);
-            Env.log.println("initiate random list of users to drop");
+        Env.log.println("node "+own_id);
+        Env.log.println("initialize blocked nodes for DOS runs");
 
-            //initiate three vector for the random ids
-            int[][] ran = new int[3][];
-            
-            //initiate the vectors for three case of 1, 5, and 10 drops
-            ran[0] = new int[1];
-            for (int i = 0; i < 1; i++) {
+        for(String dos: Env.dos_runs) {
+            n = Integer.parseInt(dos);
+            while( n>0 ) {
                 rand = (int) (runiform() * 100 + 1);
-                ran[0][i] = rand;
                 for(Agent kid: children)
-                    if( rand == (kid.own_id % 100) ) 
-                        Env.setBlock("1",kid);
-            }
-            
-            ran[1] = new int[5];
-            for (int i = 0; i < 5; i++) {
-                rand = (int) (runiform() * 100 + 1);
-                if (getArrayIndex(ran[1], rand) < 0) {
-                    ran[1][i] = rand;
-                    for(Agent kid: children)
-                        if( rand == (kid.own_id % 100) ) 
-                            Env.setBlock("5",kid);
-                } else {
-                    i--;
+                    if( rand == (kid.own_id % 100) ) {
+                        Env.setBlock(dos,kid);
+                        n--;
+                        break;
                 }
             }
-            
-            ran[2] = new int[10];
-            for (int i = 0; i < 10; i++) {
-                rand = (int) (runiform() * 100 + 1);
-                if (getArrayIndex(ran[2], rand) < 0) {
-                    ran[2][i] = rand;
-                    for(Agent kid: children)
-                        if( rand == (kid.own_id % 100) ) 
-                            Env.setBlock("10",kid);
-                } else {
-                    i--;
-                }
-            }
-            
-            //set the random variable
-            this.ran = ran;
-
-        for(int i=0 ; i<3 ; i++) 
-           Env.log.println("ran["+i+"] "+Arrays.toString(ran[i]));
-
-        for(String dos: Env.dos_runs) 
-           Env.log.println("dos "+dos+" dropped "+Env.blockList.get(dos));
+            Env.log.println("dos "+dos+" dropped "+Env.blockList.get(dos));
+        }
     }
 
     /**
