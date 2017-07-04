@@ -71,8 +71,10 @@ public class Env extends SimState {
     //
 
     static PrintWriter out;
+    static PrintWriter net;
     public static PrintWriter log;
     public static CSVPrinter csvPrinter;
+    public static CSVPrinter loadPrinter;
     static int pop;
 
     static ArrayList<Agent> listAgent;
@@ -233,8 +235,9 @@ public class Env extends SimState {
         //
 
         out = Util.openWrite(stem+"_out.csv");
-
+        net = Util.openWrite(stem+"_net.csv");
         log = Util.openWrite(stem+"_log.txt");
+
         log.println(
            "Scenario Settings:\n" +
            "   Network map: "+fileConfig+"\n"+
@@ -371,6 +374,53 @@ public class Env extends SimState {
         }
         catch (IOException e) {
            throw new RuntimeException("Error writing to output file");
+        }
+    }
+
+    /**
+     * Print out results
+     */
+    public static void printLoad(Agent agent) {
+        CSVFormat loadFormat ;
+        Bidstep[] bids;
+        ArrayList<String> header;
+        ArrayList<String> values;
+
+        header = new ArrayList<>();
+        header.add("pop");
+        header.add("id");
+        header.add("sd_type");
+        header.add("load");
+        header.add("elast");
+        for(int i=0 ; i<20 ; i++) {
+            header.add("p"+i);
+            header.add("q_min"+i);
+            header.add("q_max"+i);
+        }
+
+        values = new ArrayList<>();
+        bids = agent.demand.bids;
+
+        try {
+            if( loadPrinter == null ) {
+                loadFormat  = CSVFormat.DEFAULT;
+                loadPrinter = new CSVPrinter(net,loadFormat);
+                loadPrinter.printRecord(header);
+            }
+            values.add(Integer.toString(pop));
+            values.add(Integer.toString(agent.own_id));
+            values.add(agent.sd_type);
+            values.add(Double.toString(agent.load));
+            values.add(Double.toString(agent.elast));
+            for(int i=0 ; bids[i] != null ; i++) {
+                values.add(Integer.toString(bids[i].p));
+                values.add(Integer.toString(bids[i].q_min));
+                values.add(Integer.toString(bids[i].q_max));
+            }
+            loadPrinter.printRecord(values);
+        }
+        catch (IOException e) {
+           throw new RuntimeException("Error writing to load file");
         }
     }
 

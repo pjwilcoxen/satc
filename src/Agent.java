@@ -443,6 +443,7 @@ public class Agent implements Steppable {
         switch (Env.stageNow) {
             case INIT_LOADS:
                 drawLoad();
+                Env.printLoad(this);
                 do_send_demands();
                 break;
 
