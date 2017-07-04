@@ -10,7 +10,7 @@ public class Msg {
     int from;
     int to;
     Types type;
-    Bidstep bids[];
+    Demand demand;
     int price;
 
     public int dos_id;
@@ -26,10 +26,10 @@ public class Msg {
         this.from = from;
     }
 
-    public void setDemand(Bidstep bids[]) {
+    public void setDemand(Demand demand) {
         assert type == Types.NONE;
-        assert bids != null;
-        this.bids = bids;
+        assert demand != null;
+        this.demand = demand;
         type = Types.DEMAND;
     }
 
@@ -47,9 +47,9 @@ public class Msg {
         return type == Types.PRICE;
     }
 
-    public Bidstep[] getDemand() {
+    public Demand getDemand() {
         assert type == Types.DEMAND;
-        return bids;
+        return demand;
     }
 
     public int getPrice() {

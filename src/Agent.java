@@ -143,10 +143,10 @@ public class Agent implements Steppable {
         p_c[drop][1] = p1;
     }
 
-    public void appendQueueD(Bidstep[] bids, int drop) {
+    public void appendQueueD(Demand demand, int drop) {
         Bidstep tmp[][];
         tmp = queueD.get(drop);
-        tmp[queueSizeD[drop]] = bids;
+        tmp[queueSizeD[drop]] = demand.bids;
         queueD.set(drop, tmp);
         queueSizeD[drop]++;
     }
@@ -260,13 +260,11 @@ public class Agent implements Steppable {
         steps = (int) (runiform() * maxstep + 2);
 
         //call draw function based on the type of end user
-        if (sd_type.equals("D")) {
+        if (sd_type.equals("D")) 
             bids = drawDemand();
-        } else {
+        else 
             bids = drawSupply();
-        }
     }
-    
      
     //call aggragate function  on the queue
     private ArrayList<Bidstep[]> runsim(){
@@ -568,7 +566,7 @@ public class Agent implements Steppable {
 
         for(int i=0 ; i<Env.dos_runs.length ; i++) {
             Msg msg = new Msg(this,parent.own_id);
-            msg.setDemand(bids);
+            msg.setDemand(new Demand(bids));
             msg.dos_id = i;
             dbus.send(msg);
         }
@@ -597,7 +595,7 @@ public class Agent implements Steppable {
             tmp = addCost(agg.get(i), cost, i);
             tmp = addCapacity(tmp, cap);
             Msg msg = new Msg(this,parent.own_id);
-            msg.setDemand(tmp);
+            msg.setDemand(new Demand(tmp));
             msg.dos_id = i;
             dbus.send(msg);
         }
