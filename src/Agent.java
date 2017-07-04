@@ -93,10 +93,6 @@ public class Agent implements Steppable {
      */
     ArrayList<Agent> children;
 
-    private Bidstep[] getAggD(int drop) {
-        return aggD.get(drop);
-    }
-
     public void setParent(Agent Parent) {
         this.parent = Parent;
         Parent.children.add(this);
@@ -375,7 +371,7 @@ public class Agent implements Steppable {
         pr  = getBl(drop);
         pc0 = getP_c(drop)[0];
         pc1 = getP_c(drop)[1];
-        dem = new Demand( getAggD(drop) );
+        dem = new Demand( aggD.get(drop) );
 
         return dem.getP(pr,pc0,pc1,cost,cap);
     }
@@ -592,6 +588,7 @@ public class Agent implements Steppable {
      */
     private void do_report_end() {
 
+        Bidstep[] thisD;
         int child_id;
 
         for(Msg msg: getMsgs(Msg.Types.PRICE)) 
@@ -602,10 +599,9 @@ public class Agent implements Steppable {
         //find the balance price for each case of dropped nodes
         for (int j = 0; j < 4; j++) {
             int i, bl = 0;
-            for (i = 0; ((getAggD(j)[i] != null)
-                    && (getAggD(j)[i].q_max >= 0)); i++) {
-                bl = getAggD(j)[i].p;
-            }
+            thisD = aggD.get(j);
+            for(i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) 
+                bl = thisD[i].p;
             Env.log.println("node_id: " + own_id  + " balance price: " + bl);
         }
         
