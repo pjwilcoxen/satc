@@ -2,7 +2,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import sim.engine.SimState;
 import sim.engine.Steppable;
-import static java.lang.Math.pow;
 
 /**
  * General purpose Agent class
@@ -277,9 +276,9 @@ public class Agent implements Steppable {
 
         //call draw function based on the type of end user
         if (sd_type.equals("D")) 
-            demand = drawDemand();
+            demand = Demand.makeDemand(load,elast,steps);
         else 
-            demand = drawSupply();
+            demand = Demand.makeSupply(load,elast,steps);
         bids = demand.bids;
     }
      
@@ -650,80 +649,5 @@ public class Agent implements Steppable {
             Env.printResult(this,dos,bl,ex);
         }
     }
-
-    /**
-     * Create demand curves based on initial load, elasticity, and number of steps
-     */
-    private Demand drawDemand(){
-        Demand newD;
-        Bidstep[] result;
-
-        newD = new Demand();
-        result = newD.bids;
-        
-        int iniprice= 40 +  (int) (runiform() * 12 - 6);
-        int p0 = iniprice/steps;
-        int p1 = iniprice*2/steps;
-        int q1= (int) (load * pow((double)p0/iniprice,elast));
-        int q2=(int)(load * pow((double)p1/iniprice,elast));
-        result[0]  = new Bidstep(p0, q2, q1);
-        
-        //create the number of steps below the price=40
-        for(int i =1 ; i < steps; i ++){
-            p1 = iniprice*(i+1)/steps;
-            q1= q2;
-            q2= (int) (load * pow((double)p1/iniprice,elast));
-            result[i]  = new Bidstep(p1, q2, q1);
-        }
-        
-        //create twice the number of steps upper the proce = 40
-        for(int i =1 ; i < 2*steps; i ++){
-            p1 = iniprice + (360*i)/(2*steps);
-            q1= q2;
-            q2= (int) (load * pow((double)p1/iniprice,elast));
-            result[steps + i - 1]  = new Bidstep(p1, q2, q1);
-        }
-        
-        return newD;
-    }
-    
-    /**
-     * Create supply curves with reverse quantities in comparison to demand curve
-     */
-    private Demand drawSupply(){
-        Demand newD;
-        Bidstep[] result;
-
-        newD = new Demand();
-        result = newD.bids;
-
-        int iniprice= 40 + (int) (runiform() * 12 - 6);
-        
-        int p0 = iniprice/steps;
-        int p1 = (iniprice*2)/steps;
-
-        int q1=(int)((-1) * (load * pow((double)p0/iniprice,elast)));
-        int q2=(int)((-1) * (load * pow((double)p1/iniprice,elast)));
-        result[0]  = new Bidstep(p0, q1, q2);
-        
-        //create the number of steps below the price=40
-        for(int i =1 ; i < steps; i ++){
-            p1 = iniprice*(i+1)/steps;
-            q1= q2;
-            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
-            result[i]  = new Bidstep(p1, q1, q2);
-        }
-        
-        //create twice the number of steps upper the proce = 40
-        for(int i =1 ; i < 2*steps ; i++){
-            p1 = iniprice+ 360*i/(2*steps);
-            q1= q2;
-            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
-            result[steps + i - 1]  = new Bidstep(p1, q1, q2);
-        }
-        
-        return newD;
-    }
-
 }
 

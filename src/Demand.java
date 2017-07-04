@@ -1,3 +1,5 @@
+import static java.lang.Math.pow;
+
 public class Demand {
    
     static final int MAXBIDS = 400;
@@ -202,5 +204,78 @@ public class Demand {
         return aggD;
     }
     
+    /**
+     * Create demand curves based on initial load, elasticity, and number of steps
+     */
+    public static Demand makeDemand(double load, double elast, int steps){
+        Demand newD;
+        Bidstep[] result;
+
+        newD = new Demand();
+        result = newD.bids;
+        
+        int iniprice= 40 +  (int) (Env.runiform() * 12 - 6);
+        int p0 = iniprice/steps;
+        int p1 = iniprice*2/steps;
+        int q1= (int) (load * pow((double)p0/iniprice,elast));
+        int q2=(int)(load * pow((double)p1/iniprice,elast));
+        result[0]  = new Bidstep(p0, q2, q1);
+        
+        //create the number of steps below the price=40
+        for(int i =1 ; i < steps; i ++){
+            p1 = iniprice*(i+1)/steps;
+            q1= q2;
+            q2= (int) (load * pow((double)p1/iniprice,elast));
+            result[i]  = new Bidstep(p1, q2, q1);
+        }
+        
+        //create twice the number of steps upper the proce = 40
+        for(int i =1 ; i < 2*steps; i ++){
+            p1 = iniprice + (360*i)/(2*steps);
+            q1= q2;
+            q2= (int) (load * pow((double)p1/iniprice,elast));
+            result[steps + i - 1]  = new Bidstep(p1, q2, q1);
+        }
+        
+        return newD;
+    }
+    
+    /**
+     * Create supply curves with reverse quantities in comparison to demand curve
+     */
+    public static Demand makeSupply(double load, double elast, int steps){
+        Demand newD;
+        Bidstep[] result;
+
+        newD = new Demand();
+        result = newD.bids;
+
+        int iniprice= 40 + (int) (Env.runiform() * 12 - 6);
+        
+        int p0 = iniprice/steps;
+        int p1 = (iniprice*2)/steps;
+
+        int q1=(int)((-1) * (load * pow((double)p0/iniprice,elast)));
+        int q2=(int)((-1) * (load * pow((double)p1/iniprice,elast)));
+        result[0]  = new Bidstep(p0, q1, q2);
+        
+        //create the number of steps below the price=40
+        for(int i =1 ; i < steps; i ++){
+            p1 = iniprice*(i+1)/steps;
+            q1= q2;
+            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
+            result[i]  = new Bidstep(p1, q1, q2);
+        }
+        
+        //create twice the number of steps upper the proce = 40
+        for(int i =1 ; i < 2*steps ; i++){
+            p1 = iniprice+ 360*i/(2*steps);
+            q1= q2;
+            q2= (int) ((-1) * (load * pow((double)p1/iniprice,elast)));
+            result[steps + i - 1]  = new Bidstep(p1, q1, q2);
+        }
+        
+        return newD;
+    }
   
 }
