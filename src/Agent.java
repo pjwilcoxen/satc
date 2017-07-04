@@ -202,6 +202,16 @@ public class Agent implements Steppable {
             child.dbus.send(msg);
             }
     }
+
+    /**
+     * Send a demand to parent node
+     */
+    private void reportDemand(Demand demand,int dos_id) {
+        Msg msg = new Msg(this,parent.own_id);
+        msg.setDemand(demand);
+        msg.dos_id = dos_id;
+        dbus.send(msg);
+    }
  
     public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, String sd_type) {
         super();
@@ -275,7 +285,9 @@ public class Agent implements Steppable {
             bids = drawSupply();
     }
      
-    //call aggragate function  on the queue
+    /**
+     * Aggregate demands from child nodes
+     */
     private Demand sumDemands(int dos_id) {
         Demand aggD;
         Demand this_dem;
@@ -477,15 +489,9 @@ public class Agent implements Steppable {
      * to this agent's parent node.
      */
     private void do_init_load() {
-
         drawLoad();
-
-        for(int i=0 ; i<Env.dos_runs.length ; i++) {
-            Msg msg = new Msg(this,parent.own_id);
-            msg.setDemand(new Demand(bids));
-            msg.dos_id = i;
-            dbus.send(msg);
-        }
+        for(int dos_id=0 ; dos_id<Env.dos_runs.length ; dos_id++) 
+            reportDemand(new Demand(bids),dos_id);
     }
 
     /**
@@ -512,10 +518,7 @@ public class Agent implements Steppable {
 
             // send to parent
 
-            Msg msg = new Msg(this,parent.own_id);
-            msg.setDemand(tmp);
-            msg.dos_id = dos_id;
-            dbus.send(msg);
+            reportDemand(tmp,dos_id);
         }
 
         clearQueuesD();
