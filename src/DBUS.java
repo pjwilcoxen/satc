@@ -37,6 +37,7 @@ public class DBUS {
      * @param msg Message to send
      */
     public void send(Msg msg) {
-        Env.getAgent(msg.to).deliver(msg);
+        if( ! Env.isBlocked(msg.dos_id,msg.from) )
+            Env.getAgent(msg.to).deliver(msg);
     }
 }

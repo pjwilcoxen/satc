@@ -562,21 +562,21 @@ public class Agent implements Steppable {
     }
 
     /**
-     * Create net demand curves for the end users
+     * Create net demand curve for the end user
+     *
+     * Build a random net demand and then send it as a message
+     * to this agent's parent node.
      */
     private void do_init_load() {
 
-        //build a random net demand for this agent
         drawLoad();
 
-        //populate the parents queues for different cases of dropped nodes 
-        for(int i=0 ; i<Env.dos_runs.length ; i++)
-            if( ! Env.isBlocked(Env.dos_runs[i],this) ) {
-                Msg msg = new Msg(this,parent.own_id);
-                msg.setDemand(bids);
-                msg.dos_id = i;
-                dbus.send(msg);
-            }
+        for(int i=0 ; i<Env.dos_runs.length ; i++) {
+            Msg msg = new Msg(this,parent.own_id);
+            msg.setDemand(bids);
+            msg.dos_id = i;
+            dbus.send(msg);
+        }
     }
 
     /**

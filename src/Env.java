@@ -166,6 +166,18 @@ public class Env extends SimState {
     }
 
     /**
+     * Check whether an agent is on a block list
+     * 
+     * @param dos_id Subscript of the DOS run
+     * @param from ID of apparent sender
+     * @return True if the agent is blocked in the indicated DOS run
+     */
+    public static boolean isBlocked(int dos_id, int from) {
+       String run = Env.dos_runs[dos_id];
+       return blockList.get(run).contains(from);
+    }
+
+    /**
      * Entry point for the simulation
      */
     public static void main(String[] args) {

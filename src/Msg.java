@@ -6,7 +6,7 @@ public class Msg {
         PRICE
     };
 
-    Agent agent;
+    Agent sender;
     int from;
     int to;
     Types type;
@@ -15,11 +15,11 @@ public class Msg {
 
     public int dos_id;
 
-    public Msg(Agent agent,int to) {
-        this.agent = agent;
-        this.from  = agent.own_id;
-        this.to    = to;
-        this.type  = Types.NONE;
+    public Msg(Agent sender,int to) {
+        this.sender = sender;
+        this.from   = sender.own_id;
+        this.to     = to;
+        this.type   = Types.NONE;
     }
 
     public void setFrom(int from) {
