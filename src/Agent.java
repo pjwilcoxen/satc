@@ -291,17 +291,24 @@ public class Agent implements Steppable {
     }
 
     //change the step prices considering transation cost
-    private Bidstep[] addCost(Bidstep[] bids, int c, int drop) {
-        Bidstep[] tmp = new Bidstep[maxbids];
+    private Demand addCost(Demand demand, int c, int drop) {
+        Demand newD;
+        Bidstep[] tmp;
+        Bidstep[] bids;
         int i;
+
+        newD = new Demand();
+        tmp  = newD.bids;
+        bids = demand.bids;
+
         //decrease the price level of steps with positive quantity
         for(i = 0; (bids[i] != null) && (bids[i].getQ_min() >= 0); i++ )
             tmp[i] = new Bidstep(bids[i].getP()-c,bids[i].getQ_min(),bids[i].getQ_max());
         
         //if there is no step with positive quantity 
         if(i == 0){
-                for(; bids[i] != null ; i++)
-                    tmp[i] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),bids[i].getQ_max());
+            for(; bids[i] != null ; i++)
+                tmp[i] = new Bidstep(bids[i].getP()+c,bids[i].getQ_min(),bids[i].getQ_max());
         }
         if(bids[i] != null ){
             //if theere is a vertical overlaop with y axis
@@ -334,20 +341,28 @@ public class Agent implements Steppable {
             
             }
         }
-        return tmp;
 
-        
+        return newD;
     }
 
     //put capacity constrain on the net demand
-    private Bidstep [] addCapacity(Bidstep[] bids, int cap) {
-        Bidstep[] tmp = new Bidstep[maxbids];
-        int i, j=0;
+    private Demand addCapacity(Demand demand, int cap) {
+        Demand newD;
+        Bidstep[] bids;
+        Bidstep[] tmp;
+        int i;
+        int j;
         
+        newD = new Demand();
+        tmp  = newD.bids;
+        bids = demand.bids;
+
+        j = 0;
+
         //skip the steps with more quantity than cap
         for(i =0; bids[i].getQ_min() >= cap; i++);
         if(bids[i] == null)
-            return new Bidstep[0];
+            return new Demand(new Bidstep[0]);
         //set the right corner step
         if(bids[i].getQ_max() > cap){
             tmp[j++]= new Bidstep(bids[i].getP(),bids[i].getQ_min(),cap);
@@ -357,13 +372,12 @@ public class Agent implements Steppable {
         for(;(bids[i] != null) && (bids[i].getQ_min() >= ((-1)*(cap))); i++)
             tmp[j++] = new Bidstep(bids[i].getP(),bids[i].getQ_min(),bids[i].getQ_max());
         if (bids[i] == null) 
-            return tmp;
+            return newD;
         //set the left corner step
         else
             tmp[j] = new Bidstep(bids[i].getP(),((-1)*(cap)),bids[i].getQ_max());
         
-        return tmp;
-        
+        return newD;
     }
     
     //find the actual price for the end users considering transaction cost and capacity limit
@@ -576,26 +590,28 @@ public class Agent implements Steppable {
      */
     private void do_agg_end() {
 
+        Demand this_agg;
+        Demand tmp;
+        
         Env.log.println("node "+own_id);
 
-        Demand this_agg;
-        ArrayList<Bidstep[]> agg;
-        Bidstep tmp[];
-        
-        agg = new ArrayList<>();
         for(int dos_id=0 ; dos_id<4 ; dos_id++) {
-            this_agg = sumDemands(dos_id) ;
-            agg.add( this_agg.bids );
-            aggD.set(dos_id,this_agg.bids);
-        }
 
-        //call addCost and addCapacity functions to consider transaction costs and capacity constrains
-        for (int i = 0; i < 4; i++) {
-            tmp = addCost(agg.get(i), cost, i);
+            // do the aggregation and save the result
+
+            this_agg = sumDemands(dos_id) ;
+            aggD.set(dos_id,this_agg.bids);
+
+            // adjust for transmission cost and constraint
+
+            tmp = addCost(this_agg, cost, dos_id);
             tmp = addCapacity(tmp, cap);
+
+            // send to parent
+
             Msg msg = new Msg(this,parent.own_id);
-            msg.setDemand(new Demand(tmp));
-            msg.dos_id = i;
+            msg.setDemand(tmp);
+            msg.dos_id = dos_id;
             dbus.send(msg);
         }
 
