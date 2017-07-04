@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import static java.lang.Math.pow;
