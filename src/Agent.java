@@ -59,7 +59,8 @@ public class Agent implements Steppable {
 
     //vector of bids drawn from initial load, elast, and number of steps
     Bidstep[] bids;
-	
+    Demand demand;
+
     //inidicates the queue variable for Bidstep type filled by childNodes 
     //Four vactors for different cases of dropped nodes    
     ArrayList<Bidstep[][]> queueD;
@@ -135,10 +136,10 @@ public class Agent implements Steppable {
         p_c[drop][1] = p1;
     }
 
-    public void appendQueueD(Demand demand, int drop) {
+    public void appendQueueD(Demand dem, int drop) {
         Bidstep tmp[][];
         tmp = queueD.get(drop);
-        tmp[queueSizeD[drop]] = demand.bids;
+        tmp[queueSizeD[drop]] = dem.bids;
         queueD.set(drop, tmp);
         queueSizeD[drop]++;
     }
@@ -202,9 +203,9 @@ public class Agent implements Steppable {
     /**
      * Send a demand to parent node
      */
-    private void reportDemand(Demand demand,int dos_id) {
+    private void reportDemand(Demand dem,int dos_id) {
         Msg msg = new Msg(this,parent.own_id);
-        msg.setDemand(demand);
+        msg.setDemand(dem);
         msg.dos_id = dos_id;
         dbus.send(msg);
     }
@@ -276,9 +277,10 @@ public class Agent implements Steppable {
 
         //call draw function based on the type of end user
         if (sd_type.equals("D")) 
-            bids = drawDemand();
+            demand = drawDemand();
         else 
-            bids = drawSupply();
+            demand = drawSupply();
+        bids = demand.bids;
     }
      
     /**
@@ -301,7 +303,7 @@ public class Agent implements Steppable {
     }
 
     //change the step prices considering transation cost
-    private Demand addCost(Demand demand, int c, int drop) {
+    private Demand addCost(Demand dem, int c, int drop) {
         Demand newD;
         Bidstep[] tmp;
         Bidstep[] bids;
@@ -309,7 +311,7 @@ public class Agent implements Steppable {
 
         newD = new Demand();
         tmp  = newD.bids;
-        bids = demand.bids;
+        bids = dem.bids;
 
         //decrease the price level of steps with positive quantity
         for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
@@ -441,7 +443,8 @@ public class Agent implements Steppable {
     private void step_end() {
         switch (Env.stageNow) {
             case INIT_LOADS:
-                do_init_load();
+                drawLoad();
+                do_send_demands();
                 break;
 
             case CALC_LOADS:
@@ -479,13 +482,9 @@ public class Agent implements Steppable {
     }
 
     /**
-     * Create net demand curve for the end user
-     *
-     * Build a random net demand and then send it as a message
-     * to this agent's parent node.
+     * Send demand to parent node
      */
-    private void do_init_load() {
-        drawLoad();
+    private void do_send_demands() {
         for(int dos_id=0 ; dos_id<Env.dos_runs.length ; dos_id++) 
             reportDemand(new Demand(bids),dos_id);
     }
@@ -530,7 +529,8 @@ public class Agent implements Steppable {
 
         Demand this_agg;
         ArrayList<Bidstep[]> agg;
-        
+        Bidstep[] thisD;
+
         agg = new ArrayList<>();
         for(int dos_id=0 ; dos_id<4 ; dos_id++) {
             this_agg = sumDemands(dos_id) ;
@@ -540,15 +540,16 @@ public class Agent implements Steppable {
 
         //find the balance price for each case of dropped nodes
         for (int j = 0; j < 4; j++) {
-            int i, bl = 0, min =1;
-            for (i = 0; ((agg.get(j)[i] != null)
-                    && (agg.get(j)[i].q_max >= 0)); i++) {
-                bl = agg.get(j)[i].p;
-                min = agg.get(j)[i].q_min;
+            int i, bl=0, min=1;
+
+            thisD = agg.get(j);
+            for (i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) {
+                bl  = thisD[i].p;
+                min = thisD[i].q_min;
             }
 
             //if there is not any balance point- report -1 as price
-            if ((i == 0) || ((agg.get(j)[i] == null)&&(min > 0))) {
+            if ((i == 0) || ((thisD[i] == null)&&(min > 0))) {
                 bl = -1;
                 Env.log.println("failed at drop: " + j);
             }
@@ -653,8 +654,12 @@ public class Agent implements Steppable {
     /**
      * Create demand curves based on initial load, elasticity, and number of steps
      */
-    private Bidstep[] drawDemand(){
-        Bidstep [] result = new Bidstep[maxbids];
+    private Demand drawDemand(){
+        Demand newD;
+        Bidstep[] result;
+
+        newD = new Demand();
+        result = newD.bids;
         
         int iniprice= 40 +  (int) (runiform() * 12 - 6);
         int p0 = iniprice/steps;
@@ -679,14 +684,19 @@ public class Agent implements Steppable {
             result[steps + i - 1]  = new Bidstep(p1, q2, q1);
         }
         
-        return result;
+        return newD;
     }
     
     /**
      * Create supply curves with reverse quantities in comparison to demand curve
      */
-    private Bidstep[] drawSupply(){
-        Bidstep [] result = new Bidstep[maxbids];
+    private Demand drawSupply(){
+        Demand newD;
+        Bidstep[] result;
+
+        newD = new Demand();
+        result = newD.bids;
+
         int iniprice= 40 + (int) (runiform() * 12 - 6);
         
         int p0 = iniprice/steps;
@@ -712,7 +722,7 @@ public class Agent implements Steppable {
             result[steps + i - 1]  = new Bidstep(p1, q1, q2);
         }
         
-        return result;
+        return newD;
     }
 
 }
