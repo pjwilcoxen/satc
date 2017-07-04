@@ -741,30 +741,32 @@ public class Agent implements Steppable {
             if(bid1[i].p < bid2[j].p){
                     //if it is the fist step
                     if(k == 0)
-                        aggBid[k].setQ_min(bid1[i].q_min + bid2[j].q_max);
+                        aggBid[k].q_min = bid1[i].q_min + bid2[j].q_max;
                     i++;
                     
             }else if(bid1[i].p > bid2[j].p){
                     //initiate the left corner of the first step
                     if(k == 0)
-                        aggBid[k].setQ_min(bid1[i].q_max + bid2[j].q_min);
+                        aggBid[k].q_min = bid1[i].q_max + bid2[j].q_min;
                     j++;
             }else{ 
                     //initiate the left corner of the first step
                     if(k == 0)
-                        aggBid[k].setQ_min(bid1[i].q_min + bid2[j].q_min);
+                        aggBid[k].q_min = bid1[i].q_min + bid2[j].q_min;
                     i++;
                     j++;
             }
             //initiate the left corner of each step based on the right corner of the next step
             if(k > 1)
-                aggBid[k-1].setQ_min(aggBid[k].q_max);
+                aggBid[k-1].q_min = aggBid[k].q_max;
             
             k++;
             
           }
+
         //initiate the last step
-        aggBid[k-1].setQ_min(aggBid[k-1].q_max-100);
+        aggBid[k-1].q_min = aggBid[k-1].q_max - 100;
+        
         return aggBid;
     }
     

@@ -50,16 +50,16 @@ public class Demand {
 
             //skip the bids with more quantity than (-1) * cap & less price than the balance price
             for (i = 0; ((bids[i] != null)
-                        && (bids[i].getP() <= pr)
-                        && (bids[i].getQ_max() >= ((-1) * cap))); i++)
-                            p = bids[i].getP();
+                        && (bids[i].p <= pr)
+                        && (bids[i].q_max >= ((-1) * cap))); i++)
+                            p = bids[i].p;
 
             if (bids[i] == null) {
                 return p;
             }
             
             //if the target step passed the cap line
-            if (bids[i].getQ_max() < ((-1) * cap)) {
+            if (bids[i].q_max < ((-1) * cap)) {
                 if(pr <= p + cost) 
                     return pr - cost;
                 else
@@ -77,18 +77,18 @@ public class Demand {
 
             //skip the bids with more quantity than cap
             for (i = 0; ((bids[i] != null)
-                    && (bids[i].getQ_min() >= cap)); i++)
-                         p = bids[i].getP();
+                    && (bids[i].q_min >= cap)); i++)
+                         p = bids[i].p;
 
             if (bids[i] == null) {
                 return p;
             } 
             
-            if (pr > bids[i].getP() - cost) 
+            if (pr > bids[i].p - cost) 
                 return pr + cost;
 
             //put limit equal to cap
-            return bids[i].getP();
+            return bids[i].p;
         }
 
         assert false;
