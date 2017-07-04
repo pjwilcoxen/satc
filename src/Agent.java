@@ -446,25 +446,6 @@ public class Agent implements Steppable {
         return report;
     }
 
-    /**
-     * Calculate the net demand considering the balance price
-     */
-     private int findExcessDemand(int price){
-        int i;
-        for(i = 0;(bids[i] != null)  && (bids[i].getP() < price); i++);
-          
-        if(bids[i] == null) 
-             Env.log.println("error price: " + price);
-                
-        int q;
-        if(bids[i].getP() == price)  //where the balance price is the same as step price
-            q = bids[i].getQ_min();
-        else                                  //where the balance price is between two steps
-            q = bids[i].getQ_max();
-       
-        return q; 
-     }
-
 
     /**
      *  General step function
@@ -737,6 +718,7 @@ public class Agent implements Steppable {
         int bl;
         int i;
         String dos;
+        Demand dem;
 
         for(i=0 ; i<Env.dos_runs.length ; i++) {
         
@@ -745,8 +727,10 @@ public class Agent implements Steppable {
 
             if (bl <= -1) 
                 ex = 0;
-            else
-                ex = findExcessDemand(bl);
+            else {
+                dem = new Demand(bids);
+                ex = dem.getQ(bl);
+            }
 
             Env.printResult(this,dos,bl,ex);
         }
