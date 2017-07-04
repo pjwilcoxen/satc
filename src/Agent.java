@@ -277,17 +277,19 @@ public class Agent implements Steppable {
      
     //call aggragate function  on the queue
     private Demand sumDemands(int dos_id) {
+        Demand aggD;
+        Demand this_dem;
 
         for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
             appendQueueD(msg.getDemand(),msg.dos_id);
 
-        Bidstep[] aggD;
-        
-        aggD = queueD.get(dos_id)[0];
-        for(int i=1 ; i < queueSizeD[dos_id] ; i++)
-            aggD = aggregateDemand(aggD, queueD.get(dos_id)[i]);
-        
-        return new Demand(aggD);
+        aggD = new Demand( queueD.get(dos_id)[0] );
+        for(int i=1 ; i < queueSizeD[dos_id] ; i++) {
+            this_dem = new Demand( queueD.get(dos_id)[i] );
+            aggD = aggD.aggregateDemand(this_dem);
+        }
+
+        return aggD;
     }
 
     //change the step prices considering transation cost
@@ -720,67 +722,6 @@ public class Agent implements Steppable {
         
         return result;
     }
-    
-    /**
-     * Aggregate two net demand curves
-     */
-    private Bidstep[] aggregateDemand(Bidstep[] bid1, Bidstep[] bid2) {
-        Bidstep [] aggBid = new Bidstep[maxbids];
-        
-        int i =0, j =0, k = 0;
-        int min = 0, sd;
-        
-        //screen all the steps in the two input array of bids
-        while((bid1[i]!= null)&&(bid2[j]!=null)){
-            
-            //initiate the aggregate step considering the minimum price level and sum of the right corners as the max quantity
-            aggBid[k] = new Bidstep(minBid(bid1[i], bid2[j]).p
-                                            ,0,bid1[i].q_max + bid2[j].q_max);
-            
-            
-            if(bid1[i].p < bid2[j].p){
-                    //if it is the fist step
-                    if(k == 0)
-                        aggBid[k].q_min = bid1[i].q_min + bid2[j].q_max;
-                    i++;
-                    
-            }else if(bid1[i].p > bid2[j].p){
-                    //initiate the left corner of the first step
-                    if(k == 0)
-                        aggBid[k].q_min = bid1[i].q_max + bid2[j].q_min;
-                    j++;
-            }else{ 
-                    //initiate the left corner of the first step
-                    if(k == 0)
-                        aggBid[k].q_min = bid1[i].q_min + bid2[j].q_min;
-                    i++;
-                    j++;
-            }
-            //initiate the left corner of each step based on the right corner of the next step
-            if(k > 1)
-                aggBid[k-1].q_min = aggBid[k].q_max;
-            
-            k++;
-            
-          }
 
-        //initiate the last step
-        aggBid[k-1].q_min = aggBid[k-1].q_max - 100;
-        
-        return aggBid;
-    }
-    
-  
-    /**
-     * Find the minimum price between two input bids
-     */
-    private Bidstep minBid(Bidstep bid1, Bidstep bid2) {
-        if(bid1.p < bid2.p)
-            return bid1;
-        else    
-            return bid2;
-        
-    }
 }
-
 

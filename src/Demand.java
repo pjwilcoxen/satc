@@ -136,4 +136,68 @@ public class Demand {
         return newD;
     }
 
+    /**
+     * Aggregate two net demand curves
+     */
+    public Demand aggregateDemand(Demand dem2) {
+        Demand aggD;
+        Bidstep[] aggBid;
+        Bidstep[] bid1;
+        Bidstep[] bid2;
+        int i;
+        int j;
+        int k;
+        int min_p; 
+
+        aggD   = new Demand();
+        aggBid = aggD.bids;
+        bid1   = bids;
+        bid2   = dem2.bids;
+
+        i=0;
+        j=0;
+        k=0;
+        
+        //screen all the steps in the two input array of bids
+        while((bid1[i]!= null)&&(bid2[j]!=null)){
+            
+            //initiate the aggregate step considering the minimum price level and sum of the right corners as the max quantity
+            min_p = bid1[i].p < bid2[j].p ? bid1[i].p : bid2[j].p ;
+            aggBid[k] = new Bidstep(min_p,0,bid1[i].q_max + bid2[j].q_max);
+            
+            if(bid1[i].p < bid2[j].p){
+                //if it is the fist step
+                if(k == 0)
+                    aggBid[k].q_min = bid1[i].q_min + bid2[j].q_max;
+                i++;
+            } 
+            else if(bid1[i].p > bid2[j].p) {
+                //initiate the left corner of the first step
+                if(k == 0)
+                    aggBid[k].q_min = bid1[i].q_max + bid2[j].q_min;
+                j++;
+            }
+            else { 
+                //initiate the left corner of the first step
+                if(k == 0)
+                    aggBid[k].q_min = bid1[i].q_min + bid2[j].q_min;
+                i++;
+                j++;
+            }
+
+            //initiate the left corner of each step based on the right corner of the next step
+            if(k > 1)
+                aggBid[k-1].q_min = aggBid[k].q_max;
+            
+            k++;
+            
+          }
+
+        //initiate the last step
+        aggBid[k-1].q_min = aggBid[k-1].q_max - 100;
+        
+        return aggD;
+    }
+    
+  
 }
