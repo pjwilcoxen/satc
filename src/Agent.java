@@ -97,10 +97,6 @@ public class Agent implements Steppable {
         return aggD.get(drop);
     }
 
-    private void setAggD(Bidstep[] agg, int drop) {
-        aggD.set(drop, agg);
-    }
-
     public void setParent(Agent Parent) {
         this.parent = Parent;
         Parent.children.add(this);
@@ -174,6 +170,19 @@ public class Agent implements Steppable {
 
         for(Msg msg: msgs) 
             if( msg.type == type ) 
+                selected.add(msg);
+        
+        for(Msg msg: selected)
+            msgs.remove(msg);
+        
+        return selected;
+    }
+
+    private ArrayList<Msg> getMsgs(Msg.Types type,int dos_id) {
+        ArrayList<Msg> selected = new ArrayList<>();
+
+        for(Msg msg: msgs) 
+            if( msg.type == type && msg.dos_id == dos_id ) 
                 selected.add(msg);
         
         for(Msg msg: selected)
@@ -267,28 +276,18 @@ public class Agent implements Steppable {
     }
      
     //call aggragate function  on the queue
-    private ArrayList<Bidstep[]> runsim(){
+    private Demand sumDemands(int dos_id) {
 
-        for(Msg msg: getMsgs(Msg.Types.DEMAND)) 
+        for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
             appendQueueD(msg.getDemand(),msg.dos_id);
 
-        Bidstep aggBidD[];
+        Bidstep[] aggD;
         
-        //initiate an arraylist for the aggregated vectors
-        ArrayList<Bidstep[]> agg = new ArrayList<>();
+        aggD = queueD.get(dos_id)[0];
+        for(int i=1 ; i < queueSizeD[dos_id] ; i++)
+            aggD = aggregateDemand(aggD, queueD.get(dos_id)[i]);
         
-        //call aggregate function on each queue based on number of drops
-        for(int j = 0 ; j < 4 ; j ++){
-            aggBidD = queueD.get(j)[0];
-            //call aggregate function by the number of each queue's size
-            for(int i=1 ; i < queueSizeD[j] ; i++)
-                aggBidD = aggregateDemand(aggBidD, queueD.get(j)[i]);
-            //populate the agg arraylist 
-            agg.add(aggBidD);
-        }
-        
-        return agg;
-       
+        return new Demand(aggD);
     }
 
     //change the step prices considering transation cost
@@ -579,15 +578,15 @@ public class Agent implements Steppable {
 
         Env.log.println("node "+own_id);
 
+        Demand this_agg;
         ArrayList<Bidstep[]> agg;
         Bidstep tmp[];
         
-        //call rusim to aggregate the net demands
-        agg = runsim();
-
-        //set the agg vectors as class variable
-        for (int i = 0; i < 4; i++) {
-            setAggD(agg.get(i), i);
+        agg = new ArrayList<>();
+        for(int dos_id=0 ; dos_id<4 ; dos_id++) {
+            this_agg = sumDemands(dos_id) ;
+            agg.add( this_agg.bids );
+            aggD.set(dos_id,this_agg.bids);
         }
 
         //call addCost and addCapacity functions to consider transaction costs and capacity constrains
@@ -611,10 +610,15 @@ public class Agent implements Steppable {
 
         Env.log.println("node "+own_id);
 
+        Demand this_agg;
         ArrayList<Bidstep[]> agg;
         
-        //call runsim to aggregate the net demands
-        agg = runsim();
+        agg = new ArrayList<>();
+        for(int dos_id=0 ; dos_id<4 ; dos_id++) {
+            this_agg = sumDemands(dos_id) ;
+            agg.add( this_agg.bids );
+            aggD.set(dos_id,this_agg.bids);
+        }
 
         //find the balance price for each case of dropped nodes
         for (int j = 0; j < 4; j++) {
