@@ -631,28 +631,21 @@ public class Agent implements Steppable {
      * Report net demand as 0 if no price was found
      */
     private void do_calc_load() {
+        Demand dem;
+        int bl;
+        int ex;
+        String dos;
             
         for(Msg msg: getMsgs(Msg.Types.PRICE)) 
             setBl(msg.getPrice(),msg.dos_id);
 
-        int ex;
-        int bl;
-        int i;
-        String dos;
-        Demand dem;
-
-        for(i=0 ; i<Env.dos_runs.length ; i++) {
+        for(int i=0 ; i<Env.dos_runs.length ; i++) {
         
-            dos = Env.dos_runs[i];
+            dem = new Demand(bids);
             bl  = getBl(i);
+            ex  = dem.getQ(bl);
 
-            if (bl <= -1) 
-                ex = 0;
-            else {
-                dem = new Demand(bids);
-                ex = dem.getQ(bl);
-            }
-
+            dos = Env.dos_runs[i];
             Env.printResult(this,dos,bl,ex);
         }
     }

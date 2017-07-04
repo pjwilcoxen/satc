@@ -17,8 +17,11 @@ public class Demand {
     public int getQ(int price) {
         int i;
 
+        if( price <= -1 )
+            return 0;
+
         for(i=0 ; (bids[i] != null)  && (bids[i].p < price) ; i++);
-          
+
         assert bids[i] != null ;
                 
         if(bids[i].p == price)     //where the price is the same as step price
