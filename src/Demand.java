@@ -28,7 +28,9 @@ public class Demand {
     }
 
     /**
-     * Find the actual price for the end users considering transaction cost and capacity limit
+     * Find the actual price for the end users 
+     *
+     * Includes transaction cost and capacity limit
      */
     public int getP(int pr, int pc0, int pc1, int cost, int cap) { 
         int report = 0;
@@ -92,4 +94,46 @@ public class Demand {
         assert false;
         return report;
     }
+
+    /**
+     * Add capacity constrain on the net demand
+     */
+    public Demand addCapacity(int cap) {
+        Demand newD;
+        Bidstep[] tmp;
+        int i;
+        int j;
+        
+        newD = new Demand();
+        tmp  = newD.bids;
+
+        j = 0;
+
+        //skip the steps with more quantity than cap
+        for(i =0; bids[i].q_min >= cap; i++);
+        
+        if(bids[i] == null)
+            return new Demand(new Bidstep[0]);
+
+        //set the right corner step
+        
+        if(bids[i].q_max > cap){
+            tmp[j++]= new Bidstep(bids[i].p,bids[i].q_min,cap);
+            i++;
+        }
+
+        //consider the steps between two capacity limits
+        
+        for( ; (bids[i] != null) && (bids[i].q_min >= ((-1)*(cap))) ; i++)
+            tmp[j++] = new Bidstep(bids[i].p,bids[i].q_min,bids[i].q_max);
+
+        if (bids[i] == null) 
+            return newD;
+
+        //set the left corner step
+        tmp[j] = new Bidstep(bids[i].p,((-1)*(cap)),bids[i].q_max);
+        
+        return newD;
+    }
+
 }
