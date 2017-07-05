@@ -221,7 +221,7 @@ public class Agent implements Steppable {
 
         queueD = new ArrayList<>();
         for(int i=0 ; i<Env.nDOS ; i++)
-            queueD.add(new ArrayList<Demand>());
+            queueD.add(new ArrayList<>());
         
         clearQueuesD();
     }

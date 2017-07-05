@@ -3,15 +3,24 @@ import static java.lang.Math.pow;
 
 public class Demand {
    
+
+    static class Bidstep {
+        int p;
+        int q_min;
+        int q_max;
+
+        Bidstep(int p, int q_min, int q_max) {
+            this.p     = p;
+            this.q_min = q_min;
+            this.q_max = q_max;
+        }
+    }
+
     public static final int MAXBIDS = 400;
     public Bidstep[] bids;
 
     public Demand() {
         bids = new Bidstep[MAXBIDS];
-    }
-
-    public Demand(Bidstep[] bids) {
-        this.bids = bids;
     }
 
     /**
@@ -129,10 +138,10 @@ public class Demand {
         j = 0;
 
         //skip the steps with more quantity than cap
-        for(i =0; bids[i].q_min >= cap; i++);
+        for(i=0; bids[i].q_min >= cap; i++);
         
         if(bids[i] == null)
-            return new Demand(new Bidstep[0]);
+            return newD;
 
         //set the right corner step
         
