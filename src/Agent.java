@@ -50,8 +50,7 @@ public class Agent implements Steppable {
     double elast;
     double blockDraw;
 
-    //vector of bids drawn from initial load, elast, and number of steps
-    Bidstep[] bids;
+    // demand for this agent
     Demand demand;
 
     // set of queues of incoming bids from child nodes; there will be 
@@ -259,8 +258,6 @@ public class Agent implements Steppable {
             demand = Demand.makeDemand(load,elast,steps);
         else 
             demand = Demand.makeSupply(load,elast,steps);
-
-        bids = demand.bids;
     }
      
     /**
@@ -466,7 +463,7 @@ public class Agent implements Steppable {
      */
     private void do_send_demands() {
         for(int dos_id=0 ; dos_id<Env.dos_runs.length ; dos_id++) 
-            reportDemand(new Demand(bids),dos_id);
+            reportDemand(demand,dos_id);
     }
 
     /**
@@ -602,7 +599,6 @@ public class Agent implements Steppable {
      * Report net demand as 0 if no price was found
      */
     private void do_calc_load() {
-        Demand dem;
         int bl;
         int ex;
         String dos;
@@ -612,9 +608,8 @@ public class Agent implements Steppable {
 
         for(int i=0 ; i<Env.dos_runs.length ; i++) {
         
-            dem = new Demand(bids);
             bl  = getBl(i);
-            ex  = dem.getQ(bl);
+            ex  = demand.getQ(bl);
 
             dos = Env.dos_runs[i];
             Env.printResult(this,dos,bl,ex);
