@@ -56,11 +56,8 @@ public class Agent implements Steppable {
 
     //inidicates the queue variable for Bidstep type filled by childNodes 
     //Four vactors for different cases of dropped nodes    
-    ArrayList<Bidstep[][]> queueD;
-    
-    //indicates the size of each vector of queueD
-    int[] queueSizeD;
-    
+    ArrayList<ArrayList<Demand>> queueD;
+     
     //indicates the aggregated net demands for each case of dropped nodes    
     ArrayList<Bidstep[]> aggD;
     
@@ -109,7 +106,7 @@ public class Agent implements Steppable {
 
     private void clearQueuesD() {
         for (int i = 0; i < Env.nDOS ; i++) 
-            queueSizeD[i] = 0;
+            queueD.get(i).clear();
     }
 
     public int getType() {
@@ -130,11 +127,7 @@ public class Agent implements Steppable {
     }
 
     public void appendQueueD(Demand dem, int drop) {
-        Bidstep tmp[][];
-        tmp = queueD.get(drop);
-        tmp[queueSizeD[drop]] = dem.bids;
-        queueD.set(drop, tmp);
-        queueSizeD[drop]++;
+        queueD.get(drop).add(dem);
     }
 
     private double runiform() {
@@ -226,12 +219,10 @@ public class Agent implements Steppable {
         cost = Env.transCost ;
         cap  = Env.transCap;
 
-        queueSizeD = new int[Env.nDOS];
-      
         queueD = new ArrayList<>();
         aggD   = new ArrayList<>();
         for(int i=0 ; i<Env.nDOS ; i++) {
-            queueD.add(new Bidstep[100][Demand.MAXBIDS]);
+            queueD.add(new ArrayList<Demand>());
             aggD.add(new Bidstep[Demand.MAXBIDS]);
         }
         
@@ -278,17 +269,16 @@ public class Agent implements Steppable {
      * Aggregate demands from child nodes
      */
     private Demand sumDemands(int dos_id) {
-        Demand aggD;
-        Demand this_dem;
+        Demand aggD = null;
 
         for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
             appendQueueD(msg.getDemand(),msg.dos_id);
 
-        aggD = new Demand( queueD.get(dos_id)[0] );
-        for(int i=1 ; i < queueSizeD[dos_id] ; i++) {
-            this_dem = new Demand( queueD.get(dos_id)[i] );
-            aggD = aggD.aggregateDemand(this_dem);
-        }
+        for(Demand dem: queueD.get(dos_id) ) 
+            if( aggD == null )
+                aggD = dem;
+            else
+                aggD = aggD.aggregateDemand(dem);
 
         return aggD;
     }
