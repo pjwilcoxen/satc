@@ -54,12 +54,12 @@ public class Agent implements Steppable {
     Bidstep[] bids;
     Demand demand;
 
-    //inidicates the queue variable for Bidstep type filled by childNodes 
-    //Four vactors for different cases of dropped nodes    
+    // set of queues of incoming bids from child nodes; there will be 
+    // one queue for each DOS run
     ArrayList<ArrayList<Demand>> queueD;
      
-    //indicates the aggregated net demands for each case of dropped nodes    
-    ArrayList<Bidstep[]> aggD;
+    // array of aggregated demands; one for each DOS run
+    Demand[] aggD;
     
     //indicates the balance price for each case of dropped nodes    
     int[] bl;
@@ -216,15 +216,13 @@ public class Agent implements Steppable {
         
         bl   = new int[Env.nDOS];
         p_c  = new int[Env.nDOS][2];
+        aggD = new Demand[Env.nDOS];
         cost = Env.transCost ;
         cap  = Env.transCap;
 
         queueD = new ArrayList<>();
-        aggD   = new ArrayList<>();
-        for(int i=0 ; i<Env.nDOS ; i++) {
+        for(int i=0 ; i<Env.nDOS ; i++)
             queueD.add(new ArrayList<Demand>());
-            aggD.add(new Bidstep[Demand.MAXBIDS]);
-        }
         
         clearQueuesD();
     }
@@ -269,18 +267,18 @@ public class Agent implements Steppable {
      * Aggregate demands from child nodes
      */
     private Demand sumDemands(int dos_id) {
-        Demand aggD = null;
+        Demand thisD = null;
 
         for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
             appendQueueD(msg.getDemand(),msg.dos_id);
 
         for(Demand dem: queueD.get(dos_id) ) 
-            if( aggD == null )
-                aggD = dem;
+            if( thisD == null )
+                thisD = dem;
             else
-                aggD = aggD.aggregateDemand(dem);
+                thisD = thisD.aggregateDemand(dem);
 
-        return aggD;
+        return thisD;
     }
 
     //change the step prices considering transation cost
@@ -354,7 +352,7 @@ public class Agent implements Steppable {
         pr  = getBl(drop);
         pc0 = getP_c(drop)[0];
         pc1 = getP_c(drop)[1];
-        dem = new Demand( aggD.get(drop) );
+        dem = aggD[drop];
 
         return dem.getP(pr,pc0,pc1,cost,cap);
     }
@@ -486,7 +484,7 @@ public class Agent implements Steppable {
             // do the aggregation and save the result
 
             this_agg = sumDemands(dos_id) ;
-            aggD.set(dos_id,this_agg.bids);
+            aggD[dos_id] = this_agg;
             Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
 
             // adjust for transmission cost and constraint
@@ -518,7 +516,7 @@ public class Agent implements Steppable {
         for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
             this_agg = sumDemands(dos_id) ;
             agg.add( this_agg.bids );
-            aggD.set(dos_id,this_agg.bids);
+            aggD[dos_id] = this_agg;
             Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
         }
 
@@ -584,7 +582,7 @@ public class Agent implements Steppable {
         //find the balance price for each case of dropped nodes
         for (int j = 0; j < Env.nDOS ; j++) {
             int i, bl = 0;
-            thisD = aggD.get(j);
+            thisD = aggD[j].bids;
             for(i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) 
                 bl = thisD[i].p;
             Env.log.println("node_id: " + own_id  + " balance price: " + bl);
