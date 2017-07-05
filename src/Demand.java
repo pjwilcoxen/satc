@@ -298,4 +298,61 @@ public class Demand {
 
         return bl;
     }
+
+    //change the step prices considering transation cost
+    public Demand addCost(int c, int drop, Agent agent) {
+        Demand newD;
+        Bidstep[] tmp;
+        int i;
+
+        newD = new Demand();
+        tmp  = newD.bids;
+
+        //decrease the price level of steps with positive quantity
+        for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
+            tmp[i] = new Bidstep(bids[i].p-c,bids[i].q_min,bids[i].q_max);
+        
+        //if there is no step with positive quantity 
+        if(i == 0){
+            for( ; bids[i] != null ; i++)
+                tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
+        }
+        if(bids[i] != null ){
+            //if there is a vertical overlap with y axis
+            if(bids[i].q_max == 0){
+                //set the two upper and lower limits around the balance price
+                int mid = ((bids[i-1].p + bids[i].p)/2);
+                //avoid negative value for the lower step
+                if((mid-c) < 0)
+                    agent.setP_c(0,mid+c, drop);
+                else
+                    agent.setP_c(mid-c,mid+c, drop);
+                //increase the price level of steps with positive quantity
+                for(; bids[i] != null ; i++ )
+                    tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
+            
+            //if a horizontal step indicate the balance price
+            }else{
+                //set the two upper and lower limits around the balance price
+                if((bids[i-1].p-c) < 0)
+                    agent.setP_c(0,bids[i-1].p+c, drop);
+                else
+                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c, drop);
+
+                //divide the middle step into two steps with +c/-c prices
+                
+                tmp[i]   = new Bidstep(bids[i].p-c,0,bids[i].q_max);
+                tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,0);
+                i++;
+                
+                //increase the price level of steps with positive quantity
+                
+                for(; bids[i] != null ; i++)
+                    tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
+            }
+        }
+
+        return newD;
+    }
+
 }

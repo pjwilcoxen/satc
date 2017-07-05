@@ -120,7 +120,7 @@ public class Agent implements Steppable {
         return p_c[drop];
     }
 
-    private void setP_c(int p0, int p1, int drop) {
+    public void setP_c(int p0, int p1, int drop) {
         p_c[drop][0] = p0;
         p_c[drop][1] = p1;
     }
@@ -278,64 +278,6 @@ public class Agent implements Steppable {
         return thisD;
     }
 
-    //change the step prices considering transation cost
-    private Demand addCost(Demand dem, int c, int drop) {
-        Demand newD;
-        Bidstep[] tmp;
-        Bidstep[] bids;
-        int i;
-
-        newD = new Demand();
-        tmp  = newD.bids;
-        bids = dem.bids;
-
-        //decrease the price level of steps with positive quantity
-        for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
-            tmp[i] = new Bidstep(bids[i].p-c,bids[i].q_min,bids[i].q_max);
-        
-        //if there is no step with positive quantity 
-        if(i == 0){
-            for( ; bids[i] != null ; i++)
-                tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
-        }
-        if(bids[i] != null ){
-            //if there is a vertical overlap with y axis
-            if(bids[i].q_max == 0){
-                //set the two upper and lower limits around the balance price
-                int mid = ((bids[i-1].p + bids[i].p)/2);
-                //avoid negative value for the lower step
-                if((mid-c) < 0)
-                    setP_c(0,mid+c, drop);
-                else
-                    setP_c(mid-c,mid+c, drop);
-                //increase the price level of steps with positive quantity
-                for(; bids[i] != null ; i++ )
-                    tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
-            
-            //if a horizontal step indicate the balance price
-            }else{
-                //set the two upper and lower limits around the balance price
-                if((bids[i-1].p-c) < 0)
-                    setP_c(0,bids[i-1].p+c, drop);
-                else
-                    setP_c(bids[i-1].p-c,bids[i-1].p+c, drop);
-
-                //divide the middle step into two steps with +c/-c prices
-                
-                tmp[i]   = new Bidstep(bids[i].p-c,0,bids[i].q_max);
-                tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,0);
-                i++;
-                
-                //increase the price level of steps with positive quantity
-                
-                for(; bids[i] != null ; i++)
-                    tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
-            }
-        }
-
-        return newD;
-    }
-
     
     /**
      * Find the actual price for the end users considering transaction cost and capacity limit
@@ -486,7 +428,7 @@ public class Agent implements Steppable {
 
             // adjust for transmission cost and constraint
 
-            tmp = addCost(this_agg, cost, dos_id);
+            tmp = this_agg.addCost(cost, dos_id, this);
             tmp = tmp.addCapacity(cap);
 
             // send to parent
