@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import static java.lang.Math.pow;
 
 public class Demand {
@@ -11,6 +12,19 @@ public class Demand {
 
     public Demand(Bidstep[] bids) {
         this.bids = bids;
+    }
+
+    /**
+     * Build a list of strings representing the bid
+     */
+    public ArrayList<String> toStrings() {
+        ArrayList<String> list = new ArrayList<>();
+        for(int i=0 ; bids[i] != null ; i++ ) {
+            list.add(Integer.toString(bids[i].p));
+            list.add(Integer.toString(bids[i].q_min));
+            list.add(Integer.toString(bids[i].q_max));
+        }
+        return list;
     }
 
     /**

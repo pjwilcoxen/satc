@@ -381,7 +381,6 @@ public class Env extends SimState {
      */
     public static void printLoad(Agent agent,String casetag,Demand dem) {
         CSVFormat loadFormat ;
-        Bidstep[] bids;
         ArrayList<String> header;
         ArrayList<String> values;
 
@@ -399,7 +398,6 @@ public class Env extends SimState {
         }
 
         values = new ArrayList<>();
-        bids = dem.bids;
 
         try {
             if( loadPrinter == null ) {
@@ -413,11 +411,8 @@ public class Env extends SimState {
             values.add(casetag);
             values.add(Double.toString(agent.load));
             values.add(Double.toString(agent.elast));
-            for(int i=0 ; bids[i] != null ; i++) {
-                values.add(Integer.toString(bids[i].p));
-                values.add(Integer.toString(bids[i].q_min));
-                values.add(Integer.toString(bids[i].q_max));
-            }
+            for(String str: dem.toStrings() )
+                values.add(str);
             loadPrinter.printRecord(values);
         }
         catch (IOException e) {
