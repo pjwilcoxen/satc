@@ -243,6 +243,7 @@ public class Agent implements Steppable {
      */
     private void drawLoad() {
  
+        Env.Draw draw;
         int max = 9858; 
         int rand;
         int row;
@@ -253,7 +254,6 @@ public class Agent implements Steppable {
 
         rand = (int)(runiform() * max);
         
-        Env.Draw draw;
         if( sd_type.equals("D") )
            draw = Env.drawListD.get(rand);
         else
@@ -270,6 +270,7 @@ public class Agent implements Steppable {
             demand = Demand.makeDemand(load,elast,steps);
         else 
             demand = Demand.makeSupply(load,elast,steps);
+
         bids = demand.bids;
     }
      
@@ -496,6 +497,7 @@ public class Agent implements Steppable {
 
             this_agg = sumDemands(dos_id) ;
             aggD.set(dos_id,this_agg.bids);
+            Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
 
             // adjust for transmission cost and constraint
 
@@ -527,6 +529,7 @@ public class Agent implements Steppable {
             this_agg = sumDemands(dos_id) ;
             agg.add( this_agg.bids );
             aggD.set(dos_id,this_agg.bids);
+            Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
         }
 
         //find the balance price for each case of dropped nodes

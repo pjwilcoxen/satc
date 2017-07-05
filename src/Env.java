@@ -448,6 +448,7 @@ public class Env extends SimState {
        System.out.println("Simulation complete");
        out.close();
        log.close();
+       net.close();
        System.exit(0);
     }
  
