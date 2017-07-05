@@ -2,7 +2,7 @@ import static java.lang.Math.pow;
 
 public class Demand {
    
-    static final int MAXBIDS = 400;
+    public static final int MAXBIDS = 400;
     public Bidstep[] bids;
 
     public Demand() {
@@ -101,7 +101,7 @@ public class Demand {
     }
 
     /**
-     * Add capacity constrain on the net demand
+     * Add capacity constraint on the net demand
      */
     public Demand addCapacity(int cap) {
         Demand newD;
@@ -230,7 +230,7 @@ public class Demand {
         boolean makeS;
         int sign;
 
-        makeS = type=="S"; 
+        makeS = type.equals("S"); 
         sign  = makeS ? -1 : 1 ;       
         
         int iniprice = 40 + (int) (Env.runiform() * 12 - 6);

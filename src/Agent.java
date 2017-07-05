@@ -32,12 +32,6 @@ public class Agent implements Steppable {
      */
     int steps;
 
-    // not needed?
-    static int maxbids = 400;
-
-    // the overall environment
-    Env e;
-        
     //indicates the type of node (end user = 3, middle node = 2, root node = 1)
     int type;
     
@@ -91,7 +85,7 @@ public class Agent implements Steppable {
     /**
      * Children of this agent
      */
-    ArrayList<Agent> children;
+    final ArrayList<Agent> children = new ArrayList<>();
 
     public void setParent(Agent Parent) {
         this.parent = Parent;
@@ -114,7 +108,7 @@ public class Agent implements Steppable {
     //
 
     private void clearQueuesD() {
-        for (int i = 0; i < 4; i++) 
+        for (int i = 0; i < Env.nDOS ; i++) 
             queueSizeD[i] = 0;
     }
 
@@ -174,6 +168,13 @@ public class Agent implements Steppable {
         return selected;
     }
 
+    /**
+     * Extract a subset of messages from the input queue
+     *
+     * @param type Message type to extract
+     * @param dos_id DOS run number
+     * @return List of messages
+     */
     private ArrayList<Msg> getMsgs(Msg.Types type,int dos_id) {
         ArrayList<Msg> selected = new ArrayList<>();
 
@@ -209,41 +210,31 @@ public class Agent implements Steppable {
         dbus.send(msg);
     }
  
-    public Agent(SimState state, Agent mkt, int type, int up_id, int own_id, String sd_type) {
+    public Agent(int type, int up_id, int own_id, String sd_type) {
         super();
 
-        this.type = type;
+        this.type    = type;
         this.sd_type = sd_type;
-        this.par_id = up_id;
-        this.own_id = own_id;
-
-        parent   = mkt;
-        children = new ArrayList<>();
+        this.par_id  = up_id;
+        this.own_id  = own_id;
+        load         = 0;
+        elast        = 0;
+        parent       = null;
         
-        e    = (Env) state;
-        bl   = new int[4];
-        p_c  = new int[4][2];
+        bl   = new int[Env.nDOS];
+        p_c  = new int[Env.nDOS][2];
         cost = Env.transCost ;
         cap  = Env.transCap;
 
-        if (mkt != null) {
-            mkt.children.add(this);
-        }
-
-        queueSizeD = new int[4];
+        queueSizeD = new int[Env.nDOS];
       
         queueD = new ArrayList<>();
-        queueD.add(new Bidstep[100][maxbids]);
-        queueD.add(new Bidstep[100][maxbids]);
-        queueD.add(new Bidstep[100][maxbids]);
-        queueD.add(new Bidstep[100][maxbids]);
-
-        aggD = new ArrayList<>();
-        aggD.add(new Bidstep[maxbids]);
-        aggD.add(new Bidstep[maxbids]);
-        aggD.add(new Bidstep[maxbids]);
-        aggD.add(new Bidstep[maxbids]);
-
+        aggD   = new ArrayList<>();
+        for(int i=0 ; i<Env.nDOS ; i++) {
+            queueD.add(new Bidstep[100][Demand.MAXBIDS]);
+            aggD.add(new Bidstep[Demand.MAXBIDS]);
+        }
+        
         clearQueuesD();
     }
     
@@ -443,7 +434,7 @@ public class Agent implements Steppable {
         switch (Env.stageNow) {
             case INIT_LOADS:
                 drawLoad();
-                Env.printLoad(this);
+                Env.printLoad(this,"base",demand);
                 do_send_demands();
                 break;
 
@@ -499,7 +490,7 @@ public class Agent implements Steppable {
         
         Env.log.println("node "+own_id);
 
-        for(int dos_id=0 ; dos_id<4 ; dos_id++) {
+        for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
 
             // do the aggregation and save the result
 
@@ -532,14 +523,14 @@ public class Agent implements Steppable {
         Bidstep[] thisD;
 
         agg = new ArrayList<>();
-        for(int dos_id=0 ; dos_id<4 ; dos_id++) {
+        for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
             this_agg = sumDemands(dos_id) ;
             agg.add( this_agg.bids );
             aggD.set(dos_id,this_agg.bids);
         }
 
         //find the balance price for each case of dropped nodes
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < Env.nDOS ; j++) {
             int i, bl=0, min=1;
 
             thisD = agg.get(j);
@@ -579,7 +570,7 @@ public class Agent implements Steppable {
         
         Env.log.println("node "+own_id);
 
-        for(int i=0 ; i<4 ; i++ ) {
+        for(int i=0 ; i<Env.nDOS ; i++ ) {
             reportPrice(getBl(i),i);
         }
     }
@@ -598,7 +589,7 @@ public class Agent implements Steppable {
         Env.log.println("node "+own_id);
 
         //find the balance price for each case of dropped nodes
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < Env.nDOS ; j++) {
             int i, bl = 0;
             thisD = aggD.get(j);
             for(i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) 
@@ -606,9 +597,9 @@ public class Agent implements Steppable {
             Env.log.println("node_id: " + own_id  + " balance price: " + bl);
         }
         
-        int[] report = new int[4];
+        int[] report = new int[Env.nDOS];
         //set the report values for each case of dropped nodes
-        for (int drop = 0; drop < 4; drop++) {
+        for (int drop = 0; drop < Env.nDOS ; drop++) {
             //report -1 in the case of no balance point
             if (getBl(drop) <= -1) {
                 report[drop] = -1;

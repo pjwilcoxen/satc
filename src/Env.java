@@ -64,6 +64,7 @@ public class Env extends SimState {
      */
     public static final HashMap<String, ArrayList<Integer>> blockList = new HashMap<>();
     public static final String dos_runs[] = { "0", "1", "5", "10" };
+    public static int nDOS = dos_runs.length;
     public static String thisDOS = "0";
 
     //
@@ -77,7 +78,7 @@ public class Env extends SimState {
     public static CSVPrinter loadPrinter;
     static int pop;
 
-    static ArrayList<Agent> listAgent;
+    static final ArrayList<Agent> listAgent = new ArrayList<>();
    
     //
     //  Env()
@@ -290,8 +291,6 @@ public class Env extends SimState {
 
         //read the topology of the network and build the list of agents
 
-        listAgent = new ArrayList<>();
-
         br = new BufferedReader(Util.openRead(fileConfig));
         csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
 
@@ -304,7 +303,7 @@ public class Env extends SimState {
             cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
             cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
-            cur_agent = new Agent(this,null,cur_type,cur_upid,cur_id,cur_sd);
+            cur_agent = new Agent(cur_type,cur_upid,cur_id,cur_sd);
             
             dbus = DBUS.find(cur_dbus);
             if( dbus == null )dbus = new DBUS(cur_dbus);
@@ -380,7 +379,7 @@ public class Env extends SimState {
     /**
      * Print out results
      */
-    public static void printLoad(Agent agent) {
+    public static void printLoad(Agent agent,String casetag,Demand dem) {
         CSVFormat loadFormat ;
         Bidstep[] bids;
         ArrayList<String> header;
@@ -390,6 +389,7 @@ public class Env extends SimState {
         header.add("pop");
         header.add("id");
         header.add("sd_type");
+        header.add("case");
         header.add("load");
         header.add("elast");
         for(int i=0 ; i<20 ; i++) {
@@ -399,7 +399,7 @@ public class Env extends SimState {
         }
 
         values = new ArrayList<>();
-        bids = agent.demand.bids;
+        bids = dem.bids;
 
         try {
             if( loadPrinter == null ) {
@@ -410,6 +410,7 @@ public class Env extends SimState {
             values.add(Integer.toString(pop));
             values.add(Integer.toString(agent.own_id));
             values.add(agent.sd_type);
+            values.add(casetag);
             values.add(Double.toString(agent.load));
             values.add(Double.toString(agent.elast));
             for(int i=0 ; bids[i] != null ; i++) {
