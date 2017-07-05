@@ -273,4 +273,29 @@ public class Demand {
         
         return newD;
     }
+
+    /** 
+     * Find an equilibrium price for a net demand curve
+     */
+    public int getBl() {
+        int i;
+        int bl;
+        int min;
+
+        bl  = -2;
+        min = 1;
+
+        for(i=0 ; (bids[i] != null) && (bids[i].q_max >= 0) ; i++) {
+            bl  = bids[i].p;
+            min = bids[i].q_min;
+        }
+
+        //if there is not any balance point- report -1 as price
+        if ((i == 0) || ((bids[i] == null) && (min > 0))) 
+            bl = -1;
+
+        assert bl != -2;
+
+        return bl;
+    }
 }

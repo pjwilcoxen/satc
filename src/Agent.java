@@ -506,35 +506,22 @@ public class Agent implements Steppable {
      */
     private void do_agg_mid() {
 
+        int j;
+        int bl;
+
         Env.log.println("node "+own_id);
 
-        Demand this_agg;
-        ArrayList<Bidstep[]> agg;
-        Bidstep[] thisD;
-
-        agg = new ArrayList<>();
         for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
-            this_agg = sumDemands(dos_id) ;
-            agg.add( this_agg.bids );
-            aggD[dos_id] = this_agg;
-            Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
+            aggD[dos_id] = sumDemands(dos_id) ;
+            Env.printLoad(this,Env.dos_runs[dos_id],aggD[dos_id]);
         }
 
         //find the balance price for each case of dropped nodes
-        for (int j = 0; j < Env.nDOS ; j++) {
-            int i, bl=0, min=1;
+        for(j=0; j < Env.nDOS ; j++) {
 
-            thisD = agg.get(j);
-            for (i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) {
-                bl  = thisD[i].p;
-                min = thisD[i].q_min;
-            }
-
-            //if there is not any balance point- report -1 as price
-            if ((i == 0) || ((thisD[i] == null)&&(min > 0))) {
-                bl = -1;
+            bl = aggD[j].getBl();
+            if( bl == -1 )
                 Env.log.println("failed at drop: " + j);
-            }
 
             //set the balance price as the class variable
             setBl(bl, j);
@@ -545,7 +532,7 @@ public class Agent implements Steppable {
             Env.printResult(this,dos,bl,0);
 
             // write a log message
-            Env.log.println("node_id: "+own_id+" Balance Price: "+bl+" Prob: "+dos);
+            Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+bl);
         }
 
         clearQueuesD();
@@ -571,21 +558,21 @@ public class Agent implements Steppable {
      */
     private void do_report_end() {
 
-        Bidstep[] thisD;
         int child_id;
+        int bl;
 
         for(Msg msg: getMsgs(Msg.Types.PRICE)) 
             setBl(msg.getPrice(),msg.dos_id);
 
         Env.log.println("node "+own_id);
+ 
+        // next block is reporting only before accounting for
+        // cost and capacity. should it be retained somewhere?
 
         //find the balance price for each case of dropped nodes
         for (int j = 0; j < Env.nDOS ; j++) {
-            int i, bl = 0;
-            thisD = aggD[j].bids;
-            for(i=0 ; (thisD[i] != null) && (thisD[i].q_max >= 0) ; i++) 
-                bl = thisD[i].p;
-            Env.log.println("node_id: " + own_id  + " balance price: " + bl);
+            bl = aggD[j].getBl();
+            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[j]+" own price: "+bl);
         }
         
         int[] report = new int[Env.nDOS];
@@ -598,6 +585,7 @@ public class Agent implements Steppable {
             } else {
                 report[drop] = findReportPrice(drop);
             }
+            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[drop]+" joint price: "+report[drop]);
         }
 
         //write the balance prices on csv file for each case and report to children 

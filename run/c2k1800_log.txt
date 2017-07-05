@@ -26,23 +26,31 @@ node 202
 node 201
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 45 Prob: 0
-node_id: 203 Balance Price: 45 Prob: 1
-node_id: 203 Balance Price: 46 Prob: 5
-node_id: 203 Balance Price: 45 Prob: 10
+node 203 DOS run 0 own price: 45
+node 203 DOS run 1 own price: 45
+node 203 DOS run 5 own price: 46
+node 203 DOS run 10 own price: 45
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 22
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 24
+node 201 DOS run 5 own price: 24
+node 201 DOS run 10 own price: 22
+node 201 DOS run 0 joint price: 43
+node 201 DOS run 1 joint price: 43
+node 201 DOS run 5 joint price: 44
+node 201 DOS run 10 joint price: 43
 node 202
-node_id: 202 balance price: 215
-node_id: 202 balance price: 205
-node_id: 202 balance price: 197
-node_id: 202 balance price: 215
+node 202 DOS run 0 own price: 215
+node 202 DOS run 1 own price: 205
+node 202 DOS run 5 own price: 197
+node 202 DOS run 10 own price: 215
+node 202 DOS run 0 joint price: 72
+node 202 DOS run 1 joint price: 67
+node 202 DOS run 5 joint price: 61
+node 202 DOS run 10 joint price: 64
 *** stage CALC_LOADS
 *** population 2
 *** stage INIT_DROPS
@@ -65,24 +73,32 @@ node 202
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
+node 203 DOS run 0 own price: -1
 failed at drop: 1
-node_id: 203 Balance Price: -1 Prob: 1
-node_id: 203 Balance Price: 43 Prob: 5
-node_id: 203 Balance Price: 43 Prob: 10
+node 203 DOS run 1 own price: -1
+node 203 DOS run 5 own price: 43
+node 203 DOS run 10 own price: 43
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 22
-node_id: 201 balance price: 23
-node_id: 201 balance price: 23
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 22
+node 201 DOS run 5 own price: 23
+node 201 DOS run 10 own price: 23
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: -1
+node 201 DOS run 5 joint price: 41
+node 201 DOS run 10 joint price: 41
 node 202
-node_id: 202 balance price: 225
-node_id: 202 balance price: 220
-node_id: 202 balance price: 215
-node_id: 202 balance price: 219
+node 202 DOS run 0 own price: 225
+node 202 DOS run 1 own price: 220
+node 202 DOS run 5 own price: 215
+node 202 DOS run 10 own price: 219
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: -1
+node 202 DOS run 5 joint price: 55
+node 202 DOS run 10 joint price: 48
 *** stage CALC_LOADS
 *** population 3
 *** stage INIT_DROPS
@@ -105,23 +121,31 @@ node 201
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
-node_id: 203 Balance Price: 45 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
-node_id: 203 Balance Price: 47 Prob: 10
+node 203 DOS run 0 own price: -1
+node 203 DOS run 1 own price: 45
+node 203 DOS run 5 own price: 47
+node 203 DOS run 10 own price: 47
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 25
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
+node 201 DOS run 0 own price: 25
+node 201 DOS run 1 own price: 24
+node 201 DOS run 5 own price: 24
+node 201 DOS run 10 own price: 24
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: 43
+node 201 DOS run 5 joint price: 45
+node 201 DOS run 10 joint price: 45
 node 202
-node_id: 202 balance price: 225
-node_id: 202 balance price: 225
-node_id: 202 balance price: 199
-node_id: 202 balance price: 192
+node 202 DOS run 0 own price: 225
+node 202 DOS run 1 own price: 225
+node 202 DOS run 5 own price: 199
+node 202 DOS run 10 own price: 192
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: 74
+node 202 DOS run 5 joint price: 60
+node 202 DOS run 10 joint price: 53
 *** stage CALC_LOADS
 *** population 4
 *** stage INIT_DROPS
@@ -144,23 +168,31 @@ node 201
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
-node_id: 203 Balance Price: 43 Prob: 1
-node_id: 203 Balance Price: 43 Prob: 5
-node_id: 203 Balance Price: 43 Prob: 10
+node 203 DOS run 0 own price: -1
+node 203 DOS run 1 own price: 43
+node 203 DOS run 5 own price: 43
+node 203 DOS run 10 own price: 43
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 292
-node_id: 202 balance price: 292
-node_id: 202 balance price: 306
-node_id: 202 balance price: 306
+node 202 DOS run 0 own price: 292
+node 202 DOS run 1 own price: 292
+node 202 DOS run 5 own price: -1
+node 202 DOS run 10 own price: -1
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: 76
+node 202 DOS run 5 joint price: 87
+node 202 DOS run 10 joint price: 103
 node 201
-node_id: 201 balance price: 22
-node_id: 201 balance price: 24
-node_id: 201 balance price: 22
-node_id: 201 balance price: 22
+node 201 DOS run 0 own price: 22
+node 201 DOS run 1 own price: 24
+node 201 DOS run 5 own price: 22
+node 201 DOS run 10 own price: 22
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: 41
+node 201 DOS run 5 joint price: 41
+node 201 DOS run 10 joint price: 41
 *** stage CALC_LOADS
 *** population 5
 *** stage INIT_DROPS
@@ -183,24 +215,32 @@ node 201
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
+node 203 DOS run 0 own price: -1
 failed at drop: 1
-node_id: 203 Balance Price: -1 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
-node_id: 203 Balance Price: 44 Prob: 10
+node 203 DOS run 1 own price: -1
+node 203 DOS run 5 own price: 47
+node 203 DOS run 10 own price: 44
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 215
-node_id: 202 balance price: 215
-node_id: 202 balance price: 222
-node_id: 202 balance price: 220
+node 202 DOS run 0 own price: 215
+node 202 DOS run 1 own price: 215
+node 202 DOS run 5 own price: 222
+node 202 DOS run 10 own price: 220
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: -1
+node 202 DOS run 5 joint price: 76
+node 202 DOS run 10 joint price: 67
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 28
-node_id: 201 balance price: 26
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 24
+node 201 DOS run 5 own price: 28
+node 201 DOS run 10 own price: 26
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: -1
+node 201 DOS run 5 joint price: 45
+node 201 DOS run 10 joint price: 42
 *** stage CALC_LOADS
 *** population 6
 *** stage INIT_DROPS
@@ -222,23 +262,31 @@ node 201
 node 202
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 44 Prob: 0
-node_id: 203 Balance Price: 45 Prob: 1
-node_id: 203 Balance Price: 44 Prob: 5
-node_id: 203 Balance Price: 62 Prob: 10
+node 203 DOS run 0 own price: 44
+node 203 DOS run 1 own price: 45
+node 203 DOS run 5 own price: 44
+node 203 DOS run 10 own price: 62
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 237
-node_id: 202 balance price: 237
-node_id: 202 balance price: 257
-node_id: 202 balance price: 237
+node 202 DOS run 0 own price: 237
+node 202 DOS run 1 own price: 237
+node 202 DOS run 5 own price: 257
+node 202 DOS run 10 own price: 237
+node 202 DOS run 0 joint price: 77
+node 202 DOS run 1 joint price: 77
+node 202 DOS run 5 joint price: 77
+node 202 DOS run 10 joint price: 67
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 24
-node_id: 201 balance price: 29
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 24
+node 201 DOS run 5 own price: 24
+node 201 DOS run 10 own price: 29
+node 201 DOS run 0 joint price: 42
+node 201 DOS run 1 joint price: 43
+node 201 DOS run 5 joint price: 42
+node 201 DOS run 10 joint price: 60
 *** stage CALC_LOADS
 *** population 7
 *** stage INIT_DROPS
@@ -260,23 +308,31 @@ node 202
 node 201
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 46 Prob: 0
-node_id: 203 Balance Price: 56 Prob: 1
-node_id: 203 Balance Price: 46 Prob: 5
-node_id: 203 Balance Price: 52 Prob: 10
+node 203 DOS run 0 own price: 46
+node 203 DOS run 1 own price: 56
+node 203 DOS run 5 own price: 46
+node 203 DOS run 10 own price: 52
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 178
-node_id: 202 balance price: 173
-node_id: 202 balance price: 165
-node_id: 202 balance price: 203
+node 202 DOS run 0 own price: 178
+node 202 DOS run 1 own price: 173
+node 202 DOS run 5 own price: 165
+node 202 DOS run 10 own price: 203
+node 202 DOS run 0 joint price: 68
+node 202 DOS run 1 joint price: 67
+node 202 DOS run 5 joint price: 62
+node 202 DOS run 10 joint price: 67
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 25
-node_id: 201 balance price: 22
-node_id: 201 balance price: 22
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 25
+node 201 DOS run 5 own price: 22
+node 201 DOS run 10 own price: 22
+node 201 DOS run 0 joint price: 44
+node 201 DOS run 1 joint price: 54
+node 201 DOS run 5 joint price: 44
+node 201 DOS run 10 joint price: 50
 *** stage CALC_LOADS
 *** population 8
 *** stage INIT_DROPS
@@ -299,25 +355,33 @@ node 202
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
+node 203 DOS run 0 own price: -1
 failed at drop: 1
-node_id: 203 Balance Price: -1 Prob: 1
+node 203 DOS run 1 own price: -1
 failed at drop: 2
-node_id: 203 Balance Price: -1 Prob: 5
-node_id: 203 Balance Price: 45 Prob: 10
+node 203 DOS run 5 own price: -1
+node 203 DOS run 10 own price: 45
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 23
-node_id: 201 balance price: 23
-node_id: 201 balance price: 21
-node_id: 201 balance price: 22
+node 201 DOS run 0 own price: 23
+node 201 DOS run 1 own price: 23
+node 201 DOS run 5 own price: 21
+node 201 DOS run 10 own price: 22
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: -1
+node 201 DOS run 5 joint price: -1
+node 201 DOS run 10 joint price: 43
 node 202
-node_id: 202 balance price: 175
-node_id: 202 balance price: 175
-node_id: 202 balance price: 168
-node_id: 202 balance price: 219
+node 202 DOS run 0 own price: 175
+node 202 DOS run 1 own price: 175
+node 202 DOS run 5 own price: 168
+node 202 DOS run 10 own price: 219
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: -1
+node 202 DOS run 5 joint price: -1
+node 202 DOS run 10 joint price: 66
 *** stage CALC_LOADS
 *** population 9
 *** stage INIT_DROPS
@@ -340,25 +404,33 @@ node 202
 *** stage AGG_MID
 node 203
 failed at drop: 0
-node_id: 203 Balance Price: -1 Prob: 0
+node 203 DOS run 0 own price: -1
 failed at drop: 1
-node_id: 203 Balance Price: -1 Prob: 1
-node_id: 203 Balance Price: 47 Prob: 5
+node 203 DOS run 1 own price: -1
+node 203 DOS run 5 own price: 47
 failed at drop: 3
-node_id: 203 Balance Price: -1 Prob: 10
+node 203 DOS run 10 own price: -1
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 202
-node_id: 202 balance price: 277
-node_id: 202 balance price: 305
-node_id: 202 balance price: 305
-node_id: 202 balance price: 305
+node 202 DOS run 0 own price: 277
+node 202 DOS run 1 own price: 305
+node 202 DOS run 5 own price: 305
+node 202 DOS run 10 own price: -1
+node 202 DOS run 0 joint price: -1
+node 202 DOS run 1 joint price: -1
+node 202 DOS run 5 joint price: 88
+node 202 DOS run 10 joint price: -1
 node 201
-node_id: 201 balance price: 23
-node_id: 201 balance price: 23
-node_id: 201 balance price: 22
-node_id: 201 balance price: 26
+node 201 DOS run 0 own price: 23
+node 201 DOS run 1 own price: 23
+node 201 DOS run 5 own price: 22
+node 201 DOS run 10 own price: 26
+node 201 DOS run 0 joint price: -1
+node 201 DOS run 1 joint price: -1
+node 201 DOS run 5 joint price: 45
+node 201 DOS run 10 joint price: -1
 *** stage CALC_LOADS
 *** population 10
 *** stage INIT_DROPS
@@ -380,21 +452,29 @@ node 201
 node 202
 *** stage AGG_MID
 node 203
-node_id: 203 Balance Price: 44 Prob: 0
-node_id: 203 Balance Price: 46 Prob: 1
-node_id: 203 Balance Price: 45 Prob: 5
-node_id: 203 Balance Price: 43 Prob: 10
+node 203 DOS run 0 own price: 44
+node 203 DOS run 1 own price: 46
+node 203 DOS run 5 own price: 45
+node 203 DOS run 10 own price: 43
 *** stage REPORT_MID
 node 203
 *** stage REPORT_END
 node 201
-node_id: 201 balance price: 24
-node_id: 201 balance price: 25
-node_id: 201 balance price: 24
-node_id: 201 balance price: 22
+node 201 DOS run 0 own price: 24
+node 201 DOS run 1 own price: 25
+node 201 DOS run 5 own price: 24
+node 201 DOS run 10 own price: 22
+node 201 DOS run 0 joint price: 42
+node 201 DOS run 1 joint price: 44
+node 201 DOS run 5 joint price: 43
+node 201 DOS run 10 joint price: 41
 node 202
-node_id: 202 balance price: 179
-node_id: 202 balance price: 179
-node_id: 202 balance price: 179
-node_id: 202 balance price: 169
+node 202 DOS run 0 own price: 179
+node 202 DOS run 1 own price: 179
+node 202 DOS run 5 own price: 179
+node 202 DOS run 10 own price: 169
+node 202 DOS run 0 joint price: 67
+node 202 DOS run 1 joint price: 66
+node 202 DOS run 5 joint price: 62
+node 202 DOS run 10 joint price: 55
 *** stage CALC_LOADS
