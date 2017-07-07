@@ -17,7 +17,7 @@ public class Demand {
     }
 
     public static final int MAXBIDS = 400;
-    public Bidstep[] bids;
+    Bidstep[] bids;
 
     public Demand() {
         bids = new Bidstep[MAXBIDS];
@@ -25,6 +25,11 @@ public class Demand {
 
     /**
      * Build a list of strings representing the bid
+     * 
+     * Returns a list of strings representing the bids.  Within each bid
+     * the strings will be p, q_min, q_max.
+     * 
+     * @return List of strings representing bids 
      */
     public ArrayList<String> toStrings() {
         ArrayList<String> list = new ArrayList<>();
@@ -323,7 +328,7 @@ public class Demand {
     }
 
     //change the step prices considering transation cost
-    public Demand addCost(int c, int drop, Agent agent) {
+    public Demand addCost(int c, int drop, Mid agent) {
         Demand newD;
         Bidstep[] tmp;
         int i;
