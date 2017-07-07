@@ -142,7 +142,7 @@ public class Env extends SimState {
        throw new RuntimeException("No agent with id "+own_id);
     }
 
-    class Draw {
+    static class Draw {
        int n;
        double load;
        double elast;

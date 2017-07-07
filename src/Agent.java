@@ -1,6 +1,5 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import sim.engine.SimState;
 import sim.engine.Steppable;
 
 /**
@@ -111,11 +110,15 @@ public abstract class Agent implements Steppable {
 
     /**
      * Send a demand to parent node
+     * 
+     * @param dem Demand curve
+     * @param dos_id DOS run indicator
      */
     public void reportDemand(Demand dem,int dos_id) {
         Msg msg = new Msg(this,par_id);
         msg.setDemand(dem);
         msg.dos_id = dos_id;
+        assert dbus != null;
         dbus.send(msg);
     }
  

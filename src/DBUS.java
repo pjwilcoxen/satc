@@ -6,9 +6,9 @@ import java.util.HashMap;
 public class DBUS {
 
     private static final HashMap<String, DBUS> busList = new HashMap<>();
-    private static boolean initLog = true;
     
-    public static String logHeader = "bus,"+Msg.logHeader+",status";
+    public static final String logHeader = "bus,"+Msg.logHeader+",status";
+    private static boolean initLog = true;
 
     String name;
 
@@ -23,10 +23,10 @@ public class DBUS {
     }
 
     /**
-	 * Construct a new DBUS instance
-	 *
-	 * @param name Name of the bus
-	 */
+     * Construct a new DBUS instance
+     *
+     * @param name Name of the bus
+     */
     public DBUS(String name){
         if( busList.containsKey(name) )
             throw new RuntimeException("Redundant dbus instantiation");

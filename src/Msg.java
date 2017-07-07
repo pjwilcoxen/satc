@@ -1,6 +1,6 @@
 public class Msg {
 
-    public static String logHeader = "pop,dos,sender,from,to,type";
+    public static final String logHeader = "pop,dos,sender,from,to,type";
 
     public static enum Types {
         NONE,

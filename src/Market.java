@@ -19,8 +19,6 @@ public abstract class Market extends Agent {
         queueD = new ArrayList<>();
         for(int i=0 ; i<Env.nDOS ; i++)
             queueD.add(new ArrayList<>());
-        
-        clearQueuesD();
     }
     
     /**
