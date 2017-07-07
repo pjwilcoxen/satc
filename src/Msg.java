@@ -22,6 +22,17 @@ public class Msg {
         this.type   = Types.NONE;
     }
 
+    public String logString() {
+        String msg;
+        msg = "pop "+Env.pop
+            + ", dos "+Env.dos_runs[dos_id]
+            + ", sender "+sender.own_id
+            + ", from "+from
+            + ", to "+ to
+            + ", type "+type;
+        return msg;
+    }
+
     public void setFrom(int from) {
         this.from = from;
     }

@@ -73,6 +73,7 @@ public class Env extends SimState {
 
     static PrintWriter out;
     static PrintWriter net;
+    static PrintWriter msg;
     public static PrintWriter log;
     public static CSVPrinter csvPrinter;
     public static CSVPrinter loadPrinter;
@@ -240,6 +241,7 @@ public class Env extends SimState {
 
         out = Util.openWrite(stem+"_out.csv");
         net = Util.openWrite(stem+"_net.csv");
+        msg = Util.openWrite(stem+"_msg.csv");
         log = Util.openWrite(stem+"_log.txt");
 
         log.println(
@@ -340,6 +342,12 @@ public class Env extends SimState {
             schedule.scheduleRepeating(cur_agent);
         }
                 
+        // tell parents about their children now that all agents have been instantiated
+
+        for (Agent a : listAgent ) 
+            if ( a.par_id != 0 )
+                Env.getAgent(a.par_id).children.add(a);
+        
         br.close();
     }
 

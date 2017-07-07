@@ -37,7 +37,14 @@ public class DBUS {
      * @param msg Message to send
      */
     public void send(Msg msg) {
-        if( ! Env.isBlocked(msg.dos_id,msg.from) )
+        String logMsg;
+        logMsg = msg.logString();
+        if( ! Env.isBlocked(msg.dos_id,msg.from) ) {
             Env.getAgent(msg.to).deliver(msg);
+            Env.msg.println(logMsg+", delivered");
+        }
+        else
+            Env.msg.println(logMsg+", blocked");
+
     }
 }
