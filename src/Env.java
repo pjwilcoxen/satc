@@ -79,7 +79,7 @@ public class Env extends SimState {
     public static CSVPrinter loadPrinter;
     static int pop;
 
-    static final ArrayList<Agent> listAgent = new ArrayList<>();
+    static final HashMap<Integer,Agent> listAgent = new HashMap<>();
    
     //
     //  Env()
@@ -137,9 +137,8 @@ public class Env extends SimState {
      * @return Agent's instance
      */
     public static Agent getAgent(int own_id) {
-       for(Agent a: listAgent) 
-           if( a.own_id == own_id) 
-               return a;
+       if( listAgent.containsKey(own_id) )
+           return listAgent.get(own_id);
        throw new RuntimeException("No agent with id "+own_id);
     }
 
@@ -338,13 +337,13 @@ public class Env extends SimState {
 
             cur_agent.setDBUS(dbus);
 
-            listAgent.add(cur_agent);
+            listAgent.put(cur_id,cur_agent);
             schedule.scheduleRepeating(cur_agent);
         }
                 
         // tell parents about their children now that all agents have been instantiated
 
-        for (Agent a : listAgent ) 
+        for (Agent a : listAgent.values() ) 
             if ( a.par_id != 0 )
                 Env.getAgent(a.par_id).children.add(a);
         
