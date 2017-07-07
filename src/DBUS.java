@@ -6,7 +6,10 @@ import java.util.HashMap;
 public class DBUS {
 
     private static final HashMap<String, DBUS> busList = new HashMap<>();
+    private static boolean initLog = true;
     
+    public static String logHeader = "bus,"+Msg.logHeader+",status";
+
     String name;
 
     /**
@@ -29,6 +32,10 @@ public class DBUS {
             throw new RuntimeException("Redundant dbus instantiation");
         this.name = name; 
         busList.put(name,this);
+        if( initLog ) {
+            Env.msg.println(logHeader);
+            initLog = false;
+        }
     }
     
     /**
@@ -37,14 +44,12 @@ public class DBUS {
      * @param msg Message to send
      */
     public void send(Msg msg) {
-        String logMsg;
-        logMsg = msg.logString();
+        String status = "blocked";
         if( ! Env.isBlocked(msg.dos_id,msg.from) ) {
             Env.getAgent(msg.to).deliver(msg);
-            Env.msg.println(logMsg+", delivered");
+            status = "delivered";
         }
-        else
-            Env.msg.println(logMsg+", blocked");
+        Env.msg.println(name+","+msg.logString()+","+status);
 
     }
 }

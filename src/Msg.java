@@ -1,5 +1,7 @@
 public class Msg {
 
+    public static String logHeader = "pop,dos,sender,from,to,type";
+
     public static enum Types {
         NONE,
         DEMAND,
@@ -24,12 +26,12 @@ public class Msg {
 
     public String logString() {
         String msg;
-        msg = "pop "+Env.pop
-            + ", dos "+Env.dos_runs[dos_id]
-            + ", sender "+sender.own_id
-            + ", from "+from
-            + ", to "+ to
-            + ", type "+type;
+        msg = ""+Env.pop
+            + ","+Env.dos_runs[dos_id]
+            + ","+sender.own_id
+            + ","+from
+            + ","+ to
+            + ","+type;
         return msg;
     }
 
