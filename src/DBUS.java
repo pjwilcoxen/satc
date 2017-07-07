@@ -7,6 +7,9 @@ public class DBUS {
 
     private static final HashMap<String, DBUS> busList = new HashMap<>();
     
+    public static final String logHeader = "bus,"+Msg.logHeader+",status";
+    private static boolean initLog = true;
+
     String name;
 
     /**
@@ -20,15 +23,19 @@ public class DBUS {
     }
 
     /**
-	 * Construct a new DBUS instance
-	 *
-	 * @param name Name of the bus
-	 */
+     * Construct a new DBUS instance
+     *
+     * @param name Name of the bus
+     */
     public DBUS(String name){
         if( busList.containsKey(name) )
             throw new RuntimeException("Redundant dbus instantiation");
         this.name = name; 
         busList.put(name,this);
+        if( initLog ) {
+            Env.msg.println(logHeader);
+            initLog = false;
+        }
     }
     
     /**
@@ -37,7 +44,12 @@ public class DBUS {
      * @param msg Message to send
      */
     public void send(Msg msg) {
-        if( ! Env.isBlocked(msg.dos_id,msg.from) )
+        String status = "blocked";
+        if( ! Env.isBlocked(msg.dos_id,msg.from) ) {
             Env.getAgent(msg.to).deliver(msg);
+            status = "delivered";
+        }
+        Env.msg.println(name+","+msg.logString()+","+status);
+
     }
 }

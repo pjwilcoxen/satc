@@ -73,12 +73,13 @@ public class Env extends SimState {
 
     static PrintWriter out;
     static PrintWriter net;
+    static PrintWriter msg;
     public static PrintWriter log;
     public static CSVPrinter csvPrinter;
     public static CSVPrinter loadPrinter;
     static int pop;
 
-    static final ArrayList<Agent> listAgent = new ArrayList<>();
+    static final HashMap<Integer,Agent> listAgent = new HashMap<>();
    
     //
     //  Env()
@@ -136,10 +137,12 @@ public class Env extends SimState {
      * @return Agent's instance
      */
     public static Agent getAgent(int own_id) {
-       return listAgent.get(own_id-1);
+       if( listAgent.containsKey(own_id) )
+           return listAgent.get(own_id);
+       throw new RuntimeException("No agent with id "+own_id);
     }
 
-    class Draw {
+    static class Draw {
        int n;
        double load;
        double elast;
@@ -237,6 +240,7 @@ public class Env extends SimState {
 
         out = Util.openWrite(stem+"_out.csv");
         net = Util.openWrite(stem+"_net.csv");
+        msg = Util.openWrite(stem+"_msg.csv");
         log = Util.openWrite(stem+"_log.txt");
 
         log.println(
@@ -303,25 +307,45 @@ public class Env extends SimState {
             cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
             cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
-            cur_agent = new Agent(cur_type,cur_upid,cur_id,cur_sd);
+            // watch for conflicts between type and parent
+            
+            if( cur_upid == 0 && cur_type != 1 ) {
+                log.println("Warning: node "+cur_id+" has type "+cur_type+" but no parent");
+                log.println("Warning: will be treated as a root node");
+                cur_type = 1;
+            }
+            
+            switch( cur_type ) {
+                case 1: 
+                    cur_agent = new Root(cur_id);
+                    break;
+
+                case 2: 
+                    cur_agent = new Mid(cur_upid,cur_id);
+                    break;
+
+                case 3: 
+                    cur_agent = new Trader(cur_upid,cur_id,cur_sd);
+                    break;
+
+                default:
+                    throw new RuntimeException("Unexpected agent type "+cur_type);
+            }
             
             dbus = DBUS.find(cur_dbus);
             if( dbus == null )dbus = new DBUS(cur_dbus);
 
             cur_agent.setDBUS(dbus);
 
-            listAgent.add(cur_agent);
+            listAgent.put(cur_id,cur_agent);
+            schedule.scheduleRepeating(cur_agent);
         }
-        
-        // link each agent to its parent now that all are instantiated and
-        // then add it to the MASON schedule.
+                
+        // tell parents about their children now that all agents have been instantiated
 
-        for (Agent a : listAgent ) {
-            if (a.getType() != 1) {
-                a.setParent( listAgent.get(a.getPar_id() - 1));
-            }
-            schedule.scheduleRepeating(a);
-        }
+        for (Agent a : listAgent.values() ) 
+            if ( a.par_id != 0 )
+                Env.getAgent(a.par_id).children.add(a);
         
         br.close();
     }
@@ -407,10 +431,18 @@ public class Env extends SimState {
             }
             values.add(Integer.toString(pop));
             values.add(Integer.toString(agent.own_id));
-            values.add(agent.sd_type);
+            if( agent instanceof Trader) {
+                Trader trader = (Trader) agent;
+                values.add(trader.sd_type);
+                values.add(Double.toString(trader.load));
+                values.add(Double.toString(trader.elast));
+            }
+            else {
+                values.add("");
+                values.add("");
+                values.add("");
+            }
             values.add(casetag);
-            values.add(Double.toString(agent.load));
-            values.add(Double.toString(agent.elast));
             for(String str: dem.toStrings() )
                 values.add(str);
             loadPrinter.printRecord(values);

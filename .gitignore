@@ -2,3 +2,4 @@ market.jar
 *.class
 *~
 *_net.csv
+*_msg.csv
