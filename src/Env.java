@@ -409,10 +409,11 @@ public class Env extends SimState {
         ArrayList<String> values;
 
         header = new ArrayList<>();
+        
         header.add("pop");
         header.add("id");
-        header.add("sd_type");
         header.add("case");
+        header.add("sd_type");
         header.add("load");
         header.add("elast");
         for(int i=0 ; i<20 ; i++) {
@@ -431,6 +432,7 @@ public class Env extends SimState {
             }
             values.add(Integer.toString(pop));
             values.add(Integer.toString(agent.own_id));
+            values.add(casetag);
             if( agent instanceof Trader) {
                 Trader trader = (Trader) agent;
                 values.add(trader.sd_type);
@@ -442,7 +444,6 @@ public class Env extends SimState {
                 values.add("");
                 values.add("");
             }
-            values.add(casetag);
             for(String str: dem.toStrings() )
                 values.add(str);
             loadPrinter.printRecord(values);
