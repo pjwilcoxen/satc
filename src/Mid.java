@@ -50,7 +50,6 @@ public class Mid extends Market {
                     tmp = adjustTrans(dos_id);
                     reportDemand(tmp,dos_id);
                 }
-                clearQueuesD();
                 break;
 
             case REPORT_END:

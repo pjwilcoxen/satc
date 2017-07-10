@@ -39,7 +39,6 @@ public class Root extends Market {
                     aggDemands(dos_id);
                     findEquilibrium(dos_id);
                 }
-                clearQueuesD();
                 break;
 
             case REPORT_MID:

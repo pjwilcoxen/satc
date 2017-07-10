@@ -50,6 +50,8 @@ public abstract class Market extends Agent {
                 thisD = thisD.aggregateDemand(dem);
 
         aggD[dos_id] = thisD;
+
+        queueD.get(dos_id).clear();
         Env.printLoad(this,Env.dos_runs[dos_id],thisD);
     }
 
@@ -58,7 +60,7 @@ public abstract class Market extends Agent {
      */
     void getDemands(int dos_id) {
         for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
-            appendQueueD(msg.getDemand(),msg.dos_id);
+            queueD.get(dos_id).add(msg.getDemand());
     }
 
     /**
@@ -72,18 +74,4 @@ public abstract class Market extends Agent {
             child.dbus.send(msg);
             }
     }
-
-    void appendQueueD(Demand dem, int dos_id) {
-        queueD.get(dos_id).add(dem);
-    }
-
-    //
-    //  clearQueuesD
-    //
-
-    void clearQueuesD() {
-        for (int i = 0; i < Env.nDOS ; i++) 
-            queueD.get(i).clear();
-    }
-
 }
