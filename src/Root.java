@@ -61,15 +61,16 @@ public class Root extends Market {
     private void do_agg_mid(int dos_id) {
         int this_bl;
         String dos;
-        
-        dos = Env.dos_runs[dos_id];
 
-        aggD[dos_id] = sumDemands(dos_id) ;
-        Env.printLoad(this,Env.dos_runs[dos_id],aggD[dos_id]);
+        // do the aggregation and save the result
+
+        aggDemands(dos_id) ;
 
         // find the equilibrium price
         
         this_bl = aggD[dos_id].getBl();
+
+        dos = Env.dos_runs[dos_id];
 
         if( this_bl == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+dos);

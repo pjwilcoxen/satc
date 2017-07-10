@@ -40,11 +40,18 @@ public class Mid extends Market {
     public void step(SimState state) {
         switch (Env.stageNow) {
             case AGG_END:
-                do_agg_end();
+                Env.log.println("node "+own_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) 
+                    do_agg_end(dos_id);
+                clearQueuesD();
                 break;
 
             case REPORT_END:
-                do_report_end();
+                Env.log.println("node "+own_id);
+                for(Msg msg: getMsgs(Msg.Types.PRICE)) 
+                    setBl(msg.getPrice(),msg.dos_id);
+                for (int dos_id=0; dos_id<Env.nDOS ; dos_id++) 
+                    do_report_end(dos_id);
                 break;
                 
             default:
@@ -72,76 +79,60 @@ public class Mid extends Market {
     /**
      * Aggregate net demands of leaf nodes
      */
-    private void do_agg_end() {
+    private void do_agg_end(int dos_id) {
 
         Demand this_agg;
         Demand tmp;
-        
-        Env.log.println("node "+own_id);
 
-        for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
+        // do the aggregation and save the result
 
-            // do the aggregation and save the result
+        aggDemands(dos_id) ;
 
-            this_agg = sumDemands(dos_id) ;
-            aggD[dos_id] = this_agg;
-            Env.printLoad(this,Env.dos_runs[dos_id],this_agg);
+        // adjust for transmission cost and constraint
 
-            // adjust for transmission cost and constraint
+        tmp = aggD[dos_id].addCost(cost, dos_id, this);
+        tmp = tmp.addCapacity(cap);
 
-            tmp = this_agg.addCost(cost, dos_id, this);
-            tmp = tmp.addCapacity(cap);
+        // send to parent
 
-            // send to parent
-
-            reportDemand(tmp,dos_id);
-        }
-
-        clearQueuesD();
-
+        reportDemand(tmp,dos_id);
     }
 
     /**
      * Report the balance prices from the middle nodes to leaf nodes
      */
-    private void do_report_end() {
+    private void do_report_end(int dos_id) {
 
-        int child_id;
         int bl;
+        int report;
+        String dos;
 
-        for(Msg msg: getMsgs(Msg.Types.PRICE)) 
-            setBl(msg.getPrice(),msg.dos_id);
+        dos = Env.dos_runs[dos_id];
 
-        Env.log.println("node "+own_id);
- 
         // next block is reporting only before accounting for
         // cost and capacity. should it be retained somewhere?
+        //
+        // find the balance price for each case of dropped nodes
 
-        //find the balance price for each case of dropped nodes
-        for (int j = 0; j < Env.nDOS ; j++) {
-            bl = aggD[j].getBl();
-            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[j]+" own price: "+bl);
-        }
+        bl = aggD[dos_id].getBl();
+        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+bl);
         
-        int[] report = new int[Env.nDOS];
-        //set the report values for each case of dropped nodes
-        for (int dos_id = 0; dos_id < Env.nDOS ; dos_id++) {
-            //report -1 in the case of no balance point
-            if (getBl(dos_id) <= -1) {
-                report[dos_id] = -1;
-            //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
-            } else {
-                report[dos_id] = findReportPrice(dos_id);
-            }
-            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[dos_id]+" joint price: "+report[dos_id]);
-        }
+        //set the report value
+
+        //report -1 in the case of no balance point
+        //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
+
+        if (getBl(dos_id) <= -1) 
+            report = -1;
+        else 
+            report = findReportPrice(dos_id);
+        
+        Env.log.println("node "+own_id+" DOS run "+dos+" joint price: "+report);
 
         //write the balance prices on csv file for each case and report to children 
 
-        for(int i=0 ; i<Env.dos_runs.length ; i++) {
-            Env.printResult(this,Env.dos_runs[i],report[i],0);
-            reportPrice(report[i],i);
-        }
+        Env.printResult(this,dos,report,0);
+        reportPrice(report,dos_id);
     }
 
     /**

@@ -40,7 +40,7 @@ public abstract class Market extends Agent {
     /**
      * Aggregate demands from child nodes
      */
-    Demand sumDemands(int dos_id) {
+    void aggDemands(int dos_id) {
         Demand thisD = null;
 
         for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
@@ -52,7 +52,8 @@ public abstract class Market extends Agent {
             else
                 thisD = thisD.aggregateDemand(dem);
 
-        return thisD;
+        aggD[dos_id] = thisD;
+        Env.printLoad(this,Env.dos_runs[dos_id],thisD);
     }
 
     /**

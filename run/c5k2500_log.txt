@@ -26,21 +26,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 243
-node 202 DOS run 1 own price: 243
-node 202 DOS run 5 own price: 233
-node 202 DOS run 10 own price: 255
 node 202 DOS run 0 joint price: 57
+node 202 DOS run 1 own price: 243
 node 202 DOS run 1 joint price: 57
+node 202 DOS run 5 own price: 233
 node 202 DOS run 5 joint price: 61
+node 202 DOS run 10 own price: 255
 node 202 DOS run 10 joint price: 71
 node 201
 node 201 DOS run 0 own price: 24
-node 201 DOS run 1 own price: 24
-node 201 DOS run 5 own price: 25
-node 201 DOS run 10 own price: 28
 node 201 DOS run 0 joint price: 47
+node 201 DOS run 1 own price: 24
 node 201 DOS run 1 joint price: 47
+node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 51
+node 201 DOS run 10 own price: 28
 node 201 DOS run 10 joint price: 61
 *** stage CALC_LOADS
 *** population 2
@@ -63,21 +63,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 194
-node 202 DOS run 1 own price: 194
-node 202 DOS run 5 own price: 190
-node 202 DOS run 10 own price: 184
 node 202 DOS run 0 joint price: 51
+node 202 DOS run 1 own price: 194
 node 202 DOS run 1 joint price: 50
+node 202 DOS run 5 own price: 190
 node 202 DOS run 5 joint price: 51
+node 202 DOS run 10 own price: 184
 node 202 DOS run 10 joint price: 50
 node 201
 node 201 DOS run 0 own price: 24
-node 201 DOS run 1 own price: 22
-node 201 DOS run 5 own price: 24
-node 201 DOS run 10 own price: 25
 node 201 DOS run 0 joint price: 41
+node 201 DOS run 1 own price: 22
 node 201 DOS run 1 joint price: 40
+node 201 DOS run 5 own price: 24
 node 201 DOS run 5 joint price: 41
+node 201 DOS run 10 own price: 25
 node 201 DOS run 10 joint price: 40
 *** stage CALC_LOADS
 *** population 3
@@ -100,21 +100,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 296
-node 202 DOS run 1 own price: 289
-node 202 DOS run 5 own price: -1
-node 202 DOS run 10 own price: -1
 node 202 DOS run 0 joint price: 68
+node 202 DOS run 1 own price: 289
 node 202 DOS run 1 joint price: 67
+node 202 DOS run 5 own price: -1
 node 202 DOS run 5 joint price: 57
+node 202 DOS run 10 own price: -1
 node 202 DOS run 10 joint price: 57
 node 201
 node 201 DOS run 0 own price: 25
-node 201 DOS run 1 own price: 25
-node 201 DOS run 5 own price: 25
-node 201 DOS run 10 own price: 24
 node 201 DOS run 0 joint price: 58
+node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 57
+node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 57
+node 201 DOS run 10 own price: 24
 node 201 DOS run 10 joint price: 57
 *** stage CALC_LOADS
 *** population 4
@@ -137,21 +137,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 236
-node 202 DOS run 1 own price: 236
-node 202 DOS run 5 own price: 220
-node 202 DOS run 10 own price: 216
 node 202 DOS run 0 joint price: 57
+node 202 DOS run 1 own price: 236
 node 202 DOS run 1 joint price: 57
+node 202 DOS run 5 own price: 220
 node 202 DOS run 5 joint price: 53
+node 202 DOS run 10 own price: 216
 node 202 DOS run 10 joint price: 58
 node 201
 node 201 DOS run 0 own price: 24
-node 201 DOS run 1 own price: 24
-node 201 DOS run 5 own price: 22
-node 201 DOS run 10 own price: 22
 node 201 DOS run 0 joint price: 47
+node 201 DOS run 1 own price: 24
 node 201 DOS run 1 joint price: 47
+node 201 DOS run 5 own price: 22
 node 201 DOS run 5 joint price: 43
+node 201 DOS run 10 own price: 22
 node 201 DOS run 10 joint price: 48
 *** stage CALC_LOADS
 *** population 5
@@ -174,21 +174,21 @@ node 203
 *** stage REPORT_END
 node 201
 node 201 DOS run 0 own price: 25
-node 201 DOS run 1 own price: 25
-node 201 DOS run 5 own price: 25
-node 201 DOS run 10 own price: 26
 node 201 DOS run 0 joint price: 53
+node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 56
+node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 61
+node 201 DOS run 10 own price: 26
 node 201 DOS run 10 joint price: 62
 node 202
 node 202 DOS run 0 own price: 172
-node 202 DOS run 1 own price: 195
-node 202 DOS run 5 own price: 225
-node 202 DOS run 10 own price: 225
 node 202 DOS run 0 joint price: 63
+node 202 DOS run 1 own price: 195
 node 202 DOS run 1 joint price: 66
+node 202 DOS run 5 own price: 225
 node 202 DOS run 5 joint price: 71
+node 202 DOS run 10 own price: 225
 node 202 DOS run 10 joint price: 72
 *** stage CALC_LOADS
 *** population 6
@@ -211,21 +211,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 246
-node 202 DOS run 1 own price: 245
-node 202 DOS run 5 own price: 242
-node 202 DOS run 10 own price: 266
 node 202 DOS run 0 joint price: 63
+node 202 DOS run 1 own price: 245
 node 202 DOS run 1 joint price: 65
+node 202 DOS run 5 own price: 242
 node 202 DOS run 5 joint price: 69
+node 202 DOS run 10 own price: 266
 node 202 DOS run 10 joint price: 66
 node 201
 node 201 DOS run 0 own price: 22
-node 201 DOS run 1 own price: 23
-node 201 DOS run 5 own price: 26
-node 201 DOS run 10 own price: 22
 node 201 DOS run 0 joint price: 53
+node 201 DOS run 1 own price: 23
 node 201 DOS run 1 joint price: 55
+node 201 DOS run 5 own price: 26
 node 201 DOS run 5 joint price: 59
+node 201 DOS run 10 own price: 22
 node 201 DOS run 10 joint price: 56
 *** stage CALC_LOADS
 *** population 7
@@ -248,21 +248,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 187
-node 202 DOS run 1 own price: 181
-node 202 DOS run 5 own price: 172
-node 202 DOS run 10 own price: 194
 node 202 DOS run 0 joint price: 60
+node 202 DOS run 1 own price: 181
 node 202 DOS run 1 joint price: 59
+node 202 DOS run 5 own price: 172
 node 202 DOS run 5 joint price: 55
+node 202 DOS run 10 own price: 194
 node 202 DOS run 10 joint price: 59
 node 201
 node 201 DOS run 0 own price: 25
-node 201 DOS run 1 own price: 25
-node 201 DOS run 5 own price: 25
-node 201 DOS run 10 own price: 23
 node 201 DOS run 0 joint price: 50
+node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 49
+node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 45
+node 201 DOS run 10 own price: 23
 node 201 DOS run 10 joint price: 49
 *** stage CALC_LOADS
 *** population 8
@@ -285,21 +285,21 @@ node 203
 *** stage REPORT_END
 node 201
 node 201 DOS run 0 own price: 26
-node 201 DOS run 1 own price: 26
-node 201 DOS run 5 own price: 23
-node 201 DOS run 10 own price: 21
 node 201 DOS run 0 joint price: 52
+node 201 DOS run 1 own price: 26
 node 201 DOS run 1 joint price: 52
+node 201 DOS run 5 own price: 23
 node 201 DOS run 5 joint price: 45
+node 201 DOS run 10 own price: 21
 node 201 DOS run 10 joint price: 40
 node 202
 node 202 DOS run 0 own price: 235
-node 202 DOS run 1 own price: 232
-node 202 DOS run 5 own price: 220
-node 202 DOS run 10 own price: 207
 node 202 DOS run 0 joint price: 62
+node 202 DOS run 1 own price: 232
 node 202 DOS run 1 joint price: 62
+node 202 DOS run 5 own price: 220
 node 202 DOS run 5 joint price: 55
+node 202 DOS run 10 own price: 207
 node 202 DOS run 10 joint price: 50
 *** stage CALC_LOADS
 *** population 9
@@ -322,21 +322,21 @@ node 203
 *** stage REPORT_END
 node 202
 node 202 DOS run 0 own price: 224
-node 202 DOS run 1 own price: 275
-node 202 DOS run 5 own price: 269
-node 202 DOS run 10 own price: 247
 node 202 DOS run 0 joint price: 62
+node 202 DOS run 1 own price: 275
 node 202 DOS run 1 joint price: 68
+node 202 DOS run 5 own price: 269
 node 202 DOS run 5 joint price: 64
+node 202 DOS run 10 own price: 247
 node 202 DOS run 10 joint price: 63
 node 201
 node 201 DOS run 0 own price: 24
-node 201 DOS run 1 own price: 27
-node 201 DOS run 5 own price: 23
-node 201 DOS run 10 own price: 24
 node 201 DOS run 0 joint price: 52
+node 201 DOS run 1 own price: 27
 node 201 DOS run 1 joint price: 58
+node 201 DOS run 5 own price: 23
 node 201 DOS run 5 joint price: 54
+node 201 DOS run 10 own price: 24
 node 201 DOS run 10 joint price: 53
 *** stage CALC_LOADS
 *** population 10
@@ -359,20 +359,20 @@ node 203
 *** stage REPORT_END
 node 201
 node 201 DOS run 0 own price: 24
-node 201 DOS run 1 own price: 25
-node 201 DOS run 5 own price: 25
-node 201 DOS run 10 own price: 25
 node 201 DOS run 0 joint price: 52
+node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 54
+node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 56
+node 201 DOS run 10 own price: 25
 node 201 DOS run 10 joint price: 59
 node 202
 node 202 DOS run 0 own price: 192
-node 202 DOS run 1 own price: 189
-node 202 DOS run 5 own price: 217
-node 202 DOS run 10 own price: 222
 node 202 DOS run 0 joint price: 62
+node 202 DOS run 1 own price: 189
 node 202 DOS run 1 joint price: 64
+node 202 DOS run 5 own price: 217
 node 202 DOS run 5 joint price: 66
+node 202 DOS run 10 own price: 222
 node 202 DOS run 10 joint price: 69
 *** stage CALC_LOADS
