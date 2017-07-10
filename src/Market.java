@@ -5,10 +5,6 @@ import java.util.ArrayList;
  */
 public abstract class Market extends Agent {
 
-    // queue for incoming demands
-
-    ArrayList<Demand> queueD = new ArrayList<>();
-     
     // aggregate demand
 
     Demand aggD;
@@ -20,7 +16,8 @@ public abstract class Market extends Agent {
      * @param own_id Own ID
      */
     public Market(int up_id, int own_id) {
-        super(up_id,own_id) ;
+        super(up_id,own_id);
+        aggD = null;
     }
     
     /** 
@@ -30,37 +27,43 @@ public abstract class Market extends Agent {
     public void runInit() {
         super.runInit();
         aggD = null;
-        queueD.clear();
     }
 
     /**
      * Aggregate demands from child nodes
+     * 
+     * @param demands List of demand curves
+     * @return Aggregate demand
      */
-    void aggDemands() {
-        Demand thisD = null;
+    Demand aggDemands(ArrayList<Demand> demands) {
+        Demand newD = null;
 
-        for(Demand dem: queueD ) 
-            if( thisD == null )
-                thisD = dem;
+        for(Demand dem: demands ) 
+            if( newD == null )
+                newD = dem;
             else
-                thisD = thisD.aggregateDemand(dem);
+                newD = newD.aggregateDemand(dem);
 
-        aggD = thisD;
-
-        queueD.clear();
-        Env.printLoad(this,Env.curDOS,thisD);
+        Env.printLoad(this,Env.curDOS,newD);
+        return newD;
     }
 
     /**
      * Extract and save demands from list of messages
+     * 
+     * @return List of demands
      */
-    void getDemands() {
+    ArrayList<Demand> getDemands() {
+        ArrayList<Demand> queue = new ArrayList<>();
         for(Msg msg: getMsgs(Msg.Types.DEMAND)) 
-            queueD.add(msg.getDemand());
+            queue.add(msg.getDemand());
+        return queue;
     }
 
     /**
      * Broadcast a price to all children
+     * 
+     * @param price Price to send
      */
     void reportPrice(int price) {
         for (Agent child: children) {

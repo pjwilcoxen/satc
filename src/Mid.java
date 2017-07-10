@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import sim.engine.SimState;
 
 /** 
@@ -5,17 +6,22 @@ import sim.engine.SimState;
  */
 public class Mid extends Market {
 
-    static final int IDOS = 0;
+    // local version of the global transmission cost
 
-    //local version of the global transmission cost
     int cost;
 
     //local version of the global capacity constraint
+    
     int cap; 
    
-    //indicates the upper and lower level around the balance prices considering transaction cost
+    // bounds used in adjusting for transmission parameters
+    
     int pc0;
     int pc1;
+    
+    // Aggregate demand after adjusting for transmission parameters
+    
+    Demand adjD;
 
     /**
      * Midlevel market object
@@ -38,19 +44,19 @@ public class Mid extends Market {
      */
     @Override
     public void step(SimState state) {
-        Demand tmp;
-
+        ArrayList<Demand> dList;
+        
         switch (Env.stageNow) {
             
             case AGG_END:
-                getDemands();
-                aggDemands();
-                tmp = adjustTrans();
-                reportDemand(tmp);
+                dList = getDemands();
+                aggD  = aggDemands(dList);
+                adjD  = adjustTrans(aggD);
+                reportDemand(adjD);
                 break;
 
             case REPORT_END:
-                getPrice();
+                aPrice = getPrice();
                 do_report_end();
                 break;
                 
@@ -75,20 +81,24 @@ public class Mid extends Market {
         super.runInit();
         pc0 = 0;
         pc1 = 0;
+        adjD = null;
     }
 
     /**
      * Adjust aggregate demand for transmission parameters
+     * 
+     * @param agg Original demand curve
+     * @return Curve adjusted for transmission
      */
-    private Demand adjustTrans() {
+    private Demand adjustTrans(Demand agg) {
         Demand newD;
-        newD = aggD.addCost(cost, this);
+        newD = agg.addCost(cost, this);
         newD = newD.addCapacity(cap);
-        return newD ;
+        return newD;
     }
 
     /**
-     * Report the balance prices from the middle nodes to leaf nodes
+     * Report the equilibrium price from a middle node to its children
      */
     private void do_report_end() {
 
@@ -98,23 +108,23 @@ public class Mid extends Market {
 
         dos = Env.curDOS;
 
-        // next block is reporting only before accounting for
+        // next block is reporting only; before accounting for
         // cost and capacity. should it be retained somewhere?
         //
         // find the balance price for each case of dropped nodes
 
-        this_bl = aggD.getBl();
+        this_bl = aggD.getEquPrice();
         Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
         
-        //set the report value
+        // set the report value
+        //
+        // report -1 if no equilibrium was found. otherwise, get an
+        // adjust price that accounts for transmission parameters
 
-        //report -1 in the case of no balance point
-        //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
-
-        if (bl <= -1) 
+        if (aPrice <= -1) 
             report = -1;
         else 
-            report = findReportPrice();
+            report = aggD.getP(aPrice,pc0,pc1,cost,cap);
         
         Env.log.println("node "+own_id+" DOS run "+dos+" joint price: "+report);
 
@@ -125,13 +135,15 @@ public class Mid extends Market {
     }
 
     /**
-     * Find the actual price for the end users considering transaction cost and capacity limit
+     * Set Price bounds
+     * 
+     * These are used in finding a downstream price consistent with
+     * transmission parameters.
+     * 
+     * @param p0 Lower bound
+     * @param p1 Upper bound
      */
-    private int findReportPrice() {
-        return aggD.getP(bl,pc0,pc1,cost,cap);
-    }
-
-    public void setP_c(int p0, int p1) {
+    public void setPc(int p0, int p1) {
         pc0 = p0;
         pc1 = p1;
     }

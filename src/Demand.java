@@ -348,9 +348,12 @@ public class Demand {
     /** 
      * Find an equilibrium price for a net demand curve
      * 
+     * Returns the highest price with a positive q_max and a negative
+     * q_min.
+     * 
      * @return The equilibrium price for this net demand curve
      */
-    public int getBl() {
+    public int getEquPrice() {
         int i;
         int bl;
         int min;
@@ -363,10 +366,19 @@ public class Demand {
             min = bids[i].q_min;
         }
 
-        //if there is not any balance point- report -1 as price
-        if ((i == 0) || ((bids[i] == null) && (min > 0))) 
-            bl = -1;
+        // no equilibrium because there are no steps with positive q_max
+        
+        if( i==0 )
+            return -1;
+        
+        // no equilibrium because we've run off the top end of the 
+        // demand curve and the minimum demanded is still positive
+        
+        if( (bids[i] == null) && (min > 0) ) 
+            return -1;
 
+        // make sure something was found
+        
         assert bl != -2;
 
         return bl;
@@ -403,9 +415,9 @@ public class Demand {
                 int mid = ((bids[i-1].p + bids[i].p)/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
-                    agent.setP_c(0,mid+c);
+                    agent.setPc(0,mid+c);
                 else
-                    agent.setP_c(mid-c,mid+c);
+                    agent.setPc(mid-c,mid+c);
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
                     tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
@@ -414,9 +426,9 @@ public class Demand {
             }else{
                 //set the two upper and lower limits around the balance price
                 if((bids[i-1].p-c) < 0)
-                    agent.setP_c(0,bids[i-1].p+c);
+                    agent.setPc(0,bids[i-1].p+c);
                 else
-                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c);
+                    agent.setPc(bids[i-1].p-c,bids[i-1].p+c);
 
                 //divide the middle step into two steps with +c/-c prices
                 

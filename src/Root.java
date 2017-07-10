@@ -1,11 +1,10 @@
+import java.util.ArrayList;
 import sim.engine.SimState;
 
 /**
  * Root nodes are markets that have no parent nodes
  */
 public class Root extends Market {
-
-    static final int IDOS = 0;
 
     /**
      * Root node
@@ -23,16 +22,18 @@ public class Root extends Market {
      */
     @Override
     public void step(SimState state) {
+        ArrayList<Demand> dList;
+        
         switch (Env.stageNow) {
 
             case AGG_MID:
-                getDemands();
-                aggDemands();
-                findEquilibrium();
+                dList  = getDemands();
+                aggD   = aggDemands(dList);
+                aPrice = findRootPrice();
                 break;
 
             case REPORT_MID:
-                reportPrice(bl);
+                reportPrice(aPrice);
                 break;
                 
             default:
@@ -40,35 +41,27 @@ public class Root extends Market {
         }
     }
 
-    @Override
-    public void reportDemand(Demand dem) {
-        assert false;
-    }
-
     /**
      * Aggregate net demands of middle nodes
      */
-    private void findEquilibrium() {
+    private int findRootPrice() {
         int this_bl;
         String dos;
 
         // find the equilibrium price
         
-        this_bl = aggD.getBl();
+        this_bl = aggD.getEquPrice();
 
         dos = Env.curDOS;
 
         if( this_bl == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+dos);
 
-        // make a note of this price
-         
-        bl = this_bl;
-            
-        // write the balance prices to the csv file
-        // and log it as well
+        // write the balance prices to the csv file and log it as well
 
         Env.printResult(this,dos,this_bl,0);
         Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
+        
+        return this_bl;
     }
 }

@@ -17,17 +17,10 @@ public abstract class Agent implements Steppable {
      */
     private static final int RCOUNT = 10;
 
-    //indicates the type of node (end user = 3, middle node = 2, root node = 1)
-    int type;
+    // permanent attributes of the agent
     
-    //indicates own id
-    int own_id;
-    
-    //indicates parents' id
-    int par_id;
-    
-    //indicates the balance price for each case of dropped nodes    
-    int bl;
+    final int own_id;   
+    final int par_id;
     
     /**
      * Pools for holding random numbers for this agent  
@@ -35,24 +28,30 @@ public abstract class Agent implements Steppable {
      * Helps preserve testing repeatability when code using
      * the numbers is reordered.
      */
-    ArrayList<Double[]> rPool = new ArrayList<>();
+    final ArrayList<Double[]> rPool = new ArrayList<>();
 
     // random variable for DOS runs
 
     static final int IDOS = 0 ;
+    
     double rBlock;
 
-    //data bus this agent uses to communicate with its parent
+    // data bus this agent uses to communicate with its parent
+    
     DBUS dbus;
 
-    ArrayDeque<Msg> msgs = new ArrayDeque<>();
-
-    //  Parent and list of children
+    // this agent's incoming message queue
+    
+    final ArrayDeque<Msg> msgs = new ArrayDeque<>();
 
     /**
-     * Children of this agent
+     * Children of the agent
      */
     final ArrayList<Agent> children = new ArrayList<>();
+
+    // this agent's view of the price
+    
+    int aPrice;
 
     /**
      * Set the DBUS used by this agent to talk to its parent
@@ -75,6 +74,7 @@ public abstract class Agent implements Steppable {
      */
     public void runInit() {
         msgs.clear();
+        aPrice = 0;
     }
 
     /**
@@ -106,12 +106,15 @@ public abstract class Agent implements Steppable {
     }
 
     /**
-     * Extract and save price from list of messages
+     * Extract a price from list of messages
+     * 
+     * @return Price sent
      */
-    void getPrice() {
-        ArrayList<Msg> msgs = getMsgs(Msg.Types.PRICE);
-        assert msgs.size() == 1;
-        bl = msgs.get(0).getPrice();
+    int getPrice() {
+        ArrayList<Msg> price_msgs;
+        price_msgs = getMsgs(Msg.Types.PRICE);
+        assert price_msgs.size() == 1;
+        return price_msgs.get(0).getPrice();
     }
 
     /**
@@ -126,6 +129,12 @@ public abstract class Agent implements Steppable {
         dbus.send(msg);
     }
 
+    /**
+     * Get a random number from this agent's pool
+     * 
+     * @param which Which number to retrieve
+     * @return Uniform random number
+     */
     double runiform(int which) {
         Double[] pop_set = rPool.get(Env.pop-1);
         return pop_set[which];
@@ -140,8 +149,6 @@ public abstract class Agent implements Steppable {
     public Agent(int up_id, int own_id) {
         super();
 
-        Double[] rArray;
-
         this.par_id = up_id;
         this.own_id = own_id;
         
@@ -149,6 +156,8 @@ public abstract class Agent implements Steppable {
         // randomization. do it once when the agent is 
         // instantiated to help with repeatability when
         // code using the numbers is reordered.
+
+        Double[] rArray;
 
         for(int i=0 ; i<Env.numPop ; i++) {
             rArray = new Double[RCOUNT];

@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -222,8 +221,7 @@ public class Env extends SimState {
     /** 
      * Add an agent to a block list
      * 
-     * @param run DOS run where the block should be set
-     * @param agent Agent that should be blocked
+     * @param own_id ID of agent that should be blocked
      */
     public static void setBlock(int own_id) {
        blockList.add(own_id);
