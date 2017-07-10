@@ -8,7 +8,7 @@ public class Trader extends Agent {
     /**
      * Maximum number of steps in each generated bid
      */
-    static int maxstep = 14;
+    static final int MAXSTEP = 14;
 
     /**
      * Actual number of steps used, for reference
@@ -85,11 +85,15 @@ public class Trader extends Agent {
     public void step(SimState state) {
         switch (Env.stageNow) {
             case SEND_END:
-                do_send_demands();
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
+                    reportDemand(demand,dos_id);
                 break;
 
             case CALC_LOADS:
-                do_calc_load();
+                for(Msg msg: getMsgs(Msg.Types.PRICE))
+                    setBl(msg.getPrice(),msg.dos_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
+                    do_calc_load(dos_id);
                 break;
                 
             default:
@@ -118,13 +122,14 @@ public class Trader extends Agent {
         else
            draw = Env.drawListS.get(rand);
         
+        // parameters to use in constructing this curve
+
         load  = draw.load;
         elast = draw.elast;
-
-        //number of steps to create curve
-        steps = (int) (rStep * maxstep + 2);
+        steps = (int) (rStep * MAXSTEP + 2);
 
         //call draw function based on the type of end user
+
         if (sd_type.equals("D")) 
             demand = Demand.makeDemand(this);
         else 
@@ -132,34 +137,18 @@ public class Trader extends Agent {
     }
      
     /**
-     * Calculate actual loads at the leaf nodes
-     *
-     * Report net demand as 0 if no price was found
+     * Calculate actual net load by the trader
      */
-    private void do_calc_load() {
+    private void do_calc_load(int dos_id) {
         int bl;
         int ex;
         String dos;
-            
-        for(Msg msg: getMsgs(Msg.Types.PRICE)) 
-            setBl(msg.getPrice(),msg.dos_id);
-
-        for(int i=0 ; i<Env.dos_runs.length ; i++) {
         
-            bl  = getBl(i);
-            ex  = demand.getQ(bl);
+        bl  = getBl(dos_id);
+        ex  = demand.getQ(bl);
 
-            dos = Env.dos_runs[i];
-            Env.printResult(this,dos,bl,ex);
-        }
-    }
-
-    /**
-     * Send a demand curve to a parent node
-     */
-    private void do_send_demands() {
-        for(int dos_id=0 ; dos_id<Env.dos_runs.length ; dos_id++) 
-            reportDemand(demand,dos_id);
+        dos = Env.dos_runs[dos_id];
+        Env.printResult(this,dos,bl,ex);
     }
 
 }
