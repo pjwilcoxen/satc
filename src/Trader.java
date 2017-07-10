@@ -68,12 +68,11 @@ public class Trader extends Agent {
      */
     @Override
     public void runInit() {
+        super.runInit();
         double cutoff;
-        for(String dos: Env.dos_runs) {
-            cutoff = Double.parseDouble(dos);
-            if( rBlock < cutoff ) 
-                Env.setBlock(dos,this);
-        }
+        cutoff = Double.parseDouble(Env.curDOS);
+        if( rBlock < cutoff ) 
+            Env.setBlock(own_id);
     }
 
     /**
@@ -84,16 +83,14 @@ public class Trader extends Agent {
     @Override
     public void step(SimState state) {
         switch (Env.stageNow) {
+
             case SEND_END:
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
-                    reportDemand(demand,dos_id);
+                reportDemand(demand);
                 break;
 
             case CALC_LOADS:
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
-                    getPrices(dos_id);
-                    do_calc_load(dos_id);
-                }
+                getPrice();
+                do_calc_load();
                 break;
                 
             default:
@@ -139,16 +136,9 @@ public class Trader extends Agent {
     /**
      * Calculate actual net load by the trader
      */
-    private void do_calc_load(int dos_id) {
-        int bl;
-        int ex;
-        String dos;
-        
-        bl  = getBl(dos_id);
-        ex  = demand.getQ(bl);
-
-        dos = Env.dos_runs[dos_id];
-        Env.printResult(this,dos,bl,ex);
+    private void do_calc_load() {
+        int ex = demand.getQ(bl);
+        Env.printResult(this,Env.curDOS,bl,ex);
     }
 
 }

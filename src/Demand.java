@@ -376,11 +376,10 @@ public class Demand {
      * Change the step prices to account for the transmission cost
      * 
      * @param c Transmission cost
-     * @param dos_id DOS run
      * @param agent Midlevel market
      * @return New demand curve
      */
-    public Demand addCost(int c, int dos_id, Mid agent) {
+    public Demand addCost(int c, Mid agent) {
         Demand newD;
         Bidstep[] tmp;
         int i;
@@ -404,9 +403,9 @@ public class Demand {
                 int mid = ((bids[i-1].p + bids[i].p)/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
-                    agent.setP_c(0,mid+c, dos_id);
+                    agent.setP_c(0,mid+c);
                 else
-                    agent.setP_c(mid-c,mid+c, dos_id);
+                    agent.setP_c(mid-c,mid+c);
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
                     tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
@@ -415,9 +414,9 @@ public class Demand {
             }else{
                 //set the two upper and lower limits around the balance price
                 if((bids[i-1].p-c) < 0)
-                    agent.setP_c(0,bids[i-1].p+c, dos_id);
+                    agent.setP_c(0,bids[i-1].p+c);
                 else
-                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c, dos_id);
+                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c);
 
                 //divide the middle step into two steps with +c/-c prices
                 

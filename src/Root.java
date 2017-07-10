@@ -16,14 +16,6 @@ public class Root extends Market {
         super(0,own_id);
     }
             
-    /** 
-     * Initialize for a new population
-     */
-    @Override
-    public void popInit() {
-        super.popInit();
-    }
-
     /**
      * Actions based on current simulation step
      *
@@ -32,17 +24,15 @@ public class Root extends Market {
     @Override
     public void step(SimState state) {
         switch (Env.stageNow) {
+
             case AGG_MID:
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
-                    getDemands(dos_id);
-                    aggDemands(dos_id);
-                    findEquilibrium(dos_id);
-                }
+                getDemands();
+                aggDemands();
+                findEquilibrium();
                 break;
 
             case REPORT_MID:
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++ )
-                    reportPrice(getBl(dos_id),dos_id);
+                reportPrice(bl);
                 break;
                 
             default:
@@ -51,29 +41,29 @@ public class Root extends Market {
     }
 
     @Override
-    public void reportDemand(Demand dem,int dos_id ) {
+    public void reportDemand(Demand dem) {
         assert false;
     }
 
     /**
      * Aggregate net demands of middle nodes
      */
-    private void findEquilibrium(int dos_id) {
+    private void findEquilibrium() {
         int this_bl;
         String dos;
 
         // find the equilibrium price
         
-        this_bl = aggD[dos_id].getBl();
+        this_bl = aggD.getBl();
 
-        dos = Env.dos_runs[dos_id];
+        dos = Env.curDOS;
 
         if( this_bl == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+dos);
 
         // make a note of this price
          
-        bl[dos_id] = this_bl;
+        bl = this_bl;
             
         // write the balance prices to the csv file
         // and log it as well

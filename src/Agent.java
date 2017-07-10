@@ -27,7 +27,7 @@ public abstract class Agent implements Steppable {
     int par_id;
     
     //indicates the balance price for each case of dropped nodes    
-    int[] bl;
+    int bl;
     
     /**
      * Pools for holding random numbers for this agent  
@@ -55,26 +55,6 @@ public abstract class Agent implements Steppable {
     final ArrayList<Agent> children = new ArrayList<>();
 
     /**
-     * Get the agent's idea of the equilibrium price
-     * 
-     * @param dos_id DOS run
-     * @return Price
-     */
-    public int getBl(int dos_id) {
-        return bl[dos_id];
-    }
-
-    /**
-     * Set the agent's idea of the equilibrium price
-     * 
-     * @param bl Price
-     * @param dos_id DOS run
-     */
-    public void setBl(int bl, int dos_id) {
-        this.bl[dos_id] = bl;
-    }
-    
-    /**
      * Set the DBUS used by this agent to talk to its parent
      * 
      * @param dbus DBUS object
@@ -92,10 +72,10 @@ public abstract class Agent implements Steppable {
 
     /**
      * Initialize this agent for a new DOS run
-     *
-     * Override as needed in subclasses.
      */
-    public abstract void runInit();
+    public void runInit() {
+        msgs.clear();
+    }
 
     /**
      * Add a message to this agent's input queue
@@ -110,6 +90,7 @@ public abstract class Agent implements Steppable {
      * Extract a set of messages from the input queue
      *
      * @param type Message type to extract
+     * @return List of messages
      */
     ArrayList<Msg> getMsgs(Msg.Types type) {
         ArrayList<Msg> selected = new ArrayList<>();
@@ -125,43 +106,22 @@ public abstract class Agent implements Steppable {
     }
 
     /**
-     * Extract a subset of messages from the input queue
-     *
-     * @param type Message type to extract
-     * @param dos_id DOS run number
-     * @return List of messages
+     * Extract and save price from list of messages
      */
-    ArrayList<Msg> getMsgs(Msg.Types type,int dos_id) {
-        ArrayList<Msg> selected = new ArrayList<>();
-
-        for(Msg msg: msgs) 
-            if( msg.type == type && msg.dos_id == dos_id ) 
-                selected.add(msg);
-        
-        for(Msg msg: selected)
-            msgs.remove(msg);
-        
-        return selected;
-    }
-
-    /**
-     * Extract and save prices from list of messages
-     */
-    void getPrices(int dos_id) {
-        for(Msg msg: getMsgs(Msg.Types.PRICE,dos_id)) 
-            setBl(msg.getPrice(),msg.dos_id);
+    void getPrice() {
+        ArrayList<Msg> msgs = getMsgs(Msg.Types.PRICE);
+        assert msgs.size() == 1;
+        bl = msgs.get(0).getPrice();
     }
 
     /**
      * Send a demand to parent node
      * 
      * @param dem Demand curve
-     * @param dos_id DOS run indicator
      */
-    public void reportDemand(Demand dem,int dos_id) {
+    public void reportDemand(Demand dem) {
         Msg msg = new Msg(this,par_id);
         msg.setDemand(dem);
-        msg.dos_id = dos_id;
         assert dbus != null;
         dbus.send(msg);
     }
@@ -182,12 +142,9 @@ public abstract class Agent implements Steppable {
 
         Double[] rArray;
 
-        this.type    = 0;
-        this.par_id  = up_id;
-        this.own_id  = own_id;
+        this.par_id = up_id;
+        this.own_id = own_id;
         
-        bl = new int[Env.nDOS];
-
         // build a pool of values to be used for later
         // randomization. do it once when the agent is 
         // instantiated to help with repeatability when

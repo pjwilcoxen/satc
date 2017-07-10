@@ -34,11 +34,6 @@ public class Msg {
     int price;
 
     /**
-     * The DOS id associated with this message
-     */
-    public int dos_id;
-
-    /**
      * Message
      * 
      * @param sender Agent sending the message
@@ -59,7 +54,7 @@ public class Msg {
     public String logString() {
         String msg;
         msg = ""+Env.pop
-            + ","+Env.dos_runs[dos_id]
+            + ","+Env.curDOS
             + ","+sender.own_id
             + ","+from
             + ","+ to

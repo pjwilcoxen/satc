@@ -8,316 +8,496 @@ Scenario Settings:
 
 *** population 1
 dos 0 dropped []
-dos 1 dropped []
-dos 5 dropped [31, 38, 87, 94, 170, 189]
-dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 No equilibrium at root node 203 for DOS run: 0
 node 203 DOS run 0 own price: -1
-No equilibrium at root node 203 for DOS run: 1
-node 203 DOS run 1 own price: -1
-node 203 DOS run 5 own price: 52
-node 203 DOS run 10 own price: 64
 *** stage REPORT_MID
 *** stage REPORT_END
 node 202 DOS run 0 own price: 243
 node 202 DOS run 0 joint price: -1
-node 202 DOS run 1 own price: 243
-node 202 DOS run 1 joint price: -1
-node 202 DOS run 5 own price: 233
-node 202 DOS run 5 joint price: 65
-node 202 DOS run 10 own price: 255
-node 202 DOS run 10 joint price: 69
 node 201 DOS run 0 own price: 24
 node 201 DOS run 0 joint price: -1
+*** stage CALC_LOADS
+dos 1 dropped []
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+No equilibrium at root node 203 for DOS run: 1
+node 203 DOS run 1 own price: -1
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 1 own price: 243
+node 202 DOS run 1 joint price: -1
 node 201 DOS run 1 own price: 24
 node 201 DOS run 1 joint price: -1
+*** stage CALC_LOADS
+dos 5 dropped [31, 38, 87, 94, 170, 189]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 52
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: 233
+node 202 DOS run 5 joint price: 65
 node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 50
+*** stage CALC_LOADS
+dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 64
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 10 own price: 255
+node 202 DOS run 10 joint price: 69
 node 201 DOS run 10 own price: 28
 node 201 DOS run 10 joint price: 62
 *** stage CALC_LOADS
 *** population 2
 dos 0 dropped []
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+No equilibrium at root node 203 for DOS run: 0
+node 203 DOS run 0 own price: -1
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 0 own price: 24
+node 201 DOS run 0 joint price: -1
+node 202 DOS run 0 own price: 194
+node 202 DOS run 0 joint price: -1
+*** stage CALC_LOADS
 dos 1 dropped [12, 18]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 41
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 1 own price: 194
+node 202 DOS run 1 joint price: 63
+node 201 DOS run 1 own price: 22
+node 201 DOS run 1 joint price: 39
+*** stage CALC_LOADS
 dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+No equilibrium at root node 203 for DOS run: 5
+node 203 DOS run 5 own price: -1
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: 190
+node 202 DOS run 5 joint price: -1
+node 201 DOS run 5 own price: 24
+node 201 DOS run 5 joint price: -1
+*** stage CALC_LOADS
 dos 10 dropped [12, 18, 21, 34, 55, 75, 80, 81, 86, 103, 126, 128, 133, 136, 138, 152, 153, 159, 163, 164, 171, 178, 192]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
-No equilibrium at root node 203 for DOS run: 0
-node 203 DOS run 0 own price: -1
-node 203 DOS run 1 own price: 41
-No equilibrium at root node 203 for DOS run: 5
-node 203 DOS run 5 own price: -1
 node 203 DOS run 10 own price: 42
 *** stage REPORT_MID
 *** stage REPORT_END
-node 202 DOS run 0 own price: 194
-node 202 DOS run 0 joint price: -1
-node 202 DOS run 1 own price: 194
-node 202 DOS run 1 joint price: 63
-node 202 DOS run 5 own price: 190
-node 202 DOS run 5 joint price: -1
-node 202 DOS run 10 own price: 184
-node 202 DOS run 10 joint price: 44
-node 201 DOS run 0 own price: 24
-node 201 DOS run 0 joint price: -1
-node 201 DOS run 1 own price: 22
-node 201 DOS run 1 joint price: 39
-node 201 DOS run 5 own price: 24
-node 201 DOS run 5 joint price: -1
 node 201 DOS run 10 own price: 25
 node 201 DOS run 10 joint price: 40
+node 202 DOS run 10 own price: 184
+node 202 DOS run 10 joint price: 44
 *** stage CALC_LOADS
 *** population 3
 dos 0 dropped []
-dos 1 dropped [124, 181]
-dos 5 dropped [34, 124, 160, 181, 193]
-dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 58
-node 203 DOS run 1 own price: 58
-node 203 DOS run 5 own price: 56
-node 203 DOS run 10 own price: 59
 *** stage REPORT_MID
 *** stage REPORT_END
 node 202 DOS run 0 own price: 296
 node 202 DOS run 0 joint price: 73
-node 202 DOS run 1 own price: 289
-node 202 DOS run 1 joint price: 70
-node 202 DOS run 5 own price: -1
-node 202 DOS run 5 joint price: 54
-node 202 DOS run 10 own price: -1
-node 202 DOS run 10 joint price: 57
 node 201 DOS run 0 own price: 25
 node 201 DOS run 0 joint price: 56
+*** stage CALC_LOADS
+dos 1 dropped [124, 181]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 58
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 56
+node 202 DOS run 1 own price: 289
+node 202 DOS run 1 joint price: 70
+*** stage CALC_LOADS
+dos 5 dropped [34, 124, 160, 181, 193]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 56
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: -1
+node 202 DOS run 5 joint price: 54
 node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 54
+*** stage CALC_LOADS
+dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 59
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 10 own price: 24
 node 201 DOS run 10 joint price: 57
+node 202 DOS run 10 own price: -1
+node 202 DOS run 10 joint price: 57
 *** stage CALC_LOADS
 *** population 4
 dos 0 dropped []
-dos 1 dropped []
-dos 5 dropped [21, 60, 63, 135, 158, 174]
-dos 10 dropped [5, 7, 10, 20, 21, 23, 29, 34, 54, 60, 61, 63, 67, 70, 74, 75, 87, 116, 121, 124, 135, 136, 158, 174]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 46
-node 203 DOS run 1 own price: 46
-node 203 DOS run 5 own price: 45
-node 203 DOS run 10 own price: 54
 *** stage REPORT_MID
 *** stage REPORT_END
 node 202 DOS run 0 own price: 236
 node 202 DOS run 0 joint price: 66
-node 202 DOS run 1 own price: 236
-node 202 DOS run 1 joint price: 66
-node 202 DOS run 5 own price: 220
-node 202 DOS run 5 joint price: 59
-node 202 DOS run 10 own price: 216
-node 202 DOS run 10 joint price: 56
 node 201 DOS run 0 own price: 24
 node 201 DOS run 0 joint price: 44
+*** stage CALC_LOADS
+dos 1 dropped []
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 46
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 1 own price: 24
 node 201 DOS run 1 joint price: 44
+node 202 DOS run 1 own price: 236
+node 202 DOS run 1 joint price: 66
+*** stage CALC_LOADS
+dos 5 dropped [21, 60, 63, 135, 158, 174]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 45
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 5 own price: 22
 node 201 DOS run 5 joint price: 43
+node 202 DOS run 5 own price: 220
+node 202 DOS run 5 joint price: 59
+*** stage CALC_LOADS
+dos 10 dropped [5, 7, 10, 20, 21, 23, 29, 34, 54, 60, 61, 63, 67, 70, 74, 75, 87, 116, 121, 124, 135, 136, 158, 174]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 54
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 10 own price: 22
 node 201 DOS run 10 joint price: 52
+node 202 DOS run 10 own price: 216
+node 202 DOS run 10 joint price: 56
 *** stage CALC_LOADS
 *** population 5
 dos 0 dropped []
-dos 1 dropped [107, 192]
-dos 5 dropped [24, 78, 107, 192, 197]
-dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 57
-node 203 DOS run 1 own price: 57
-node 203 DOS run 5 own price: 59
-node 203 DOS run 10 own price: 62
 *** stage REPORT_MID
 *** stage REPORT_END
 node 201 DOS run 0 own price: 25
 node 201 DOS run 0 joint price: 55
-node 201 DOS run 1 own price: 25
-node 201 DOS run 1 joint price: 55
-node 201 DOS run 5 own price: 25
-node 201 DOS run 5 joint price: 57
-node 201 DOS run 10 own price: 26
-node 201 DOS run 10 joint price: 60
 node 202 DOS run 0 own price: 172
 node 202 DOS run 0 joint price: 62
+*** stage CALC_LOADS
+dos 1 dropped [107, 192]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 57
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 1 own price: 25
+node 201 DOS run 1 joint price: 55
 node 202 DOS run 1 own price: 195
 node 202 DOS run 1 joint price: 70
+*** stage CALC_LOADS
+dos 5 dropped [24, 78, 107, 192, 197]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 59
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 5 own price: 25
+node 201 DOS run 5 joint price: 57
 node 202 DOS run 5 own price: 225
 node 202 DOS run 5 joint price: 76
+*** stage CALC_LOADS
+dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 62
+*** stage REPORT_MID
+*** stage REPORT_END
 node 202 DOS run 10 own price: 225
 node 202 DOS run 10 joint price: 76
+node 201 DOS run 10 own price: 26
+node 201 DOS run 10 joint price: 60
 *** stage CALC_LOADS
 *** population 6
 dos 0 dropped []
-dos 1 dropped [98, 152]
-dos 5 dropped [40, 73, 88, 98, 139, 152]
-dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142, 152, 169, 175, 197]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 No equilibrium at root node 203 for DOS run: 0
 node 203 DOS run 0 own price: -1
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 0 own price: 22
+node 201 DOS run 0 joint price: -1
+node 202 DOS run 0 own price: 246
+node 202 DOS run 0 joint price: -1
+*** stage CALC_LOADS
+dos 1 dropped [98, 152]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 1 own price: 57
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 1 own price: 23
+node 201 DOS run 1 joint price: 55
+node 202 DOS run 1 own price: 245
+node 202 DOS run 1 joint price: 63
+*** stage CALC_LOADS
+dos 5 dropped [40, 73, 88, 98, 139, 152]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 5 own price: 63
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: 242
+node 202 DOS run 5 joint price: 65
+node 201 DOS run 5 own price: 26
+node 201 DOS run 5 joint price: 61
+*** stage CALC_LOADS
+dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142, 152, 169, 175, 197]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 10 own price: 60
 *** stage REPORT_MID
 *** stage REPORT_END
-node 202 DOS run 0 own price: 246
-node 202 DOS run 0 joint price: -1
-node 202 DOS run 1 own price: 245
-node 202 DOS run 1 joint price: 63
-node 202 DOS run 5 own price: 242
-node 202 DOS run 5 joint price: 65
-node 202 DOS run 10 own price: 266
-node 202 DOS run 10 joint price: 62
-node 201 DOS run 0 own price: 22
-node 201 DOS run 0 joint price: -1
-node 201 DOS run 1 own price: 23
-node 201 DOS run 1 joint price: 55
-node 201 DOS run 5 own price: 26
-node 201 DOS run 5 joint price: 61
 node 201 DOS run 10 own price: 22
 node 201 DOS run 10 joint price: 58
+node 202 DOS run 10 own price: 266
+node 202 DOS run 10 joint price: 62
 *** stage CALC_LOADS
 *** population 7
 dos 0 dropped []
-dos 1 dropped [150]
-dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
-dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 54
-node 203 DOS run 1 own price: 53
-node 203 DOS run 5 own price: 50
-node 203 DOS run 10 own price: 54
 *** stage REPORT_MID
 *** stage REPORT_END
 node 202 DOS run 0 own price: 187
 node 202 DOS run 0 joint price: 57
-node 202 DOS run 1 own price: 181
-node 202 DOS run 1 joint price: 55
-node 202 DOS run 5 own price: 172
-node 202 DOS run 5 joint price: 52
-node 202 DOS run 10 own price: 194
-node 202 DOS run 10 joint price: 56
 node 201 DOS run 0 own price: 25
 node 201 DOS run 0 joint price: 52
+*** stage CALC_LOADS
+dos 1 dropped [150]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 53
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 1 own price: 25
 node 201 DOS run 1 joint price: 51
+node 202 DOS run 1 own price: 181
+node 202 DOS run 1 joint price: 55
+*** stage CALC_LOADS
+dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 50
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 5 own price: 25
 node 201 DOS run 5 joint price: 48
+node 202 DOS run 5 own price: 172
+node 202 DOS run 5 joint price: 52
+*** stage CALC_LOADS
+dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 54
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 10 own price: 23
 node 201 DOS run 10 joint price: 52
+node 202 DOS run 10 own price: 194
+node 202 DOS run 10 joint price: 56
 *** stage CALC_LOADS
 *** population 8
 dos 0 dropped []
-dos 1 dropped [49, 53, 92, 153]
-dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
-dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 153, 164, 172, 175, 179, 184]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 51
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 0 own price: 235
+node 202 DOS run 0 joint price: 65
+node 201 DOS run 0 own price: 26
+node 201 DOS run 0 joint price: 49
+*** stage CALC_LOADS
+dos 1 dropped [49, 53, 92, 153]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 1 own price: 53
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 1 own price: 26
+node 201 DOS run 1 joint price: 51
+node 202 DOS run 1 own price: 232
+node 202 DOS run 1 joint price: 64
+*** stage CALC_LOADS
+dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 5 own price: 45
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: 220
+node 202 DOS run 5 joint price: 61
+node 201 DOS run 5 own price: 23
+node 201 DOS run 5 joint price: 43
+*** stage CALC_LOADS
+dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 153, 164, 172, 175, 179, 184]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
 node 203 DOS run 10 own price: 43
 *** stage REPORT_MID
 *** stage REPORT_END
-node 201 DOS run 0 own price: 26
-node 201 DOS run 0 joint price: 49
-node 201 DOS run 1 own price: 26
-node 201 DOS run 1 joint price: 51
-node 201 DOS run 5 own price: 23
-node 201 DOS run 5 joint price: 43
 node 201 DOS run 10 own price: 21
 node 201 DOS run 10 joint price: 41
-node 202 DOS run 0 own price: 235
-node 202 DOS run 0 joint price: 65
-node 202 DOS run 1 own price: 232
-node 202 DOS run 1 joint price: 64
-node 202 DOS run 5 own price: 220
-node 202 DOS run 5 joint price: 61
 node 202 DOS run 10 own price: 207
 node 202 DOS run 10 joint price: 45
 *** stage CALC_LOADS
 *** population 9
 dos 0 dropped []
-dos 1 dropped [92, 94, 124, 159, 192]
-dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
-dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 54
-node 203 DOS run 1 own price: 63
-node 203 DOS run 5 own price: 56
-node 203 DOS run 10 own price: 58
 *** stage REPORT_MID
 *** stage REPORT_END
 node 202 DOS run 0 own price: 224
 node 202 DOS run 0 joint price: 65
-node 202 DOS run 1 own price: 275
-node 202 DOS run 1 joint price: 67
-node 202 DOS run 5 own price: 269
-node 202 DOS run 5 joint price: 64
-node 202 DOS run 10 own price: 247
-node 202 DOS run 10 joint price: 60
 node 201 DOS run 0 own price: 24
 node 201 DOS run 0 joint price: 52
+*** stage CALC_LOADS
+dos 1 dropped [92, 94, 124, 159, 192]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 63
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 1 own price: 275
+node 202 DOS run 1 joint price: 67
 node 201 DOS run 1 own price: 27
 node 201 DOS run 1 joint price: 61
+*** stage CALC_LOADS
+dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 56
+*** stage REPORT_MID
+*** stage REPORT_END
+node 202 DOS run 5 own price: 269
+node 202 DOS run 5 joint price: 64
 node 201 DOS run 5 own price: 23
 node 201 DOS run 5 joint price: 54
+*** stage CALC_LOADS
+dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 58
+*** stage REPORT_MID
+*** stage REPORT_END
 node 201 DOS run 10 own price: 24
 node 201 DOS run 10 joint price: 56
+node 202 DOS run 10 own price: 247
+node 202 DOS run 10 joint price: 60
 *** stage CALC_LOADS
 *** population 10
 dos 0 dropped []
-dos 1 dropped [75, 124]
-dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
-dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
 *** stage SEND_END
 *** stage AGG_END
 *** stage AGG_MID
 node 203 DOS run 0 own price: 53
-node 203 DOS run 1 own price: 58
-node 203 DOS run 5 own price: 58
-node 203 DOS run 10 own price: 63
 *** stage REPORT_MID
 *** stage REPORT_END
 node 201 DOS run 0 own price: 24
 node 201 DOS run 0 joint price: 51
-node 201 DOS run 1 own price: 25
-node 201 DOS run 1 joint price: 56
-node 201 DOS run 5 own price: 25
-node 201 DOS run 5 joint price: 56
-node 201 DOS run 10 own price: 25
-node 201 DOS run 10 joint price: 61
 node 202 DOS run 0 own price: 192
 node 202 DOS run 0 joint price: 63
+*** stage CALC_LOADS
+dos 1 dropped [75, 124]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 1 own price: 58
+*** stage REPORT_MID
+*** stage REPORT_END
 node 202 DOS run 1 own price: 189
 node 202 DOS run 1 joint price: 63
+node 201 DOS run 1 own price: 25
+node 201 DOS run 1 joint price: 56
+*** stage CALC_LOADS
+dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 5 own price: 58
+*** stage REPORT_MID
+*** stage REPORT_END
 node 202 DOS run 5 own price: 217
 node 202 DOS run 5 joint price: 64
+node 201 DOS run 5 own price: 25
+node 201 DOS run 5 joint price: 56
+*** stage CALC_LOADS
+dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
+*** stage SEND_END
+*** stage AGG_END
+*** stage AGG_MID
+node 203 DOS run 10 own price: 63
+*** stage REPORT_MID
+*** stage REPORT_END
+node 201 DOS run 10 own price: 25
+node 201 DOS run 10 joint price: 61
 node 202 DOS run 10 own price: 222
 node 202 DOS run 10 joint price: 67
 *** stage CALC_LOADS

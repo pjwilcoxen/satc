@@ -14,7 +14,8 @@ public class Mid extends Market {
     int cap; 
    
     //indicates the upper and lower level around the balance prices considering transaction cost
-    int[][] p_c;
+    int pc0;
+    int pc1;
 
     /**
      * Midlevel market object
@@ -26,7 +27,6 @@ public class Mid extends Market {
      */
     public Mid(int up_id, int own_id) {
         super(up_id,own_id);
-        p_c  = new int[Env.nDOS][2];
         cost = Env.transCost ;
         cap  = Env.transCap;
     }
@@ -43,19 +43,15 @@ public class Mid extends Market {
         switch (Env.stageNow) {
             
             case AGG_END:
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
-                    getDemands(dos_id);
-                    aggDemands(dos_id);
-                    tmp = adjustTrans(dos_id);
-                    reportDemand(tmp,dos_id);
-                }
+                getDemands();
+                aggDemands();
+                tmp = adjustTrans();
+                reportDemand(tmp);
                 break;
 
             case REPORT_END:
-                for (int dos_id=0; dos_id<Env.nDOS ; dos_id++) {
-                    getPrices(dos_id);
-                    do_report_end(dos_id);
-                }
+                getPrice();
+                do_report_end();
                 break;
                 
             default:
@@ -77,15 +73,16 @@ public class Mid extends Market {
     @Override
     public void runInit() {
         super.runInit();
-        p_c = new int[Env.nDOS][2];
+        pc0 = 0;
+        pc1 = 0;
     }
 
     /**
      * Adjust aggregate demand for transmission parameters
      */
-    private Demand adjustTrans(int dos_id) {
+    private Demand adjustTrans() {
         Demand newD;
-        newD = aggD[dos_id].addCost(cost, dos_id, this);
+        newD = aggD.addCost(cost, this);
         newD = newD.addCapacity(cap);
         return newD ;
     }
@@ -93,65 +90,50 @@ public class Mid extends Market {
     /**
      * Report the balance prices from the middle nodes to leaf nodes
      */
-    private void do_report_end(int dos_id) {
+    private void do_report_end() {
 
-        int bl;
+        int this_bl;
         int report;
         String dos;
 
-        dos = Env.dos_runs[dos_id];
+        dos = Env.curDOS;
 
         // next block is reporting only before accounting for
         // cost and capacity. should it be retained somewhere?
         //
         // find the balance price for each case of dropped nodes
 
-        bl = aggD[dos_id].getBl();
-        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+bl);
+        this_bl = aggD.getBl();
+        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
         
         //set the report value
 
         //report -1 in the case of no balance point
         //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
 
-        if (getBl(dos_id) <= -1) 
+        if (bl <= -1) 
             report = -1;
         else 
-            report = findReportPrice(dos_id);
+            report = findReportPrice();
         
         Env.log.println("node "+own_id+" DOS run "+dos+" joint price: "+report);
 
         //write the balance prices on csv file for each case and report to children 
 
         Env.printResult(this,dos,report,0);
-        reportPrice(report,dos_id);
+        reportPrice(report);
     }
 
     /**
      * Find the actual price for the end users considering transaction cost and capacity limit
      */
-    private int findReportPrice(int dos_id) {
-        Demand dem;
-        int pr;
-        int pc0;
-        int pc1;
-
-        pr  = getBl(dos_id);
-        pc0 = getP_c(dos_id)[0];
-        pc1 = getP_c(dos_id)[1];
-        dem = aggD[dos_id];
-
-        return dem.getP(pr,pc0,pc1,cost,cap);
+    private int findReportPrice() {
+        return aggD.getP(bl,pc0,pc1,cost,cap);
     }
 
-    private int[] getP_c(int dos_id) {
-        return p_c[dos_id];
+    public void setP_c(int p0, int p1) {
+        pc0 = p0;
+        pc1 = p1;
     }
-
-    public void setP_c(int p0, int p1, int dos_id) {
-        p_c[dos_id][0] = p0;
-        p_c[dos_id][1] = p1;
-    }
-
 
 }

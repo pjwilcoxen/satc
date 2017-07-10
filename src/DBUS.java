@@ -49,7 +49,7 @@ public class DBUS {
      */
     public void send(Msg msg) {
         String status = "blocked";
-        if( ! Env.isBlocked(msg.dos_id,msg.from) ) {
+        if( ! Env.isBlocked(msg.from) ) {
             Env.getAgent(msg.to).deliver(msg);
             status = "delivered";
         }

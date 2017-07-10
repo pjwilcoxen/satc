@@ -102,7 +102,7 @@ public class Env extends SimState {
     /**
      * Lists of agents to block under DOS runs
      */
-    public static final HashMap<String, ArrayList<Integer>> blockList = new HashMap<>();
+    public static final ArrayList<Integer> blockList = new ArrayList<>();
     
     /**
      * Default list of DOS runs
@@ -113,7 +113,12 @@ public class Env extends SimState {
      * Number of DOS runs to carry out
      */
     public static int nDOS = dos_runs.length;
-    
+   
+    /** 
+     * Current DOS run
+     */
+    public static String curDOS;
+
     //
     // Other variables
     //
@@ -153,8 +158,6 @@ public class Env extends SimState {
      */
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
-        for(String dos: dos_runs)
-           blockList.put(dos, new ArrayList<>());
         try {
             readDraws();
         } catch (IOException e) {
@@ -222,8 +225,8 @@ public class Env extends SimState {
      * @param run DOS run where the block should be set
      * @param agent Agent that should be blocked
      */
-    public static void setBlock(String run, Agent agent) {
-       blockList.get(run).add(agent.own_id);
+    public static void setBlock(int own_id) {
+       blockList.add(own_id);
     }   
 
     /**
@@ -234,19 +237,17 @@ public class Env extends SimState {
      * @return True if the agent is blocked in the indicated DOS run
      */
     public static boolean isBlocked(String run, Agent agent) {
-       return blockList.get(run).contains(agent.own_id);
+       return blockList.contains(agent.own_id);
     }
 
     /**
      * Check whether an agent is on a block list
      * 
-     * @param dos_id Subscript of the DOS run
      * @param from ID of apparent sender
      * @return True if the agent is blocked in the indicated DOS run
      */
-    public static boolean isBlocked(int dos_id, int from) {
-       String run = Env.dos_runs[dos_id];
-       return blockList.get(run).contains(from);
+    public static boolean isBlocked(int from) {
+       return blockList.contains(from);
     }
 
     /**
@@ -336,28 +337,31 @@ public class Env extends SimState {
             System.out.println("Starting population "+pop);
             log.println("*** population "+pop);
 
-            //  initialize for this population
+            // initialize for this population
 
             for(Agent a: listAgent)
                 a.popInit();
 
-            // initialize for DOS runs; kids figure out if they're blocked
+            // run DOS scenarios
 
-            for(String dos: dos_runs) 
-                blockList.get(dos).clear();
+            for(String dos: dos_runs) {
 
-            for(Agent kid: listAgent)
-                kid.runInit();
+                // initialize for DOS runs; agents figure out if they're blocked
 
-            for(String dos: dos_runs) 
-                log.println("dos "+dos+" dropped "+blockList.get(dos));
+                curDOS = dos;
+                blockList.clear();
+                for(Agent a: listAgent)
+                    a.runInit();
 
-            // now step through the run
+                log.println("dos "+curDOS+" dropped "+blockList);
 
-            for( Stage s : Stage.values() ) {
-                log.println("*** stage "+s);
-                stageNow = s;
-                enviro.schedule.step(enviro);
+                // now step through the run
+
+                for( Stage s : Stage.values() ) {
+                    log.println("*** stage "+s);
+                    stageNow = s;
+                    enviro.schedule.step(enviro);
+                }
             }
         }
         

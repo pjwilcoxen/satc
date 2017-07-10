@@ -5,12 +5,13 @@ import java.util.ArrayList;
  */
 public abstract class Market extends Agent {
 
-    // set of queues of incoming bids from child nodes; there will be 
-    // one queue for each DOS run
-    ArrayList<ArrayList<Demand>> queueD;
+    // queue for incoming demands
+
+    ArrayList<Demand> queueD = new ArrayList<>();
      
-    // array of aggregated demands; one for each DOS run
-    Demand[] aggD;
+    // aggregate demand
+
+    Demand aggD;
 
     /**
      * General market object
@@ -20,11 +21,6 @@ public abstract class Market extends Agent {
      */
     public Market(int up_id, int own_id) {
         super(up_id,own_id) ;
-
-        aggD = new Demand[Env.nDOS];
-        queueD = new ArrayList<>();
-        for(int i=0 ; i<Env.nDOS ; i++)
-            queueD.add(new ArrayList<>());
     }
     
     /** 
@@ -32,45 +28,44 @@ public abstract class Market extends Agent {
      */
     @Override
     public void runInit() {
-        aggD = new Demand[Env.nDOS];
-        for(int i=0 ; i<Env.nDOS ; i++)
-            queueD.get(i).clear();
+        super.runInit();
+        aggD = null;
+        queueD.clear();
     }
 
     /**
      * Aggregate demands from child nodes
      */
-    void aggDemands(int dos_id) {
+    void aggDemands() {
         Demand thisD = null;
 
-        for(Demand dem: queueD.get(dos_id) ) 
+        for(Demand dem: queueD ) 
             if( thisD == null )
                 thisD = dem;
             else
                 thisD = thisD.aggregateDemand(dem);
 
-        aggD[dos_id] = thisD;
+        aggD = thisD;
 
-        queueD.get(dos_id).clear();
-        Env.printLoad(this,Env.dos_runs[dos_id],thisD);
+        queueD.clear();
+        Env.printLoad(this,Env.curDOS,thisD);
     }
 
     /**
      * Extract and save demands from list of messages
      */
-    void getDemands(int dos_id) {
-        for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
-            queueD.get(dos_id).add(msg.getDemand());
+    void getDemands() {
+        for(Msg msg: getMsgs(Msg.Types.DEMAND)) 
+            queueD.add(msg.getDemand());
     }
 
     /**
      * Broadcast a price to all children
      */
-    void reportPrice(int price,int dos_id) {
+    void reportPrice(int price) {
         for (Agent child: children) {
             Msg msg = new Msg(this,child.own_id);
             msg.setPrice(price);
-            msg.dos_id = dos_id;
             child.dbus.send(msg);
             }
     }
