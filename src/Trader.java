@@ -90,10 +90,10 @@ public class Trader extends Agent {
                 break;
 
             case CALC_LOADS:
-                for(Msg msg: getMsgs(Msg.Types.PRICE))
-                    setBl(msg.getPrice(),msg.dos_id);
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
+                    getPrices(dos_id);
                     do_calc_load(dos_id);
+                }
                 break;
                 
             default:

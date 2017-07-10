@@ -38,20 +38,27 @@ public class Mid extends Market {
      */
     @Override
     public void step(SimState state) {
+        Demand tmp;
+
         switch (Env.stageNow) {
+            
             case AGG_END:
                 Env.log.println("node "+own_id);
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) 
-                    do_agg_end(dos_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
+                    getDemands(dos_id);
+                    aggDemands(dos_id);
+                    tmp = adjustTrans(dos_id);
+                    reportDemand(tmp,dos_id);
+                }
                 clearQueuesD();
                 break;
 
             case REPORT_END:
                 Env.log.println("node "+own_id);
-                for(Msg msg: getMsgs(Msg.Types.PRICE)) 
-                    setBl(msg.getPrice(),msg.dos_id);
-                for (int dos_id=0; dos_id<Env.nDOS ; dos_id++) 
+                for (int dos_id=0; dos_id<Env.nDOS ; dos_id++) {
+                    getPrices(dos_id);
                     do_report_end(dos_id);
+                }
                 break;
                 
             default:
@@ -77,25 +84,13 @@ public class Mid extends Market {
     }
 
     /**
-     * Aggregate net demands of leaf nodes
+     * Adjust aggregate demand for transmission parameters
      */
-    private void do_agg_end(int dos_id) {
-
-        Demand this_agg;
-        Demand tmp;
-
-        // do the aggregation and save the result
-
-        aggDemands(dos_id) ;
-
-        // adjust for transmission cost and constraint
-
-        tmp = aggD[dos_id].addCost(cost, dos_id, this);
-        tmp = tmp.addCapacity(cap);
-
-        // send to parent
-
-        reportDemand(tmp,dos_id);
+    private Demand adjustTrans(int dos_id) {
+        Demand newD;
+        newD = aggD[dos_id].addCost(cost, dos_id, this);
+        newD = newD.addCapacity(cap);
+        return newD ;
     }
 
     /**

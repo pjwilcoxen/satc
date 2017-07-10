@@ -34,8 +34,11 @@ public class Root extends Market {
         switch (Env.stageNow) {
             case AGG_MID:
                 Env.log.println("node "+own_id);
-                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
-                    do_agg_mid(dos_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
+                    getDemands(dos_id);
+                    aggDemands(dos_id);
+                    findEquilibrium(dos_id);
+                }
                 clearQueuesD();
                 break;
 
@@ -58,13 +61,9 @@ public class Root extends Market {
     /**
      * Aggregate net demands of middle nodes
      */
-    private void do_agg_mid(int dos_id) {
+    private void findEquilibrium(int dos_id) {
         int this_bl;
         String dos;
-
-        // do the aggregation and save the result
-
-        aggDemands(dos_id) ;
 
         // find the equilibrium price
         

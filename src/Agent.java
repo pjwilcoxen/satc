@@ -145,6 +145,14 @@ public abstract class Agent implements Steppable {
     }
 
     /**
+     * Extract and save prices from list of messages
+     */
+    void getPrices(int dos_id) {
+        for(Msg msg: getMsgs(Msg.Types.PRICE,dos_id)) 
+            setBl(msg.getPrice(),msg.dos_id);
+    }
+
+    /**
      * Send a demand to parent node
      * 
      * @param dem Demand curve

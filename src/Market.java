@@ -43,9 +43,6 @@ public abstract class Market extends Agent {
     void aggDemands(int dos_id) {
         Demand thisD = null;
 
-        for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
-            appendQueueD(msg.getDemand(),msg.dos_id);
-
         for(Demand dem: queueD.get(dos_id) ) 
             if( thisD == null )
                 thisD = dem;
@@ -54,6 +51,14 @@ public abstract class Market extends Agent {
 
         aggD[dos_id] = thisD;
         Env.printLoad(this,Env.dos_runs[dos_id],thisD);
+    }
+
+    /**
+     * Extract and save demands from list of messages
+     */
+    void getDemands(int dos_id) {
+        for(Msg msg: getMsgs(Msg.Types.DEMAND,dos_id)) 
+            appendQueueD(msg.getDemand(),msg.dos_id);
     }
 
     /**
