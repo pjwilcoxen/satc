@@ -33,11 +33,16 @@ public class Root extends Market {
     public void step(SimState state) {
         switch (Env.stageNow) {
             case AGG_MID:
-                do_agg_mid();
+                Env.log.println("node "+own_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++)
+                    do_agg_mid(dos_id);
+                clearQueuesD();
                 break;
 
             case REPORT_MID:
-                do_report_mid();
+                Env.log.println("node "+own_id);
+                for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++ )
+                    reportPrice(getBl(dos_id),dos_id);
                 break;
                 
             default:
@@ -53,51 +58,30 @@ public class Root extends Market {
     /**
      * Aggregate net demands of middle nodes
      */
-    private void do_agg_mid() {
-
-        int j;
+    private void do_agg_mid(int dos_id) {
         int this_bl;
-
-        Env.log.println("node "+own_id);
-
-        for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
-            aggD[dos_id] = sumDemands(dos_id) ;
-            Env.printLoad(this,Env.dos_runs[dos_id],aggD[dos_id]);
-        }
-
-        //find the balance price for each case of dropped nodes
+        String dos;
         
-        for(j=0; j < Env.nDOS ; j++) {
+        dos = Env.dos_runs[dos_id];
 
-            this_bl = aggD[j].getBl();
-            if( this_bl == -1 )
-                Env.log.println("failed at DOS run: " + Env.dos_runs[j]);
+        aggD[dos_id] = sumDemands(dos_id) ;
+        Env.printLoad(this,Env.dos_runs[dos_id],aggD[dos_id]);
 
-            //set the balance price as the class variable
-            setBl(this_bl, j);
+        // find the equilibrium price
+        
+        this_bl = aggD[dos_id].getBl();
+
+        if( this_bl == -1 )
+            Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+dos);
+
+        // make a note of this price
+         
+        bl[dos_id] = this_bl;
             
-            // write the balance prices to the csv file
+        // write the balance prices to the csv file
+        // and log it as well
 
-            String dos = Env.dos_runs[j];
-            Env.printResult(this,dos,this_bl,0);
-
-            // write a log message
-            Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
-        }
-
-        clearQueuesD();
-
-        //increment agent's view of time
-        myTime++;
+        Env.printResult(this,dos,this_bl,0);
+        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
     }
-
-    /**
-     * Report the balance price from the root node to middle nodes
-     */
-    private void do_report_mid() {
-        Env.log.println("node "+own_id);
-        for(int i=0 ; i<Env.nDOS ; i++ )
-            reportPrice(getBl(i),i);
-    }
-
 }

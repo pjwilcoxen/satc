@@ -17,9 +17,6 @@ public abstract class Agent implements Steppable {
      */
     private static final int RCOUNT = 10;
 
-    //the agent's view of the time
-    int myTime = 0;
-
     //indicates the type of node (end user = 3, middle node = 2, root node = 1)
     int type;
     

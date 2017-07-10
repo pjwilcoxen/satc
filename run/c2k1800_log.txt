@@ -55,10 +55,10 @@ node 201
 *** stage AGG_MID
 node 203
 node 203 DOS run 0 own price: 40
-failed at DOS run: 1
+No equilibrium at root node 203 for DOS run: 1
 node 203 DOS run 1 own price: -1
 node 203 DOS run 5 own price: 41
-failed at DOS run: 10
+No equilibrium at root node 203 for DOS run: 10
 node 203 DOS run 10 own price: -1
 *** stage REPORT_MID
 node 203
@@ -204,7 +204,7 @@ node 202
 node 201
 *** stage AGG_MID
 node 203
-failed at DOS run: 0
+No equilibrium at root node 203 for DOS run: 0
 node 203 DOS run 0 own price: -1
 node 203 DOS run 1 own price: 47
 node 203 DOS run 5 own price: 60
@@ -281,7 +281,7 @@ node 201
 node 203
 node 203 DOS run 0 own price: 45
 node 203 DOS run 1 own price: 45
-failed at DOS run: 5
+No equilibrium at root node 203 for DOS run: 5
 node 203 DOS run 5 own price: -1
 node 203 DOS run 10 own price: 41
 *** stage REPORT_MID
@@ -317,7 +317,7 @@ node 201
 node 202
 *** stage AGG_MID
 node 203
-failed at DOS run: 0
+No equilibrium at root node 203 for DOS run: 0
 node 203 DOS run 0 own price: -1
 node 203 DOS run 1 own price: 54
 node 203 DOS run 5 own price: 47
