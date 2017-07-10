@@ -26,11 +26,54 @@ public class Trader extends Agent {
     // demand for this agent
     Demand demand;
 
+    static final int IDRAW  = 1;
+    static final int ISTEP  = 2;
+    static final int IPRICE = 3;
+
+    double rDraw  ;
+    double rStep  ;
+    double rPrice ;
+
+    /**
+     * Trader agent
+     * 
+     * @param up_id   ID of parent node
+     * @param own_id  Own ID
+     * @param sd_type Supply or demand type
+     */
     public Trader(int up_id,int own_id, String sd_type) {
         super(up_id,own_id);
         this.sd_type = sd_type;
-        load  = 0;
-        elast = 0;
+    }
+
+    /** 
+     * Initialize for a new population
+     */
+    @Override 
+    public void popInit() {
+        super.popInit();
+        load      = 0;
+        elast     = 0;
+        steps     = 0;
+        demand    = null;
+        rDraw     = runiform(IDRAW);
+        rStep     = runiform(ISTEP);
+        rPrice    = runiform(IPRICE);
+        drawLoad();
+        Env.printLoad(this,"base",demand);
+    }
+
+    /** 
+     * Reset at the beginning of a DOS run
+     */
+    @Override
+    public void runInit() {
+        double cutoff;
+        for(String dos: Env.dos_runs) {
+            cutoff = Double.parseDouble(dos);
+            if( rBlock < cutoff ) 
+                Env.setBlock(dos,this);
+        }
     }
 
     /**
@@ -41,9 +84,7 @@ public class Trader extends Agent {
     @Override
     public void step(SimState state) {
         switch (Env.stageNow) {
-            case INIT_LOADS:
-                drawLoad();
-                Env.printLoad(this,"base",demand);
+            case SEND_END:
                 do_send_demands();
                 break;
 
@@ -70,7 +111,7 @@ public class Trader extends Agent {
         // max was originally hard-coded and is left that 
         // way for compatibility
 
-        rand = (int)(Env.runiform() * max);
+        rand = (int)(rDraw * max);
         
         if( sd_type.equals("D") )
            draw = Env.drawListD.get(rand);
@@ -81,13 +122,13 @@ public class Trader extends Agent {
         elast = draw.elast;
 
         //number of steps to create curve
-        steps = (int) (Env.runiform() * maxstep + 2);
+        steps = (int) (rStep * maxstep + 2);
 
         //call draw function based on the type of end user
         if (sd_type.equals("D")) 
-            demand = Demand.makeDemand(load,elast,steps);
+            demand = Demand.makeDemand(this);
         else 
-            demand = Demand.makeSupply(load,elast,steps);
+            demand = Demand.makeSupply(this);
     }
      
     /**

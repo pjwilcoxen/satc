@@ -10,7 +10,12 @@ public abstract class Agent implements Steppable {
     /**
      * Version of the Agent class
      */
-    public static final String VER = "2.0";
+    public static final String VER = "3.0";
+
+    /**
+     * Number of random values to generate per population
+     */
+    private static final int RCOUNT = 10;
 
     //the agent's view of the time
     int myTime = 0;
@@ -27,7 +32,18 @@ public abstract class Agent implements Steppable {
     //indicates the balance price for each case of dropped nodes    
     int[] bl;
     
-    double blockDraw;
+    /**
+     * Pools for holding random numbers for this agent  
+     *
+     * Helps preserve testing repeatability when code using
+     * the numbers is reordered.
+     */
+    ArrayList<Double[]> rPool = new ArrayList<>();
+
+    // random variable for DOS runs
+
+    static final int IDOS = 0 ;
+    double rBlock;
 
     //data bus this agent uses to communicate with its parent
     DBUS dbus;
@@ -41,25 +57,48 @@ public abstract class Agent implements Steppable {
      */
     final ArrayList<Agent> children = new ArrayList<>();
 
-    public int getBl(int drop) {
-        return bl[drop];
+    /**
+     * Get the agent's idea of the equilibrium price
+     * 
+     * @param dos_id DOS run
+     * @return Price
+     */
+    public int getBl(int dos_id) {
+        return bl[dos_id];
     }
 
-    public void setBl(int bl, int drop) {
-        this.bl[drop] = bl;
+    /**
+     * Set the agent's idea of the equilibrium price
+     * 
+     * @param bl Price
+     * @param dos_id DOS run
+     */
+    public void setBl(int bl, int dos_id) {
+        this.bl[dos_id] = bl;
     }
-     
+    
+    /**
+     * Set the DBUS used by this agent to talk to its parent
+     * 
+     * @param dbus DBUS object
+     */
     public void setDBUS(DBUS dbus) {
         this.dbus = dbus;
     }
 
-    public int getType() {
-        return type;
-    }
+    /**
+     * Initialize this agent for a new population
+     */
+    public void popInit() {
+        rBlock = runiform(IDOS)*100.0;
+    }    
 
-    public int getPar_id() {
-        return par_id;
-    }
+    /**
+     * Initialize this agent for a new DOS run
+     *
+     * Override as needed in subclasses.
+     */
+    public abstract void runInit();
 
     /**
      * Add a message to this agent's input queue
@@ -121,9 +160,22 @@ public abstract class Agent implements Steppable {
         assert dbus != null;
         dbus.send(msg);
     }
- 
+
+    double runiform(int which) {
+        Double[] pop_set = rPool.get(Env.pop-1);
+        return pop_set[which];
+    }
+
+    /**
+     * General agent instance
+     * 
+     * @param up_id ID of agent's parent node
+     * @param own_id Own ID
+     */
     public Agent(int up_id, int own_id) {
         super();
+
+        Double[] rArray;
 
         this.type    = 0;
         this.par_id  = up_id;
@@ -131,7 +183,17 @@ public abstract class Agent implements Steppable {
         
         bl = new int[Env.nDOS];
 
-    }
+        // build a pool of values to be used for later
+        // randomization. do it once when the agent is 
+        // instantiated to help with repeatability when
+        // code using the numbers is reordered.
 
+        for(int i=0 ; i<Env.numPop ; i++) {
+            rArray = new Double[RCOUNT];
+            for(int j=0 ; j<RCOUNT ; j++)
+                rArray[j] = Env.runiform();
+            rPool.add(rArray);
+        }
+    }
 }
 

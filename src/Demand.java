@@ -1,9 +1,19 @@
 import java.util.ArrayList;
 import static java.lang.Math.pow;
 
+/**
+ * Class for holding and manipulating net demand curves
+ */
 public class Demand {
-   
 
+    /**
+     * Maximum steps in a demand curve
+     */
+    public static final int MAXBIDS = 400;
+   
+    /**
+     * One step of a demand or supply curve
+     */
     static class Bidstep {
         int p;
         int q_min;
@@ -15,10 +25,14 @@ public class Demand {
             this.q_max = q_max;
         }
     }
-
-    public static final int MAXBIDS = 400;
+    
+    // A complete curve is a list of steps
+    
     Bidstep[] bids;
 
+    /**
+     * Demand curve
+     */
     public Demand() {
         bids = new Bidstep[MAXBIDS];
     }
@@ -26,8 +40,7 @@ public class Demand {
     /**
      * Build a list of strings representing the bid
      * 
-     * Returns a list of strings representing the bids.  Within each bid
-     * the strings will be p, q_min, q_max.
+     * Within each bid the strings will be p, q_min, q_max.
      * 
      * @return List of strings representing bids 
      */
@@ -43,6 +56,9 @@ public class Demand {
 
     /**
      * Calculate the net demand at a given price
+     * 
+     * @param price Price 
+     * @return Quantity
      */
     public int getQ(int price) {
         int i;
@@ -64,6 +80,13 @@ public class Demand {
      * Find the actual price for the end users 
      *
      * Includes transaction cost and capacity limit
+     * 
+     * @param pr Tentative price
+     * @param pc0 
+     * @param pc1
+     * @param cost Transmission cost
+     * @param cap Transmission capacity
+     * @return Actual price
      */
     public int getP(int pr, int pc0, int pc1, int cost, int cap) { 
         int report = 0;
@@ -130,6 +153,9 @@ public class Demand {
 
     /**
      * Add capacity constraint on the net demand
+     * 
+     * @param cap Transmission capacity
+     * @return New demand curve
      */
     public Demand addCapacity(int cap) {
         Demand newD;
@@ -171,6 +197,9 @@ public class Demand {
 
     /**
      * Aggregate two net demand curves
+     * 
+     * @param dem2 Demand curve to add to this one
+     * @return New demand curve
      */
     public Demand aggregateDemand(Demand dem2) {
         Demand aggD;
@@ -234,22 +263,28 @@ public class Demand {
     
     /**
      * Create demand curves based on initial load, elasticity, and number of steps
+     * 
+     * @param trader Trader whose demand we're building
+     * @return New demand curve
      */
-    public static Demand makeDemand(double load, double elast, int steps){
-        return do_make("D",load,elast,steps);
+    public static Demand makeDemand(Trader trader) {
+        return do_make("D",trader);
     }
     
     /**
      * Create supply curves with reverse quantities in comparison to demand curve
+     * 
+     * @param trader Trader whose supply we're building
+     * @return New demand
      */
-    public static Demand makeSupply(double load, double elast, int steps){
-        return do_make("S",load,elast,steps);
+    public static Demand makeSupply(Trader trader) {
+        return do_make("S",trader);
     }
   
     /**
      * Build a demand or supply curve 
      */
-    private static Demand do_make(String type, double load, double elast, int steps){
+    private static Demand do_make(String type, Trader trader) {
         Demand newD;
         Bidstep[] result;
 
@@ -258,10 +293,18 @@ public class Demand {
         boolean makeS;
         int sign;
 
+        // get information about the trader; make local copies
+        // for slightly greater clarity in calculations
+
+        double elast  = trader.elast;
+        double load   = trader.load;
+        int    steps  = trader.steps;
+        double rPrice = trader.rPrice;
+
         makeS = type.equals("S"); 
         sign  = makeS ? -1 : 1 ;       
         
-        int iniprice = 40 + (int) (Env.runiform() * 12 - 6);
+        int iniprice = 40 + (int) (rPrice * 12 - 6);
         
         int p0 = iniprice/steps;
         int p1 = iniprice*2/steps;
@@ -304,6 +347,8 @@ public class Demand {
 
     /** 
      * Find an equilibrium price for a net demand curve
+     * 
+     * @return The equilibrium price for this net demand curve
      */
     public int getBl() {
         int i;
@@ -327,8 +372,15 @@ public class Demand {
         return bl;
     }
 
-    //change the step prices considering transation cost
-    public Demand addCost(int c, int drop, Mid agent) {
+    /**
+     * Change the step prices to account for the transmission cost
+     * 
+     * @param c Transmission cost
+     * @param dos_id DOS run
+     * @param agent Midlevel market
+     * @return New demand curve
+     */
+    public Demand addCost(int c, int dos_id, Mid agent) {
         Demand newD;
         Bidstep[] tmp;
         int i;
@@ -352,9 +404,9 @@ public class Demand {
                 int mid = ((bids[i-1].p + bids[i].p)/2);
                 //avoid negative value for the lower step
                 if((mid-c) < 0)
-                    agent.setP_c(0,mid+c, drop);
+                    agent.setP_c(0,mid+c, dos_id);
                 else
-                    agent.setP_c(mid-c,mid+c, drop);
+                    agent.setP_c(mid-c,mid+c, dos_id);
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
                     tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
@@ -363,9 +415,9 @@ public class Demand {
             }else{
                 //set the two upper and lower limits around the balance price
                 if((bids[i-1].p-c) < 0)
-                    agent.setP_c(0,bids[i-1].p+c, drop);
+                    agent.setP_c(0,bids[i-1].p+c, dos_id);
                 else
-                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c, drop);
+                    agent.setP_c(bids[i-1].p-c,bids[i-1].p+c, dos_id);
 
                 //divide the middle step into two steps with +c/-c prices
                 

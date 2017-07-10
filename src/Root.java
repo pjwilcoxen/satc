@@ -5,10 +5,25 @@ import sim.engine.SimState;
  */
 public class Root extends Market {
 
+    static final int IDOS = 0;
+
+    /**
+     * Root node
+     * 
+     * @param own_id ID number of the node
+     */
     public Root(int own_id) {
         super(0,own_id);
     }
             
+    /** 
+     * Initialize for a new population
+     */
+    @Override
+    public void popInit() {
+        super.popInit();
+    }
+
     /**
      * Actions based on current simulation step
      *
@@ -51,11 +66,12 @@ public class Root extends Market {
         }
 
         //find the balance price for each case of dropped nodes
+        
         for(j=0; j < Env.nDOS ; j++) {
 
             this_bl = aggD[j].getBl();
             if( this_bl == -1 )
-                Env.log.println("failed at drop: " + j);
+                Env.log.println("failed at DOS run: " + Env.dos_runs[j]);
 
             //set the balance price as the class variable
             setBl(this_bl, j);
@@ -79,12 +95,9 @@ public class Root extends Market {
      * Report the balance price from the root node to middle nodes
      */
     private void do_report_mid() {
-        
         Env.log.println("node "+own_id);
-
-        for(int i=0 ; i<Env.nDOS ; i++ ) {
+        for(int i=0 ; i<Env.nDOS ; i++ )
             reportPrice(getBl(i),i);
-        }
     }
 
 }

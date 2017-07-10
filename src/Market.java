@@ -12,6 +12,12 @@ public abstract class Market extends Agent {
     // array of aggregated demands; one for each DOS run
     Demand[] aggD;
 
+    /**
+     * General market object
+     * 
+     * @param up_id Parent node's ID
+     * @param own_id Own ID
+     */
     public Market(int up_id, int own_id) {
         super(up_id,own_id) ;
 
@@ -21,6 +27,16 @@ public abstract class Market extends Agent {
             queueD.add(new ArrayList<>());
     }
     
+    /** 
+     * Reset at the beginning of a DOS run
+     */
+    @Override
+    public void runInit() {
+        aggD = new Demand[Env.nDOS];
+        for(int i=0 ; i<Env.nDOS ; i++)
+            queueD.get(i).clear();
+    }
+
     /**
      * Aggregate demands from child nodes
      */
@@ -51,8 +67,8 @@ public abstract class Market extends Agent {
             }
     }
 
-    void appendQueueD(Demand dem, int drop) {
-        queueD.get(drop).add(dem);
+    void appendQueueD(Demand dem, int dos_id) {
+        queueD.get(dos_id).add(dem);
     }
 
     //

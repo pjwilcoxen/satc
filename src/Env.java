@@ -17,7 +17,11 @@ import sim.engine.SimState;
 public class Env extends SimState {
 
     private static final String USAGE = "Usage: java -jar market.jar <runfile>";
-    public static final String VER  = "2.0";
+
+    /**
+     * Support -version option
+     */
+    public static final String VER  = "3.0";
 
     //
     // Information loaded from the run file
@@ -31,10 +35,26 @@ public class Env extends SimState {
     //
     
     private   static String fileConfig ;
-    protected static String fileDraws  ;
-    protected static int    transCost = 1 ;
-    protected static int    transCap  = 2500 ;
-    private   static int    numPop    = 10 ;
+    
+    /**
+     * File name for monte carlo draws
+     */
+    protected static String fileDraws ;
+    
+    /**
+     * Default transmission cost
+     */
+    protected static int transCost = 1 ;
+    
+    /**
+     * Default transmission capacity
+     */
+    protected static int transCap  = 2500 ;
+    
+    /** 
+     * Default number of populations
+     */
+    protected static int numPop    = 10 ;
 
     //
     // Handle random number generation centrally so we can
@@ -44,29 +64,56 @@ public class Env extends SimState {
     private static Random rgen;
     private static long rgen_seed = -1;
 
-    //
-    // Stages per simulation
-    //
-
+    /**
+     * Stages per simulation
+     */
     public static enum Stage {
-       INIT_DROPS, 
-       INIT_LOADS, 
+       /**
+        * Traders send demands up
+        * */
+       SEND_END,
+       /**
+        * Mid nodes aggregate and send demand up
+        */
        AGG_END, 
+       /**
+        * Root node aggregates and finds equilibrium
+        */
        AGG_MID, 
+       /**
+        * Root node report price to mid nodes
+        */
        REPORT_MID, 
+       /**
+        * Mid nodes report price to traders
+       */
        REPORT_END, 
+       /**
+        * Traders determine actual loads
+        */
        CALC_LOADS 
     };
+    
+    /**
+     * Current stage
+     */
     public static Stage stageNow;
 
     /**
      * Lists of agents to block under DOS runs
      */
     public static final HashMap<String, ArrayList<Integer>> blockList = new HashMap<>();
+    
+    /**
+     * Default list of DOS runs
+     */
     public static final String dos_runs[] = { "0", "1", "5", "10" };
+    
+    /**
+     * Number of DOS runs to carry out
+     */
     public static int nDOS = dos_runs.length;
-    public static String thisDOS = "0";
-
+    
     //
     // Other variables
     //
@@ -74,18 +121,36 @@ public class Env extends SimState {
     static PrintWriter out;
     static PrintWriter net;
     static PrintWriter msg;
+    
+    /**
+     * Printer for log file
+     */
     public static PrintWriter log;
+    
+    /**
+     * Printer for the output file
+     */
     public static CSVPrinter csvPrinter;
+    
+    /**
+     * Printer for net demands
+     */
     public static CSVPrinter loadPrinter;
     static int pop;
 
-    static final HashMap<Integer,Agent> listAgent = new HashMap<>();
+    /**
+     * Master list of agents
+     *
+     * Keep as an ArrayList to allow them to be initialized in 
+     * a known order.
+     */
+    static final ArrayList<Agent> listAgent = new ArrayList<>();
    
-    //
-    //  Env()
-    //     Constructor. argument list imposed by MASON
-    //
-    
+    /**
+     * Master simulation environment 
+     * 
+     * @param seed Seed for the random number generator
+     */
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
         for(String dos: dos_runs)
@@ -137,8 +202,9 @@ public class Env extends SimState {
      * @return Agent's instance
      */
     public static Agent getAgent(int own_id) {
-       if( listAgent.containsKey(own_id) )
-           return listAgent.get(own_id);
+        for(Agent a: listAgent)
+            if( a.own_id == own_id )
+                return a;
        throw new RuntimeException("No agent with id "+own_id);
     }
 
@@ -185,6 +251,8 @@ public class Env extends SimState {
 
     /**
      * Entry point for the simulation
+     * 
+     * @param args Command line arguments
      */
     public static void main(String[] args) {
         
@@ -193,6 +261,7 @@ public class Env extends SimState {
         String stem;
         int ext;
         Properties props;
+        double cutoff;
 
         if( args.length != 1 ) {
             System.out.println("Error: expected 1 argument but found "+args.length+".");
@@ -264,17 +333,32 @@ public class Env extends SimState {
         enviro.start();
 
         for( pop=1 ; pop<=numPop ; pop++ ) {
-           System.out.println("Starting population "+pop);
-           log.println("*** population "+pop);
+            System.out.println("Starting population "+pop);
+            log.println("*** population "+pop);
 
-           for(String dos: dos_runs)
-              blockList.get(dos).clear();
+            //  initialize for this population
 
-           for( Stage s : Stage.values() ) {
-              log.println("*** stage "+s);
-              stageNow = s;
-              enviro.schedule.step(enviro);
-           }
+            for(Agent a: listAgent)
+                a.popInit();
+
+            // initialize for DOS runs; kids figure out if they're blocked
+
+            for(String dos: dos_runs) 
+                blockList.get(dos).clear();
+
+            for(Agent kid: listAgent)
+                kid.runInit();
+
+            for(String dos: dos_runs) 
+                log.println("dos "+dos+" dropped "+blockList.get(dos));
+
+            // now step through the run
+
+            for( Stage s : Stage.values() ) {
+                log.println("*** stage "+s);
+                stageNow = s;
+                enviro.schedule.step(enviro);
+            }
         }
         
         enviro.finish();
@@ -337,13 +421,13 @@ public class Env extends SimState {
 
             cur_agent.setDBUS(dbus);
 
-            listAgent.put(cur_id,cur_agent);
+            listAgent.add(cur_agent);
             schedule.scheduleRepeating(cur_agent);
         }
                 
         // tell parents about their children now that all agents have been instantiated
 
-        for (Agent a : listAgent.values() ) 
+        for (Agent a : listAgent ) 
             if ( a.par_id != 0 )
                 Env.getAgent(a.par_id).children.add(a);
         
@@ -378,10 +462,15 @@ public class Env extends SimState {
 
     /**
      * Print out results
+     * 
+     * @param agent Agent 
+     * @param dos DOS run
+     * @param p Price
+     * @param q Quantity
      */
     public static void printResult(Agent agent, String dos, int p, int q) {
 
-        String header[] = {"pop","dos","id","draw","blocked","p","q"};
+        String header[] = {"pop","dos","id","rblock","blocked","p","q"};
         CSVFormat csvFormat ;
         String draw;
         int block;
@@ -392,7 +481,7 @@ public class Env extends SimState {
               csvPrinter = new CSVPrinter(out,csvFormat);
            }
            block = isBlocked(dos,agent) ? 1 : 0;
-           draw = String.format("%.1f",agent.blockDraw);
+           draw = String.format("%.1f",agent.rBlock);
            csvPrinter.printRecord( pop, dos, agent.own_id, draw, block, p, q );      
         }
         catch (IOException e) {
@@ -402,8 +491,12 @@ public class Env extends SimState {
 
     /**
      * Print out results
+     * 
+     * @param agent Agent
+     * @param casetag Tag indicating DOS case
+     * @param dem Demand curve
      */
-    public static void printLoad(Agent agent,String casetag,Demand dem) {
+    public static void printLoad(Agent agent,String casetag, Demand dem) {
         CSVFormat loadFormat ;
         ArrayList<String> header;
         ArrayList<String> values;

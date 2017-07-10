@@ -5,6 +5,8 @@ import sim.engine.SimState;
  */
 public class Mid extends Market {
 
+    static final int IDOS = 0;
+
     //local version of the global transmission cost
     int cost;
 
@@ -14,6 +16,14 @@ public class Mid extends Market {
     //indicates the upper and lower level around the balance prices considering transaction cost
     int[][] p_c;
 
+    /**
+     * Midlevel market object
+     * 
+     * All markets other than root nodes are midlevel markets.
+     * 
+     * @param up_id ID of parent node
+     * @param own_id Own ID
+     */
     public Mid(int up_id, int own_id) {
         super(up_id,own_id);
         p_c  = new int[Env.nDOS][2];
@@ -29,10 +39,6 @@ public class Mid extends Market {
     @Override
     public void step(SimState state) {
         switch (Env.stageNow) {
-            case INIT_DROPS: 
-                do_init_drops();
-                break;
-                
             case AGG_END:
                 do_agg_end();
                 break;
@@ -46,29 +52,21 @@ public class Mid extends Market {
         }
     }
 
-    //first cycle: populate the random vectors for dropping end users    
+    /** 
+     * Initialize for a new population
+     */
+    @Override 
+    public void popInit() {
+        super.popInit();
+    }
 
-    private void do_init_drops() {
-        
-        int i,n;
-        int rand;
-        int block_id;
-        double cutoff;
-        Agent block_kid;
-
-        Env.log.println("node "+own_id);
-        Env.log.println("initialize blocked nodes for DOS runs");
-
-        for(Agent kid: children)
-           kid.blockDraw = 100.0*Env.runiform();
-           
-        for(String dos: Env.dos_runs) {
-            cutoff = Double.parseDouble(dos);
-            for(Agent kid: children)
-                if( kid.blockDraw < cutoff ) 
-                    Env.setBlock(dos,kid);
-            Env.log.println("dos "+dos+" dropped "+Env.blockList.get(dos));
-        }
+    /** 
+     * Reset at the beginning of a DOS run
+     */
+    @Override
+    public void runInit() {
+        super.runInit();
+        p_c = new int[Env.nDOS][2];
     }
 
     /**
@@ -127,15 +125,15 @@ public class Mid extends Market {
         
         int[] report = new int[Env.nDOS];
         //set the report values for each case of dropped nodes
-        for (int drop = 0; drop < Env.nDOS ; drop++) {
+        for (int dos_id = 0; dos_id < Env.nDOS ; dos_id++) {
             //report -1 in the case of no balance point
-            if (getBl(drop) <= -1) {
-                report[drop] = -1;
+            if (getBl(dos_id) <= -1) {
+                report[dos_id] = -1;
             //call findReportPrice to adjust the repor price by considering the transaction cost and capacity constrains
             } else {
-                report[drop] = findReportPrice(drop);
+                report[dos_id] = findReportPrice(dos_id);
             }
-            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[drop]+" joint price: "+report[drop]);
+            Env.log.println("node "+own_id+" DOS run "+Env.dos_runs[dos_id]+" joint price: "+report[dos_id]);
         }
 
         //write the balance prices on csv file for each case and report to children 
@@ -149,27 +147,27 @@ public class Mid extends Market {
     /**
      * Find the actual price for the end users considering transaction cost and capacity limit
      */
-    private int findReportPrice(int drop) {
+    private int findReportPrice(int dos_id) {
         Demand dem;
         int pr;
         int pc0;
         int pc1;
 
-        pr  = getBl(drop);
-        pc0 = getP_c(drop)[0];
-        pc1 = getP_c(drop)[1];
-        dem = aggD[drop];
+        pr  = getBl(dos_id);
+        pc0 = getP_c(dos_id)[0];
+        pc1 = getP_c(dos_id)[1];
+        dem = aggD[dos_id];
 
         return dem.getP(pr,pc0,pc1,cost,cap);
     }
 
-    private int[] getP_c(int drop) {
-        return p_c[drop];
+    private int[] getP_c(int dos_id) {
+        return p_c[dos_id];
     }
 
-    public void setP_c(int p0, int p1, int drop) {
-        p_c[drop][0] = p0;
-        p_c[drop][1] = p1;
+    public void setP_c(int p0, int p1, int dos_id) {
+        p_c[dos_id][0] = p0;
+        p_c[dos_id][1] = p1;
     }
 
 

@@ -7,7 +7,11 @@ public class DBUS {
 
     private static final HashMap<String, DBUS> busList = new HashMap<>();
     
-    public static final String logHeader = "bus,"+Msg.logHeader+",status";
+    /**
+     * Header for log files
+     */
+    public static final String LOGHEADER = "bus,"+Msg.LOGHEADER+",status";
+    
     private static boolean initLog = true;
 
     String name;
@@ -33,7 +37,7 @@ public class DBUS {
         this.name = name; 
         busList.put(name,this);
         if( initLog ) {
-            Env.msg.println(logHeader);
+            Env.msg.println(LOGHEADER);
             initLog = false;
         }
     }
