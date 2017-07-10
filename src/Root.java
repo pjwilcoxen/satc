@@ -33,7 +33,6 @@ public class Root extends Market {
     public void step(SimState state) {
         switch (Env.stageNow) {
             case AGG_MID:
-                Env.log.println("node "+own_id);
                 for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++) {
                     getDemands(dos_id);
                     aggDemands(dos_id);
@@ -42,7 +41,6 @@ public class Root extends Market {
                 break;
 
             case REPORT_MID:
-                Env.log.println("node "+own_id);
                 for(int dos_id=0 ; dos_id<Env.nDOS ; dos_id++ )
                     reportPrice(getBl(dos_id),dos_id);
                 break;
