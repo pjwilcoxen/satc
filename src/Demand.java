@@ -168,7 +168,8 @@ public class Demand {
 
         j = 0;
 
-        //skip the steps with more quantity than cap
+        //skip the steps with a minimum greater than the cap
+
         for(i=0; bids[i].q_min >= cap; i++);
         
         if(bids[i] == null)
