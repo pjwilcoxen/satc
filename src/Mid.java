@@ -48,14 +48,14 @@ public class Mid extends Market {
         
         switch (Env.stageNow) {
             
-            case AGG_END:
+            case MID_AGGREGATE:
                 dList = getDemands();
                 aggD  = aggDemands(dList);
                 adjD  = adjustTrans(aggD);
                 reportDemand(adjD);
                 break;
 
-            case REPORT_END:
+            case MID_REPORT:
                 aPrice = getPrice();
                 do_report_end();
                 break;

@@ -85,7 +85,7 @@ public class Trader extends Agent {
         
         switch (Env.stageNow) {
 
-            case SEND_END:
+            case TRADER_SEND:
                 reportDemand(demand);
                 break;
 

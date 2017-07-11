@@ -70,23 +70,23 @@ public class Env extends SimState {
        /**
         * Traders send demands up
         * */
-       SEND_END,
+       TRADER_SEND,
        /**
         * Mid nodes aggregate and send demand up
         */
-       AGG_END, 
+       MID_AGGREGATE, 
        /**
         * Root node aggregates and finds equilibrium
         */
-       AGG_MID, 
+       ROOT_SOLVE, 
        /**
         * Root node report price to mid nodes
         */
-       REPORT_MID, 
+       ROOT_REPORT, 
        /**
         * Mid nodes report price to traders
        */
-       REPORT_END, 
+       MID_REPORT, 
        /**
         * Traders determine actual loads
         */
@@ -323,7 +323,8 @@ public class Env extends SimState {
            "   Transmission cost: "+transCost+"\n"+
            "   Transmission cap: "+transCap+"\n"+
            "   Populations: "+numPop+"\n"+
-           "   Seed imposed: "+seed+"\n"
+           "   Seed imposed: "+seed+"\n"+
+           "   DOS runs: "+String.join(",",dos_runs)
            );
 
         // 
@@ -338,7 +339,7 @@ public class Env extends SimState {
 
         for( pop=1 ; pop<=numPop ; pop++ ) {
             System.out.println("Starting population "+pop);
-            log.println("*** population "+pop);
+            log.println("\n*** population "+pop);
 
             // initialize for this population
 
@@ -361,7 +362,7 @@ public class Env extends SimState {
                 // now step through the run
 
                 for( Stage s : Stage.values() ) {
-                    log.println("*** stage "+s);
+                    log.println("*** "+s);
                     stageNow = s;
                     enviro.schedule.step(enviro);
                 }
@@ -461,7 +462,7 @@ public class Env extends SimState {
                 where = "trader "+a.own_id+" ";
                 if( a.getTier() != 1 )
                     Err.add(where+"has tier "+a.getTier());
-                if( a.children.size() != 0 )
+                if( !a.children.isEmpty() )
                     Err.add(where+"has child nodes");
                 if( a.par_id == 0 )
                     Err.add(where+"has no parent node");
@@ -471,7 +472,7 @@ public class Env extends SimState {
                 where = "mid "+a.own_id+" ";
                 if( a.getTier() != 2 )
                     Err.add(where+"has tier "+a.getTier());
-                if( a.children.size() == 0 )
+                if( a.children.isEmpty() )
                     Err.add(where+"has no child nodes");
                 if( a.par_id == 0 )
                     Err.add(where+"has no parent node");
@@ -481,7 +482,7 @@ public class Env extends SimState {
                 where = "root "+a.own_id+" ";
                 if( a.getTier() != 3 )
                     Err.add(where+"has tier "+a.getTier());
-                if( a.children.size() == 0 )
+                if( a.children.isEmpty() )
                     Err.add(where+"has no child nodes");
                 if( a.par_id != 0 )
                     Err.add(where+"has a parent node");
@@ -490,7 +491,7 @@ public class Env extends SimState {
             assert false;
         }
         
-        if( Err.size() != 0 ) {
+        if( !Err.isEmpty() ) {
             for(String s: Err)
                 System.out.println("configuration error: "+s);
             System.exit(0);

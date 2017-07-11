@@ -5,414 +5,424 @@ Scenario Settings:
    Transmission cap: 3000
    Populations: 10
    Seed imposed: 123456
+   DOS runs: 0,1,5,10
 
 *** population 1
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 52
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=243, grid p=54
 node 201 DOS run 0: own p=24, grid p=50
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 52
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 1: own p=243, grid p=54
 node 201 DOS run 1: own p=24, grid p=50
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [31, 38, 87, 94, 170, 189]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 55
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=233, grid p=57
 node 201 DOS run 5: own p=25, grid p=53
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 65
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 10: own p=255, grid p=67
 node 201 DOS run 10: own p=28, grid p=63
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 2
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 43
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 0: own p=24, grid p=41
 node 202 DOS run 0: own p=194, grid p=45
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [12, 18]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 42
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 1: own p=194, grid p=44
 node 201 DOS run 1: own p=22, grid p=40
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 43
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=190, grid p=45
 node 201 DOS run 5: own p=24, grid p=41
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [12, 18, 21, 34, 55, 75, 80, 81, 86, 103, 126, 128, 133, 136, 138, 152, 153, 159, 163, 164, 171, 178, 192]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 42
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=25, grid p=40
 node 202 DOS run 10: own p=184, grid p=44
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 3
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 63
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=296, grid p=65
 node 201 DOS run 0: own p=25, grid p=61
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [124, 181]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 62
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=25, grid p=60
 node 202 DOS run 1: own p=289, grid p=64
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [34, 124, 160, 181, 193]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 62
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=-1, grid p=60
 node 201 DOS run 5: own p=25, grid p=60
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 62
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=24, grid p=60
 node 202 DOS run 10: own p=-1, grid p=60
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 4
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 53
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=236, grid p=55
 node 201 DOS run 0: own p=24, grid p=51
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 53
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=24, grid p=51
 node 202 DOS run 1: own p=236, grid p=55
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [21, 60, 63, 135, 158, 174]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 46
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 5: own p=22, grid p=44
 node 202 DOS run 5: own p=220, grid p=48
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [5, 7, 10, 20, 21, 23, 29, 34, 54, 60, 61, 63, 67, 70, 74, 75, 87, 116, 121, 124, 135, 136, 158, 174]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 54
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=22, grid p=52
 node 202 DOS run 10: own p=216, grid p=56
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 5
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 58
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 0: own p=25, grid p=56
 node 202 DOS run 0: own p=172, grid p=60
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [107, 192]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 60
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=25, grid p=58
 node 202 DOS run 1: own p=195, grid p=62
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [24, 78, 107, 192, 197]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 64
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 5: own p=25, grid p=62
 node 202 DOS run 5: own p=225, grid p=66
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 66
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 10: own p=225, grid p=68
 node 201 DOS run 10: own p=26, grid p=64
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 6
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 58
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 0: own p=22, grid p=56
 node 202 DOS run 0: own p=246, grid p=60
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [98, 152]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 59
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=23, grid p=57
 node 202 DOS run 1: own p=245, grid p=61
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [40, 73, 88, 98, 139, 152]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 63
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=242, grid p=65
 node 201 DOS run 5: own p=26, grid p=61
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142, 152, 169, 175, 197]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 60
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=22, grid p=58
 node 202 DOS run 10: own p=266, grid p=62
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 7
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 55
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=187, grid p=57
 node 201 DOS run 0: own p=25, grid p=53
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [150]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 53
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=25, grid p=51
 node 202 DOS run 1: own p=181, grid p=55
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 50
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 5: own p=25, grid p=48
 node 202 DOS run 5: own p=172, grid p=52
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 54
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=23, grid p=52
 node 202 DOS run 10: own p=194, grid p=56
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 8
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 56
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=235, grid p=58
 node 201 DOS run 0: own p=26, grid p=54
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [49, 53, 92, 153]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 56
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 1: own p=26, grid p=54
 node 202 DOS run 1: own p=232, grid p=58
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 50
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=220, grid p=52
 node 201 DOS run 5: own p=23, grid p=48
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 153, 164, 172, 175, 179, 184]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 43
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=21, grid p=41
 node 202 DOS run 10: own p=207, grid p=45
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 9
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 57
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 0: own p=224, grid p=59
 node 201 DOS run 0: own p=24, grid p=55
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [92, 94, 124, 159, 192]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 65
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 1: own p=275, grid p=67
 node 201 DOS run 1: own p=27, grid p=63
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 58
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=269, grid p=60
 node 201 DOS run 5: own p=23, grid p=56
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 58
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=24, grid p=56
 node 202 DOS run 10: own p=247, grid p=60
-*** stage CALC_LOADS
+*** CALC_LOADS
+
 *** population 10
 dos 0 dropped []
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 0 own price: 57
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 0: own p=24, grid p=55
 node 202 DOS run 0: own p=192, grid p=59
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 1 dropped [75, 124]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 1 own price: 58
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 1: own p=189, grid p=60
 node 201 DOS run 1: own p=25, grid p=56
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 5 own price: 61
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 202 DOS run 5: own p=217, grid p=63
 node 201 DOS run 5: own p=25, grid p=59
-*** stage CALC_LOADS
+*** CALC_LOADS
 dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
-*** stage SEND_END
-*** stage AGG_END
-*** stage AGG_MID
+*** TRADER_SEND
+*** MID_AGGREGATE
+*** ROOT_SOLVE
 node 203 DOS run 10 own price: 63
-*** stage REPORT_MID
-*** stage REPORT_END
+*** ROOT_REPORT
+*** MID_REPORT
 node 201 DOS run 10: own p=25, grid p=61
 node 202 DOS run 10: own p=222, grid p=65
-*** stage CALC_LOADS
+*** CALC_LOADS

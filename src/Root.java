@@ -27,13 +27,13 @@ public class Root extends Market {
         
         switch (Env.stageNow) {
 
-            case AGG_MID:
+            case ROOT_SOLVE:
                 dList  = getDemands();
                 aggD   = aggDemands(dList);
                 aPrice = findRootPrice();
                 break;
 
-            case REPORT_MID:
+            case ROOT_REPORT:
                 reportPrice(aPrice);
                 break;
                 
