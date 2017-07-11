@@ -104,15 +104,10 @@ public class Env extends SimState {
     public static final ArrayList<Integer> blockList = new ArrayList<>();
     
     /**
-     * Default list of DOS runs
+     * List of DOS runs desired
      */
-    public static final String dos_runs[] = { "0", "1", "5", "10" };
+    public static String dos_runs[];
     
-    /**
-     * Number of DOS runs to carry out
-     */
-    public static int nDOS = dos_runs.length;
-   
     /** 
      * Current DOS run
      */
@@ -261,6 +256,7 @@ public class Env extends SimState {
         int ext;
         Properties props;
         double cutoff;
+        String dosprop;
 
         if( args.length != 1 ) {
             System.out.println("Error: expected 1 argument but found "+args.length+".");
@@ -288,6 +284,15 @@ public class Env extends SimState {
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
         seed       = props.getProperty("seed","none");
+        dosprop    = props.getProperty("dos","0,1,5,10");
+
+        //
+        //  Unpack the DOS specification
+        //
+
+        dos_runs = dosprop.split(",");
+        for(int i=0 ; i<dos_runs.length ; i++)
+            dos_runs[i] = dos_runs[i].trim();
 
         // 
         //  Set up the random number generator, allowing for a fixed
