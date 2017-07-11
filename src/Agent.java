@@ -37,9 +37,9 @@ public abstract class Agent implements Steppable {
     
     double rBlock;
 
-    // data bus this agent uses to communicate with its parent
+    // data channel this agent uses to communicate with its parent
     
-    DBUS dbus;
+    Channel channel;
 
     // this agent's incoming message queue
     
@@ -55,12 +55,12 @@ public abstract class Agent implements Steppable {
     int aPrice;
 
     /**
-     * Set the DBUS used by this agent to talk to its parent
+     * Set the channel used by this agent to talk to its parent
      * 
-     * @param dbus DBUS object
+     * @param channel Channel object
      */
-    public void setDBUS(DBUS dbus) {
-        this.dbus = dbus;
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     /**
@@ -126,8 +126,8 @@ public abstract class Agent implements Steppable {
     public void reportDemand(Demand dem) {
         Msg msg = new Msg(this,par_id);
         msg.setDemand(dem);
-        assert dbus != null;
-        dbus.send(msg);
+        assert channel != null;
+        channel.send(msg);
     }
 
     /**

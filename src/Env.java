@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.csv.*;
 import sim.engine.SimState;
 
@@ -380,10 +378,10 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap ;
-        String cur_sd, cur_dbus;
+        String cur_sd, cur_chan;
         Agent cur_agent;
         String items[];
-        DBUS dbus;
+        Channel channel;
 
         //read the topology of the network and build the list of agents
 
@@ -396,7 +394,7 @@ public class Env extends SimState {
                 cur_type  = Integer.parseInt(rec.get("type"));
                 cur_sd    = rec.get("sd_type");
                 cur_upid  = Integer.parseInt(rec.get("up_id"));
-                cur_dbus  = rec.get("dbus");
+                cur_chan  = rec.get("channel");
                 cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
                 cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
@@ -416,11 +414,11 @@ public class Env extends SimState {
                         throw new RuntimeException("Unexpected agent type "+cur_type);
                 }
 
-                // set its DBUS
+                // set its channel
 
-                dbus = DBUS.find(cur_dbus);
-                if( dbus == null )dbus = new DBUS(cur_dbus);
-                cur_agent.setDBUS(dbus);
+                channel = Channel.find(cur_chan);
+                if( channel == null )channel = new Channel(cur_chan);
+                cur_agent.setChannel(channel);
 
                 // add it to the list of agents and schedule it for stepping
 

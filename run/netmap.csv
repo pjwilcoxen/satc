@@ -1,4 +1,4 @@
-id,type,sd_type,up_id,dbus,cost,cap
+id,type,sd_type,up_id,channel,cost,cap
 1,3,D,201,type1,1,2000
 2,3,D,201,type2,1,2000
 3,3,D,201,type3,1,2000

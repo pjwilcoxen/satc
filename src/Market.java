@@ -69,7 +69,7 @@ public abstract class Market extends Agent {
         for (Agent child: children) {
             Msg msg = new Msg(this,child.own_id);
             msg.setPrice(price);
-            child.dbus.send(msg);
+            child.channel.send(msg);
             }
     }
 }
