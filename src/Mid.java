@@ -108,25 +108,18 @@ public class Mid extends Market {
 
         dos = Env.curDOS;
 
-        // next block is reporting only; before accounting for
-        // cost and capacity. should it be retained somewhere?
-        //
-        // find the balance price for each case of dropped nodes
+        // find this node's equilibrium price in isolation
 
         this_bl = aggD.getEquPrice();
-        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
         
-        // set the report value
-        //
-        // report -1 if no equilibrium was found. otherwise, get an
-        // adjust price that accounts for transmission parameters
+        // find the node's actual price accounting for transmission
 
         if (aPrice <= -1) 
             report = -1;
         else 
             report = aggD.getP(aPrice,pc0,pc1,cost,cap);
         
-        Env.log.println("node "+own_id+" DOS run "+dos+" joint price: "+report);
+        Env.log.println("node "+own_id+" DOS run "+dos+": own p="+this_bl+", grid p="+report);
 
         //write the balance prices on csv file for each case and report to children 
 
