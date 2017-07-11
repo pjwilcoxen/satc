@@ -33,7 +33,7 @@ public class Env extends SimState {
     //    numPop     -- number of populations to draw
     //
     
-    private   static String fileConfig ;
+    private static String fileConfig ;
     
     /**
      * File name for monte carlo draws
@@ -369,7 +369,7 @@ public class Env extends SimState {
     /**
      * Create agents based on the input network map
      */
-    private void makeAgents() throws FileNotFoundException, IOException {
+    private void makeAgents(String filename) {
     
         BufferedReader br;
         CSVParser csvReader;
@@ -381,59 +381,115 @@ public class Env extends SimState {
 
         //read the topology of the network and build the list of agents
 
-        br = new BufferedReader(Util.openRead(fileConfig));
-        csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
+        try {
+            br = new BufferedReader(Util.openRead(filename));
+            csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
 
-        for(CSVRecord rec: csvReader) {
-            cur_id    = Integer.parseInt(rec.get("id"));
-            cur_type  = Integer.parseInt(rec.get("type"));
-            cur_sd    = rec.get("sd_type");
-            cur_upid  = Integer.parseInt(rec.get("up_id"));
-            cur_dbus  = rec.get("dbus");
-            cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
-            cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
+            for(CSVRecord rec: csvReader) {
+                cur_id    = Integer.parseInt(rec.get("id"));
+                cur_type  = Integer.parseInt(rec.get("type"));
+                cur_sd    = rec.get("sd_type");
+                cur_upid  = Integer.parseInt(rec.get("up_id"));
+                cur_dbus  = rec.get("dbus");
+                cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
+                cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
 
-            // watch for conflicts between type and parent
-            
-            if( cur_upid == 0 && cur_type != 1 ) {
-                log.println("Warning: node "+cur_id+" has type "+cur_type+" but no parent");
-                log.println("Warning: will be treated as a root node");
-                cur_type = 1;
-            }
-            
-            switch( cur_type ) {
-                case 1: 
-                    cur_agent = new Root(cur_id);
-                    break;
+                // create the agent
 
-                case 2: 
-                    cur_agent = new Mid(cur_upid,cur_id);
-                    break;
+                switch( cur_type ) {
+                    case 1: 
+                        cur_agent = new Root(cur_upid,cur_id);
+                        break;
+                    case 2: 
+                        cur_agent = new Mid(cur_upid,cur_id);
+                        break;
+                    case 3: 
+                        cur_agent = new Trader(cur_upid,cur_id,cur_sd);
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected agent type "+cur_type);
+                }
 
-                case 3: 
-                    cur_agent = new Trader(cur_upid,cur_id,cur_sd);
-                    break;
+                // set its DBUS
 
-                default:
-                    throw new RuntimeException("Unexpected agent type "+cur_type);
-            }
-            
-            dbus = DBUS.find(cur_dbus);
-            if( dbus == null )dbus = new DBUS(cur_dbus);
+                dbus = DBUS.find(cur_dbus);
+                if( dbus == null )dbus = new DBUS(cur_dbus);
+                cur_agent.setDBUS(dbus);
 
-            cur_agent.setDBUS(dbus);
+                // add it to the list of agents and schedule it for stepping
 
-            listAgent.add(cur_agent);
-            schedule.scheduleRepeating(cur_agent);
+                listAgent.add(cur_agent);
+                schedule.scheduleRepeating(cur_agent);
+            } 
+
+        br.close();
         }
-                
-        // tell parents about their children now that all agents have been instantiated
+        catch (IOException e) {
+            System.out.println("Could not read network file: "+filename);
+            System.exit(0);
+        }
+    }
 
-        for (Agent a : listAgent ) 
+    /**
+     * Configure the grid
+     */
+    private void buildGrid() {
+
+        // tell parents about their children 
+
+        for (Agent a : listAgent) 
             if ( a.par_id != 0 )
                 Env.getAgent(a.par_id).children.add(a);
+       
+        // set grid tiers for future reference
+
+        for (Agent a : listAgent) 
+            a.getTier();
+
+        // check configuration
+
+        ArrayList<String> Err = new ArrayList<>();
+        String where;
+
+        for(Agent a: listAgent) {
+            if( a instanceof Trader ) {
+                where = "trader "+a.own_id+" ";
+                if( a.getTier() != 1 )
+                    Err.add(where+"has tier "+a.getTier());
+                if( a.children.size() != 0 )
+                    Err.add(where+"has child nodes");
+                if( a.par_id == 0 )
+                    Err.add(where+"has no parent node");
+                continue;
+            }
+            if( a instanceof Mid ) {
+                where = "mid "+a.own_id+" ";
+                if( a.getTier() != 2 )
+                    Err.add(where+"has tier "+a.getTier());
+                if( a.children.size() == 0 )
+                    Err.add(where+"has no child nodes");
+                if( a.par_id == 0 )
+                    Err.add(where+"has no parent node");
+                continue;
+            }
+            if( a instanceof Root ) {
+                where = "root "+a.own_id+" ";
+                if( a.getTier() != 3 )
+                    Err.add(where+"has tier "+a.getTier());
+                if( a.children.size() == 0 )
+                    Err.add(where+"has no child nodes");
+                if( a.par_id != 0 )
+                    Err.add(where+"has a parent node");
+                continue;
+            }
+            assert false;
+        }
         
-        br.close();
+        if( Err.size() != 0 ) {
+            for(String s: Err)
+                System.out.println("configuration error: "+s);
+            System.exit(0);
+        }
     }
 
     /**
@@ -554,13 +610,8 @@ public class Env extends SimState {
     @Override
     public void start(){
 	     super.start();
-            try {
-                makeAgents();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Env.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Env.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        makeAgents(fileConfig);
+        buildGrid();
     }
 
     /**

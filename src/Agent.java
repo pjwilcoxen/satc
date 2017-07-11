@@ -21,7 +21,8 @@ public abstract class Agent implements Steppable {
     
     final int own_id;   
     final int par_id;
-    
+    int gridTier = 0;
+
     /**
      * Pools for holding random numbers for this agent  
      *
@@ -138,6 +139,31 @@ public abstract class Agent implements Steppable {
     double runiform(int which) {
         Double[] pop_set = rPool.get(Env.pop-1);
         return pop_set[which];
+    }
+
+    /**
+     * getTier
+     *
+     * Deduce and return the tier of this agent in the grid where
+     * traders are 1 and numbers rise from there.
+     *
+     * @return Tier number
+     */
+    public int getTier() {
+        int kid_cur;
+        int kid_max;
+        
+        if( gridTier != 0 )
+            return gridTier;
+        
+        kid_max = 0;
+        for(Agent kid: children) {
+            kid_cur = kid.getTier();
+            if( kid_cur>kid_max )kid_max = kid_cur;
+        }
+
+        gridTier = kid_max + 1;
+        return gridTier;
     }
 
     /**

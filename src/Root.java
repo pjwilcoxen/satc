@@ -9,10 +9,11 @@ public class Root extends Market {
     /**
      * Root node
      * 
+     * @param par_id ID of parent; normally 0
      * @param own_id ID number of the node
      */
-    public Root(int own_id) {
-        super(0,own_id);
+    public Root(int par_id, int own_id) {
+        super(par_id,own_id);
     }
             
     /**
