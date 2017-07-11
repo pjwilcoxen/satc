@@ -5,15 +5,18 @@ highly distributed electricity markets.
 
 ## Agent
 
-Agents represent entities that communication.  They include end users or 
-electricity suppliers (__Trader__) and market nodes (__Market__).  Market 
-nodes are abstract but come in two subclasses that can be instantiated: 
-midlevel markets (__Mid__) and root markets (__Root__). 
+Agent is an abstract class that provides basic features for entities that 
+communicate.  One subclass, __Trader__, can be instantiated to represent 
+end users or suppliers.  A second subclass, __Market__, is an abstract 
+class that provides basic capabilities for market nodes.  It has two 
+subclasses that can be instantiated: __Mid__, which represents midlevel 
+markets, and __Root__, which represents root markets.
 
-Trader nodes have upstream parents that are Market nodes.  Mid nodes have
-downstream children that are Trader nodes and upstream parents that are 
-(for now) Root nodes.  Root nodes have downstream children that are Mid nodes
-and do not have upstream parent nodes.
+__Trader__ nodes have upstream parents that are __Mid__ nodes.  __Mid__ 
+nodes have downstream children that are __Trader__ nodes and upstream 
+parents that are (for now) __Root__ nodes.  __Root__ nodes have downstream 
+children that are __Mid__ nodes and do not have upstream 
+parent nodes.
 
 ## Channel
 
@@ -28,32 +31,38 @@ whether random denial of service filtering applies to the sender.  If so,
 the message is dropped. If not, the message is passed to the recipient via 
 the recipient's __deliver(Msg)__ method.
 
-In subsequent refinements messages may be subject to man in the middle 
-interventions or other attacks by passing the message to another node
-instead of delivering it to its destination.  The diversion is set 
-up via __divert(old_id,new_id)__ to route messages intended for 
-old_id to new_id instead.
+Man in the middle attacks and other interventions can be set up via each
+channel's __divert(old_id,new_id)__ method.  When a diversion is present,
+messages originally intended for old_id are rerouted to new_id instead.
+Future features to be implemented:
+* Allow copy of messages rather than fully diverting them
+* Random DOS loss rates that can vary by channel
+* VPN channels that prohibit diversions
 
 ## Demand
 
 A __Demand__ object holds a net demand curve expressed as a list of steps.
 Positive quantities indicate demand and negative quantites indicate supply.
-Traders send Demand objects to Mid nodes.  Mid nodes send aggregated
-Demand objects to Root nodes.  In all cases the curves are sent via 
-Msg objects.
+__Trader__ nodes send __Demand__ objects to __Mid__ nodes.  __Mid__ nodes 
+send aggregated __Demand__ objects to __Root__ nodes.  In all cases the 
+curves are sent via __Msg__ objects.
 
 ## Env
 
 The __Env__ object represents the environment under which the simulation
 is running.  It includes various global variables and is also responsible
-for loading data, configuring the network of nodes, and then starting the
+for loading data, configuring the network of __Agent__ nodes, 
+the __Channel__ objects they use to communicate, and then starting the
 simulation.
 
 ## Msg
 
 A single message from one agent to another.  At the moment, two types of 
-messages can be sent: one with a Demand object and one with a price.  All 
-Msg objects are passed via Channel objects.
+messages can be sent: one with a __Demand__ object and one with a 
+price.  All __Msg__ objects are passed via __Channel__ objects. Future 
+features to be implemented:
+* Encryption that prevents reading by diverters
+* Signing that prevents spoofing the sender
 
 ## Util
 
