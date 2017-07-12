@@ -25,19 +25,25 @@ allowed and they can have different properties.  Each agent has a specific
 Channel that it uses to communicate with its upstream parent node.  A Channel 
 is used to by one agent to send Msg objects to another.
 
-Each Channel has one main method, __send(Msg)__.  It looks up the sender and 
-recipient from the corresponding fields of the __Msg__ object and checks 
+Each Channel has one main method, __send()__.  It looks up the sender and 
+recipient from the corresponding fields of the Msg object it is given and checks 
 whether random denial of service filtering applies to the sender.  If so, 
-the message is dropped. If not, the message is passed to the recipient via 
-the recipient's __deliver(Msg)__ method.
+the message is dropped. Otherwise, as long as the message is not diverted (discussed
+below) it is passed to the recipient via the recipient's __deliver()__ method.
 
-Man in the middle attacks and other interventions can be set up via each
-channel's __divert(old_id,new_id)__ method.  When a diversion is present,
-messages originally intended for old_id are rerouted to new_id instead.
-Future features to be implemented:
-* Allow copy of messages rather than fully diverting them
+Three hooks are available to support man in the middle attacks and other 
+interventions.  Message diversions can be set up via each channel's 
+__divert_to()__ and __divert_from()__ methods. The first diverts all 
+messages sent *to* a given node and the second diverts all messages sent
+*by* a given node. The *from* diversion is processed first and when both 
+apply to a given message it takes precedence.  Messages can be reinserted 
+downstream from the diversions via the channel's __inject()__ method.  Future 
+features to be implemented:
 * Random DOS loss rates that can vary by channel
 * VPN channels that prohibit diversions
+* Authentication of senders
+* Authentication of recipients -- blocking __divert_to()__
+
 
 ## Demand
 

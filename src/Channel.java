@@ -6,7 +6,8 @@ import java.util.HashMap;
 public class Channel {
 
     private static final HashMap<String, Channel> channelList = new HashMap<>();
-    private static final HashMap<Integer, Integer> divertList = new HashMap<>();
+    private static final HashMap<Integer, Integer> divertTo = new HashMap<>();
+    private static final HashMap<Integer, Integer> divertFrom = new HashMap<>();
     
     /**
      * Header for log files
@@ -44,15 +45,27 @@ public class Channel {
     }
     
     /**
-     * Configure a diversion of messages in transit
+     * Divert messages based on recipient
      * 
-     * @param old_id ID of original recipient
+     * @param to_id ID of original recipient
      * @param new_id ID of new node to receive it instead
      */
-    public void divert(int old_id, int new_id) {
-        if( divertList.containsKey(old_id) )
-            throw new RuntimeException("Redundant diversion for recipient "+old_id);
-        divertList.put(old_id,new_id);
+    public void divert_to(int to_id, int new_id) {
+        if( divertTo.containsKey(to_id) )
+            throw new RuntimeException("Redundant diversion for recipient "+to_id);
+        divertTo.put(to_id,new_id);
+    }
+    
+    /**
+     * Divert messages based on sender
+     * 
+     * @param from_id ID of original sender
+     * @param new_id ID of new node to receive it
+     */
+    public void divert_from(int from_id, int new_id) {
+        if( divertFrom.containsKey(from_id) )
+            throw new RuntimeException("Redundant diversion for recipient "+from_id);
+        divertFrom.put(from_id,new_id);
     }
     
     /**
@@ -61,21 +74,43 @@ public class Channel {
      * @param msg Message to send
      */
     public void send(Msg msg) {
-        String who = name+","+msg.logString()+",";
+        String who;
+        int new_id;
+        
+        who = name+","+msg.logString()+",";
         
         if( Env.isBlocked(msg.from) ) {
             Env.msg.println(who+"blocked");
             return;
         }
         
-        if( divertList.containsKey(msg.to) ) {
-            int target = divertList.get(msg.to);
-            Env.msg.println(who+"diverted to "+target);
-            Env.getAgent(target).deliver(msg);
+        if( divertFrom.containsKey(msg.from) ) {
+            new_id = divertFrom.get(msg.to);
+            Env.msg.println(who+"diverted (from) to "+new_id);
+            Env.getAgent(new_id).deliver(msg);
+            return;
+        }
+
+        if( divertTo.containsKey(msg.to) ) {
+            new_id = divertTo.get(msg.to);
+            Env.msg.println(who+"diverted (to) to "+new_id);
+            Env.getAgent(new_id).deliver(msg);
             return;
         }
         
         Env.getAgent(msg.to).deliver(msg);
         Env.msg.println(who+"delivered");
     }
+    
+    /**
+     * Inject a message downstream from diversions
+     * 
+     * @param msg Message to deliver 
+     */
+    public void inject(Msg msg) {
+        String who = name+","+msg.logString()+",";
+        Env.getAgent(msg.to).deliver(msg);
+        Env.msg.println(who+"injected");
+    }
+    
 }
