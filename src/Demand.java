@@ -1,5 +1,8 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import static java.lang.Math.pow;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 /**
  * Class for holding and manipulating net demand curves
@@ -10,7 +13,7 @@ public class Demand {
      * Maximum steps in a demand curve
      */
     public static final int MAXBIDS = 400;
-   
+
     /**
      * One step of a demand or supply curve
      */
@@ -447,4 +450,58 @@ public class Demand {
         return newD;
     }
 
+    /**
+     * Print this demand to the log file
+     * 
+     * @param owner Agent owning this demand curve
+     * @param casetag Tag indicating DOS case
+     */
+    public void log(Agent owner, String casetag) {
+
+        CSVFormat loadFormat;
+        ArrayList<String> header;
+        ArrayList<String> values;
+
+        header = new ArrayList<>();
+        header.add("pop");
+        header.add("id");
+        header.add("tag");
+        header.add("dos");
+        header.add("sd_type");
+        header.add("load");
+        header.add("elast");
+        for (int i = 0; i < 20; i++) {
+            header.add("p" + i);
+            header.add("q_min" + i);
+            header.add("q_max" + i);
+        }
+        values = new ArrayList<>();
+        try {
+            if (Env.loadPrinter == null) {
+                loadFormat = CSVFormat.DEFAULT;
+                Env.loadPrinter = new CSVPrinter(Env.net, loadFormat);
+                Env.loadPrinter.printRecord(header);
+            }
+            values.add(Integer.toString(Env.pop));
+            values.add(Integer.toString(owner.own_id));
+            values.add(casetag);
+            values.add(Env.curDOS);
+            if (owner instanceof Trader) {
+                Trader trader = (Trader) owner;
+                values.add(trader.sd_type);
+                values.add(Double.toString(trader.load));
+                values.add(Double.toString(trader.elast));
+            } else {
+                values.add("");
+                values.add("");
+                values.add("");
+            }
+            for (String str : toStrings()) {
+                values.add(str);
+            }
+            Env.loadPrinter.printRecord(values);
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to load file");
+        }
+    }
 }

@@ -60,7 +60,7 @@ public class Trader extends Agent {
         rStep     = runiform(ISTEP);
         rPrice    = runiform(IPRICE);
         drawLoad();
-        Env.printLoad(this,"base",demand);
+        demand.log(this,"base");
     }
 
     /** 

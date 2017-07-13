@@ -52,6 +52,7 @@ public class Mid extends Market {
                 dList = getDemands();
                 aggD  = aggDemands(dList);
                 adjD  = adjustTrans(aggD);
+                adjD.log(this,"adj");
                 reportDemand(adjD);
                 break;
 

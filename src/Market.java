@@ -44,7 +44,7 @@ public abstract class Market extends Agent {
             else
                 newD = newD.aggregateDemand(dem);
 
-        Env.printLoad(this,Env.curDOS,newD);
+        newD.log(this,"sum");
         return newD;
     }
 

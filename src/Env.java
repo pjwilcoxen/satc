@@ -552,63 +552,6 @@ public class Env extends SimState {
     }
 
     /**
-     * Print out results
-     * 
-     * @param agent Agent
-     * @param casetag Tag indicating DOS case
-     * @param dem Demand curve
-     */
-    public static void printLoad(Agent agent,String casetag, Demand dem) {
-        CSVFormat loadFormat ;
-        ArrayList<String> header;
-        ArrayList<String> values;
-
-        header = new ArrayList<>();
-        
-        header.add("pop");
-        header.add("id");
-        header.add("case");
-        header.add("sd_type");
-        header.add("load");
-        header.add("elast");
-        for(int i=0 ; i<20 ; i++) {
-            header.add("p"+i);
-            header.add("q_min"+i);
-            header.add("q_max"+i);
-        }
-
-        values = new ArrayList<>();
-
-        try {
-            if( loadPrinter == null ) {
-                loadFormat  = CSVFormat.DEFAULT;
-                loadPrinter = new CSVPrinter(net,loadFormat);
-                loadPrinter.printRecord(header);
-            }
-            values.add(Integer.toString(pop));
-            values.add(Integer.toString(agent.own_id));
-            values.add(casetag);
-            if( agent instanceof Trader) {
-                Trader trader = (Trader) agent;
-                values.add(trader.sd_type);
-                values.add(Double.toString(trader.load));
-                values.add(Double.toString(trader.elast));
-            }
-            else {
-                values.add("");
-                values.add("");
-                values.add("");
-            }
-            for(String str: dem.toStrings() )
-                values.add(str);
-            loadPrinter.printRecord(values);
-        }
-        catch (IOException e) {
-           throw new RuntimeException("Error writing to load file");
-        }
-    }
-
-    /**
      *  Start the simulation
      */
     @Override
