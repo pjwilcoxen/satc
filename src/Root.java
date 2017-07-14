@@ -28,15 +28,16 @@ public class Root extends Market {
         switch (Env.stageNow) {
 
             case ROOT_SOLVE:
-                dList  = getDemands();
-                demDn   = aggDemands(dList);
+                dList = getDemands();
+                demDn = aggDemands(dList);
+                demDn.log(this,"down");
                 priceAu = demDn.getEquPrice();
-                priceDn = priceAu;
                 break;
 
             case ROOT_REPORT:
-                Env.printResult(this,priceDn,0);
+                priceDn = priceAu;
                 reportPrice(priceDn);
+                writePQ();
                 log();
                 break;
                 
@@ -46,7 +47,7 @@ public class Root extends Market {
     }
 
     /**
-     * Aggregate net demands of middle nodes
+     * Write a log message
      */
     void log() {
         int q = demDn.getQ(priceDn);

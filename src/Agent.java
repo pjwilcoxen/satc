@@ -206,6 +206,16 @@ public abstract class Agent implements Steppable {
     }
 
     /**
+     * Write an agent's record to the output file
+     */
+    void writePQ() {
+        int q = 0;
+        if( this instanceof Trader )
+            q = demDn.getQ(priceDn);
+        Env.printResult(this,priceDn,q);           
+    }
+
+    /**
      * Set Price bounds
      * 
      * These are used in finding a downstream price consistent with

@@ -41,8 +41,7 @@ public abstract class Market extends Agent {
                 newD = newD.aggregateDemand(dem);
 
         assert newD != null;
-        
-        newD.log(this,"down");
+
         return newD;
     }
 

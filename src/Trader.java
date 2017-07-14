@@ -56,8 +56,6 @@ public class Trader extends Agent {
         rDraw     = runiform(IDRAW);
         rStep     = runiform(ISTEP);
         rPrice    = runiform(IPRICE);
-        drawLoad();
-        demDn.log(this,"base");
     }
 
     /** 
@@ -83,13 +81,16 @@ public class Trader extends Agent {
         switch (Env.stageNow) {
 
             case TRADER_SEND:
-                reportDemand(demDn);
+                demDn = drawLoad();
+                demDn.log(this,"base");
+                demUp = demDn; // reserved for future trans adjustments
+                reportDemand(demUp);
                 break;
 
             case CALC_LOADS:
                 priceUp = getPrice();
-                q = demDn.getQ(priceUp);
-                Env.printResult(this,priceUp,q);
+                priceDn = priceUp;
+                writePQ();
                 break;
                 
             default:
@@ -100,8 +101,9 @@ public class Trader extends Agent {
     /**
      * Build the agent's net demand curve
      */
-    private void drawLoad() {
+    private Demand drawLoad() {
  
+        Demand newD;
         Env.Draw draw;
         int max = 9858; 
         int rand;
@@ -127,9 +129,11 @@ public class Trader extends Agent {
         //call draw function based on the type of end user
 
         if (sd_type.equals("D")) 
-            demDn = Demand.makeDemand(this);
+            newD = Demand.makeDemand(this);
         else 
-            demDn = Demand.makeSupply(this);
+            newD = Demand.makeSupply(this);
+        
+        return newD;
     }
      
 }

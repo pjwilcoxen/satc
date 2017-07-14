@@ -32,6 +32,7 @@ public class Mid extends Market {
             case MID_AGGREGATE:
                 dList = getDemands();
                 demDn = aggDemands(dList);
+                demDn.log(this,"down");
                 demUp = demDn.adjustTrans(this);
                 demUp.log(this,"up");
                 reportDemand(demUp);
@@ -41,8 +42,8 @@ public class Mid extends Market {
                 priceUp = getPrice();
                 priceAu = demDn.getEquPrice();
                 priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
-                Env.printResult(this,priceDn,0);
                 reportPrice(priceDn);
+                writePQ();
                 log();
                 break;
                 
@@ -70,6 +71,9 @@ public class Mid extends Market {
         demUp = null;
     }
 
+    /**
+     * Write a log message
+     */
     void log() {
         int q = demDn.getQ(priceDn);
         Env.log.println(
