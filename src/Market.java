@@ -5,10 +5,6 @@ import java.util.ArrayList;
  */
 public abstract class Market extends Agent {
 
-    // aggregate demand
-
-    Demand aggD;
-
     /**
      * General market object
      * 
@@ -17,7 +13,7 @@ public abstract class Market extends Agent {
      */
     public Market(int up_id, int own_id) {
         super(up_id,own_id);
-        aggD = null;
+        demDn = null;
     }
     
     /** 
@@ -26,7 +22,7 @@ public abstract class Market extends Agent {
     @Override
     public void runInit() {
         super.runInit();
-        aggD = null;
+        demDn = null;
     }
 
     /**

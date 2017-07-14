@@ -111,6 +111,8 @@ public class Env extends SimState {
      */
     public static String curDOS;
 
+    static Properties props;
+
     //
     // Other variables
     //
@@ -252,7 +254,6 @@ public class Env extends SimState {
         String seed;
         String stem;
         int ext;
-        Properties props;
         double cutoff;
         String dosprop;
 
@@ -395,8 +396,8 @@ public class Env extends SimState {
                 cur_sd    = rec.get("sd_type");
                 cur_upid  = Integer.parseInt(rec.get("up_id"));
                 cur_chan  = rec.get("channel");
-                cur_cost  = Integer.parseInt(rec.get("cost"));    // reserved
-                cur_cap   = Integer.parseInt(rec.get("cap"));     // reserved
+                cur_cost  = Integer.parseInt(rec.get("cost"));
+                cur_cap   = Integer.parseInt(rec.get("cap"));
 
                 // create the agent
 
@@ -413,6 +414,17 @@ public class Env extends SimState {
                     default:
                         throw new RuntimeException("Unexpected agent type "+cur_type);
                 }
+
+                // save transmission parameters, overriding with global 
+                // versions, if they were given
+                
+                cur_agent.cost = cur_cost;
+                if( props.getProperty("transcost") != null )
+                    cur_agent.cost = transCost ;
+
+                cur_agent.cap = cur_cap;
+                if( props.getProperty("transcap") != null )
+                    cur_agent.cap  = transCap;
 
                 // set its channel
 
@@ -556,7 +568,7 @@ public class Env extends SimState {
      */
     @Override
     public void start(){
-	     super.start();
+	super.start();
         makeAgents(fileConfig);
         buildGrid();
     }

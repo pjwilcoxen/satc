@@ -23,9 +23,6 @@ public class Trader extends Agent {
     //indicates supply or demand type
     String sd_type;
 
-    // demand for this agent
-    Demand demand;
-
     static final int IDRAW  = 1;
     static final int ISTEP  = 2;
     static final int IPRICE = 3;
@@ -55,12 +52,12 @@ public class Trader extends Agent {
         load      = 0;
         elast     = 0;
         steps     = 0;
-        demand    = null;
+        demDn    = null;
         rDraw     = runiform(IDRAW);
         rStep     = runiform(ISTEP);
         rPrice    = runiform(IPRICE);
         drawLoad();
-        demand.log(this,"base");
+        demDn.log(this,"base");
     }
 
     /** 
@@ -86,13 +83,13 @@ public class Trader extends Agent {
         switch (Env.stageNow) {
 
             case TRADER_SEND:
-                reportDemand(demand);
+                reportDemand(demDn);
                 break;
 
             case CALC_LOADS:
-                aPrice = getPrice();
-                q = demand.getQ(aPrice);
-                Env.printResult(this,Env.curDOS,aPrice,q);
+                priceUp = getPrice();
+                q = demDn.getQ(priceUp);
+                Env.printResult(this,Env.curDOS,priceUp,q);
                 break;
                 
             default:
@@ -130,9 +127,9 @@ public class Trader extends Agent {
         //call draw function based on the type of end user
 
         if (sd_type.equals("D")) 
-            demand = Demand.makeDemand(this);
+            demDn = Demand.makeDemand(this);
         else 
-            demand = Demand.makeSupply(this);
+            demDn = Demand.makeSupply(this);
     }
      
 }

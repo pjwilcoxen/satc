@@ -6,23 +6,6 @@ import sim.engine.SimState;
  */
 public class Mid extends Market {
 
-    // local version of the global transmission cost
-
-    int cost;
-
-    //local version of the global capacity constraint
-    
-    int cap; 
-   
-    // bounds used in adjusting for transmission parameters
-    
-    int pc0;
-    int pc1;
-    
-    // Aggregate demand after adjusting for transmission parameters
-    
-    Demand adjD;
-
     /**
      * Midlevel market object
      * 
@@ -33,8 +16,6 @@ public class Mid extends Market {
      */
     public Mid(int up_id, int own_id) {
         super(up_id,own_id);
-        cost = Env.transCost ;
-        cap  = Env.transCap;
     }
 
     /**
@@ -50,14 +31,15 @@ public class Mid extends Market {
             
             case MID_AGGREGATE:
                 dList = getDemands();
-                aggD  = aggDemands(dList);
-                adjD  = adjustTrans(aggD);
-                adjD.log(this,"adj");
-                reportDemand(adjD);
+                demDn = aggDemands(dList);
+                demUp = adjustTrans(demDn);
+                demUp.log(this,"adj");
+                reportDemand(demUp);
                 break;
 
             case MID_REPORT:
-                aPrice = getPrice();
+                priceUp = getPrice();
+                priceAu = demDn.getEquPrice();
                 do_report_end();
                 break;
                 
@@ -82,7 +64,7 @@ public class Mid extends Market {
         super.runInit();
         pc0 = 0;
         pc1 = 0;
-        adjD = null;
+        demUp = null;
     }
 
     /**
@@ -102,30 +84,26 @@ public class Mid extends Market {
      * Report the equilibrium price from a middle node to its children
      */
     private void do_report_end() {
-
-        int this_bl;
-        int report;
         String dos;
 
         dos = Env.curDOS;
 
         // find this node's equilibrium price in isolation
 
-        this_bl = aggD.getEquPrice();
         
         // find the node's actual price accounting for transmission
 
-        if (aPrice <= -1) 
-            report = -1;
+        if (priceUp <= -1) 
+            priceDn = -1;
         else 
-            report = aggD.getP(aPrice,pc0,pc1,cost,cap);
+            priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
         
-        Env.log.println("node "+own_id+" DOS run "+dos+": own p="+this_bl+", grid p="+report);
+        Env.log.println("node "+own_id+" DOS run "+dos+": own p="+priceAu+", grid p="+priceDn);
 
         //write the balance prices on csv file for each case and report to children 
 
-        Env.printResult(this,dos,report,0);
-        reportPrice(report);
+        Env.printResult(this,dos,priceDn,0);
+        reportPrice(priceDn);
     }
 
     /**

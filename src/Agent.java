@@ -50,9 +50,21 @@ public abstract class Agent implements Steppable {
      */
     final ArrayList<Agent> children = new ArrayList<>();
 
-    // this agent's view of the price
+    // transmission costs, capacity and price adjustments to parent node
+
+    int cost;
+    int cap; 
+    int pc0;
+    int pc1;
     
-    int aPrice;
+    // this agent's view of up and downstream demand and price
+    
+    Demand demDn;
+    Demand demUp;
+
+    int priceUp; // price received from parent
+    int priceDn; // price reported to children
+    int priceAu; // price in autarky
 
     /**
      * Set the channel used by this agent to talk to its parent
@@ -75,7 +87,7 @@ public abstract class Agent implements Steppable {
      */
     public void runInit() {
         msgs.clear();
-        aPrice = 0;
+        priceUp = 0;
     }
 
     /**

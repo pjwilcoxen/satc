@@ -29,12 +29,12 @@ public class Root extends Market {
 
             case ROOT_SOLVE:
                 dList  = getDemands();
-                aggD   = aggDemands(dList);
-                aPrice = findRootPrice();
+                demDn   = aggDemands(dList);
+                priceUp = findRootPrice();
                 break;
 
             case ROOT_REPORT:
-                reportPrice(aPrice);
+                reportPrice(priceUp);
                 break;
                 
             default:
@@ -51,7 +51,7 @@ public class Root extends Market {
 
         // find the equilibrium price
         
-        this_bl = aggD.getEquPrice();
+        this_bl = demDn.getEquPrice();
 
         dos = Env.curDOS;
 
