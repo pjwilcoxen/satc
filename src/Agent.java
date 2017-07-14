@@ -224,9 +224,10 @@ public abstract class Agent implements Steppable {
      * @param p0 Lower bound
      * @param p1 Upper bound
      */
-    public void setPc(int p0, int p1) {
-        pc0 = p0;
-        pc1 = p1;
+    public void setPc(int base_p, int dp) {
+        pc0 = base_p - dp;
+        pc1 = base_p + dp;
+		if( pc0<0 )pc0 = 0;
     }
 }
 

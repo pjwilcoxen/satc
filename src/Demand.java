@@ -27,6 +27,10 @@ public class Demand {
             this.q_min = q_min;
             this.q_max = q_max;
         }
+		
+		Bidstep shift_p(int dp) {
+			return new Bidstep(p+dp,q_min,q_max);
+		}
     }
     
     // A complete curve is a list of steps
@@ -85,8 +89,8 @@ public class Demand {
      * Includes transaction cost and capacity limit
      * 
      * @param pr Tentative price
-     * @param pc0 
-     * @param pc1
+     * @param pc0 lower bound of Q=0 range for upstream price
+     * @param pc1 upper bound of Q=0 range for upstream price
      * @param cost Transmission cost
      * @param cap Transmission capacity
      * @return Actual price
@@ -407,35 +411,34 @@ public class Demand {
         tmp  = newD.bids;
 
         //decrease the price level of steps with positive quantity
+
         for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
             tmp[i] = new Bidstep(bids[i].p-c,bids[i].q_min,bids[i].q_max);
         
         //if there is no step with positive quantity 
+
         if(i == 0){
             for( ; bids[i] != null ; i++)
                 tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
         }
+
         if(bids[i] != null ){
             //if there is a vertical overlap with y axis
             if(bids[i].q_max == 0){
+                
                 //set the two upper and lower limits around the balance price
                 int mid = ((bids[i-1].p + bids[i].p)/2);
-                //avoid negative value for the lower step
-                if((mid-c) < 0)
-                    agent.setPc(0,mid+c);
-                else
-                    agent.setPc(mid-c,mid+c);
+                agent.setPc(mid,c);
+
                 //increase the price level of steps with positive quantity
                 for(; bids[i] != null ; i++ )
                     tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
             
             //if a horizontal step indicate the balance price
-            }else{
+            } else {
+                
                 //set the two upper and lower limits around the balance price
-                if((bids[i-1].p-c) < 0)
-                    agent.setPc(0,bids[i-1].p+c);
-                else
-                    agent.setPc(bids[i-1].p-c,bids[i-1].p+c);
+                agent.setPc(bids[i-1].p,c);
 
                 //divide the middle step into two steps with +c/-c prices
                 
