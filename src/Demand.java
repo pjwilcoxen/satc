@@ -45,6 +45,16 @@ public class Demand {
     }
 
     /**
+     * Convert the curve to a list
+     */
+    private ArrayList<Bidstep> asList() {
+        ArrayList<Bidstep> bidlist = new ArrayList<>();
+        for(int i=0 ; bids[i] != null ; i++)
+            bidlist.add(bids[i]);
+        return bidlist;
+    }
+
+    /**
      * Build a list of strings representing the bid
      * 
      * Within each bid the strings will be p, q_min, q_max.
@@ -53,10 +63,10 @@ public class Demand {
      */
     public ArrayList<String> toStrings() {
         ArrayList<String> list = new ArrayList<>();
-        for(int i=0 ; bids[i] != null ; i++ ) {
-            list.add(Integer.toString(bids[i].p));
-            list.add(Integer.toString(bids[i].q_min));
-            list.add(Integer.toString(bids[i].q_max));
+        for(Bidstep bid: asList()) {
+            list.add(Integer.toString(bid.p));
+            list.add(Integer.toString(bid.q_min));
+            list.add(Integer.toString(bid.q_max));
         }
         return list;
     }
