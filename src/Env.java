@@ -538,11 +538,10 @@ public class Env extends SimState {
      * Print out results
      * 
      * @param agent Agent 
-     * @param dos DOS run
      * @param p Price
      * @param q Quantity
      */
-    public static void printResult(Agent agent, String dos, int p, int q) {
+    public static void printResult(Agent agent, int p, int q) {
 
         String header[] = {"pop","dos","id","rblock","blocked","p","q"};
         CSVFormat csvFormat ;
@@ -554,9 +553,9 @@ public class Env extends SimState {
               csvFormat  = CSVFormat.DEFAULT.withHeader(header);
               csvPrinter = new CSVPrinter(out,csvFormat);
            }
-           block = isBlocked(dos,agent) ? 1 : 0;
+           block = isBlocked(curDOS,agent) ? 1 : 0;
            draw = String.format("%.1f",agent.rBlock);
-           csvPrinter.printRecord( pop, dos, agent.own_id, draw, block, p, q );      
+           csvPrinter.printRecord( pop, curDOS, agent.own_id, draw, block, p, q );      
         }
         catch (IOException e) {
            throw new RuntimeException("Error writing to output file");

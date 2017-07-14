@@ -89,7 +89,7 @@ public class Trader extends Agent {
             case CALC_LOADS:
                 priceUp = getPrice();
                 q = demDn.getQ(priceUp);
-                Env.printResult(this,Env.curDOS,priceUp,q);
+                Env.printResult(this,priceUp,q);
                 break;
                 
             default:

@@ -30,11 +30,14 @@ public class Root extends Market {
             case ROOT_SOLVE:
                 dList  = getDemands();
                 demDn   = aggDemands(dList);
-                priceUp = findRootPrice();
+                priceAu = demDn.getEquPrice();
+                priceDn = priceAu;
                 break;
 
             case ROOT_REPORT:
-                reportPrice(priceUp);
+                Env.printResult(this,priceDn,0);
+                reportPrice(priceDn);
+                log();
                 break;
                 
             default:
@@ -45,24 +48,16 @@ public class Root extends Market {
     /**
      * Aggregate net demands of middle nodes
      */
-    private int findRootPrice() {
-        int this_bl;
-        String dos;
-
-        // find the equilibrium price
-        
-        this_bl = demDn.getEquPrice();
-
-        dos = Env.curDOS;
-
-        if( this_bl == -1 )
-            Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+dos);
-
-        // write the balance prices to the csv file and log it as well
-
-        Env.printResult(this,dos,this_bl,0);
-        Env.log.println("node "+own_id+" DOS run "+dos+" own price: "+this_bl);
-        
-        return this_bl;
+    void log() {
+        int q = demDn.getQ(priceDn);
+        if( priceAu == -1 )
+            Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
+        Env.log.println(
+            "node "+own_id+
+            ", DOS "+Env.curDOS+
+            ", p_self="+priceAu+
+            ", p_down="+priceDn+
+            ", q_down="+q                    
+        );
     }
 }

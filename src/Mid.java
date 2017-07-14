@@ -32,15 +32,18 @@ public class Mid extends Market {
             case MID_AGGREGATE:
                 dList = getDemands();
                 demDn = aggDemands(dList);
-                demUp = adjustTrans(demDn);
-                demUp.log(this,"adj");
+                demUp = demDn.adjustTrans(this);
+                demUp.log(this,"up");
                 reportDemand(demUp);
                 break;
 
             case MID_REPORT:
                 priceUp = getPrice();
                 priceAu = demDn.getEquPrice();
-                do_report_end();
+                priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
+                Env.printResult(this,priceDn,0);
+                reportPrice(priceDn);
+                log();
                 break;
                 
             default:
@@ -67,57 +70,15 @@ public class Mid extends Market {
         demUp = null;
     }
 
-    /**
-     * Adjust aggregate demand for transmission parameters
-     * 
-     * @param agg Original demand curve
-     * @return Curve adjusted for transmission
-     */
-    private Demand adjustTrans(Demand agg) {
-        Demand newD;
-        newD = agg.addCost(cost, this);
-        newD = newD.addCapacity(cap);
-        return newD;
-    }
-
-    /**
-     * Report the equilibrium price from a middle node to its children
-     */
-    private void do_report_end() {
-        String dos;
-
-        dos = Env.curDOS;
-
-        // find this node's equilibrium price in isolation
-
-        
-        // find the node's actual price accounting for transmission
-
-        if (priceUp <= -1) 
-            priceDn = -1;
-        else 
-            priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
-        
-        Env.log.println("node "+own_id+" DOS run "+dos+": own p="+priceAu+", grid p="+priceDn);
-
-        //write the balance prices on csv file for each case and report to children 
-
-        Env.printResult(this,dos,priceDn,0);
-        reportPrice(priceDn);
-    }
-
-    /**
-     * Set Price bounds
-     * 
-     * These are used in finding a downstream price consistent with
-     * transmission parameters.
-     * 
-     * @param p0 Lower bound
-     * @param p1 Upper bound
-     */
-    public void setPc(int p0, int p1) {
-        pc0 = p0;
-        pc1 = p1;
-    }
-
+    void log() {
+        int q = demDn.getQ(priceDn);
+        Env.log.println(
+            "node "+own_id+
+            ", DOS "+Env.curDOS+
+            ", p_self="+priceAu+
+            ", p_up="+priceUp+
+            ", p_down="+priceDn+
+            ", q_down="+q
+        );
+    }        
 }

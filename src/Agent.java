@@ -204,5 +204,19 @@ public abstract class Agent implements Steppable {
             rPool.add(rArray);
         }
     }
+
+    /**
+     * Set Price bounds
+     * 
+     * These are used in finding a downstream price consistent with
+     * transmission parameters.
+     * 
+     * @param p0 Lower bound
+     * @param p1 Upper bound
+     */
+    public void setPc(int p0, int p1) {
+        pc0 = p0;
+        pc1 = p1;
+    }
 }
 

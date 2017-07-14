@@ -96,6 +96,9 @@ public class Demand {
         int i;
         int p;
 
+        if( pr <= -1 )
+            return -1;
+        
         // if the price is between local balance price +c/-c
 
         if ((pr >= pc0) && (pr <= pc1)) {
@@ -395,7 +398,7 @@ public class Demand {
      * @param agent Midlevel market
      * @return New demand curve
      */
-    public Demand addCost(int c, Mid agent) {
+    public Demand addCost(int c, Agent agent) {
         Demand newD;
         Bidstep[] tmp;
         int i;
@@ -503,5 +506,18 @@ public class Demand {
         } catch (IOException e) {
             throw new RuntimeException("Error writing to load file");
         }
+    }
+
+    /**
+     * Adjust aggregate demand for transmission parameters
+     *
+     * @param agg Original demand curve
+     * @return Curve adjusted for transmission
+     */
+    Demand adjustTrans(Agent agent) {
+        Demand newD;
+        newD = this.addCost(agent.cost, agent);
+        newD = newD.addCapacity(agent.cap);
+        return newD;
     }
 }
