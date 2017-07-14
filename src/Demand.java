@@ -107,70 +107,87 @@ public class Demand {
      * @param cap Transmission capacity
      * @return Actual price
      */
-    public int getP(int pr, int pc0, int pc1, int cost, int cap) { 
-        int report = 0;
+    public int getP(int pUp, int pc0, int pc1, int cost, int cap) { 
+        Bidstep bid;
         int i;
         int p;
+        int pDn;
 
-        if( pr <= -1 )
+        if( pUp <= -1 )
             return -1;
         
-        // if the price is between local balance price +c/-c
+        // is the upstream price is between the Q=0 thresholds? if so,
+        // return the middle of the range
 
-        if ((pr >= pc0) && (pr <= pc1)) {
-            return ((pc0 + pc1) / 2);
-        }
+        if ( pUp >= pc0 && pUp <= pc1 )
+            return (pc0 + pc1)/2;
         
-        // if the price is more than local balance price +c
+        // is the price above the upper threshold and thus in the 
+        // supply zone?
 
-        if (pr > pc1) {
+        if (pUp > pc1) {
             p = 0;
 
-            //skip the bids with more quantity than (-1) * cap & less price than the balance price
-            for (i = 0; ((bids[i] != null)
-                        && (bids[i].p <= pr)
-                        && (bids[i].q_max >= ((-1) * cap))); i++)
-                            p = bids[i].p;
+            // downstream price received by sellers if the constraint isn't 
+            // binding: it's the upstream price less the transmission cost
+        
+            pDn = pUp - cost;
 
-            if (bids[i] == null) {
-                return p;
-            }
+            // scan up the bids for first one with p > pUp or q_max to the left of cap
             
-            //if the target step passed the cap line
-            if (bids[i].q_max < ((-1) * cap)) {
-                if(pr <= p + cost) 
-                    return pr - cost;
+            for (i=0; bids[i] != null && bids[i].p <= pUp && bids[i].q_max >= -cap; i++)
+                p = bids[i].p;
+
+            // nothing left: return the last price
+            
+            if( bids[i] == null )
+                return p;
+            
+            // was the cap binding? if so, return which ever is smaller:
+            // pDn or this step's p.
+            
+            if( bids[i].q_max < -cap ) 
+                if( pDn <= p ) 
+                    return pDn ;
                 else
                     return p;
-            }
             
-            //put limit equal to cap
-            return pr - cost;
+            // constraint wasn't binding so return pDn
+
+            return pDn;
         } 
         
-        // if the price is less than local balance price +c    
+        // price must be below the lower threshold so we're in the
+        // demand zone
 
-        if (pr < pc0) {
-            p = 0;
+        p = 0;
 
-            //skip the bids with more quantity than cap
-            for (i = 0; ((bids[i] != null)
-                    && (bids[i].q_min >= cap)); i++)
-                         p = bids[i].p;
+        // downstream price paid by buyers if the constraint isn't 
+        // binding: it's the upstream price plus the transmission cost
+        
+        pDn = pUp + cost;
 
-            if (bids[i] == null) {
-                return p;
-            } 
-            
-            if (pr > bids[i].p - cost) 
-                return pr + cost;
+        // skip up the curve for bids with more quantity than cap
+        
+        for(i=0; bids[i] != null && bids[i].q_min >= cap ; i++)
+            p = bids[i].p;
 
-            //put limit equal to cap
-            return bids[i].p;
-        }
+        // nothing left: constraint is binding and return last price
+        
+        if (bids[i] == null) 
+            return p;
+        
+        // found first bid that doesn't violate the capacity constraint.
+        // if the unconstrained downstream price pDn is higher than it, 
+        // the constraint isn't binding so return pDn
+        
+        if ( pDn > bids[i].p) 
+            return pDn;
 
-        assert false;
-        return report;
+        // ok, the constraint is binding: the bid price is higher than 
+        // pDn so the local price will rise to that instead.
+        
+        return bids[i].p;
     }
 
     /**
