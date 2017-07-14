@@ -27,10 +27,10 @@ public class Demand {
             this.q_min = q_min;
             this.q_max = q_max;
         }
-		
-		Bidstep shift_p(int dp) {
-			return new Bidstep(p+dp,q_min,q_max);
-		}
+        
+        Bidstep shift_p(int dp) {
+            return new Bidstep(p+dp,q_min,q_max);
+        }
     }
     
     // A complete curve is a list of steps
@@ -108,7 +108,7 @@ public class Demand {
         if ((pr >= pc0) && (pr <= pc1)) {
             return ((pc0 + pc1) / 2);
         }
-		
+        
         // if the price is more than local balance price +c
 
         if (pr > pc1) {
@@ -135,7 +135,7 @@ public class Demand {
             //put limit equal to cap
             return pr - cost;
         } 
-		
+        
         // if the price is less than local balance price +c    
 
         if (pr < pc0) {
@@ -406,51 +406,70 @@ public class Demand {
         Demand newD;
         Bidstep[] tmp;
         int i;
+        int mid;
 
         newD = new Demand();
         tmp  = newD.bids;
 
-        //decrease the price level of steps with positive quantity
+        // decrease the price level of steps with positive quantity
 
         for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
-            tmp[i] = new Bidstep(bids[i].p-c,bids[i].q_min,bids[i].q_max);
+            tmp[i] = bids[i].shift_p(-c);
         
-        //if there is no step with positive quantity 
+        // raise the price if this is a pure supply curve with 
+        // all steps to the left of the y axis
 
-        if(i == 0){
+        if(i == 0)
             for( ; bids[i] != null ; i++)
-                tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
-        }
+                tmp[i] = bids[i].shift_p(c);
 
-        if(bids[i] != null ){
-            //if there is a vertical overlap with y axis
-            if(bids[i].q_max == 0){
-                
-                //set the two upper and lower limits around the balance price
-                int mid = ((bids[i-1].p + bids[i].p)/2);
-                agent.setPc(mid,c);
+        // return if there aren't any more steps, which means we're 
+        // not crossing the y axis
 
-                //increase the price level of steps with positive quantity
-                for(; bids[i] != null ; i++ )
-                    tmp[i] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
+        if( bids[i] == null )
+           return newD;
+
+        // ok, started out positive but the curve crosses the y axis. 
+        // there are two cases: (1) the vertical part of the step lies
+        // on the y axis; and (2) the vertical part of the step lies 
+        // to the left of the y axis
+
+        if(bids[i].q_max == 0){
             
-            //if a horizontal step indicate the balance price
-            } else {
-                
-                //set the two upper and lower limits around the balance price
-                agent.setPc(bids[i-1].p,c);
+            // case 1: step has a vertical overlap with y axis
 
-                //divide the middle step into two steps with +c/-c prices
-                
-                tmp[i]   = new Bidstep(bids[i].p-c,0,bids[i].q_max);
-                tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,0);
-                i++;
-                
-                //increase the price level of steps with positive quantity
-                
-                for(; bids[i] != null ; i++)
-                    tmp[i+1] = new Bidstep(bids[i].p+c,bids[i].q_min,bids[i].q_max);
-            }
+            // set the two upper and lower limits around the balance price
+
+            mid = ((bids[i-1].p + bids[i].p)/2);
+            agent.setPc(mid,c);
+
+            // bump up the remaining supply steps
+
+            for(; bids[i] != null ; i++ )
+                tmp[i] = bids[i].shift_p(c);
+        
+        } else {
+            
+            // case 2: step is to the left of the y axis
+            
+            // set the two upper and lower limits around the balance price
+
+            agent.setPc(bids[i-1].p,c);
+
+            // divide the middle step into two steps with +c/-c prices
+            
+            tmp[i] = bids[i].shift_p(-c);
+            tmp[i].q_min = 0;
+
+            tmp[i+1] = bids[i].shift_p(c);
+            tmp[i+1].q_max = 0;
+
+            i++;
+            
+            // bump up the remaining supply steps
+            
+            for(; bids[i] != null ; i++)
+                tmp[i+1] = bids[i].shift_p(c);
         }
 
         return newD;
