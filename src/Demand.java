@@ -78,19 +78,21 @@ public class Demand {
      * @return Quantity
      */
     public int getQ(int price) {
-        int i;
 
         if( price <= -1 )
             return 0;
 
-        for(i=0 ; (bids[i] != null)  && (bids[i].p < price) ; i++);
+        // find the first step at or above the given price
 
-        assert bids[i] != null ;
-                
-        if(bids[i].p == price)     //where the price is the same as step price
-            return bids[i].q_min;
-        else                       //where the price is between two steps
-            return bids[i].q_max;
+        for(Bidstep bid: asList())
+            if( bid.p == price)     
+                return bid.q_min;
+            else if( bid.p > price)
+                return bid.q_max;
+        
+        // didn't find one
+
+        return -1;
     }
 
     /**
