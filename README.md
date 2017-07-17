@@ -6,17 +6,9 @@ highly distributed electricity markets.
 ## Agent
 
 Agent is an abstract class that provides basic features for entities that 
-communicate.  One subclass, __Trader__, can be instantiated to represent 
-end users or suppliers.  A second subclass, __Market__, is an abstract 
-class that provides basic capabilities for market nodes.  It has two 
-subclasses that can be instantiated: __Mid__, which represents midlevel 
-markets, and __Root__, which represents root markets.
-
-__Trader__ nodes have upstream parents that are __Mid__ nodes.  __Mid__ 
-nodes have downstream children that are __Trader__ nodes and upstream 
-parents that are (for now) __Root__ nodes.  __Root__ nodes have downstream 
-children that are __Mid__ nodes and do not have upstream 
-parent nodes.
+communicate.  It has two subclasses: Grid, for agents actually connected
+to the power grid, and Virtual, for agents that only have communication 
+links.
 
 ## Channel
 
@@ -61,6 +53,21 @@ for loading data, configuring the network of __Agent__ nodes,
 the __Channel__ objects they use to communicate, and then starting the
 simulation.
 
+## Grid
+
+Abstract class for grid-connected agents (that is, agents through
+which power can flow).  One subclass, __Trader__, can be instantiated to represent 
+end users or suppliers.  A second subclass, __Market__, is an abstract 
+class that provides basic capabilities for market nodes.  It has two 
+subclasses that can be instantiated: __Mid__, which represents midlevel 
+markets, and __Root__, which represents root markets.
+
+__Trader__ nodes have upstream parents that are __Mid__ nodes.  __Mid__ 
+nodes have downstream children that are __Trader__ nodes and upstream 
+parents that are (for now) __Root__ nodes.  __Root__ nodes have downstream 
+children that are __Mid__ nodes and do not have upstream 
+parent nodes.
+
 ## Msg
 
 A single message from one agent to another.  At the moment, two types of 
@@ -74,3 +81,8 @@ features to be implemented:
 
 A utility class that includes a few general purpose methods for opening
 files with built-in exception handling.
+
+## Virtual
+
+Class for agents connected to the communications network but not
+connected directly to the power grid. 
