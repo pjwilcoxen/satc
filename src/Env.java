@@ -415,17 +415,21 @@ public class Env extends SimState {
                         throw new RuntimeException("Unexpected agent type "+cur_type);
                 }
 
-                // save transmission parameters, overriding with global 
-                // versions, if they were given
+                // if this is a Grid agent, save transmission parameters, 
+                // overriding with global versions, if they were given
                 
-                cur_agent.cost = cur_cost;
-                if( props.getProperty("transcost") != null )
-                    cur_agent.cost = transCost ;
+                if( cur_agent instanceof Grid ) {
+                    Grid grid_agent = (Grid) cur_agent;
+                    
+                    grid_agent.cost = cur_cost;
+                    if( props.getProperty("transcost") != null )
+                        grid_agent.cost = transCost ;
 
-                cur_agent.cap = cur_cap;
-                if( props.getProperty("transcap") != null )
-                    cur_agent.cap  = transCap;
-
+                    grid_agent.cap = cur_cap;
+                    if( props.getProperty("transcap") != null )
+                        grid_agent.cap  = transCap;
+                }
+                
                 // set its channel
 
                 channel = Channel.find(cur_chan);
@@ -450,54 +454,67 @@ public class Env extends SimState {
      * Configure the grid
      */
     private void buildGrid() {
-
+        ArrayList<Grid> gridList = new ArrayList<>();
+        ArrayList<String> Err = new ArrayList<>();
+        String where;
+        
+        for( Agent a : listAgent ) 
+            if( a instanceof Grid )
+                gridList.add((Grid) a);
+        
         // tell parents about their children 
 
-        for (Agent a : listAgent) 
-            if ( a.par_id != 0 )
-                Env.getAgent(a.par_id).children.add(a);
+        for (Grid g : gridList) 
+            if( g.par_id != 0 ) {
+                Agent par = Env.getAgent(g.par_id);
+                if( par instanceof Grid )
+                    ((Grid) par).children.add(g);
+                else
+                    Err.add("parent of "+g.own_id+" is not a grid agent");
+            }
        
         // set grid tiers for future reference
 
-        for (Agent a : listAgent) 
-            a.getTier();
+        for (Grid g : gridList) 
+            g.getTier();
 
         // check configuration
 
-        ArrayList<String> Err = new ArrayList<>();
-        String where;
-
-        for(Agent a: listAgent) {
-            if( a instanceof Trader ) {
-                where = "trader "+a.own_id+" ";
-                if( a.getTier() != 1 )
-                    Err.add(where+"has tier "+a.getTier());
-                if( !a.children.isEmpty() )
+        for(Grid g: gridList) {
+            
+            if( g instanceof Trader ) {
+                where = "trader "+g.own_id+" ";
+                if( g.getTier() != 1 )
+                    Err.add(where+"has tier "+g.getTier());
+                if( !g.children.isEmpty() )
                     Err.add(where+"has child nodes");
-                if( a.par_id == 0 )
+                if( g.par_id == 0 )
                     Err.add(where+"has no parent node");
                 continue;
             }
-            if( a instanceof Mid ) {
-                where = "mid "+a.own_id+" ";
-                if( a.getTier() != 2 )
-                    Err.add(where+"has tier "+a.getTier());
-                if( a.children.isEmpty() )
+
+            if( g instanceof Mid ) {
+                where = "mid "+g.own_id+" ";
+                if( g.getTier() != 2 )
+                    Err.add(where+"has tier "+g.getTier());
+                if( g.children.isEmpty() )
                     Err.add(where+"has no child nodes");
-                if( a.par_id == 0 )
+                if( g.par_id == 0 )
                     Err.add(where+"has no parent node");
                 continue;
             }
-            if( a instanceof Root ) {
-                where = "root "+a.own_id+" ";
-                if( a.getTier() != 3 )
-                    Err.add(where+"has tier "+a.getTier());
-                if( a.children.isEmpty() )
+
+            if( g instanceof Root ) {
+                where = "root "+g.own_id+" ";
+                if( g.getTier() != 3 )
+                    Err.add(where+"has tier "+g.getTier());
+                if( g.children.isEmpty() )
                     Err.add(where+"has no child nodes");
-                if( a.par_id != 0 )
+                if( g.par_id != 0 )
                     Err.add(where+"has a parent node");
                 continue;
             }
+            
             assert false;
         }
         

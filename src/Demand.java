@@ -100,7 +100,7 @@ public class Demand {
      *
      * Includes transaction cost and capacity limit
      * 
-     * @param pr Tentative price
+     * @param pUp Tentative price
      * @param pc0 lower bound of Q=0 range for upstream price
      * @param pc1 upper bound of Q=0 range for upstream price
      * @param cost Transmission cost
@@ -431,7 +431,7 @@ public class Demand {
      * @param agent Midlevel market
      * @return New demand curve
      */
-    public Demand addCost(int c, Agent agent) {
+    public Demand addCost(int c, Grid agent) {
         Demand newD;
         Bidstep[] tmp;
         int i;
@@ -565,7 +565,7 @@ public class Demand {
      * @param agg Original demand curve
      * @return Curve adjusted for transmission
      */
-    Demand adjustTrans(Agent agent) {
+    Demand adjustTrans(Grid agent) {
         Demand newD;
         newD = this.addCost(agent.cost, agent);
         newD = newD.addCapacity(agent.cap);

@@ -17,11 +17,9 @@ public abstract class Agent implements Steppable {
      */
     private static final int RCOUNT = 10;
 
-    // permanent attributes of the agent
+    // permanent characteristics of this agent
     
     final int own_id;   
-    final int par_id;
-    int gridTier = 0;
 
     /**
      * Pools for holding random numbers for this agent  
@@ -46,27 +44,6 @@ public abstract class Agent implements Steppable {
     final ArrayDeque<Msg> msgs = new ArrayDeque<>();
 
     /**
-     * Children of the agent
-     */
-    final ArrayList<Agent> children = new ArrayList<>();
-
-    // transmission costs, capacity and price adjustments to parent node
-
-    int cost;
-    int cap; 
-    int pc0;
-    int pc1;
-    
-    // this agent's view of up and downstream demand and price
-    
-    Demand demDn;
-    Demand demUp;
-
-    int priceUp; // price received from parent
-    int priceDn; // price reported to children
-    int priceAu; // price in autarky
-
-    /**
      * Set the channel used by this agent to talk to its parent
      * 
      * @param channel Channel object
@@ -87,7 +64,6 @@ public abstract class Agent implements Steppable {
      */
     public void runInit() {
         msgs.clear();
-        priceUp = 0;
     }
 
     /**
@@ -107,14 +83,11 @@ public abstract class Agent implements Steppable {
      */
     ArrayList<Msg> getMsgs(Msg.Types type) {
         ArrayList<Msg> selected = new ArrayList<>();
-
         for(Msg msg: msgs) 
             if( msg.type == type ) 
                 selected.add(msg);
-        
         for(Msg msg: selected)
             msgs.remove(msg);
-        
         return selected;
     }
 
@@ -131,18 +104,6 @@ public abstract class Agent implements Steppable {
     }
 
     /**
-     * Send a demand to parent node
-     * 
-     * @param dem Demand curve
-     */
-    public void reportDemand(Demand dem) {
-        Msg msg = new Msg(this,par_id);
-        msg.setDemand(dem);
-        assert channel != null;
-        channel.send(msg);
-    }
-
-    /**
      * Get a random number from this agent's pool
      * 
      * @param which Which number to retrieve
@@ -154,49 +115,20 @@ public abstract class Agent implements Steppable {
     }
 
     /**
-     * getTier
-     *
-     * Deduce and return the tier of this agent in the grid where
-     * traders are 1 and numbers rise from there.
-     *
-     * @return Tier number
-     */
-    public int getTier() {
-        int kid_cur;
-        int kid_max;
-        
-        if( gridTier != 0 )
-            return gridTier;
-        
-        kid_max = 0;
-        for(Agent kid: children) {
-            kid_cur = kid.getTier();
-            if( kid_cur>kid_max )kid_max = kid_cur;
-        }
-
-        gridTier = kid_max + 1;
-        return gridTier;
-    }
-
-    /**
      * General agent instance
      * 
-     * @param up_id ID of agent's parent node
-     * @param own_id Own ID
+     * @param own_id ID of this agent
      */
-    public Agent(int up_id, int own_id) {
+    public Agent(int own_id) {
         super();
-
-        this.par_id = up_id;
         this.own_id = own_id;
-        
+
         // build a pool of values to be used for later
         // randomization. do it once when the agent is 
         // instantiated to help with repeatability when
         // code using the numbers is reordered.
 
         Double[] rArray;
-
         for(int i=0 ; i<Env.numPop ; i++) {
             rArray = new Double[RCOUNT];
             for(int j=0 ; j<RCOUNT ; j++)
@@ -204,30 +136,4 @@ public abstract class Agent implements Steppable {
             rPool.add(rArray);
         }
     }
-
-    /**
-     * Write an agent's record to the output file
-     */
-    void writePQ() {
-        int q = 0;
-        if( this instanceof Trader )
-            q = demDn.getQ(priceDn);
-        Env.printResult(this,priceDn,q);           
-    }
-
-    /**
-     * Set Price bounds
-     * 
-     * These are used in finding a downstream price consistent with
-     * transmission parameters.
-     * 
-     * @param p0 Lower bound
-     * @param p1 Upper bound
-     */
-    public void setPc(int base_p, int dp) {
-        pc0 = base_p - dp;
-        pc1 = base_p + dp;
-		if( pc0<0 )pc0 = 0;
-    }
 }
-

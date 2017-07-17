@@ -3,7 +3,7 @@ import sim.engine.SimState;
 /**
  * Agent representing an end user or supplier
  */
-public class Trader extends Agent {
+public class Trader extends Grid {
 
     /**
      * Maximum number of steps in each generated bid

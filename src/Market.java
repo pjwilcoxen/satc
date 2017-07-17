@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /** 
  * Markets aggregate demands and find equilibrium prices
  */
-public abstract class Market extends Agent {
+public abstract class Market extends Grid {
 
     /**
      * General market object

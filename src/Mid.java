@@ -26,6 +26,7 @@ public class Mid extends Market {
     @Override
     public void step(SimState state) {
         ArrayList<Demand> dList;
+        Grid self = this;
         
         switch (Env.stageNow) {
             
@@ -33,7 +34,7 @@ public class Mid extends Market {
                 dList = getDemands();
                 demDn = aggDemands(dList);
                 demDn.log(this,"down");
-                demUp = demDn.adjustTrans(this);
+                demUp = demDn.adjustTrans(self);
                 demUp.log(this,"up");
                 reportDemand(demUp);
                 break;
