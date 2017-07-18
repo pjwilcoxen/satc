@@ -437,7 +437,8 @@ public class Demand {
         Demand newD;
         Bidstep[] tmp;
         int i;
-        int mid;
+        int p_lo;
+        int p_hi;
 
         newD = new Demand();
         tmp  = newD.bids;
@@ -469,10 +470,11 @@ public class Demand {
             
             // case 1: step has a vertical overlap with y axis
 
-            // set the two upper and lower limits around the balance price
+            // set the deadband using the upper and lower prices of the overlap
 
-            mid = ((bids[i-1].p + bids[i].p)/2);
-            agent.setPc(mid,c);
+            p_lo = bids[i-1].p - c;
+            p_hi = bids[i  ].p + c;
+            agent.setPc(p_lo,p_hi);
 
             // bump up the remaining supply steps
 
@@ -483,9 +485,11 @@ public class Demand {
             
             // case 2: step is to the left of the y axis
             
-            // set the two upper and lower limits around the balance price
+            // set the deadband around the previous price
 
-            agent.setPc(bids[i-1].p,c);
+            p_lo = bids[i-1].p - c;
+            p_hi = bids[i-1].p + c;
+            agent.setPc(p_lo,p_hi);
 
             // divide the middle step into two steps with +c/-c prices
             

@@ -116,9 +116,9 @@ public abstract class Grid extends Agent {
      * @param base_p Central price 
      * @param dp Distance to upper and lower bounds
      */
-    public void setPc(int base_p, int dp) {
-        p_notrans_lo = base_p - dp;
-        p_notrans_hi = base_p + dp;
+    public void setPc(int p_lo, int p_hi) {
+        p_notrans_lo = p_lo;
+        p_notrans_hi = p_hi;
 		if( p_notrans_lo < 0 )p_notrans_lo = 0;
     }
         
