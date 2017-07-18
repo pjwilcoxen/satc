@@ -48,13 +48,15 @@ public abstract class Grid extends Agent {
     @Override
     public void runInit() {
         super.runInit();
-        priceUp = 0;
-        priceDn = 0;
-        priceAu = 0;
         demUp = null;
         if( ! (this instanceof Trader) )
             demDn = null;
-    }
+        priceUp = 0;
+        priceDn = 0;
+        priceAu = 0;
+        pc0 = 0;
+        pc1 = 0;
+}
     
     /**
      * Send a demand to the node's parent

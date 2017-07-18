@@ -101,17 +101,19 @@ public class Demand {
      * Includes transaction cost and capacity limit
      * 
      * @param pUp Tentative price
-     * @param pc0 lower bound of Q=0 range for upstream price
-     * @param pc1 upper bound of Q=0 range for upstream price
-     * @param cost Transmission cost
-     * @param cap Transmission capacity
+     * @param agent Agent whose transmission parameters should be used
      * @return Actual price
      */
-    public int getP(int pUp, int pc0, int pc1, int cost, int cap) { 
+    public int getPriceDn(int pUp, Grid agent) { 
         Bidstep bid;
         int i;
         int p;
         int pDn;
+
+        int pc0  = agent.pc0;
+        int pc1  = agent.pc1;
+        int cost = agent.cost;
+        int cap  = agent.cap;
 
         if( pUp <= -1 )
             return -1;

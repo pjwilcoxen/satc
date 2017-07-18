@@ -17,18 +17,6 @@ public abstract class Market extends Grid {
         demUp = null;
     }
     
-    /** 
-     * Reset at the beginning of a DOS run
-     */
-    @Override
-    public void runInit() {
-        super.runInit();
-        demDn = null;
-        demUp = null;
-        pc0   = 0;
-        pc1   = 0;
-    }
-
     /**
      * Retrieve demands from children and aggregate them
      */

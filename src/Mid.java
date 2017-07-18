@@ -33,7 +33,7 @@ public class Mid extends Market {
 
             case MID_REPORT:
                 priceUp = getPrice();
-                priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
+                priceDn = demDn.getPriceDn(priceUp,(Grid) this);
                 sendPriceDn();
                 break;
                 
