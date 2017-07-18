@@ -13,7 +13,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=43, p_down=43, q_down=-100
+node 203, DOS 0, p_self=43, p_up=0, p_down=43, q_down=-100
 *** MID_REPORT
 node 202, DOS 0, p_self=243, p_up=43, p_down=79, q_down=1786
 node 201, DOS 0, p_self=24, p_up=43, p_down=41, q_down=-1891
@@ -23,7 +23,7 @@ dos 1 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=43, p_down=43, q_down=-100
+node 203, DOS 1, p_self=43, p_up=0, p_down=43, q_down=-100
 *** MID_REPORT
 node 202, DOS 1, p_self=243, p_up=43, p_down=79, q_down=1786
 node 201, DOS 1, p_self=24, p_up=43, p_down=41, q_down=-1891
@@ -33,7 +33,7 @@ dos 5 dropped [31, 38, 87, 94, 170, 189]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=45, p_down=45, q_down=-47
+node 203, DOS 5, p_self=45, p_up=0, p_down=45, q_down=-47
 *** MID_REPORT
 node 202, DOS 5, p_self=233, p_up=45, p_down=75, q_down=1788
 node 201, DOS 5, p_self=25, p_up=45, p_down=43, q_down=-1801
@@ -43,7 +43,7 @@ dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=56, p_down=56, q_down=-86
+node 203, DOS 10, p_self=56, p_up=0, p_down=56, q_down=-86
 *** MID_REPORT
 node 202, DOS 10, p_self=255, p_up=56, p_down=79, q_down=1782
 node 201, DOS 10, p_self=28, p_up=56, p_down=54, q_down=-1807
@@ -55,7 +55,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=40, p_down=40, q_down=-45
+node 203, DOS 0, p_self=40, p_up=0, p_down=40, q_down=-45
 *** MID_REPORT
 node 201, DOS 0, p_self=24, p_up=40, p_down=38, q_down=-1880
 node 202, DOS 0, p_self=194, p_up=40, p_down=73, q_down=1724
@@ -66,7 +66,7 @@ dos 1 dropped [12, 18]
 *** ROOT_SOLVE
 *** ROOT_REPORT
 No equilibrium at root node 203 for DOS run: 1
-node 203, DOS 1, p_self=-1, p_down=-1, q_down=0
+node 203, DOS 1, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** MID_REPORT
 node 202, DOS 1, p_self=194, p_up=-1, p_down=-1, q_down=0
 node 201, DOS 1, p_self=22, p_up=-1, p_down=-1, q_down=0
@@ -76,7 +76,7 @@ dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=41, p_down=41, q_down=-61
+node 203, DOS 5, p_self=41, p_up=0, p_down=41, q_down=-61
 *** MID_REPORT
 node 202, DOS 5, p_self=190, p_up=41, p_down=66, q_down=1786
 node 201, DOS 5, p_self=24, p_up=41, p_down=39, q_down=-1899
@@ -87,7 +87,7 @@ dos 10 dropped [12, 18, 21, 34, 55, 75, 80, 81, 86, 103, 126, 128, 133, 136, 138
 *** ROOT_SOLVE
 *** ROOT_REPORT
 No equilibrium at root node 203 for DOS run: 10
-node 203, DOS 10, p_self=-1, p_down=-1, q_down=0
+node 203, DOS 10, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** MID_REPORT
 node 201, DOS 10, p_self=25, p_up=-1, p_down=-1, q_down=0
 node 202, DOS 10, p_self=184, p_up=-1, p_down=-1, q_down=0
@@ -99,7 +99,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=52, p_down=52, q_down=-73
+node 203, DOS 0, p_self=52, p_up=0, p_down=52, q_down=-73
 *** MID_REPORT
 node 202, DOS 0, p_self=296, p_up=52, p_down=90, q_down=1771
 node 201, DOS 0, p_self=25, p_up=52, p_down=50, q_down=-1815
@@ -109,7 +109,7 @@ dos 1 dropped [124, 181]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=52, p_down=52, q_down=-73
+node 203, DOS 1, p_self=52, p_up=0, p_down=52, q_down=-73
 *** MID_REPORT
 node 201, DOS 1, p_self=25, p_up=52, p_down=50, q_down=-1815
 node 202, DOS 1, p_self=289, p_up=52, p_down=82, q_down=1799
@@ -119,7 +119,7 @@ dos 5 dropped [34, 124, 160, 181, 193]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=51, p_down=51, q_down=-93
+node 203, DOS 5, p_self=51, p_up=0, p_down=51, q_down=-93
 *** MID_REPORT
 node 202, DOS 5, p_self=-1, p_up=51, p_down=49, q_down=2390
 node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1811
@@ -129,7 +129,7 @@ dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 1
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=54, p_down=54, q_down=-81
+node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-81
 *** MID_REPORT
 node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1806
 node 202, DOS 10, p_self=-1, p_up=54, p_down=52, q_down=2275
@@ -141,7 +141,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=44, p_down=44, q_down=-48
+node 203, DOS 0, p_self=44, p_up=0, p_down=44, q_down=-48
 *** MID_REPORT
 node 202, DOS 0, p_self=236, p_up=44, p_down=75, q_down=1787
 node 201, DOS 0, p_self=24, p_up=44, p_down=42, q_down=-1858
@@ -151,7 +151,7 @@ dos 1 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=44, p_down=44, q_down=-48
+node 203, DOS 1, p_self=44, p_up=0, p_down=44, q_down=-48
 *** MID_REPORT
 node 201, DOS 1, p_self=24, p_up=44, p_down=42, q_down=-1858
 node 202, DOS 1, p_self=236, p_up=44, p_down=75, q_down=1787
@@ -161,7 +161,7 @@ dos 5 dropped [21, 60, 63, 135, 158, 174]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=43, p_down=43, q_down=-77
+node 203, DOS 5, p_self=43, p_up=0, p_down=43, q_down=-77
 *** MID_REPORT
 node 201, DOS 5, p_self=22, p_up=43, p_down=41, q_down=-1869
 node 202, DOS 5, p_self=220, p_up=43, p_down=71, q_down=1794
@@ -171,7 +171,7 @@ dos 10 dropped [5, 7, 10, 20, 21, 23, 29, 34, 54, 60, 61, 63, 67, 70, 74, 75, 87
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=47, p_down=47, q_down=-65
+node 203, DOS 10, p_self=47, p_up=0, p_down=47, q_down=-65
 *** MID_REPORT
 node 201, DOS 10, p_self=22, p_up=47, p_down=45, q_down=-1837
 node 202, DOS 10, p_self=216, p_up=47, p_down=60, q_down=1787
@@ -183,7 +183,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=46, p_down=46, q_down=-9
+node 203, DOS 0, p_self=46, p_up=0, p_down=46, q_down=-9
 *** MID_REPORT
 node 201, DOS 0, p_self=25, p_up=46, p_down=44, q_down=-1801
 node 202, DOS 0, p_self=172, p_up=46, p_down=71, q_down=1767
@@ -193,7 +193,7 @@ dos 1 dropped [107, 192]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=46, p_down=46, q_down=-9
+node 203, DOS 1, p_self=46, p_up=0, p_down=46, q_down=-9
 *** MID_REPORT
 node 201, DOS 1, p_self=25, p_up=46, p_down=44, q_down=-1801
 node 202, DOS 1, p_self=195, p_up=46, p_down=76, q_down=1792
@@ -203,7 +203,7 @@ dos 5 dropped [24, 78, 107, 192, 197]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=50, p_down=50, q_down=-67
+node 203, DOS 5, p_self=50, p_up=0, p_down=50, q_down=-67
 *** MID_REPORT
 node 201, DOS 5, p_self=25, p_up=50, p_down=48, q_down=-1802
 node 202, DOS 5, p_self=225, p_up=50, p_down=84, q_down=1789
@@ -213,7 +213,7 @@ dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=55, p_down=55, q_down=-85
+node 203, DOS 10, p_self=55, p_up=0, p_down=55, q_down=-85
 *** MID_REPORT
 node 202, DOS 10, p_self=225, p_up=55, p_down=81, q_down=1794
 node 201, DOS 10, p_self=26, p_up=55, p_down=53, q_down=-1810
@@ -226,7 +226,7 @@ dos 0 dropped []
 *** ROOT_SOLVE
 *** ROOT_REPORT
 No equilibrium at root node 203 for DOS run: 0
-node 203, DOS 0, p_self=-1, p_down=-1, q_down=0
+node 203, DOS 0, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** MID_REPORT
 node 201, DOS 0, p_self=22, p_up=-1, p_down=-1, q_down=0
 node 202, DOS 0, p_self=246, p_up=-1, p_down=-1, q_down=0
@@ -236,7 +236,7 @@ dos 1 dropped [98, 152]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=47, p_down=47, q_down=-28
+node 203, DOS 1, p_self=47, p_up=0, p_down=47, q_down=-28
 *** MID_REPORT
 node 201, DOS 1, p_self=23, p_up=47, p_down=45, q_down=-1897
 node 202, DOS 1, p_self=245, p_up=47, p_down=72, q_down=1791
@@ -246,7 +246,7 @@ dos 5 dropped [40, 73, 88, 98, 139, 152]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=60, p_down=60, q_down=-93
+node 203, DOS 5, p_self=60, p_up=0, p_down=60, q_down=-93
 *** MID_REPORT
 node 202, DOS 5, p_self=242, p_up=60, p_down=71, q_down=1773
 node 201, DOS 5, p_self=26, p_up=60, p_down=58, q_down=-1811
@@ -256,7 +256,7 @@ dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=54, p_down=54, q_down=-86
+node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-86
 *** MID_REPORT
 node 201, DOS 10, p_self=22, p_up=54, p_down=52, q_down=-1819
 node 202, DOS 10, p_self=266, p_up=54, p_down=69, q_down=1791
@@ -268,7 +268,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=45, p_down=45, q_down=-25
+node 203, DOS 0, p_self=45, p_up=0, p_down=45, q_down=-25
 *** MID_REPORT
 node 202, DOS 0, p_self=187, p_up=45, p_down=67, q_down=1736
 node 201, DOS 0, p_self=25, p_up=45, p_down=43, q_down=-1813
@@ -278,7 +278,7 @@ dos 1 dropped [150]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=45, p_down=45, q_down=-25
+node 203, DOS 1, p_self=45, p_up=0, p_down=45, q_down=-25
 *** MID_REPORT
 node 201, DOS 1, p_self=25, p_up=45, p_down=43, q_down=-1813
 node 202, DOS 1, p_self=181, p_up=45, p_down=64, q_down=1795
@@ -288,7 +288,7 @@ dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=46, p_down=46, q_down=-84
+node 203, DOS 5, p_self=46, p_up=0, p_down=46, q_down=-84
 *** MID_REPORT
 node 201, DOS 5, p_self=25, p_up=46, p_down=44, q_down=-1853
 node 202, DOS 5, p_self=172, p_up=46, p_down=59, q_down=1774
@@ -298,7 +298,7 @@ dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141,
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=45, p_down=45, q_down=-20
+node 203, DOS 10, p_self=45, p_up=0, p_down=45, q_down=-20
 *** MID_REPORT
 node 201, DOS 10, p_self=23, p_up=45, p_down=43, q_down=-1808
 node 202, DOS 10, p_self=194, p_up=45, p_down=64, q_down=1784
@@ -310,7 +310,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=45, p_down=45, q_down=-58
+node 203, DOS 0, p_self=45, p_up=0, p_down=45, q_down=-58
 *** MID_REPORT
 node 202, DOS 0, p_self=235, p_up=45, p_down=79, q_down=1788
 node 201, DOS 0, p_self=26, p_up=45, p_down=43, q_down=-1870
@@ -320,7 +320,7 @@ dos 1 dropped [49, 53, 92, 153]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=45, p_down=45, q_down=-14
+node 203, DOS 1, p_self=45, p_up=0, p_down=45, q_down=-14
 *** MID_REPORT
 node 201, DOS 1, p_self=26, p_up=45, p_down=43, q_down=-1825
 node 202, DOS 1, p_self=232, p_up=45, p_down=76, q_down=1774
@@ -331,7 +331,7 @@ dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
 *** ROOT_SOLVE
 *** ROOT_REPORT
 No equilibrium at root node 203 for DOS run: 5
-node 203, DOS 5, p_self=-1, p_down=-1, q_down=0
+node 203, DOS 5, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** MID_REPORT
 node 202, DOS 5, p_self=220, p_up=-1, p_down=-1, q_down=0
 node 201, DOS 5, p_self=23, p_up=-1, p_down=-1, q_down=0
@@ -341,7 +341,7 @@ dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 15
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=41, p_down=41, q_down=-54
+node 203, DOS 10, p_self=41, p_up=0, p_down=41, q_down=-54
 *** MID_REPORT
 node 201, DOS 10, p_self=21, p_up=41, p_down=39, q_down=-1807
 node 202, DOS 10, p_self=207, p_up=41, p_down=60, q_down=1794
@@ -354,7 +354,7 @@ dos 0 dropped []
 *** ROOT_SOLVE
 *** ROOT_REPORT
 No equilibrium at root node 203 for DOS run: 0
-node 203, DOS 0, p_self=-1, p_down=-1, q_down=0
+node 203, DOS 0, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** MID_REPORT
 node 202, DOS 0, p_self=224, p_up=-1, p_down=-1, q_down=0
 node 201, DOS 0, p_self=24, p_up=-1, p_down=-1, q_down=0
@@ -364,7 +364,7 @@ dos 1 dropped [92, 94, 124, 159, 192]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=54, p_down=54, q_down=-40
+node 203, DOS 1, p_self=54, p_up=0, p_down=54, q_down=-40
 *** MID_REPORT
 node 202, DOS 1, p_self=275, p_up=54, p_down=80, q_down=1785
 node 201, DOS 1, p_self=27, p_up=54, p_down=52, q_down=-1801
@@ -374,7 +374,7 @@ dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=47, p_down=47, q_down=-99
+node 203, DOS 5, p_self=47, p_up=0, p_down=47, q_down=-99
 *** MID_REPORT
 node 202, DOS 5, p_self=269, p_up=47, p_down=76, q_down=1788
 node 201, DOS 5, p_self=23, p_up=47, p_down=45, q_down=-1880
@@ -384,7 +384,7 @@ dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=54, p_down=54, q_down=-96
+node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-96
 *** MID_REPORT
 node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1857
 node 202, DOS 10, p_self=247, p_up=54, p_down=67, q_down=1751
@@ -396,7 +396,7 @@ dos 0 dropped []
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 0, p_self=47, p_down=47, q_down=-90
+node 203, DOS 0, p_self=47, p_up=0, p_down=47, q_down=-90
 *** MID_REPORT
 node 201, DOS 0, p_self=24, p_up=47, p_down=45, q_down=-1876
 node 202, DOS 0, p_self=192, p_up=47, p_down=75, q_down=1782
@@ -406,7 +406,7 @@ dos 1 dropped [75, 124]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 1, p_self=51, p_down=51, q_down=-84
+node 203, DOS 1, p_self=51, p_up=0, p_down=51, q_down=-84
 *** MID_REPORT
 node 202, DOS 1, p_self=189, p_up=51, p_down=72, q_down=1783
 node 201, DOS 1, p_self=25, p_up=51, p_down=49, q_down=-1847
@@ -416,7 +416,7 @@ dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 5, p_self=51, p_down=51, q_down=-62
+node 203, DOS 5, p_self=51, p_up=0, p_down=51, q_down=-62
 *** MID_REPORT
 node 202, DOS 5, p_self=217, p_up=51, p_down=78, q_down=1747
 node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1825
@@ -426,7 +426,7 @@ dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189,
 *** MID_AGGREGATE
 *** ROOT_SOLVE
 *** ROOT_REPORT
-node 203, DOS 10, p_self=56, p_down=56, q_down=-83
+node 203, DOS 10, p_self=56, p_up=0, p_down=56, q_down=-83
 *** MID_REPORT
 node 201, DOS 10, p_self=25, p_up=56, p_down=54, q_down=-1809
 node 202, DOS 10, p_self=222, p_up=56, p_down=79, q_down=1755

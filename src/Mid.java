@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import sim.engine.SimState;
 
 /** 
@@ -25,27 +24,17 @@ public class Mid extends Market {
      */
     @Override
     public void step(SimState state) {
-        ArrayList<Demand> dList;
-        Grid self = this;
-        
         switch (Env.stageNow) {
             
             case MID_AGGREGATE:
-                dList = getDemands();
-                demDn = aggDemands(dList);
-                demDn.log(this,"down");
-                demUp = demDn.adjustTrans(self);
-                demUp.log(this,"up");
-                reportDemand(demUp);
+                buildDemDn();
+                sendDemUp();
                 break;
 
             case MID_REPORT:
                 priceUp = getPrice();
-                priceAu = demDn.getEquPrice();
                 priceDn = demDn.getP(priceUp,pc0,pc1,cost,cap);
-                reportPrice(priceDn);
-                writePQ();
-                log();
+                sendPriceDn();
                 break;
                 
             default:
@@ -53,37 +42,13 @@ public class Mid extends Market {
         }
     }
 
-    /** 
-     * Initialize for a new population
-     */
-    @Override 
-    public void popInit() {
-        super.popInit();
-    }
-
-    /** 
-     * Reset at the beginning of a DOS run
-     */
-    @Override
-    public void runInit() {
-        super.runInit();
-        pc0 = 0;
-        pc1 = 0;
-        demUp = null;
-    }
-
     /**
-     * Write a log message
+     * Send a demand curve up accounting for transmission
      */
-    void log() {
-        int q = demDn.getQ(priceDn);
-        Env.log.println(
-            "node "+own_id+
-            ", DOS "+Env.curDOS+
-            ", p_self="+priceAu+
-            ", p_up="+priceUp+
-            ", p_down="+priceDn+
-            ", q_down="+q
-        );
-    }        
+    void sendDemUp() {
+        demUp = demDn.adjustTrans((Grid) this);
+        demUp.log(this,"up");
+        reportDemand(demUp);
+    }
+
 }

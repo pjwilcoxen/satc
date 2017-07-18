@@ -14,6 +14,7 @@ public abstract class Market extends Grid {
     public Market(int up_id, int own_id) {
         super(up_id,own_id);
         demDn = null;
+        demUp = null;
     }
     
     /** 
@@ -23,50 +24,75 @@ public abstract class Market extends Grid {
     public void runInit() {
         super.runInit();
         demDn = null;
+        demUp = null;
+        pc0   = 0;
+        pc1   = 0;
     }
 
     /**
-     * Aggregate demands from child nodes
-     * 
-     * @param demands List of demand curves
-     * @return Aggregate demand
+     * Retrieve demands from children and aggregate them
      */
-    Demand aggDemands(ArrayList<Demand> demands) {
-        Demand newD = null;
+    void buildDemDn() {
+        Demand curD;
 
-        for(Demand dem: demands ) 
-            if( newD == null )
-                newD = dem;
+        // retrieve and aggregate
+
+        demDn = null;
+        for(Msg msg: getMsgs(Msg.Types.DEMAND)) {
+            curD = msg.getDemand();
+            if( demDn == null )
+                demDn = curD;
             else
-                newD = newD.aggregateDemand(dem);
+                demDn = demDn.aggregateDemand(curD);
+        }
+        assert demDn != null;
 
-        assert newD != null;
+        // log the demand for reference
 
-        return newD;
+        demDn.log(this,"down");
+
+        // figure out price in autarky
+
+        priceAu = demDn.getEquPrice();
     }
 
     /**
-     * Extract and save demands from list of messages
-     * 
-     * @return List of demands
+     * Broadcast the downstream price to all children
      */
-    ArrayList<Demand> getDemands() {
-        ArrayList<Demand> queue = new ArrayList<>();
-        for(Msg msg: getMsgs(Msg.Types.DEMAND)) 
-            queue.add(msg.getDemand());
-        return queue;
-    }
+    void sendPriceDn() {
 
-    /**
-     * Broadcast a price to all children
-     * 
-     * @param price Price to send
-     */
-    void reportPrice(int price) {
+        // send to kids
+
         for (Agent child: children) {
             Msg msg = new Msg(this,child.own_id);
-            msg.setPrice(price);
+            msg.setPrice(priceDn);
             child.channel.send(msg);
             }
+
+         // write and log results
+
+         writePQ();
+         log();
     }
+
+    /**
+     * Write a log message
+     */
+    void log() {
+        String pUp;
+        int q;
+        
+        q = demDn.getQ(priceDn);
+        if( (this instanceof Root) && priceAu == -1 )
+            Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
+
+        Env.log.println(
+            "node "+own_id+
+            ", DOS "+Env.curDOS+
+            ", p_self="+priceAu+
+            ", p_up="+priceUp+
+            ", p_down="+priceDn+
+            ", q_down="+q
+        );
+    }        
 }
