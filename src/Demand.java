@@ -110,8 +110,8 @@ public class Demand {
         int p;
         int pDn;
 
-        int pc0  = agent.pc0;
-        int pc1  = agent.pc1;
+        int pc0  = agent.p_notrans_lo;
+        int pc1  = agent.p_notrans_hi;
         int cost = agent.cost;
         int cap  = agent.cap;
 

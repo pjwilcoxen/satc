@@ -19,8 +19,8 @@ public abstract class Grid extends Agent {
 
     int cost;
     int cap; 
-    int pc0;
-    int pc1;
+    int p_notrans_lo;
+    int p_notrans_hi;
     
     // this agent's view of up and downstream demand and price
     
@@ -54,8 +54,8 @@ public abstract class Grid extends Agent {
         priceUp = 0;
         priceDn = 0;
         priceAu = 0;
-        pc0 = 0;
-        pc1 = 0;
+        p_notrans_lo = 0;
+        p_notrans_hi = 0;
 }
     
     /**
@@ -108,16 +108,18 @@ public abstract class Grid extends Agent {
     /**
      * Set Price bounds
      * 
-     * These are used in finding a downstream price consistent with
-     * transmission parameters.
+     * These define the deadband range for upstream prices; in 
+     * this range, there will be no transmission to or from the 
+     * upstream node because transmission costs are larger than
+     * the gains from trade.
      * 
      * @param base_p Central price 
      * @param dp Distance to upper and lower bounds
      */
     public void setPc(int base_p, int dp) {
-        pc0 = base_p - dp;
-        pc1 = base_p + dp;
-		if( pc0<0 )pc0 = 0;
+        p_notrans_lo = base_p - dp;
+        p_notrans_hi = base_p + dp;
+		if( p_notrans_lo < 0 )p_notrans_lo = 0;
     }
         
 }
