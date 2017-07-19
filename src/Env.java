@@ -120,7 +120,10 @@ public class Env extends SimState {
     static PrintWriter out;
     static PrintWriter net;
     static PrintWriter msg;
-    
+   
+    static int maxTier;
+    static int curTier;
+
     /**
      * Printer for log file
      */
@@ -475,8 +478,11 @@ public class Env extends SimState {
        
         // set grid tiers for future reference
 
-        for (Grid g : gridList) 
-            g.getTier();
+        maxTier = 0;
+        for (Grid g : gridList) {
+            curTier = g.getTier();
+            if( curTier>maxTier )maxTier = curTier;
+        }
 
         // check configuration
 
@@ -584,7 +590,7 @@ public class Env extends SimState {
      */
     @Override
     public void start(){
-	super.start();
+        super.start();
         makeAgents(fileConfig);
         buildGrid();
     }
@@ -594,11 +600,10 @@ public class Env extends SimState {
      */
     @Override
     public void finish() {
-       System.out.println("Simulation complete");
-       out.close();
-       log.close();
-       net.close();
-       System.exit(0);
+        System.out.println("Simulation complete");
+        out.close();
+        log.close();
+        net.close();
     }
  
 }
