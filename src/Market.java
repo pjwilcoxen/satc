@@ -21,25 +21,13 @@ public abstract class Market extends Grid {
      * Retrieve demands from children and aggregate them
      */
     void buildDemDn() {
-        Demand curD;
+        ArrayList<Demand> dList = new ArrayList<>();
 
-        // retrieve and aggregate
+        for(Msg msg: getMsgs(Msg.Types.DEMAND))
+            dList.add(msg.getDemand());
 
-        demDn = null;
-        for(Msg msg: getMsgs(Msg.Types.DEMAND)) {
-            curD = msg.getDemand();
-            if( demDn == null )
-                demDn = curD;
-            else
-                demDn = demDn.aggregateDemand(curD);
-        }
-        assert demDn != null;
-
-        // log the demand for reference
-
+        demDn = Demand.agg(dList);  
         demDn.log(this,"down");
-
-        // figure out price in autarky
 
         priceAu = demDn.getEquPrice();
     }

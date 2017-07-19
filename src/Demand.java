@@ -38,6 +38,24 @@ public class Demand {
     Bidstep[] bids;
 
     /**
+     * Aggregate a list of demand curves
+     *
+     * @param dList ArrayList of Demand curves to be aggregated
+     * @return new Demand curve
+     */
+    static Demand agg(ArrayList<Demand> dList) {
+        Demand newD = null;
+        if( dList.size() == 0 )
+            new RuntimeException("Empty list in Demand.agg()");
+        for(Demand curD: dList) 
+            if( newD == null )
+                newD = curD;
+            else
+                newD = newD.aggregateDemand(curD);
+        return newD;
+    }
+     
+    /**
      * Demand curve
      */
     public Demand() {
