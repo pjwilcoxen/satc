@@ -102,7 +102,7 @@ public abstract class Grid extends Agent {
         int q = 0;
         if( this instanceof Trader )
             q = demDn.getQ(priceDn);
-        Env.printResult(this,priceDn,q);           
+        Env.saveResult(this,priceDn,q);           
     }
 
     /**

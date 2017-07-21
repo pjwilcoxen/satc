@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
+import java.util.TreeMap;
 import org.apache.commons.csv.*;
 import sim.engine.SimState;
 
@@ -116,6 +117,9 @@ public class Env extends SimState {
     //
     // Other variables
     //
+
+    static TreeMap<Integer,String> outMap = new TreeMap<>();
+    static boolean outHeader = true;
 
     static PrintWriter out;
     static PrintWriter net;
@@ -368,6 +372,8 @@ public class Env extends SimState {
                     stageNow = s;
                     enviro.schedule.step(enviro);
                 }
+
+                printResults();
             }
         }
         
@@ -558,31 +564,38 @@ public class Env extends SimState {
     }
 
     /**
-     * Print out results
+     * Save results for printing out
      * 
      * @param agent Agent 
      * @param p Price
      * @param q Quantity
      */
-    public static void printResult(Agent agent, int p, int q) {
+    public static void saveResult(Agent agent, int p, int q) {
+           int key;
+           String results;
+           int block;
+           String draw;
 
-        String header[] = {"pop","dos","id","rblock","blocked","p","q"};
-        CSVFormat csvFormat ;
-        String draw;
-        int block;
-
-        try {
-           if( csvPrinter == null ) {
-              csvFormat  = CSVFormat.DEFAULT.withHeader(header);
-              csvPrinter = new CSVPrinter(out,csvFormat);
-           }
            block = isBlocked(curDOS,agent) ? 1 : 0;
-           draw = String.format("%.1f",agent.rBlock);
-           csvPrinter.printRecord( pop, curDOS, agent.own_id, draw, block, p, q );      
+           draw  = String.format("%.1f",agent.rBlock);
+
+           key     = agent.own_id;
+           results = draw+","+block+","+p+","+q;
+
+           outMap.put(key,results);
+    }
+
+    /**
+     * Write the results for a run to the output file
+     */
+    static void printResults() {
+        if( outHeader ) {
+            out.println("pop,dos,id,rblock,blocked,p,q");
+            outHeader = false;
         }
-        catch (IOException e) {
-           throw new RuntimeException("Error writing to output file");
-        }
+        for(int key: outMap.keySet() )
+            out.println(pop+","+curDOS+","+key+","+outMap.get(key));
+        outMap.clear();
     }
 
     /**
