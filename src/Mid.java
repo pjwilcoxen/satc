@@ -24,14 +24,16 @@ public class Mid extends Market {
      */
     @Override
     public void step(SimState state) {
+        if( gridTier != Env.curTier )
+            return;
         switch (Env.stageNow) {
-            
-            case MID_AGGREGATE:
+            case AGGREGATE:
+                if( gridTier != Env.curTier )return;
                 buildDemDn();
                 sendDemUp();
                 break;
 
-            case MID_REPORT:
+            case REPORT:
                 priceUp = getPrice();
                 priceDn = demDn.getPriceDn(priceUp,(Grid) this);
                 sendPriceDn();

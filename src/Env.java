@@ -71,21 +71,21 @@ public class Env extends SimState {
         * */
        TRADER_SEND,
        /**
-        * Mid nodes aggregate and send demand up
+        * Hook for virtual agents prior to AGGREGATE for each tier
         */
-       MID_AGGREGATE, 
+       PRE_AGGREGATE,
        /**
-        * Root node aggregates and finds equilibrium
+        * Aggregate and send demand up for each tier
         */
-       ROOT_SOLVE, 
+       AGGREGATE, 
        /**
-        * Root node report price to mid nodes
+        * Hook for virtual agents prior to REPORT for each tier
         */
-       ROOT_REPORT, 
+       PRE_REPORT,
        /**
-        * Mid nodes report price to traders
-       */
-       MID_REPORT, 
+        * Report price to child nodes for each tier
+        */
+       REPORT, 
        /**
         * Traders determine actual loads
         */
@@ -367,11 +367,35 @@ public class Env extends SimState {
 
                 // now step through the run
 
-                for( Stage s : Stage.values() ) {
-                    log.println("*** "+s);
-                    stageNow = s;
-                    enviro.schedule.step(enviro);
-                }
+                for( Stage s : Stage.values() ) 
+                    switch( s ) {
+                        case PRE_AGGREGATE:
+                            for(curTier=2 ; curTier<=maxTier ; curTier++ ) {
+                                do_stage(enviro,true,Stage.PRE_AGGREGATE);
+                                do_stage(enviro,true,Stage.AGGREGATE);
+                            }
+                            break;
+
+                        case AGGREGATE:
+                            break;
+
+                        case PRE_REPORT:
+                            for(curTier=maxTier ; curTier>=2 ; curTier-- ) {
+                                do_stage(enviro,true,Stage.PRE_REPORT);
+                                do_stage(enviro,true,Stage.REPORT);
+                            }
+                            break;
+                        
+                        case REPORT:
+                            break;
+
+                        default:
+                            do_stage(enviro,false,s);
+                            break;
+
+                    }
+
+                // write the results
 
                 printResults();
             }
@@ -379,7 +403,19 @@ public class Env extends SimState {
         
         enviro.finish();
 	}
-    
+   
+    /** 
+     * Carry out a particular stage on a given tier
+     */
+    static void do_stage(Env e, boolean showTier, Stage s) {
+        if( showTier) 
+            log.println("*** tier "+curTier+" "+s);
+        else
+            log.println("*** "+s);
+        stageNow = s;
+        e.schedule.step(e);
+    }
+        
     /**
      * Create agents based on the input network map
      */

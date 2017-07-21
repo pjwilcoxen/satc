@@ -22,13 +22,14 @@ public class Root extends Market {
      */
     @Override
     public void step(SimState state) {
+        if( gridTier != Env.curTier )
+            return;
         switch (Env.stageNow) {
-
-            case ROOT_SOLVE:
+            case AGGREGATE:
                 buildDemDn();
                 break;
 
-            case ROOT_REPORT:
+            case REPORT:
                 priceDn = priceAu;
                 sendPriceDn();
                 break;
