@@ -448,10 +448,8 @@ public class Env extends SimState {
 
                 switch( cur_type ) {
                     case 1: 
-                        cur_agent = new Root(cur_upid,cur_id);
-                        break;
                     case 2: 
-                        cur_agent = new Mid(cur_upid,cur_id);
+                        cur_agent = new Market(cur_upid,cur_id);
                         break;
                     case 3: 
                         cur_agent = new Trader(cur_upid,cur_id,cur_sd);
@@ -541,28 +539,15 @@ public class Env extends SimState {
                 continue;
             }
 
-            if( g instanceof Mid ) {
-                where = "mid "+g.own_id+" ";
-                if( g.getTier() != 2 )
+            if( g instanceof Market ) {
+                where = "market "+g.own_id+" ";
+                if( g.getTier() < 2 )
                     Err.add(where+"has tier "+g.getTier());
                 if( g.children.isEmpty() )
                     Err.add(where+"has no child nodes");
-                if( g.par_id == 0 )
-                    Err.add(where+"has no parent node");
                 continue;
             }
 
-            if( g instanceof Root ) {
-                where = "root "+g.own_id+" ";
-                if( g.getTier() != 3 )
-                    Err.add(where+"has tier "+g.getTier());
-                if( g.children.isEmpty() )
-                    Err.add(where+"has no child nodes");
-                if( g.par_id != 0 )
-                    Err.add(where+"has a parent node");
-                continue;
-            }
-            
             assert false;
         }
         

@@ -448,7 +448,7 @@ public class Demand {
      * Change the step prices to account for the transmission cost
      * 
      * @param c Transmission cost
-     * @param agent Midlevel market
+     * @param agent Grid agent
      * @return New demand curve
      */
     public Demand addCost(int c, Grid agent) {

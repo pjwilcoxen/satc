@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import sim.engine.SimState;
 
 /** 
  * Markets aggregate demands and find equilibrium prices
  */
-public abstract class Market extends Grid {
+public class Market extends Grid {
 
     /**
      * General market object
@@ -17,6 +18,37 @@ public abstract class Market extends Grid {
         demUp = null;
     }
     
+    /**
+     * Actions based on current simulation step
+     *
+     * @param state Mason state
+     */
+    @Override
+    public void step(SimState state) {
+        if( gridTier != Env.curTier )
+            return;
+        switch (Env.stageNow) {
+            case AGGREGATE:
+                buildDemDn();
+                if( par_id != 0 )
+                    sendDemUp();
+                break;
+
+            case REPORT:
+                if( par_id == 0 ) 
+                    priceDn = priceAu;
+                else {
+                    priceUp = getPrice();
+                    priceDn = demDn.getPriceDn(priceUp,(Grid) this);
+                }
+                sendPriceDn();
+                break;
+                
+            default:
+                break;
+        }
+    }
+
     /**
      * Retrieve demands from children and aggregate them
      */
@@ -51,6 +83,17 @@ public abstract class Market extends Grid {
          log();
     }
 
+
+    /**
+     * Send a demand curve up accounting for transmission
+     */
+    void sendDemUp() {
+        demUp = demDn.adjustTrans((Grid) this);
+        demUp.log(this,"up");
+        reportDemand(demUp);
+    }
+
+
     /**
      * Write a log message
      */
@@ -59,7 +102,7 @@ public abstract class Market extends Grid {
         int q;
         
         q = demDn.getQ(priceDn);
-        if( (this instanceof Root) && priceAu == -1 )
+        if( (this instanceof Market) && par_id == 0 && priceAu == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
 
         Env.log.println(
