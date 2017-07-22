@@ -27,15 +27,48 @@ public class Demand {
             this.q_min = q_min;
             this.q_max = q_max;
         }
+
+        Bidstep(Bidstep old) {
+            p     = old.p;
+            q_min = old.q_min;
+            q_max = old.q_max;
+        }
         
         Bidstep shift_p(int dp) {
             return new Bidstep(p+dp,q_min,q_max);
         }
+
     }
     
     // A complete curve is a list of steps
     
     Bidstep[] bids;
+    ArrayList<Bidstep> list;
+
+    /**
+     * Demand curve
+     */
+    public Demand() {
+        bids = new Bidstep[MAXBIDS];
+        list = new ArrayList<>();
+    }
+
+    public Demand(ArrayList<Bidstep> blist) {
+        list = blist;
+        setArray();
+    }
+
+    void setArray() {
+        int i;
+        bids = new Bidstep[list.size()+1];
+        for( i=0 ; i<list.size() ; i++ )
+            bids[i] = list.get(i);
+        bids[i] = null;
+    }
+
+    void add(Bidstep bid) {
+        list.add(bid);
+    }
 
     /**
      * Aggregate a list of demand curves
@@ -55,13 +88,6 @@ public class Demand {
         return newD;
     }
      
-    /**
-     * Demand curve
-     */
-    public Demand() {
-        bids = new Bidstep[MAXBIDS];
-    }
-
     /**
      * Convert the curve to a list
      */
@@ -217,41 +243,32 @@ public class Demand {
      * @return New demand curve
      */
     public Demand addCapacity(int cap) {
+        Bidstep newbid;
         Demand newD;
-        Bidstep[] tmp;
-        int i;
-        int j;
-        
+
         newD = new Demand();
-        tmp  = newD.bids;
-
-        j = 0;
-
-        //skip the steps with a minimum greater than the cap
-
-        for(i=0; bids[i].q_min >= cap; i++);
+        for(Bidstep old: asList()) {
         
-        if(bids[i] == null)
-            return newD;
+            // skip demands beyond cap to the right or left
 
-        //set the right corner step
-        
-        if(bids[i].q_max > cap){
-            tmp[j++]= new Bidstep(bids[i].p,bids[i].q_min,cap);
-            i++;
+            if( cap <= old.q_min )continue;
+            if( old.q_max < -cap )continue;
+
+            // create a new step
+
+            newbid = new Bidstep(old);
+
+            // impose the constraints, if necessary
+
+            if( newbid.q_max >  cap ) newbid.q_max =  cap;
+            if( newbid.q_min < -cap ) newbid.q_min = -cap;
+
+            // add it
+
+            newD.add(newbid);
         }
 
-        //consider the steps between two capacity limits
-        
-        for( ; (bids[i] != null) && (bids[i].q_min >= ((-1)*(cap))) ; i++)
-            tmp[j++] = new Bidstep(bids[i].p,bids[i].q_min,bids[i].q_max);
-
-        if (bids[i] == null) 
-            return newD;
-
-        //set the left corner step
-        tmp[j] = new Bidstep(bids[i].p,((-1)*(cap)),bids[i].q_max);
-        
+        newD.setArray();
         return newD;
     }
 
@@ -374,9 +391,9 @@ public class Demand {
 
         // first step
         if( makeS )
-            result[0] = new Bidstep(p0, q1, q2);
+            newD.add( new Bidstep(p0, q1, q2) );
         else
-            result[0] = new Bidstep(p0, q2, q1);
+            newD.add( new Bidstep(p0, q2, q1) );
         
         // create the steps below the price=40
         
@@ -385,9 +402,9 @@ public class Demand {
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             if( makeS )
-                result[i] = new Bidstep(p1, q1, q2);
+                newD.add( new Bidstep(p1, q1, q2) );
             else
-                result[i] = new Bidstep(p1, q2, q1);
+                newD.add( new Bidstep(p1, q2, q1) );
         }
         
         // create twice the number of steps above price=40
@@ -397,51 +414,28 @@ public class Demand {
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             if( makeS )
-                result[steps+i-1] = new Bidstep(p1, q1, q2);
+                newD.add( new Bidstep(p1, q1, q2) );
             else
-                result[steps+i-1] = new Bidstep(p1, q2, q1);
+                newD.add( new Bidstep(p1, q2, q1) );
         }
         
+        newD.setArray();
         return newD;
     }
 
     /** 
      * Find an equilibrium price for a net demand curve
      * 
-     * Returns the highest price with a positive q_max and a negative
-     * q_min.
+     * Returns the highest price with a nonnegative q_max and a 
+     * negative q_min; otherwise return -1.
      * 
      * @return The equilibrium price for this net demand curve
      */
     public int getEquPrice() {
-        int i;
-        int bl;
-        int min;
-
-        bl  = -2;
-        min = 1;
-
-        for(i=0 ; (bids[i] != null) && (bids[i].q_max >= 0) ; i++) {
-            bl  = bids[i].p;
-            min = bids[i].q_min;
-        }
-
-        // no equilibrium because there are no steps with positive q_max
-        
-        if( i==0 )
-            return -1;
-        
-        // no equilibrium because we've run off the top end of the 
-        // demand curve and the minimum demanded is still positive
-        
-        if( (bids[i] == null) && (min > 0) ) 
-            return -1;
-
-        // make sure something was found
-        
-        assert bl != -2;
-
-        return bl;
+        for(Bidstep bid: asList())
+            if( bid.q_min < 0 && bid.q_max >= 0 )
+                return bid.p;
+        return -1;
     }
 
     /**
@@ -453,78 +447,42 @@ public class Demand {
      */
     public Demand addCost(int c, Grid agent) {
         Demand newD;
-        Bidstep[] tmp;
-        int i;
-        int p_lo;
-        int p_hi;
+        int p_lo = -1;
+        int p_hi = -1;
 
         newD = new Demand();
-        tmp  = newD.bids;
-
-        // decrease the price level of steps with positive quantity
-
-        for(i=0 ; (bids[i] != null) && (bids[i].q_min >= 0) ; i++)
-            tmp[i] = bids[i].shift_p(-c);
-        
-        // raise the price if this is a pure supply curve with 
-        // all steps to the left of the y axis
-
-        if(i == 0)
-            for( ; bids[i] != null ; i++)
-                tmp[i] = bids[i].shift_p(c);
-
-        // return if there aren't any more steps, which means we're 
-        // not crossing the y axis
-
-        if( bids[i] == null )
-           return newD;
-
-        // ok, started out positive but the curve crosses the y axis. 
-        // there are two cases: (1) the vertical part of the step lies
-        // on the y axis; and (2) the vertical part of the step lies 
-        // to the left of the y axis
-
-        if(bids[i].q_max == 0){
+        for(Bidstep old: asList()) {
             
-            // case 1: step has a vertical overlap with y axis
+            // shift pure demand bids down
 
-            // set the deadband using the upper and lower prices of the overlap
+            if( old.q_min >= 0 ) {
+                newD.add(old.shift_p(-c));
+                continue;
+            }
 
-            p_lo = bids[i-1].p - c;
-            p_hi = bids[i  ].p + c;
-            agent.setPc(p_lo,p_hi);
+            // shift pure supply bids up
 
-            // bump up the remaining supply steps
+            if( old.q_max <=0 ) {
+                newD.add(old.shift_p(c));
+                continue;
+            }
 
-            for(; bids[i] != null ; i++ )
-                tmp[i] = bids[i].shift_p(c);
-        
-        } else {
-            
-            // case 2: step is to the left of the y axis
-            
-            // set the deadband around the previous price
+            // we're left with a horizontal step with q_min<0 and q_max>0
+            // split it and add the new pieces
 
-            p_lo = bids[i-1].p - c;
-            p_hi = bids[i-1].p + c;
-            agent.setPc(p_lo,p_hi);
-
-            // divide the middle step into two steps with +c/-c prices
-            
-            tmp[i] = bids[i].shift_p(-c);
-            tmp[i].q_min = 0;
-
-            tmp[i+1] = bids[i].shift_p(c);
-            tmp[i+1].q_max = 0;
-
-            i++;
-            
-            // bump up the remaining supply steps
-            
-            for(; bids[i] != null ; i++)
-                tmp[i+1] = bids[i].shift_p(c);
+            newD.add( new Bidstep(old.p-c,0,old.q_max) );
+            newD.add( new Bidstep(old.p+c,old.q_min,0) );
         }
 
+        // find the deadband prices
+
+        for(Bidstep bid: newD.list) {
+            if( bid.q_min == 0 )p_lo = bid.p;
+            if( bid.q_max == 0 )p_hi = bid.p;
+        }
+        agent.setPc(p_lo,p_hi);
+
+        newD.setArray();
         return newD;
     }
 
