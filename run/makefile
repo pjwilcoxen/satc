@@ -22,4 +22,6 @@ check :
 	ver -d $(OUTS) $(TXTS)
 
 restore :
+	make tidy
+	make clean
 	git checkout $(OUTS) $(TXTS)
