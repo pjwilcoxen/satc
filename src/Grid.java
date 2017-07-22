@@ -113,8 +113,8 @@ public abstract class Grid extends Agent {
      * upstream node because transmission costs are larger than
      * the gains from trade.
      * 
-     * @param base_p Central price 
-     * @param dp Distance to upper and lower bounds
+     * @param p_lo Lower bound to deadband
+     * @param p_hi Upper bound to deadband
      */
     public void setPc(int p_lo, int p_hi) {
         p_notrans_lo = p_lo;

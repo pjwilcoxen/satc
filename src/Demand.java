@@ -45,8 +45,8 @@ public class Demand {
      */
     static Demand agg(ArrayList<Demand> dList) {
         Demand newD = null;
-        if( dList.size() == 0 )
-            new RuntimeException("Empty list in Demand.agg()");
+        if( dList.isEmpty() )
+            throw new RuntimeException("Empty list in Demand.agg()");
         for(Demand curD: dList) 
             if( newD == null )
                 newD = curD;

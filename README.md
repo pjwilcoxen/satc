@@ -6,8 +6,8 @@ highly distributed electricity markets.
 ## Agent
 
 Agent is an abstract class that provides basic features for entities that 
-communicate.  It has two subclasses: Grid, for agents actually connected
-to the power grid, and Virtual, for agents that only have communication 
+communicate.  It has two subclasses: __Grid__, for agents actually connected
+to the power grid, and __Virtual__, for agents that only have communication 
 links.
 
 ## Channel
@@ -36,7 +36,6 @@ features to be implemented:
 * Authentication of senders
 * Authentication of recipients -- blocking __divert_to()__
 
-
 ## Demand
 
 A __Demand__ object holds a net demand curve expressed as a list of steps.
@@ -56,17 +55,17 @@ simulation.
 ## Grid
 
 Abstract class for grid-connected agents (that is, agents through
-which power can flow).  One subclass, __Trader__, can be instantiated to represent 
-end users or suppliers.  A second subclass, __Market__, is an abstract 
-class that provides basic capabilities for market nodes.  It has two 
-subclasses that can be instantiated: __Mid__, which represents midlevel 
-markets, and __Root__, which represents root markets.
+which power can flow).  Has two subclasses: __Trader__ and __Market__.
 
-__Trader__ nodes have upstream parents that are __Mid__ nodes.  __Mid__ 
-nodes have downstream children that are __Trader__ nodes and upstream 
-parents that are (for now) __Root__ nodes.  __Root__ nodes have downstream 
-children that are __Mid__ nodes and do not have upstream 
-parent nodes.
+## Market
+
+Represents a market.  Aggregates demands by child nodes, which can be 
+__Trader__ or other __Market__ nodes. If the node has a parent, it adjusts 
+the aggregate demand for transmission costs and capacity to the parent
+and passes the adjusted demand up.  If the node does not have a parent, 
+it determines the equilibrium price.  Market nodes receive prices from 
+upstream, adjust them for transmission parameters, and then pass them 
+down to child nodes.
 
 ## Msg
 
@@ -77,6 +76,13 @@ features to be implemented:
 * Encryption that prevents reading by diverters
 * Signing that prevents spoofing the sender
 
+## Trader
+
+Represents end users or suppliers.  __Trader__ nodes have upstream parents 
+that are __Market__ nodes.  They submit __Demand__ objects to their parent
+__Market__ nodes and then receive prices back.  Final demand or supply 
+results from the prices received.
+
 ## Util
 
 A utility class that includes a few general purpose methods for opening
@@ -84,5 +90,5 @@ files with built-in exception handling.
 
 ## Virtual
 
-Class for agents connected to the communications network but not
-connected directly to the power grid. 
+Abstract class for agents connected to the communications network but not
+connected directly to the power grid.  

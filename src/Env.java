@@ -66,6 +66,10 @@ public class Env extends SimState {
      * Stages per simulation
      */
     public static enum Stage {
+       /** 
+        * Service providers send information to clients
+        */
+       SERVICE_SEND,
        /**
         * Traders send demands up
         * */
@@ -405,7 +409,7 @@ public class Env extends SimState {
 	}
    
     /** 
-     * Carry out a particular stage on a given tier
+     * Carry out a particular stage and log it in the process
      */
     static void do_stage(Env e, boolean showTier, Stage s) {
         if( showTier) 
@@ -488,8 +492,7 @@ public class Env extends SimState {
         br.close();
         }
         catch (IOException e) {
-            System.out.println("Could not read network file: "+filename);
-            System.exit(0);
+            throw new RuntimeException("Could not read network file: "+filename);
         }
     }
 
@@ -554,7 +557,7 @@ public class Env extends SimState {
         if( !Err.isEmpty() ) {
             for(String s: Err)
                 System.out.println("configuration error: "+s);
-            System.exit(0);
+            throw new RuntimeException("Fatal configuration errors");
         }
     }
 

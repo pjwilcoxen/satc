@@ -53,14 +53,8 @@ public class Market extends Grid {
      * Retrieve demands from children and aggregate them
      */
     void buildDemDn() {
-        ArrayList<Demand> dList = new ArrayList<>();
-
-        for(Msg msg: getMsgs(Msg.Types.DEMAND))
-            dList.add(msg.getDemand());
-
-        demDn = Demand.agg(dList);  
+        demDn = Demand.agg(getDemands());  
         demDn.log(this,"down");
-
         priceAu = demDn.getEquPrice();
     }
 
@@ -102,7 +96,7 @@ public class Market extends Grid {
         int q;
         
         q = demDn.getQ(priceDn);
-        if( (this instanceof Market) && par_id == 0 && priceAu == -1 )
+        if( par_id == 0 && priceAu == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
 
         Env.log.println(

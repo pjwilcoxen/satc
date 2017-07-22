@@ -103,6 +103,18 @@ public abstract class Agent implements Steppable {
         return price_msgs.get(0).getPrice();
     }
 
+    /** 
+     * Get a list of demands from the message queue
+     *
+     * @return ArrayList of Demand objects
+     */
+    public ArrayList<Demand> getDemands() {
+        ArrayList<Demand> dList = new ArrayList<>();
+        for(Msg msg: getMsgs(Msg.Types.DEMAND))
+            dList.add(msg.getDemand());
+        return dList;
+    }
+
     /**
      * Get a random number from this agent's pool
      * 

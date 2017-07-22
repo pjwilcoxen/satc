@@ -9,6 +9,7 @@ Scenario Settings:
 
 *** population 1
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -19,10 +20,11 @@ dos 0 dropped []
 node 203, DOS 0, p_self=43, p_up=0, p_down=43, q_down=-100
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=243, p_up=43, p_down=79, q_down=1786
 node 201, DOS 0, p_self=24, p_up=43, p_down=41, q_down=-1891
+node 202, DOS 0, p_self=243, p_up=43, p_down=79, q_down=1786
 *** CALC_LOADS
 dos 1 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -37,6 +39,7 @@ node 201, DOS 1, p_self=24, p_up=43, p_down=41, q_down=-1891
 node 202, DOS 1, p_self=243, p_up=43, p_down=79, q_down=1786
 *** CALC_LOADS
 dos 5 dropped [31, 38, 87, 94, 170, 189]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -47,10 +50,11 @@ dos 5 dropped [31, 38, 87, 94, 170, 189]
 node 203, DOS 5, p_self=45, p_up=0, p_down=45, q_down=-47
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=25, p_up=45, p_down=43, q_down=-1801
 node 202, DOS 5, p_self=233, p_up=45, p_down=75, q_down=1788
+node 201, DOS 5, p_self=25, p_up=45, p_down=43, q_down=-1801
 *** CALC_LOADS
 dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -61,12 +65,13 @@ dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
 node 203, DOS 10, p_self=56, p_up=0, p_down=56, q_down=-86
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=255, p_up=56, p_down=79, q_down=1782
 node 201, DOS 10, p_self=28, p_up=56, p_down=54, q_down=-1807
+node 202, DOS 10, p_self=255, p_up=56, p_down=79, q_down=1782
 *** CALC_LOADS
 
 *** population 2
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -77,10 +82,11 @@ dos 0 dropped []
 node 203, DOS 0, p_self=40, p_up=0, p_down=40, q_down=-45
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=194, p_up=40, p_down=73, q_down=1724
 node 201, DOS 0, p_self=24, p_up=40, p_down=38, q_down=-1880
+node 202, DOS 0, p_self=194, p_up=40, p_down=73, q_down=1724
 *** CALC_LOADS
 dos 1 dropped [12, 18]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -92,10 +98,11 @@ No equilibrium at root node 203 for DOS run: 1
 node 203, DOS 1, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=22, p_up=-1, p_down=-1, q_down=0
 node 202, DOS 1, p_self=194, p_up=-1, p_down=-1, q_down=0
+node 201, DOS 1, p_self=22, p_up=-1, p_down=-1, q_down=0
 *** CALC_LOADS
 dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -110,6 +117,7 @@ node 201, DOS 5, p_self=24, p_up=41, p_down=39, q_down=-1899
 node 202, DOS 5, p_self=190, p_up=41, p_down=66, q_down=1786
 *** CALC_LOADS
 dos 10 dropped [12, 18, 21, 34, 55, 75, 80, 81, 86, 103, 126, 128, 133, 136, 138, 152, 153, 159, 163, 164, 171, 178, 192]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -127,6 +135,7 @@ node 201, DOS 10, p_self=25, p_up=-1, p_down=-1, q_down=0
 
 *** population 3
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -141,6 +150,7 @@ node 201, DOS 0, p_self=25, p_up=52, p_down=50, q_down=-1815
 node 202, DOS 0, p_self=296, p_up=52, p_down=90, q_down=1771
 *** CALC_LOADS
 dos 1 dropped [124, 181]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -151,10 +161,11 @@ dos 1 dropped [124, 181]
 node 203, DOS 1, p_self=52, p_up=0, p_down=52, q_down=-73
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=289, p_up=52, p_down=82, q_down=1799
 node 201, DOS 1, p_self=25, p_up=52, p_down=50, q_down=-1815
+node 202, DOS 1, p_self=289, p_up=52, p_down=82, q_down=1799
 *** CALC_LOADS
 dos 5 dropped [34, 124, 160, 181, 193]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -165,10 +176,11 @@ dos 5 dropped [34, 124, 160, 181, 193]
 node 203, DOS 5, p_self=51, p_up=0, p_down=51, q_down=-93
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1811
 node 202, DOS 5, p_self=-1, p_up=51, p_down=49, q_down=2390
+node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1811
 *** CALC_LOADS
 dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -179,12 +191,13 @@ dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 1
 node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-81
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=-1, p_up=54, p_down=52, q_down=2275
 node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1806
+node 202, DOS 10, p_self=-1, p_up=54, p_down=52, q_down=2275
 *** CALC_LOADS
 
 *** population 4
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -195,10 +208,11 @@ dos 0 dropped []
 node 203, DOS 0, p_self=44, p_up=0, p_down=44, q_down=-48
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=24, p_up=44, p_down=42, q_down=-1858
 node 202, DOS 0, p_self=236, p_up=44, p_down=75, q_down=1787
+node 201, DOS 0, p_self=24, p_up=44, p_down=42, q_down=-1858
 *** CALC_LOADS
 dos 1 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -209,10 +223,11 @@ dos 1 dropped []
 node 203, DOS 1, p_self=44, p_up=0, p_down=44, q_down=-48
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=24, p_up=44, p_down=42, q_down=-1858
 node 202, DOS 1, p_self=236, p_up=44, p_down=75, q_down=1787
+node 201, DOS 1, p_self=24, p_up=44, p_down=42, q_down=-1858
 *** CALC_LOADS
 dos 5 dropped [21, 60, 63, 135, 158, 174]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -227,6 +242,7 @@ node 202, DOS 5, p_self=220, p_up=43, p_down=71, q_down=1794
 node 201, DOS 5, p_self=22, p_up=43, p_down=41, q_down=-1869
 *** CALC_LOADS
 dos 10 dropped [5, 7, 10, 20, 21, 23, 29, 34, 54, 60, 61, 63, 67, 70, 74, 75, 87, 116, 121, 124, 135, 136, 158, 174]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -243,6 +259,7 @@ node 201, DOS 10, p_self=22, p_up=47, p_down=45, q_down=-1837
 
 *** population 5
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -257,6 +274,7 @@ node 202, DOS 0, p_self=172, p_up=46, p_down=71, q_down=1767
 node 201, DOS 0, p_self=25, p_up=46, p_down=44, q_down=-1801
 *** CALC_LOADS
 dos 1 dropped [107, 192]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -267,10 +285,11 @@ dos 1 dropped [107, 192]
 node 203, DOS 1, p_self=46, p_up=0, p_down=46, q_down=-9
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=25, p_up=46, p_down=44, q_down=-1801
 node 202, DOS 1, p_self=195, p_up=46, p_down=76, q_down=1792
+node 201, DOS 1, p_self=25, p_up=46, p_down=44, q_down=-1801
 *** CALC_LOADS
 dos 5 dropped [24, 78, 107, 192, 197]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -281,10 +300,11 @@ dos 5 dropped [24, 78, 107, 192, 197]
 node 203, DOS 5, p_self=50, p_up=0, p_down=50, q_down=-67
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=25, p_up=50, p_down=48, q_down=-1802
 node 202, DOS 5, p_self=225, p_up=50, p_down=84, q_down=1789
+node 201, DOS 5, p_self=25, p_up=50, p_down=48, q_down=-1802
 *** CALC_LOADS
 dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -301,6 +321,7 @@ node 201, DOS 10, p_self=26, p_up=55, p_down=53, q_down=-1810
 
 *** population 6
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -312,10 +333,11 @@ No equilibrium at root node 203 for DOS run: 0
 node 203, DOS 0, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=246, p_up=-1, p_down=-1, q_down=0
 node 201, DOS 0, p_self=22, p_up=-1, p_down=-1, q_down=0
+node 202, DOS 0, p_self=246, p_up=-1, p_down=-1, q_down=0
 *** CALC_LOADS
 dos 1 dropped [98, 152]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -326,10 +348,11 @@ dos 1 dropped [98, 152]
 node 203, DOS 1, p_self=47, p_up=0, p_down=47, q_down=-28
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=245, p_up=47, p_down=72, q_down=1791
 node 201, DOS 1, p_self=23, p_up=47, p_down=45, q_down=-1897
+node 202, DOS 1, p_self=245, p_up=47, p_down=72, q_down=1791
 *** CALC_LOADS
 dos 5 dropped [40, 73, 88, 98, 139, 152]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -344,6 +367,7 @@ node 202, DOS 5, p_self=242, p_up=60, p_down=71, q_down=1773
 node 201, DOS 5, p_self=26, p_up=60, p_down=58, q_down=-1811
 *** CALC_LOADS
 dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142, 152, 169, 175, 197]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -360,6 +384,7 @@ node 202, DOS 10, p_self=266, p_up=54, p_down=69, q_down=1791
 
 *** population 7
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -374,6 +399,7 @@ node 201, DOS 0, p_self=25, p_up=45, p_down=43, q_down=-1813
 node 202, DOS 0, p_self=187, p_up=45, p_down=67, q_down=1736
 *** CALC_LOADS
 dos 1 dropped [150]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -388,6 +414,7 @@ node 201, DOS 1, p_self=25, p_up=45, p_down=43, q_down=-1813
 node 202, DOS 1, p_self=181, p_up=45, p_down=64, q_down=1795
 *** CALC_LOADS
 dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -402,6 +429,7 @@ node 201, DOS 5, p_self=25, p_up=46, p_down=44, q_down=-1853
 node 202, DOS 5, p_self=172, p_up=46, p_down=59, q_down=1774
 *** CALC_LOADS
 dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -412,12 +440,13 @@ dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141,
 node 203, DOS 10, p_self=45, p_up=0, p_down=45, q_down=-20
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=23, p_up=45, p_down=43, q_down=-1808
 node 202, DOS 10, p_self=194, p_up=45, p_down=64, q_down=1784
+node 201, DOS 10, p_self=23, p_up=45, p_down=43, q_down=-1808
 *** CALC_LOADS
 
 *** population 8
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -428,10 +457,11 @@ dos 0 dropped []
 node 203, DOS 0, p_self=45, p_up=0, p_down=45, q_down=-58
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=235, p_up=45, p_down=79, q_down=1788
 node 201, DOS 0, p_self=26, p_up=45, p_down=43, q_down=-1870
+node 202, DOS 0, p_self=235, p_up=45, p_down=79, q_down=1788
 *** CALC_LOADS
 dos 1 dropped [49, 53, 92, 153]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -442,10 +472,11 @@ dos 1 dropped [49, 53, 92, 153]
 node 203, DOS 1, p_self=45, p_up=0, p_down=45, q_down=-14
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=232, p_up=45, p_down=76, q_down=1774
 node 201, DOS 1, p_self=26, p_up=45, p_down=43, q_down=-1825
+node 202, DOS 1, p_self=232, p_up=45, p_down=76, q_down=1774
 *** CALC_LOADS
 dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -457,10 +488,11 @@ No equilibrium at root node 203 for DOS run: 5
 node 203, DOS 5, p_self=-1, p_up=0, p_down=-1, q_down=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=23, p_up=-1, p_down=-1, q_down=0
 node 202, DOS 5, p_self=220, p_up=-1, p_down=-1, q_down=0
+node 201, DOS 5, p_self=23, p_up=-1, p_down=-1, q_down=0
 *** CALC_LOADS
 dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 153, 164, 172, 175, 179, 184]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -471,12 +503,13 @@ dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 15
 node 203, DOS 10, p_self=41, p_up=0, p_down=41, q_down=-54
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=21, p_up=41, p_down=39, q_down=-1807
 node 202, DOS 10, p_self=207, p_up=41, p_down=60, q_down=1794
+node 201, DOS 10, p_self=21, p_up=41, p_down=39, q_down=-1807
 *** CALC_LOADS
 
 *** population 9
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -492,6 +525,7 @@ node 201, DOS 0, p_self=24, p_up=-1, p_down=-1, q_down=0
 node 202, DOS 0, p_self=224, p_up=-1, p_down=-1, q_down=0
 *** CALC_LOADS
 dos 1 dropped [92, 94, 124, 159, 192]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -502,10 +536,11 @@ dos 1 dropped [92, 94, 124, 159, 192]
 node 203, DOS 1, p_self=54, p_up=0, p_down=54, q_down=-40
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=275, p_up=54, p_down=80, q_down=1785
 node 201, DOS 1, p_self=27, p_up=54, p_down=52, q_down=-1801
+node 202, DOS 1, p_self=275, p_up=54, p_down=80, q_down=1785
 *** CALC_LOADS
 dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -520,6 +555,7 @@ node 201, DOS 5, p_self=23, p_up=47, p_down=45, q_down=-1880
 node 202, DOS 5, p_self=269, p_up=47, p_down=76, q_down=1788
 *** CALC_LOADS
 dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -530,12 +566,13 @@ dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 
 node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-96
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1857
 node 202, DOS 10, p_self=247, p_up=54, p_down=67, q_down=1751
+node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1857
 *** CALC_LOADS
 
 *** population 10
 dos 0 dropped []
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -550,6 +587,7 @@ node 201, DOS 0, p_self=24, p_up=47, p_down=45, q_down=-1876
 node 202, DOS 0, p_self=192, p_up=47, p_down=75, q_down=1782
 *** CALC_LOADS
 dos 1 dropped [75, 124]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -564,6 +602,7 @@ node 202, DOS 1, p_self=189, p_up=51, p_down=72, q_down=1783
 node 201, DOS 1, p_self=25, p_up=51, p_down=49, q_down=-1847
 *** CALC_LOADS
 dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
@@ -578,6 +617,7 @@ node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1825
 node 202, DOS 5, p_self=217, p_up=51, p_down=78, q_down=1747
 *** CALC_LOADS
 dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
+*** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 *** tier 2 AGGREGATE
