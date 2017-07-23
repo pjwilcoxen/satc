@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.Set;
+import java.util.Iterator;
 import static java.lang.Math.pow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -35,24 +38,50 @@ public class Demand {
 
     }
     
-    // A complete curve is a list of steps
+    // A complete curve is a list of steps ordered by price
     
-    ArrayList<Bidstep> list;
+    TreeMap<Integer,Bidstep> bids;
 
     /**
      * Demand curve
      */
     public Demand() {
-        list = new ArrayList<>();
+        bids = new TreeMap<>();
     }
 
     /**
-     * Add a step to the list
+     * Add a step to the curve
+     *
+     * @param p Price
+     * @param q_min Minimum quantity
+     * @param q_max Maximum quantity
+     */
+    public void add(int p, int q_min, int q_max) {
+        Bidstep newbid = new Bidstep(p,q_min,q_max);
+        bids.put( p, newbid );
+    }
+
+    /**
+     * Add a step to the curve
      *
      * @param bid Bid to add
      */
-    void add(Bidstep bid) {
-        list.add(bid);
+    private void add(Bidstep bid) {
+        bids.put(bid.p,bid);
+    }
+
+    /**
+     * List of prices in this curve
+     */
+    private Set<Integer> prices() {
+        return bids.keySet();
+    }
+
+    /**
+     * No bids?
+     */
+    boolean isEmpty() {
+        return bids.isEmpty();
     }
 
     /**
@@ -61,12 +90,13 @@ public class Demand {
      * @param msg Message showing where check was called
      */
     void check(String msg) {
-        int last_p = -1000;
-        for(Bidstep bid: list) {
-            if( bid.p < last_p ) 
-                throw new RuntimeException("Non-ascending bids "+msg);
-            last_p = bid.p;
-        }
+    }
+
+    /**
+     * Get the bid for a given price
+     */
+    private Bidstep get(Integer p) {
+        return bids.get(p);
     }
 
     /**
@@ -75,7 +105,7 @@ public class Demand {
      * @param dList ArrayList of Demand curves to be aggregated
      * @return new Demand curve
      */
-    static Demand agg(ArrayList<Demand> dList) {
+    public static Demand agg(ArrayList<Demand> dList) {
         Demand newD = null;
         if( dList.isEmpty() )
             throw new RuntimeException("Empty list in Demand.agg()");
@@ -97,11 +127,11 @@ public class Demand {
      */
     public ArrayList<String> toStrings() {
         ArrayList<String> slist = new ArrayList<>();
-        for(Bidstep bid: list) {
+        bids.forEach( (p,bid) -> {
             slist.add(Integer.toString(bid.p));
             slist.add(Integer.toString(bid.q_min));
             slist.add(Integer.toString(bid.q_max));
-        }
+        }); 
         return slist;
     }
 
@@ -112,21 +142,26 @@ public class Demand {
      * @return Quantity
      */
     public int getQ(int price) {
+        Integer p;
+        Bidstep bid;
 
         if( price <= -1 )
             return 0;
 
-        // find the first step at or above the given price
+        // look for bid with smallest price at or above
+        // the input value
 
-        for(Bidstep bid: list)
-            if( bid.p == price)     
-                return bid.q_min;
-            else if( bid.p > price)
-                return bid.q_max;
-        
-        // didn't find one
+        p = bids.ceilingKey(price);
 
-        return -1;
+        if( p == null )
+            return 0;
+
+        // get the corresponding bid and return the 
+        // minimum or maximum quantity (set by convention
+        // for now
+
+        bid = get(p);
+        return (p==price) ? bid.q_min : bid.q_max;
     }
 
     /**
@@ -139,6 +174,7 @@ public class Demand {
      * @return Actual price
      */
     public int getPriceDn(int pUp, Grid agent) { 
+        Bidstep bid;
         int last_p;
         int pDn;
 
@@ -169,14 +205,14 @@ public class Demand {
 
             // scan up the bids for first one with p > pUp or q_max to the left of cap
             
-            for(Bidstep bid: list) {
-                if( bid.p <= pUp && bid.q_max >= -cap ) {
-                    last_p = bid.p;
-                    continue;
-                }
-                if( bid.q_max < -cap ) 
+            for(Integer p: prices()) {
+                bid = get(p); 
+                if( p <= pUp && bid.q_max >= -cap )
+                    last_p = p;
+                else if( bid.q_max < -cap ) 
                     return pDn <= last_p ? pDn : last_p ;
-                return pDn;
+                else
+                    return pDn;
             }
 
             // nothing left: return the last price
@@ -196,12 +232,13 @@ public class Demand {
 
         // skip up the curve for bids with more quantity than cap
        
-        for(Bidstep bid: list) {
+        for(Integer p: prices()) {
+            bid = get(p);
             if( bid.q_min >= cap ) {
-                last_p = bid.p;
+                last_p = p;
                 continue;
             }
-            return pDn > bid.p ? pDn : bid.p ;
+            return pDn > p ? pDn : p ;
         }
 
         // nothing left: constraint is binding and return last price
@@ -217,11 +254,13 @@ public class Demand {
      */
     public Demand addCapacity(int cap) {
         Bidstep newbid;
+        Bidstep old;
         Demand newD;
 
         newD = new Demand();
-        for(Bidstep old: list) {
-        
+        for(Integer p: prices()) {
+            old = get(p);
+
             // skip demands beyond cap to the right or left
 
             if( cap <= old.q_min )continue;
@@ -264,6 +303,7 @@ public class Demand {
         int iR;
 
         newD = new Demand();
+        if( isEmpty() || dem2.isEmpty() )return newD;
 
         // 
         // combine bids until we run off the top of either curve
@@ -274,22 +314,25 @@ public class Demand {
 
         new_bid = null;
 
-        numL = list.size();
-        numR = dem2.list.size();
+        Iterator<Integer> iterL = prices().iterator();
+        Iterator<Integer> iterR = dem2.prices().iterator();
 
-        iL = 0;
-        iR = 0;
+        boolean need_l = true;
+        boolean need_r = true;
 
-        while( iL < numL && iR < numR ) {
-           
-            // name the bids left and right for convenience
+        Integer pL = iterL.next();
+        Integer pR = iterR.next();
 
-            l = list.get(iL);
-            r = dem2.list.get(iR);
+        while( true ) {
+
+            // get new bids if needed
+
+            l = get(pL);
+            r = dem2.get(pR);
 
             // find the price and q_max of the next step
 
-            p = l.p < r.p ? l.p : r.p ;
+            p = pL < pR ? pL : pR ;
             q_max = l.q_max + r.q_max ;
 
             // fix q_min on the previous step and save it
@@ -303,10 +346,17 @@ public class Demand {
 
             new_bid = new Bidstep(p,0,q_max);
            
-            // figure out which bid(s) to pull next
+            // pull next needed bid(s)
 
-            if( l.p <= r.p )iL++;
-            if( r.p <= l.p )iR++;
+            if( l.p <= r.p ) {
+                if( !iterL.hasNext() )break;
+                pL = iterL.next();
+            }
+
+            if( r.p <= l.p ) {
+                if( !iterR.hasNext() )break;
+                pR = iterR.next();
+            }
         }
 
         // last step
@@ -412,9 +462,11 @@ public class Demand {
      * @return The equilibrium price for this net demand curve
      */
     public int getEquPrice() {
-        for(Bidstep bid: list)
+        for(Integer p : prices()) {
+            Bidstep bid = get(p);
             if( bid.q_min < 0 && bid.q_max >= 0 )
-                return bid.p;
+                return p;
+        }
         return -1;
     }
 
@@ -431,7 +483,8 @@ public class Demand {
         int p_hi = -1;
 
         newD = new Demand();
-        for(Bidstep old: list) {
+        for(Integer p: prices()) {
+            Bidstep old = get(p);
             
             // shift pure demand bids down
 
@@ -450,15 +503,16 @@ public class Demand {
             // we're left with a horizontal step with q_min<0 and q_max>0
             // split it and add the new pieces
 
-            newD.add( new Bidstep(old.p-c,0,old.q_max) );
-            newD.add( new Bidstep(old.p+c,old.q_min,0) );
+            newD.add( new Bidstep(p-c,0,old.q_max) );
+            newD.add( new Bidstep(p+c,old.q_min,0) );
         }
 
         // find the deadband prices
 
-        for(Bidstep bid: newD.list) {
-            if( bid.q_min == 0 )p_lo = bid.p;
-            if( bid.q_max == 0 )p_hi = bid.p;
+        for(Integer p: newD.prices()) {
+            Bidstep bid = newD.get(p);
+            if( bid.q_min == 0 )p_lo = p;
+            if( bid.q_max == 0 )p_hi = p;
         }
         agent.setPc(p_lo,p_hi);
 
