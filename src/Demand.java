@@ -20,22 +20,10 @@ public class Demand {
         int q_min;
         int q_max;
 
-        Bidstep(int p, int q_min, int q_max) {
-            this.p     = p;
+        Bidstep(int q_min, int q_max) {
             this.q_min = q_min;
             this.q_max = q_max;
         }
-
-        Bidstep(Bidstep old) {
-            p     = old.p;
-            q_min = old.q_min;
-            q_max = old.q_max;
-        }
-        
-        Bidstep shift_p(int dp) {
-            return new Bidstep(p+dp,q_min,q_max);
-        }
-
     }
     
     // A complete curve is a list of steps ordered by price
@@ -57,8 +45,8 @@ public class Demand {
      * @param q_max Maximum quantity
      */
     public void add(int p, int q_min, int q_max) {
-        Bidstep newbid = new Bidstep(p,q_min,q_max);
-        add( newbid );
+        Bidstep newbid = new Bidstep(q_min,q_max);
+        bids.put( p, newbid );
     }
 
     /**
@@ -66,8 +54,8 @@ public class Demand {
      *
      * @param bid Bid to add
      */
-    private void add(Bidstep bid) {
-        bids.put(bid.p,bid);
+    private void add(int p, Bidstep bid) {
+        bids.put(p,bid);
     }
 
     /**
@@ -147,10 +135,10 @@ public class Demand {
         pLo = bids.floorKey(price);
 
         //
-        // The following replicates earlier runs has the following quirks.
+        // The following replicates earlier runs but has some quirks.
         // When the price matches a horizontal segment of the curve, return
-        // q_min, the point farthest to the left.  When the price is part
-        // hits in a vertical segment, return q_max of the bid above, or the
+        // q_min, the point farthest to the left.  When the price is in a 
+        // vertical segment, return q_max of the bid above, or the
         // farthest right point.  When there's no higher price, return 0.
         //
         // In the long run, have this return a random q between q_min 
@@ -293,7 +281,7 @@ public class Demand {
 
             // create a new step
 
-            newbid = new Bidstep(old);
+            newbid = new Bidstep(old.q_min,old.q_max);
 
             // impose the constraints, if necessary
 
@@ -302,7 +290,7 @@ public class Demand {
 
             // add it
 
-            newD.add(newbid);
+            newD.add(p,newbid);
         }
 
         return newD;
@@ -326,6 +314,9 @@ public class Demand {
         boolean needR;
         int p;
         int q_max;
+        int last_p = -1;
+        int last_q_max = -1;
+        boolean save_last;
 
         assert demR != null;
         
@@ -335,7 +326,9 @@ public class Demand {
         // and right demand is not; make newD identical to demR
         
         if( demL == null ) {
-            demR.bids.forEach( (pL,bid) -> { newD.add(bid); });
+            demR.bids.forEach( (pL,bid) -> { 
+                newD.add(pL,bid); 
+            });
             return newD;
         }
         
@@ -348,13 +341,13 @@ public class Demand {
         // run out of bids; may want to reconsider this
         //
 
-        new_bid = null;
-
         iterL = demL.prices().iterator();
         iterR = demR.prices().iterator();
 
         Integer pL = iterL.next();
         Integer pR = iterR.next();
+
+        save_last = false;
 
         while( true ) {
 
@@ -370,15 +363,16 @@ public class Demand {
 
             // fix q_min on the previous step and save it
 
-            if( new_bid != null ) {
-                new_bid.q_min = q_max;
-                newD.add(new_bid);
-            }
+            if( save_last ) 
+                newD.add(last_p,q_max,last_q_max);
 
-            // create the new step with a placeholder for q_min
+            save_last = true;
 
-            new_bid = new Bidstep(p,0,q_max);
-           
+            // remember p and q_max for creating the step
+
+            last_p = p;
+            last_q_max = q_max;
+
             // pull next needed bid(s). a little convoluted so
             // we don't break the second update after doing
             // the first.
@@ -405,10 +399,7 @@ public class Demand {
 
         // last step
 
-        assert new_bid != null;
-        
-        new_bid.q_min = new_bid.q_max - 100;
-        newD.add(new_bid);
+        newD.add(last_p, last_q_max-100, last_q_max);
 
         return newD;
     }
@@ -464,9 +455,9 @@ public class Demand {
 
         // first step
         if( makeS )
-            newD.add( new Bidstep(p0, q1, q2) );
+            newD.add(p0, q1, q2);
         else
-            newD.add( new Bidstep(p0, q2, q1) );
+            newD.add(p0, q2, q1);
         
         // create the steps below the price=40
         
@@ -475,9 +466,9 @@ public class Demand {
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             if( makeS )
-                newD.add( new Bidstep(p1, q1, q2) );
+                newD.add(p1, q1, q2);
             else
-                newD.add( new Bidstep(p1, q2, q1) );
+                newD.add(p1, q2, q1);
         }
         
         // create twice the number of steps above price=40
@@ -487,9 +478,9 @@ public class Demand {
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             if( makeS )
-                newD.add( new Bidstep(p1, q1, q2) );
+                newD.add(p1, q1, q2);
             else
-                newD.add( new Bidstep(p1, q2, q1) );
+                newD.add(p1, q2, q1);
         }
         
         return newD;
@@ -547,22 +538,22 @@ public class Demand {
             // shift pure demand bids down
 
             if( old.q_min >= 0 ) {
-                newD.add(old.shift_p(-c));
+                newD.add(p-c, old.q_min, old.q_max);
                 continue;
             }
 
             // shift pure supply bids up
 
             if( old.q_max <=0 ) {
-                newD.add(old.shift_p(c));
+                newD.add(p+c, old.q_min, old.q_max);
                 continue;
             }
 
             // we're left with a horizontal step with q_min<0 and q_max>0
             // split it and add the new pieces
 
-            newD.add( new Bidstep(p-c,0,old.q_max) );
-            newD.add( new Bidstep(p+c,old.q_min,0) );
+            newD.add(p-c,         0, old.q_max);
+            newD.add(p+c, old.q_min,         0);
         }
 
         // find the deadband prices
