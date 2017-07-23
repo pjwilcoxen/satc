@@ -120,7 +120,7 @@ public class Demand {
     public ArrayList<String> toStrings() {
         ArrayList<String> slist = new ArrayList<>();
         bids.forEach( (p,bid) -> {
-            slist.add(Integer.toString(bid.p));
+            slist.add(Integer.toString(p));
             slist.add(Integer.toString(bid.q_min));
             slist.add(Integer.toString(bid.q_max));
         }); 
@@ -322,6 +322,8 @@ public class Demand {
         Bidstep new_bid;
         Bidstep l;
         Bidstep r;
+        boolean needL;
+        boolean needR;
         int p;
         int q_max;
 
@@ -377,14 +379,25 @@ public class Demand {
 
             new_bid = new Bidstep(p,0,q_max);
            
-            // pull next needed bid(s)
+            // pull next needed bid(s). a little convoluted so
+            // we don't break the second update after doing
+            // the first.
 
-            if( l.p <= r.p ) {
+            //
+            // eventually this should be smarter and assume that when 
+            // the first curve runs out we keep using 0 if it was 
+            // a demand curve or q_min if it was a supply curve
+            //
+            
+            needL = pL <= pR;
+            needR = pR <= pL;
+            
+            if( needL ) {
                 if( !iterL.hasNext() )break;
                 pL = iterL.next();
             }
 
-            if( r.p <= l.p ) {
+            if( needR ) {
                 if( !iterR.hasNext() )break;
                 pR = iterR.next();
             }
@@ -493,9 +506,25 @@ public class Demand {
     public int getEquPrice() {
         for(Integer p : prices()) {
             Bidstep bid = getBid(p);
-            if( bid.q_min < 0 && bid.q_max >= 0 )
+
+            // case 1: crossing is a horizontal segment
+            
+            if( bid.q_min < 0 && bid.q_max > 0 )
+                return p;
+
+            // case 2: crossing is a vertical segment; for backward
+            // compatibility return higher of the two prices
+            //
+            // eventually this should return the midpoint between
+            // the upper and lower prices
+            //
+            
+            if( bid.q_max == 0 )
                 return p;
         }
+        
+        // curve doesn't cross the y axis
+        
         return -1;
     }
 
@@ -537,6 +566,11 @@ public class Demand {
         }
 
         // find the deadband prices
+        //
+        // done this way for backward compatibility.  eventually needs 
+        // to be more robust: it relies on there being at most one 
+        // crossing, and the curve having a negative slope.
+        //
 
         for(Integer p: newD.prices()) {
             Bidstep bid = newD.getBid(p);
