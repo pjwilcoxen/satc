@@ -58,7 +58,7 @@ public class Demand {
      */
     public void add(int p, int q_min, int q_max) {
         Bidstep newbid = new Bidstep(p,q_min,q_max);
-        bids.put( p, newbid );
+        add( newbid );
     }
 
     /**
@@ -72,30 +72,26 @@ public class Demand {
 
     /**
      * List of prices in this curve
+     * 
+     * @return Set of prices in ascending order
      */
-    private Set<Integer> prices() {
+    public Set<Integer> prices() {
         return bids.keySet();
     }
 
     /**
      * No bids?
+     * 
+     * @return True if the curve has no bids
      */
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return bids.isEmpty();
-    }
-
-    /**
-     * Enforce some sanity checks
-     *
-     * @param msg Message showing where check was called
-     */
-    void check(String msg) {
     }
 
     /**
      * Get the bid for a given price
      */
-    private Bidstep get(Integer p) {
+    private Bidstep getBid(Integer p) {
         return bids.get(p);
     }
 
@@ -108,13 +104,9 @@ public class Demand {
     public static Demand agg(ArrayList<Demand> dList) {
         Demand newD = null;
         if( dList.isEmpty() )
-            throw new RuntimeException("Empty list in Demand.agg()");
+            throw new RuntimeException("Empty list in Demand.agg");
         for(Demand curD: dList) 
-            if( newD == null )
-                newD = curD;
-            else
-                newD = newD.aggregateDemand(curD);
-        newD.check("after agg");
+            newD = aggTwo(newD,curD);
         return newD;
     }
      
@@ -142,26 +134,59 @@ public class Demand {
      * @return Quantity
      */
     public int getQ(int price) {
-        Integer p;
+        Integer pHi;
+        Integer pLo;
         Bidstep bid;
 
         if( price <= -1 )
             return 0;
 
-        // look for bid with smallest price at or above
-        // the input value
+        // look for the nearest bids above and below the current price
 
-        p = bids.ceilingKey(price);
+        pHi = bids.ceilingKey(price);
+        pLo = bids.floorKey(price);
 
-        if( p == null )
-            return 0;
+        //
+        // The following replicates earlier runs has the following quirks.
+        // When the price matches a horizontal segment of the curve, return
+        // q_min, the point farthest to the left.  When the price is part
+        // hits in a vertical segment, return q_max of the bid above, or the
+        // farthest right point.  When there's no higher price, return 0.
+        //
+        // In the long run, have this return a random q between q_min 
+        // and q_max if on a horizontal segment; return the matching q
+        // if the price is in a vertical segment; and return q_min of the
+        // previous bid rather than 0 if we're off the top of a supply 
+        // curve
+        //
 
-        // get the corresponding bid and return the 
-        // minimum or maximum quantity (set by convention
-        // for now
+        // case 1: horizontal part of a step; eventually this should
+        // return a random number
+        
+        if( pHi != null && pHi.equals(pLo) ) {
+            bid = getBid(pHi);
+            return bid.q_min;
+        }
 
-        bid = get(p);
-        return (p==price) ? bid.q_min : bid.q_max;
+        // case 2: vertical part of a steps
+        
+        if( pHi != null && pLo != null ) {       
+            bid = getBid(pHi);
+            return bid.q_max;
+        }
+
+        // case 3: below the first bid; really this should return
+        // 0 if the next q_max is negative (supply)
+        
+        if( pHi != null ) {       
+            bid = getBid(pHi);
+            return bid.q_max;
+        }
+
+        // case 4: above the last bid; really this should return
+        // getBid(pLo).q_min if that's negative.
+        
+        return 0;
     }
 
     /**
@@ -206,7 +231,7 @@ public class Demand {
             // scan up the bids for first one with p > pUp or q_max to the left of cap
             
             for(Integer p: prices()) {
-                bid = get(p); 
+                bid = getBid(p); 
                 if( p <= pUp && bid.q_max >= -cap )
                     last_p = p;
                 else if( bid.q_max < -cap ) 
@@ -233,7 +258,7 @@ public class Demand {
         // skip up the curve for bids with more quantity than cap
        
         for(Integer p: prices()) {
-            bid = get(p);
+            bid = getBid(p);
             if( bid.q_min >= cap ) {
                 last_p = p;
                 continue;
@@ -259,7 +284,7 @@ public class Demand {
 
         newD = new Demand();
         for(Integer p: prices()) {
-            old = get(p);
+            old = getBid(p);
 
             // skip demands beyond cap to the right or left
 
@@ -280,30 +305,39 @@ public class Demand {
             newD.add(newbid);
         }
 
-        newD.check("after addCapacity");
         return newD;
     }
 
     /**
-     * Aggregate two net demand curves
+     * Aggregate two curves
      * 
-     * @param dem2 Demand curve to add to this one
+     * @param demL Left demand curve
+     * @param demR Right demand curve
      * @return New demand curve
      */
-    public Demand aggregateDemand(Demand dem2) {
+    private static Demand aggTwo(Demand demL, Demand demR) {
+        Iterator<Integer> iterL;
+        Iterator<Integer> iterR;
         Demand newD;
         Bidstep new_bid;
         Bidstep l;
         Bidstep r;
         int p;
         int q_max;
-        int numL;
-        int numR;
-        int iL;
-        int iR;
 
+        assert demR != null;
+        
         newD = new Demand();
-        if( isEmpty() || dem2.isEmpty() )return newD;
+        
+        // special case for convenience in agg: left demand is null 
+        // and right demand is not; make newD identical to demR
+        
+        if( demL == null ) {
+            demR.bids.forEach( (pL,bid) -> { newD.add(bid); });
+            return newD;
+        }
+        
+        if( demL.isEmpty() || demR.isEmpty() )return newD;
 
         // 
         // combine bids until we run off the top of either curve
@@ -314,11 +348,8 @@ public class Demand {
 
         new_bid = null;
 
-        Iterator<Integer> iterL = prices().iterator();
-        Iterator<Integer> iterR = dem2.prices().iterator();
-
-        boolean need_l = true;
-        boolean need_r = true;
+        iterL = demL.prices().iterator();
+        iterR = demR.prices().iterator();
 
         Integer pL = iterL.next();
         Integer pR = iterR.next();
@@ -327,8 +358,8 @@ public class Demand {
 
             // get new bids if needed
 
-            l = get(pL);
-            r = dem2.get(pR);
+            l = demL.getBid(pL);
+            r = demR.getBid(pR);
 
             // find the price and q_max of the next step
 
@@ -361,12 +392,11 @@ public class Demand {
 
         // last step
 
-        if( new_bid != null ) {
-            new_bid.q_min = new_bid.q_max - 100;
-            newD.add(new_bid);
-        }
+        assert new_bid != null;
+        
+        new_bid.q_min = new_bid.q_max - 100;
+        newD.add(new_bid);
 
-        newD.check("after aggregateDemand");
         return newD;
     }
     
@@ -449,7 +479,6 @@ public class Demand {
                 newD.add( new Bidstep(p1, q2, q1) );
         }
         
-        newD.check("after do_make");
         return newD;
     }
 
@@ -463,7 +492,7 @@ public class Demand {
      */
     public int getEquPrice() {
         for(Integer p : prices()) {
-            Bidstep bid = get(p);
+            Bidstep bid = getBid(p);
             if( bid.q_min < 0 && bid.q_max >= 0 )
                 return p;
         }
@@ -484,7 +513,7 @@ public class Demand {
 
         newD = new Demand();
         for(Integer p: prices()) {
-            Bidstep old = get(p);
+            Bidstep old = getBid(p);
             
             // shift pure demand bids down
 
@@ -510,13 +539,12 @@ public class Demand {
         // find the deadband prices
 
         for(Integer p: newD.prices()) {
-            Bidstep bid = newD.get(p);
+            Bidstep bid = newD.getBid(p);
             if( bid.q_min == 0 )p_lo = p;
             if( bid.q_max == 0 )p_hi = p;
         }
         agent.setPc(p_lo,p_hi);
 
-        newD.check("after addCost");
         return newD;
     }
 
@@ -585,7 +613,6 @@ public class Demand {
         Demand newD;
         newD = addCost(agent.cost, agent);
         newD = newD.addCapacity(agent.cap);
-        newD.check("after adjustTrans");
         return newD;
     }
 }
