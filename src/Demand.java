@@ -56,6 +56,20 @@ public class Demand {
     }
 
     /**
+     * Enforce some sanity checks
+     *
+     * @param msg Message showing where check was called
+     */
+    void check(String msg) {
+        int last_p = -1000;
+        for(Bidstep bid: list) {
+            if( bid.p < last_p ) 
+                throw new RuntimeException("Non-ascending bids "+msg);
+            last_p = bid.p;
+        }
+    }
+
+    /**
      * Aggregate a list of demand curves
      *
      * @param dList ArrayList of Demand curves to be aggregated
@@ -70,6 +84,7 @@ public class Demand {
                 newD = curD;
             else
                 newD = newD.aggregateDemand(curD);
+        newD.check("after agg");
         return newD;
     }
      
@@ -226,6 +241,7 @@ public class Demand {
             newD.add(newbid);
         }
 
+        newD.check("after addCapacity");
         return newD;
     }
 
@@ -300,6 +316,7 @@ public class Demand {
             newD.add(new_bid);
         }
 
+        newD.check("after aggregateDemand");
         return newD;
     }
     
@@ -382,6 +399,7 @@ public class Demand {
                 newD.add( new Bidstep(p1, q2, q1) );
         }
         
+        newD.check("after do_make");
         return newD;
     }
 
@@ -444,6 +462,7 @@ public class Demand {
         }
         agent.setPc(p_lo,p_hi);
 
+        newD.check("after addCost");
         return newD;
     }
 
@@ -512,6 +531,7 @@ public class Demand {
         Demand newD;
         newD = addCost(agent.cost, agent);
         newD = newD.addCapacity(agent.cap);
+        newD.check("after adjustTrans");
         return newD;
     }
 }
