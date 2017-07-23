@@ -314,9 +314,7 @@ public class Demand {
         boolean needR;
         int p;
         int q_max;
-        int last_p = -1;
-        int last_q_max = -1;
-        boolean save_last;
+        Integer last_p;
 
         assert demR != null;
         
@@ -347,7 +345,7 @@ public class Demand {
         Integer pL = iterL.next();
         Integer pR = iterR.next();
 
-        save_last = false;
+        last_p = null;
 
         while( true ) {
 
@@ -361,17 +359,14 @@ public class Demand {
             p = pL < pR ? pL : pR ;
             q_max = l.q_max + r.q_max ;
 
+            newD.add(p,0,q_max);
+            
             // fix q_min on the previous step and save it
 
-            if( save_last ) 
-                newD.add(last_p,q_max,last_q_max);
-
-            save_last = true;
-
-            // remember p and q_max for creating the step
+            if( last_p != null )
+                newD.bids.get(last_p).q_min = q_max;
 
             last_p = p;
-            last_q_max = q_max;
 
             // pull next needed bid(s). a little convoluted so
             // we don't break the second update after doing
@@ -399,7 +394,7 @@ public class Demand {
 
         // last step
 
-        newD.add(last_p, last_q_max-100, last_q_max);
+        newD.add(last_p, q_max-100, q_max);
 
         return newD;
     }
