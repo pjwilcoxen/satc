@@ -266,31 +266,32 @@ public class Demand {
      * @return New demand curve
      */
     public Demand addCapacity(int cap) {
-        Bidstep newbid;
-        Bidstep old;
         Demand newD;
+        Bidstep old;
+        int q_min;
+        int q_max;
 
         newD = new Demand();
         for(Integer p: prices()) {
-            old = getBid(p);
 
-            // skip demands beyond cap to the right or left
+            // get the next step
 
-            if( cap <= old.q_min )continue;
-            if( old.q_max < -cap )continue;
+            old   = getBid(p);
+            q_min = old.q_min;
+            q_max = old.q_max;
 
-            // create a new step
+            // skip steps beyond cap to the right or left
 
-            newbid = new Bidstep(old.q_min,old.q_max);
+            if( q_max < -cap || q_min > cap )
+                continue;
 
-            // impose the constraints, if necessary
+            // impose the constraints, if necessary, and add 
+            // the step to the new curve
 
-            if( newbid.q_max >  cap ) newbid.q_max =  cap;
-            if( newbid.q_min < -cap ) newbid.q_min = -cap;
+            if( q_max >  cap )q_max =  cap;
+            if( q_min < -cap )q_min = -cap;
 
-            // add it
-
-            newD.add(p,newbid);
+            newD.add(p,q_min,q_max);
         }
 
         return newD;
