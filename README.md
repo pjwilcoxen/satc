@@ -40,9 +40,9 @@ features to be implemented:
 
 A __Demand__ object holds a net demand curve expressed as a list of steps.
 Positive quantities indicate demand and negative quantites indicate supply.
-__Trader__ nodes send __Demand__ objects to __Mid__ nodes.  __Mid__ nodes 
-send aggregated __Demand__ objects to __Root__ nodes.  In all cases the 
-curves are sent via __Msg__ objects.
+__Trader__ nodes send __Demand__ objects to __Market__ nodes.  Lower tier 
+__Market__ nodes send aggregated __Demand__ objects to higher-tier __Market__ 
+nodes.  In all cases the curves are sent via __Msg__ objects.
 
 ## Env
 
