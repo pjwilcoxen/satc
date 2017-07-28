@@ -30,11 +30,26 @@ public class Demand {
     
     TreeMap<Integer,Bidstep> bids;
 
+    // Transmission parameters if this is an upstream curve
+
+    int cost;
+    int cap;
+    Integer pcap_hi;
+    Integer pq0_hi ;
+    Integer pq0_lo ;
+    Integer pcap_lo;
+
     /**
      * Demand curve
      */
     public Demand() {
         bids = new TreeMap<>();
+        cost    = 0;
+        cap     = 0;
+        pcap_hi = null;
+        pq0_hi  = null;
+        pq0_lo  = null;
+        pcap_lo = null;
     }
 
     /**
@@ -178,15 +193,15 @@ public class Demand {
      * @param agent Agent whose transmission parameters should be used
      * @return Actual price
      */
-    public int getPriceDn(int pUp, Grid agent) { 
+    public int getPriceDn(int pUp, Demand demUp) { 
         Bidstep bid;
         int last_p;
         int pDn;
 
-        int pc0  = agent.p_notrans_lo;
-        int pc1  = agent.p_notrans_hi;
-        int cost = agent.cost;
-        int cap  = agent.cap;
+        int pc0  = demUp.pq0_lo;
+        int pc1  = demUp.pq0_hi;
+        int cost = demUp.cost;
+        int cap  = demUp.cap;
 
         if( pUp <= -1 )
             return -1;
@@ -249,44 +264,6 @@ public class Demand {
         // nothing left: constraint is binding and return last price
         
         return last_p;
-    }
-
-    /**
-     * Add capacity constraint on the net demand
-     * 
-     * @param cap Transmission capacity
-     * @return New demand curve
-     */
-    public Demand addCapacity(int cap) {
-        Demand newD;
-        Bidstep old;
-        int q_min;
-        int q_max;
-
-        newD = new Demand();
-        for(Integer p: prices()) {
-
-            // get the next step
-
-            old   = getBid(p);
-            q_min = old.q_min;
-            q_max = old.q_max;
-
-            // skip steps beyond cap to the right or left
-
-            if( q_max < -cap || q_min > cap )
-                continue;
-
-            // impose the constraints, if necessary, and add 
-            // the step to the new curve
-
-            if( q_max >  cap )q_max =  cap;
-            if( q_min < -cap )q_min = -cap;
-
-            newD.add(p,q_min,q_max);
-        }
-
-        return newD;
     }
 
     /**
@@ -508,40 +485,73 @@ public class Demand {
     }
 
     /**
-     * Change the step prices to account for the transmission cost
+     * Adjust aggregate demand for transmission parameters
      * 
-     * @param c Transmission cost
      * @param agent Grid agent
      * @return New demand curve
      */
-    public Demand addCost(int c, Grid agent) {
+    Demand adjustTrans(Grid agent) {
         Demand newD;
-        int p_lo = -1;
-        int p_hi = -1;
+        Bidstep old;
+        int cost;
+        int cap;
+        int q_min;
+        int q_max;
+        
+        cost = agent.cost;
+        cap  = agent.cap;
 
         newD = new Demand();
+        newD.cost   = cost;
+        newD.cap    = cap;
+        newD.pq0_lo = -1;
+        newD.pq0_hi = -1;
+
         for(Integer p: prices()) {
-            Bidstep old = getBid(p);
-            
+
+            // get next step moving up the curve
+
+            old   = getBid(p);
+            q_min = old.q_min;
+            q_max = old.q_max;
+ 
+            // skip it if it's beyond the cap on either side
+
+            if( q_min >  cap )continue;
+            if( q_max < -cap )continue;
+
+            // impose the constraints and note the prices
+            // where they occur
+
+            if( q_max > cap ) {
+                q_max = cap;
+                pcap_lo = p-cost;
+            }
+
+            if( q_min < -cap ) {
+                q_min = -cap;
+                pcap_hi = p+cost;
+            }
+
             // shift pure demand bids down
 
-            if( old.q_min >= 0 ) {
-                newD.add(p-c, old.q_min, old.q_max);
+            if( q_min >= 0 ) {
+                newD.add(p-cost, q_min, q_max);
                 continue;
             }
 
             // shift pure supply bids up
 
-            if( old.q_max <=0 ) {
-                newD.add(p+c, old.q_min, old.q_max);
+            if( q_max <=0 ) {
+                newD.add(p+cost, q_min, q_max);
                 continue;
             }
 
             // we're left with a horizontal step with q_min<0 and q_max>0
             // split it and add the new pieces
 
-            newD.add(p-c,         0, old.q_max);
-            newD.add(p+c, old.q_min,         0);
+            newD.add(p-cost,     0, q_max);
+            newD.add(p+cost, q_min,     0);
         }
 
         // find the deadband prices
@@ -553,10 +563,9 @@ public class Demand {
 
         for(Integer p: newD.prices()) {
             Bidstep bid = newD.getBid(p);
-            if( bid.q_min == 0 )p_lo = p;
-            if( bid.q_max == 0 )p_hi = p;
+            if( bid.q_min == 0 )newD.pq0_lo = p;
+            if( bid.q_max == 0 )newD.pq0_hi = p;
         }
-        agent.setPc(p_lo,p_hi);
 
         return newD;
     }
@@ -614,18 +623,5 @@ public class Demand {
         } catch (IOException e) {
             throw new RuntimeException("Error writing to load file");
         }
-    }
-
-    /**
-     * Adjust aggregate demand for transmission parameters
-     *
-     * @param agg Original demand curve
-     * @return Curve adjusted for transmission
-     */
-    Demand adjustTrans(Grid agent) {
-        Demand newD;
-        newD = addCost(agent.cost, agent);
-        newD = newD.addCapacity(agent.cap);
-        return newD;
     }
 }

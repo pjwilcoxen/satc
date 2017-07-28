@@ -15,12 +15,10 @@ public abstract class Grid extends Agent {
      */
     final ArrayList<Grid> children = new ArrayList<>();
 
-    // transmission costs, capacity and price adjustments to parent node
+    // transmission cost and capacity to parent node
 
     int cost;
     int cap; 
-    int p_notrans_lo;
-    int p_notrans_hi;
     
     // this agent's view of up and downstream demand and price
     
@@ -54,9 +52,7 @@ public abstract class Grid extends Agent {
         priceUp = 0;
         priceDn = 0;
         priceAu = 0;
-        p_notrans_lo = 0;
-        p_notrans_hi = 0;
-}
+    }
     
     /**
      * Send a demand to the node's parent
@@ -104,22 +100,4 @@ public abstract class Grid extends Agent {
             q = demDn.getQ(priceDn);
         Env.saveResult(this,priceDn,q);           
     }
-
-    /**
-     * Set Price bounds
-     * 
-     * These define the deadband range for upstream prices; in 
-     * this range, there will be no transmission to or from the 
-     * upstream node because transmission costs are larger than
-     * the gains from trade.
-     * 
-     * @param p_lo Lower bound to deadband
-     * @param p_hi Upper bound to deadband
-     */
-    public void setPc(int p_lo, int p_hi) {
-        p_notrans_lo = p_lo;
-        p_notrans_hi = p_hi;
-		if( p_notrans_lo < 0 )p_notrans_lo = 0;
-    }
-        
 }

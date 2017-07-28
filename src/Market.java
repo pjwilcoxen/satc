@@ -38,7 +38,7 @@ public class Market extends Grid {
                     priceDn = priceAu;
                 else {
                     priceUp = getPrice();
-                    priceDn = demDn.getPriceDn(priceUp,(Grid) this);
+                    priceDn = demDn.getPriceDn(priceUp,demUp);
                 }
                 sendPriceDn();
                 break;
