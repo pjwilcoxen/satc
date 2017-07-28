@@ -134,47 +134,39 @@ public class Demand {
         pHi = bids.ceilingKey(price);
         pLo = bids.floorKey(price);
 
-        //
-        // The following replicates earlier runs but has some quirks.
-        // When the price matches a horizontal segment of the curve, return
-        // q_min, the point farthest to the left.  When the price is in a 
-        // vertical segment, return q_max of the bid above, or the
-        // farthest right point.  When there's no higher price, return 0.
-        //
-        // In the long run, have this return a random q between q_min 
-        // and q_max if on a horizontal segment; return the matching q
-        // if the price is in a vertical segment; and return q_min of the
-        // previous bid rather than 0 if we're off the top of a supply 
-        // curve
-        //
-
-        // case 1: horizontal part of a step; eventually this should
-        // return a random number
+        // case 1: horizontal part of a step. for backward compatibility,
+        // return q_min. eventually this should return a random number
+        // between q_min and q_max
         
         if( pHi != null && pHi.equals(pLo) ) {
             bid = getBid(pHi);
             return bid.q_min;
         }
 
-        // case 2: vertical part of a steps
+        // case 2: vertical part of a step. return q_max of pHi but 
+        // it will be the same as q_min of pLo
         
         if( pHi != null && pLo != null ) {       
             bid = getBid(pHi);
             return bid.q_max;
         }
 
-        // case 3: below the first bid; really this should return
-        // 0 if the next q_max is negative (supply)
+        // case 3: below the first bid: return q_max of the lowest bid.
+        // assumes that there's an implied step down to p=0 from the 
+        // rightmost point on either a demand, net demand or pure supply 
+        // curve.
         
-        if( pHi != null ) {       
+        if( pLo == null ) {       
             bid = getBid(pHi);
             return bid.q_max;
         }
 
-        // case 4: above the last bid; really this should return
-        // getBid(pLo).q_min if that's negative.
+        // case 4: above the last bid: return q_min of the highest bid.
+        // assumes that either a demand or a supply curve continue 
+        // up indefinitely from the last left-most point.
         
-        return 0;
+        bid = getBid(pLo);
+        return bid.q_min;
     }
 
     /**
