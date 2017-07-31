@@ -32,6 +32,7 @@ public class Demand {
 
     // Transmission parameters if this is an upstream curve
 
+    boolean isUp;
     int cost;
     int cap;
     Integer pcap_hi;
@@ -44,6 +45,7 @@ public class Demand {
      */
     public Demand() {
         bids = new TreeMap<>();
+        isUp    = false;
         cost    = 0;
         cap     = 0;
         pcap_hi = null;
@@ -187,83 +189,50 @@ public class Demand {
     /**
      * Find the actual price for the end users 
      *
-     * Includes transaction cost and capacity limit
+     * Includes transaction cost and capacity limit. Must be applied
+     * to an upstream demand curve.
      * 
      * @param pUp Tentative price
-     * @param agent Agent whose transmission parameters should be used
      * @return Actual price
      */
-    public int getPriceDn(int pUp, Demand demUp) { 
-        Bidstep bid;
-        int last_p;
-        int pDn;
+    public int getPriceDn(int pUp) { 
 
-        int pc0  = demUp.pq0_lo;
-        int pc1  = demUp.pq0_hi;
-        int cost = demUp.cost;
-        int cap  = demUp.cap;
+        assert isUp;
 
         if( pUp <= -1 )
             return -1;
         
+        // is constraint on sales upstream binding?  if so, the 
+        // price is the downstream price where the constraint 
+        // occurs
+
+        if( pcap_hi != null && pUp >= pcap_hi )
+            return pcap_hi - cost;
+
+        // are we below the sales constraint but above the 
+        // no-trade price? if so, the downstream price is the 
+        // upstream price less the transmission cost
+        
+        if (pUp > pq0_hi) 
+            return pUp - cost;
+         
         // is the upstream price is between the Q=0 thresholds? if so,
         // return the middle of the range
 
-        if ( pUp >= pc0 && pUp <= pc1 )
-            return (pc0 + pc1)/2;
+        if ( pUp >= pq0_lo && pUp <= pq0_hi )
+            return (pq0_lo + pq0_hi)/2;
         
-        // is the price above the upper threshold and thus in the 
-        // supply zone?
+        // are we in the demand zone but above the demand constraint?
+        // if so, the downstream price is the upstream price plus
+        // the transmission cost
 
-        if (pUp > pc1) {
-            last_p = 0;
+        if( pcap_lo == null || pUp > pcap_lo ) 
+            return pUp + cost;
 
-            // downstream price received by sellers if the constraint isn't 
-            // binding: it's the upstream price less the transmission cost
-        
-            pDn = pUp - cost;
+        // demand constraint must be binding; return the downstream
+        // price where that occurs
 
-            // scan up the bids for first one with p > pUp or q_max to the left of cap
-            
-            for(Integer p: prices()) {
-                bid = getBid(p); 
-                if( p <= pUp && bid.q_max >= -cap )
-                    last_p = p;
-                else if( bid.q_max < -cap ) 
-                    return pDn <= last_p ? pDn : last_p ;
-                else
-                    return pDn;
-            }
-
-            // nothing left: return the last price
-            
-            return last_p;
-        } 
-        
-        // price must be below the lower threshold so we're in the
-        // demand zone
-
-        last_p = 0;
-
-        // downstream price paid by buyers if the constraint isn't 
-        // binding: it's the upstream price plus the transmission cost
-        
-        pDn = pUp + cost;
-
-        // skip up the curve for bids with more quantity than cap
-       
-        for(Integer p: prices()) {
-            bid = getBid(p);
-            if( bid.q_min >= cap ) {
-                last_p = p;
-                continue;
-            }
-            return pDn > p ? pDn : p ;
-        }
-
-        // nothing left: constraint is binding and return last price
-        
-        return last_p;
+        return pcap_lo + cost;
     }
 
     /**
@@ -319,7 +288,7 @@ public class Demand {
 
         while( true ) {
 
-            // get new bids if needed
+            // get bids for the current prices
 
             l = demL.getBid(pL);
             r = demR.getBid(pR);
@@ -341,7 +310,6 @@ public class Demand {
             // pull next needed bid(s). a little convoluted so
             // we don't break the second update after doing
             // the first.
-
             //
             // eventually this should be smarter and assume that when 
             // the first curve runs out we keep using 0 if it was 
@@ -490,7 +458,7 @@ public class Demand {
      * @param agent Grid agent
      * @return New demand curve
      */
-    Demand adjustTrans(Grid agent) {
+    Demand addTrans(Grid agent) {
         Demand newD;
         Bidstep old;
         int cost;
@@ -502,6 +470,7 @@ public class Demand {
         cap  = agent.cap;
 
         newD = new Demand();
+        newD.isUp   = true;
         newD.cost   = cost;
         newD.cap    = cap;
         newD.pq0_lo = -1;
@@ -523,14 +492,14 @@ public class Demand {
             // impose the constraints and note the prices
             // where they occur
 
-            if( q_max > cap ) {
+            if( q_max >= cap ) {
                 q_max = cap;
-                pcap_lo = p-cost;
+                newD.pcap_lo = p-cost;
             }
 
             if( q_min < -cap ) {
                 q_min = -cap;
-                pcap_hi = p+cost;
+                newD.pcap_hi = p+cost;
             }
 
             // shift pure demand bids down

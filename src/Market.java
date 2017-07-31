@@ -38,7 +38,7 @@ public class Market extends Grid {
                     priceDn = priceAu;
                 else {
                     priceUp = getPrice();
-                    priceDn = demDn.getPriceDn(priceUp,demUp);
+                    priceDn = demUp.getPriceDn(priceUp);
                 }
                 sendPriceDn();
                 break;
@@ -81,7 +81,7 @@ public class Market extends Grid {
      * Send a demand curve up accounting for transmission
      */
     void sendDemUp() {
-        demUp = demDn.adjustTrans((Grid) this);
+        demUp = demDn.addTrans((Grid) this);
         demUp.log(this,"up");
         reportDemand(demUp);
     }
