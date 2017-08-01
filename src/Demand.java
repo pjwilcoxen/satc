@@ -36,8 +36,8 @@ public class Demand {
     int cost;
     int cap;
     Integer pcap_hi;
-    Integer pq0_hi ;
-    Integer pq0_lo ;
+    Integer min_wta;
+    Integer max_wtp;
     Integer pcap_lo;
 
     /**
@@ -49,8 +49,8 @@ public class Demand {
         cost    = 0;
         cap     = 0;
         pcap_hi = null;
-        pq0_hi  = null;
-        pq0_lo  = null;
+        min_wta = null;
+        max_wtp = null;
         pcap_lo = null;
     }
 
@@ -196,41 +196,62 @@ public class Demand {
      * @return Actual price
      */
     public int getPriceDn(int pUp) { 
+        boolean has_s;
+        boolean has_d;
 
         assert isUp;
 
         if( pUp <= -1 )
             return -1;
         
-        // is constraint on sales upstream binding?  if so, the 
-        // price is the downstream price where the constraint 
-        // occurs
+        has_s = min_wta != null;
+        has_d = max_wtp != null;
 
-        if( pcap_hi != null && pUp >= pcap_hi )
+        assert has_s || has_d;
+
+        // case 1: selling. at or above the constraint on upstream sales.
+        // return the downstream price associated with the constraint
+
+        if( has_s && pcap_hi != null && pUp >= pcap_hi )
             return pcap_hi - cost;
 
-        // are we below the sales constraint but above the 
-        // no-trade price? if so, the downstream price is the 
-        // upstream price less the transmission cost
-        
-        if (pUp > pq0_hi) 
-            return pUp - cost;
-         
-        // is the upstream price is between the Q=0 thresholds? if so,
-        // return the middle of the range
+        // case 2: selling. above minimum wta. assume selling and
+        // return the downstream price associated with pUp
 
-        if ( pUp >= pq0_lo && pUp <= pq0_hi )
-            return (pq0_lo + pq0_hi)/2;
+        if( has_s && pUp > min_wta ) 
+            return pUp - cost;
         
-        // are we in the demand zone but above the demand constraint?
-        // if so, the downstream price is the upstream price plus
-        // the transmission cost
+        // case 3: no trade. supply only and below min wta. return 
+        // the downstream selling price
+
+        if( has_s && !has_d )
+            return pUp - cost;
+
+        // if we're here there must have a demand portion. assert 
+        // that and then don't check for it 
+
+        assert has_d;
+
+        // case 4: no trade. in the zone between min_wta and 
+        // max_wtp where q will be zero
+
+        if( has_s && pUp >= max_wtp && pUp <= min_wta)
+            return (max_wtp + min_wta)/2;
+       
+        // case 5: no trade. above max_wtp. return downstream 
+        // buying price
+
+        if( pUp > max_wtp )
+            return pUp + cost;
+
+        // case 6: buying. below max_wta and above the demand cap.
+        // return the downstream price
 
         if( pcap_lo == null || pUp > pcap_lo ) 
             return pUp + cost;
 
-        // demand constraint must be binding; return the downstream
-        // price where that occurs
+        // case 7: buying. at or below the constraint on demand. return
+        // the downstream price associated with the constraint
 
         return pcap_lo + cost;
     }
@@ -470,11 +491,9 @@ public class Demand {
         cap  = agent.cap;
 
         newD = new Demand();
-        newD.isUp   = true;
-        newD.cost   = cost;
-        newD.cap    = cap;
-        newD.pq0_lo = -1;
-        newD.pq0_hi = -1;
+        newD.isUp = true;
+        newD.cost = cost;
+        newD.cap  = cap;
 
         for(Integer p: prices()) {
 
@@ -532,8 +551,12 @@ public class Demand {
 
         for(Integer p: newD.prices()) {
             Bidstep bid = newD.getBid(p);
-            if( bid.q_min == 0 )newD.pq0_lo = p;
-            if( bid.q_max == 0 )newD.pq0_hi = p;
+            if( bid.q_min >= 0 )
+                if( newD.max_wtp == null || newD.max_wtp < p )
+                    newD.max_wtp = p;
+            if( bid.q_max <= 0 )
+                if( newD.min_wta == null || newD.min_wta > p )
+                    newD.min_wta = p;
         }
 
         return newD;

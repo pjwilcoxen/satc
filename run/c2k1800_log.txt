@@ -176,7 +176,7 @@ dos 5 dropped [34, 124, 160, 181, 193]
 node 203, DOS 5, p_self=51, p_up=0, p_down=51, q_down=-93
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=-1, p_up=51, p_down=49, q_down=2390
+node 202, DOS 5, p_self=-1, p_up=51, p_down=91, q_down=1798
 node 201, DOS 5, p_self=25, p_up=51, p_down=49, q_down=-1811
 *** CALC_LOADS
 dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
@@ -192,7 +192,7 @@ node 203, DOS 10, p_self=54, p_up=0, p_down=54, q_down=-81
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
 node 201, DOS 10, p_self=24, p_up=54, p_down=52, q_down=-1806
-node 202, DOS 10, p_self=-1, p_up=54, p_down=52, q_down=2275
+node 202, DOS 10, p_self=-1, p_up=54, p_down=88, q_down=1788
 *** CALC_LOADS
 
 *** population 4
