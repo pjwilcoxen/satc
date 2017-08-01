@@ -273,7 +273,7 @@ public class Demand {
         boolean needL;
         boolean needR;
         int p;
-        int q_max;
+        Integer q_max;
         Integer last_p;
 
         assert demR != null;
@@ -305,19 +305,34 @@ public class Demand {
         Integer pL = iterL.next();
         Integer pR = iterR.next();
 
+        l = demL.getBid(pL);
+        r = demR.getBid(pR);
+
         last_p = null;
+        q_max  = null;
 
-        while( true ) {
-
-            // get bids for the current prices
-
-            l = demL.getBid(pL);
-            r = demR.getBid(pR);
+        while( pL != null || pR != null ) {
 
             // find the price and q_max of the next step
 
-            p = pL < pR ? pL : pR ;
-            q_max = l.q_max + r.q_max ;
+            if( pL != null && pR != null ) {
+                p = pL < pR ? pL : pR ;
+                q_max = l.q_max + r.q_max ;
+                needL = pL <= pR;
+                needR = pR <= pL;
+            }
+            else if( pR == null ) {
+                p = pL;
+                q_max = l.q_max + r.q_min ;
+                needL = true;
+                needR = false;
+            }
+            else {
+                p = pR;
+                q_max = l.q_min + r.q_max ;
+                needL = false;
+                needR = true;
+            }
 
             newD.add(p,0,q_max);
             
@@ -328,27 +343,23 @@ public class Demand {
 
             last_p = p;
 
-            // pull next needed bid(s). a little convoluted so
-            // we don't break the second update after doing
-            // the first.
-            //
-            // eventually this should be smarter and assume that when 
-            // the first curve runs out we keep using 0 if it was 
-            // a demand curve or q_min if it was a supply curve
-            //
+            // pull next needed bids
             
-            needL = pL <= pR;
-            needR = pR <= pL;
-            
-            if( needL ) {
-                if( !iterL.hasNext() )break;
-                pL = iterL.next();
-            }
+            if( needL ) 
+                if( iterL.hasNext() ) {
+                    pL = iterL.next();
+                    l = demL.getBid(pL);
+                }
+                else
+                    pL = null;
 
-            if( needR ) {
-                if( !iterR.hasNext() )break;
-                pR = iterR.next();
-            }
+            if( needR ) 
+                if( iterR.hasNext() ) {
+                    pR = iterR.next();
+                    r = demR.getBid(pR);
+                }
+                else
+                    pR = null;
         }
 
         // last step
