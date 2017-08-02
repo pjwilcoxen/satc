@@ -293,10 +293,7 @@ public class Demand {
         if( demL.isEmpty() || demR.isEmpty() )return newD;
 
         // 
-        // combine bids until we run off the top of either curve
-        //
-        // treats sum as undefined above top of first curve to 
-        // run out of bids; may want to reconsider this
+        // combine bids until we run off the top of both curves
         //
 
         iterL = demL.prices().iterator();
