@@ -356,6 +356,8 @@ public class Env extends SimState {
             for(Agent a: listAgent)
                 a.popInit();
 
+            Channel.divert_clear();
+
             // run DOS scenarios
 
             for(String dos: dos_runs) {
