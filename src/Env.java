@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.HashMap;
 import org.apache.commons.csv.*;
 import sim.engine.SimState;
 
@@ -33,6 +34,8 @@ public class Env extends SimState {
     //
     
     private static String fileConfig ;
+	private static String fileVirt ;
+	private static String fileAdvs ;
     
     /**
      * File name for monte carlo draws
@@ -131,7 +134,7 @@ public class Env extends SimState {
    
     static int maxTier;
     static int curTier;
-
+    
     /**
      * Printer for log file
      */
@@ -155,6 +158,13 @@ public class Env extends SimState {
      * a known order.
      */
     static final ArrayList<Agent> listAgent = new ArrayList<>();
+	
+	// Master list of historical information across pop and dos runs
+	static final HashMap<Integer, ArrayList<History>> globalHistory = new HashMap<>();
+	
+	// Public-Private key list
+	static final HashMap<String, Integer> publicKeys = new HashMap<>();
+	static final HashMap<String, Integer> privateKeys = new HashMap<>();
    
     /**
      * Master simulation environment 
@@ -214,6 +224,51 @@ public class Env extends SimState {
             if( a.own_id == own_id )
                 return a;
        throw new RuntimeException("No agent with id "+own_id);
+    }
+	
+	/**
+     * Find and return intel list given population and dos
+     */
+    public static ArrayList<History> getHistory(int pop, int dos) {
+	   
+		// Create lookup key
+		int key = pop*1000 + dos;
+	   
+		// Returns array if history exists for pop/dos run
+		if(globalHistory.containsKey(key)) {
+		   return globalHistory.get(key);
+		}
+		else {	   
+			throw new RuntimeException("No history for population "+pop+" and dos "+dos);
+		}
+    }
+	
+	/**
+     * Return agent associated with public key
+     */
+    public static Integer resolvePublic(String key) {
+	   
+		// Returns agent's id if exists
+		if(publicKeys.containsKey(key)) {
+		   return publicKeys.get(key);
+		}
+		else {	   
+			throw new RuntimeException("No agent with private key: "+key);
+		}
+    }
+	
+	/**
+     * Return agent associated with private key
+     */
+    public static Integer resolvePrivate(String key) {
+	   
+		// Returns agent's id if exists
+		if(privateKeys.containsKey(key)) {
+		   return privateKeys.get(key);
+		}
+		else {	   
+			throw new RuntimeException("No agent with public key: "+key);
+		}
     }
 
     static class Draw {
@@ -289,7 +344,9 @@ public class Env extends SimState {
         if( ext>0 )stem = stem.substring(0,ext);
 
         fileConfig = props.getProperty("netmap","netmap.csv") ;
-        fileDraws  = props.getProperty("draws","testdraws,csv") ;
+        fileDraws  = props.getProperty("draws","testdraw.csv") ;
+		fileVirt   = props.getProperty("virtual","virtualmap.csv") ;
+		fileAdvs   = props.getProperty("adversary","adversary.csv") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
@@ -354,10 +411,10 @@ public class Env extends SimState {
             // initialize for this population
 
             for(Agent a: listAgent)
-                a.popInit();
+				a.popInit();
 
-            Channel.divert_clear();
-
+			Channel.divert_clear();
+			
             // run DOS scenarios
 
             for(String dos: dos_runs) {
@@ -400,8 +457,8 @@ public class Env extends SimState {
                             break;
 
                     }
-
-                // write the results
+					
+				// write the results
 
                 printResults();
             }
@@ -409,7 +466,7 @@ public class Env extends SimState {
         
         enviro.finish();
 	}
-   
+    
     /** 
      * Carry out a particular stage and log it in the process
      */
@@ -421,8 +478,8 @@ public class Env extends SimState {
         stageNow = s;
         e.schedule.step(e);
     }
-        
-    /**
+	
+	/**
      * Create agents based on the input network map
      */
     private void makeAgents(String filename) {
@@ -450,7 +507,7 @@ public class Env extends SimState {
                 cur_cost  = Integer.parseInt(rec.get("cost"));
                 cur_cap   = Integer.parseInt(rec.get("cap"));
 
-                // create the agent
+				// create the agent
 
                 switch( cur_type ) {
                     case 1: 
@@ -590,6 +647,206 @@ public class Env extends SimState {
     }
 
     /**
+     * Creates virtual agents from file
+     */
+	 private void makeVirtual(String filename){
+		
+		BufferedReader br;
+        CSVParser csvReader;
+		int id;
+		String type, intelLevel; 
+		String[] channelList, agentList, intelList;
+		Agent cur_agent, intel_agent;
+		Intel cur_intel;
+		
+		try {
+			
+			// Configure the csv reader
+			br = new BufferedReader(Util.openRead(filename));
+            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+			
+			// Read in csv records
+			for(CSVRecord rec: csvReader) {
+                id = Integer.parseInt(rec.get("id"));
+				type = rec.get("type");
+				channelList = rec.get("channel").split(",",-1);
+				agentList = rec.get("agent").split(",",-1);
+				intelLevel = rec.get("intel_level");
+				intelList = rec.get("intel").split(",",-1);
+				
+				// Create the virtual agent
+                switch(type) {
+                    case "adversary": 
+                        cur_agent = new Adversary(id);
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected agent type "+type);
+                }
+				
+				// Load agent's channel list
+				for(int i = 0; i < channelList.length; i++){
+					((Virtual) cur_agent).channels.add(Channel.find(channelList[i]));
+				}
+				
+				// Load agent's access list
+				for(int i = 0; i < agentList.length; i++){
+					
+					((Virtual) cur_agent).agents.add(Integer.parseInt(agentList[i]));
+					
+				}
+				
+				// Load agent's intel list
+				switch(intelLevel) {
+					case "full":
+						
+						// Load all from global agent list
+						for(Agent a: listAgent){
+							cur_intel = new Intel(a, false);
+							((Virtual) cur_agent).intel.add(cur_intel);
+						}
+						break;
+					case "partial":
+						
+						// Load from intel list in file
+						for(int i = 0; i < intelList.length; i++){
+							intel_agent = Env.getAgent(Integer.parseInt(intelList[i]));
+							cur_intel = new Intel(intel_agent, false);
+							((Virtual) cur_agent).intel.add(cur_intel);
+						}
+						break;
+					case "none":
+						break;
+					default:
+						throw new RuntimeException("Unexpected intel type "+intelLevel);
+				}
+				
+				// Add agent to the schedule for stepping
+                listAgent.add(cur_agent);
+				schedule.scheduleRepeating(cur_agent);
+			}		
+		}
+		catch (IOException e) {
+            System.out.println("Could not read network file: "+filename);
+            System.exit(0);
+        }
+	 }
+	
+	/**
+     * Configure adversary agents behavior
+     */
+	 private void configureAdversary(String filename){
+		
+		BufferedReader br;
+        CSVParser csvReader;
+		int id;
+		double sophistication, constraint;
+		String goal, scope;
+		String[] targetList, capabilityList;
+		Agent a;
+		
+		try {
+			
+			// Configure csv reader
+			br = new BufferedReader(Util.openRead(filename));
+            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+			
+			// Read in csv records
+			for(CSVRecord rec: csvReader) {
+				id = Integer.parseInt(rec.get("id"));
+				goal = rec.get("goal");
+				capabilityList = rec.get("capability").split(",",-1);
+				scope = rec.get("scope");
+				targetList = rec.get("target").split(",",-1);
+				sophistication = Double.parseDouble(rec.get("sophistication"));
+				constraint = Double.parseDouble(rec.get("constraint"));
+
+				//Find adversary by id
+				a = Env.getAgent(id);
+
+				// Store adversary's properties
+				((Adversary) a).goal = goal;
+				((Adversary) a).scope = scope;
+				((Adversary) a).sophistication = sophistication;
+				((Adversary) a).constraint = constraint;
+				
+				// Load adversary's capabilities
+				for(int i = 0; i < capabilityList.length; i++){
+					((Adversary) a).capability.add(capabilityList[i]);
+				}
+
+				// Load adversary's targets
+				for(int i = 0; i < targetList.length; i++){
+					((Adversary) a).target.add(Integer.parseInt(targetList[i]));
+				}
+			}
+		}
+		catch (IOException e) {
+            System.out.println("Could not read network file: "+filename);
+            System.exit(0);	
+        }
+	 }
+	
+	/**
+     * Loads global historical data
+     */
+	 private void loadHistory(String filename){
+		
+		BufferedReader br;
+        CSVParser csvReader;
+		int pop, dos, id, p, q, key;
+		History history;
+		ArrayList<History> listHistory;
+		
+		try {
+			
+			// Configure csv reader
+			br = new BufferedReader(Util.openRead(filename));
+            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+			listHistory = new ArrayList<History>();
+			
+			// Read in csv records
+			for(CSVRecord rec: csvReader) {
+                pop = Integer.parseInt(rec.get("pop"));
+				dos = Integer.parseInt(rec.get("dos"));
+				id = Integer.parseInt(rec.get("id"));
+				p = Integer.parseInt(rec.get("p"));
+				q = Integer.parseInt(rec.get("q"));
+				
+				/**
+				* Store information in new history object
+				*
+				* Currently there is no field in file for period
+				* Temporarily using a default of 1
+				*/
+				history = new History(id);
+				history.storePrice(1,p);
+				history.storeQuantity(1,q);
+				
+				// Build key for hashmap
+				key = pop*1000 + dos;
+				
+				
+				// Add historical info to global hashmap
+				if(globalHistory.containsKey(key)){
+					listHistory.clear();
+					listHistory.addAll(globalHistory.get(key));
+					listHistory.add(history);
+					globalHistory.put(key, listHistory);
+				}
+				else {
+					listHistory.clear();
+					listHistory.add(history);
+					globalHistory.put(key, listHistory);
+				}
+			}
+		}
+		catch (IOException e) {
+            System.out.println("Could not read network file: "+filename);
+            System.exit(0);
+        }
+	 }
+	
+	/**
      * Save results for printing out
      * 
      * @param agent Agent 
@@ -629,9 +886,12 @@ public class Env extends SimState {
      */
     @Override
     public void start(){
-        super.start();
+	super.start();
         makeAgents(fileConfig);
         buildGrid();
+		makeVirtual(fileVirt);
+		configureAdversary(fileAdvs);
+		loadHistory("c"+Integer.toString(transCost)+"k"+Integer.toString(transCap)+"_hist.csv");
     }
 
     /**
@@ -639,10 +899,10 @@ public class Env extends SimState {
      */
     @Override
     public void finish() {
-        System.out.println("Simulation complete");
-        out.close();
-        log.close();
-        net.close();
+       System.out.println("Simulation complete");
+       out.close();
+       log.close();
+       net.close();
     }
  
 }

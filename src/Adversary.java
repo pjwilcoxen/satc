@@ -100,7 +100,7 @@ import sim.engine.SimState;
 		if(capability.contains("control") && channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(sophistication)) {
 			a.channel.divert_from(a.own_id, this.own_id);
 			a.channel.divert_to(a.own_id, this.own_id);
-			System.out.println("Adversary compromised Agent "+a.own_id);
+
 			return true;
 		}
 		else {

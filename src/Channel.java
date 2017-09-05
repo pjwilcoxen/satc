@@ -44,14 +44,14 @@ public class Channel {
         }
     }
     
-    /**
-     * Reset diversion maps for new populations
-     */
-    public static void divert_clear() {
-        divertTo.clear();
-        divertFrom.clear();
-    }
-    
+	/**
+	* Reset diversion maps for new populations
+	*/
+	public static void divert_clear() {
+		divertTo.clear();
+		divertFrom.clear();
+	}
+	
     /**
      * Divert messages based on recipient
      * 
