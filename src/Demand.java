@@ -590,6 +590,7 @@ public class Demand {
         header.add("sd_type");
         header.add("load");
         header.add("elast");
+        header.add("steps");
         for (int i = 0; i < 20; i++) {
             header.add("p" + i);
             header.add("q_min" + i);
@@ -616,6 +617,7 @@ public class Demand {
                 values.add("");
                 values.add("");
             }
+            values.add(Integer.toString(bids.size()));
             for (String str : toStrings()) {
                 values.add(str);
             }
