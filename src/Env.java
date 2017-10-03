@@ -27,6 +27,9 @@ public class Env extends SimState {
     //
     //    fileConfig -- configuration of the network of nodes
     //    fileDraws  -- monte carlo drawings of possible traders
+	//    fileVirt   -- configuration of virtual agents
+	//    fileAdvs   -- configuration of adversary behavior
+	//    fileHist   -- previous price and quantity data
     //    transCost  -- transmission cost between nodes
     //    transCap   -- maximum transmission between nodes
     //    seed       -- seed for RNG or else absent or "none"
@@ -36,6 +39,7 @@ public class Env extends SimState {
     private static String fileConfig ;
 	private static String fileVirt ;
 	private static String fileAdvs ;
+	private static String fileHist ;
     
     /**
      * File name for monte carlo draws
@@ -345,8 +349,9 @@ public class Env extends SimState {
 
         fileConfig = props.getProperty("netmap","netmap.csv") ;
         fileDraws  = props.getProperty("draws","testdraw.csv") ;
-		fileVirt   = props.getProperty("virtual","virtualmap.csv") ;
+		fileVirt   = props.getProperty("virtualmap","virtualmap.csv") ;
 		fileAdvs   = props.getProperty("adversary","adversary.csv") ;
+		fileHist   = props.getProperty("history","history.csv") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
@@ -891,7 +896,7 @@ public class Env extends SimState {
         buildGrid();
 		makeVirtual(fileVirt);
 		configureAdversary(fileAdvs);
-		loadHistory("c"+Integer.toString(transCost)+"k"+Integer.toString(transCap)+"_hist.csv");
+		loadHistory(fileHist);
     }
 
     /**
