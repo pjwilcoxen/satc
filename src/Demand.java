@@ -416,10 +416,7 @@ public class Demand {
         int q2=(int)(sign*load*pow((double)p1/iniprice,elast));
 
         // first step
-        if( makeS )
-            newD.add(p0, q1, q2);
-        else
-            newD.add(p0, q2, q1);
+        newD.add(p0, q2, q1);
         
         // create the steps below the price=40
         
@@ -427,10 +424,7 @@ public class Demand {
             p1 = iniprice*(i+1)/steps;
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
-            if( makeS )
-                newD.add(p1, q1, q2);
-            else
-                newD.add(p1, q2, q1);
+            newD.add(p1, q2, q1);
         }
         
         // create twice the number of steps above price=40
@@ -439,10 +433,7 @@ public class Demand {
             p1 = iniprice + 360*i/(2*steps);
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
-            if( makeS )
-                newD.add(p1, q1, q2);
-            else
-                newD.add(p1, q2, q1);
+            newD.add(p1, q2, q1);
         }
         
         return newD;
