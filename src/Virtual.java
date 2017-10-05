@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 
 /**
- * General purpose class for communications-only agents
+ * Abstract class for communications-only agents that
+ * are not connected to the electic portion of the grid.
  *
- * Currently a stub with no functionality
+ * Contains functionality to reset intel for new runs
+ * and retrieve known intel for a given agent.
  */
 public abstract class Virtual extends Agent {
     
@@ -67,8 +69,8 @@ public abstract class Virtual extends Agent {
             
                 // Reset price, quantity and bids
                 i.bid.clear();
-                i.p.clear();
-                i.q.clear();
+                i.history.p.clear();
+                i.history.q.clear();
             
                 // Initialize p and q from global intel
                 for(History h: history) {
