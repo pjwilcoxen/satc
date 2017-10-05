@@ -1,6 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import sim.engine.Steppable;
+import java.util.HashMap;
 
 /**
  * General purpose Agent class
@@ -36,7 +37,14 @@ public abstract class Agent implements Steppable {
 
     double rBlock;
     double rSecure;
-
+    
+    // public and private key for encrypting/decrypting messages
+    String publicKey;
+    String privateKey;
+    
+    // hashmap for storing other agent's public keys that are known
+    HashMap<Integer, String> knownKeys = new HashMap<>();
+    
     // data channel this agent uses to communicate with its parent
     
     Channel channel;
@@ -136,7 +144,7 @@ public abstract class Agent implements Steppable {
             dList.add(msg.getDemand());
         return dList;
     }
-
+    
     /**
      * Get a random number from this agent's pool
      * 
@@ -169,5 +177,30 @@ public abstract class Agent implements Steppable {
                 rArray[j] = Env.runiform();
             rPool.add(rArray);
         }
+    }
+    
+    /**
+     * Store a known agent's public key
+     * 
+     * @param agent_id is the other agent's id
+     * @param key is the other agent's key
+     */
+     private void storeKey(int agent_id, String key) {
+        if (!knownKeys.containsKey(agent_id)) {
+            knownKeys.put(agent_id, key);
+        }
+        else {
+            throw new RuntimeException("Redundant key storage. Agent "+own_id+" storing key "+key+" for agent "+agent_id);
+        }
+    }
+    
+    /**
+     * Store a known agent's public key
+     * 
+     * @param agent_id is the other agent's id
+     * @return Uniform random number
+     */
+    private String getKey(int agent_id) {
+        return knownKeys.get(agent_id);
     }
 }

@@ -32,6 +32,9 @@ public class Msg {
     Types type;
     Demand demand;
     int price;
+    Boolean encrypted;
+    String privateKey;
+    String publicKey;
 
     /**
      * Message
@@ -41,9 +44,10 @@ public class Msg {
      */
     public Msg(Agent sender,int to) {
         this.sender = sender;
-        this.from   = sender.own_id;
-        this.to     = to;
-        this.type   = Types.NONE;
+        this.from       = sender.own_id;
+        this.to         = to;
+        this.type       = Types.NONE;
+        this.encrypted  = false;
     }
 
     /**
@@ -130,5 +134,58 @@ public class Msg {
     public int getPrice() {
         assert type == Types.PRICE;
         return price;
+    }
+    
+    /**
+     * Is this message encrypted?
+     * 
+     * @return True if encrypted
+     */
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+    
+    /**
+     * Encrypts the message
+     *
+     * Uses either private and public keys or just private
+     */
+    public void encrypt(String pri, String pub) {
+        encrypted = true;
+        this.privateKey = pri;
+        this.publicKey = pub;
+    }
+    
+    public void encrypt(String pri) {
+        encrypted = true;
+        this.privateKey = pri;
+    }
+    
+    /**
+     * Decrypts the message
+     *
+     * @return True if decryption was successful
+     */
+    
+    public boolean decrypt(String pub, String pri) {
+        
+        if (Env.resolvePublic(pub) == Env.resolvePrivate(privateKey) && (Env.resolvePrivate(pri) == Env.resolvePublic(publicKey) || publicKey == null)) {
+            encrypted = false;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public boolean decrypt(String pub) {
+
+        if (Env.resolvePublic(pub) == Env.resolvePrivate(privateKey) && publicKey == null) {
+            encrypted = false;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

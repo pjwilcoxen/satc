@@ -45,8 +45,8 @@ public class Channel {
     }
     
     /**
-     * Reset diversion maps for new populations
-     */
+    * Reset diversion maps for new populations
+    */
     public static void divert_clear() {
         divertTo.clear();
         divertFrom.clear();
