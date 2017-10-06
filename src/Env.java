@@ -164,11 +164,22 @@ public class Env extends SimState {
     static final ArrayList<Agent> listAgent = new ArrayList<>();
     
     // Master list of historical information across pop and dos runs
-    static final HashMap<Integer, ArrayList<History>> globalHistory = new HashMap<>();
+    static final HashMap<String, ArrayList<History>> globalHistory = new HashMap<>();
+        
+    // Types of encryption
+    public static enum Encrypt{
+        
+        // Public Key Infrastructure
+        PKI,
+        
+        // Public Key Infrastructure
+        NONE
+    }
     
     // Public-Private key list
     static final HashMap<String, Integer> publicKeys = new HashMap<>();
     static final HashMap<String, Integer> privateKeys = new HashMap<>();
+    public static final HashMap<Integer, String> availableKeys = new HashMap<>();                                                                          
    
     /**
      * Master simulation environment 
@@ -236,7 +247,7 @@ public class Env extends SimState {
     public static ArrayList<History> getHistory(int pop, int dos) {
        
         // Create lookup key
-        int key = pop*1000 + dos;
+        String key = Integer.toString(pop) + "|" + Integer.toString(dos);
        
         // Returns array if history exists for pop/dos run
         if(globalHistory.containsKey(key)) {
@@ -273,6 +284,16 @@ public class Env extends SimState {
         else {     
             throw new RuntimeException("No agent with public key: "+key);
         }
+    }
+    
+    /**
+     * Retrieves an agent's public key
+     * 
+     * @param agent_id is the other agent's id
+     * @return Uniform random number
+     */
+    private String getPublicKey(int agent_id) {
+        return availableKeys.get(agent_id);
     }
 
     static class Draw {
@@ -492,7 +513,7 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap ;
-        String cur_sd, cur_chan;
+        String cur_sd, cur_chan, cur_encrypt;
         Agent cur_agent;
         String items[];
         Channel channel;
@@ -504,13 +525,14 @@ public class Env extends SimState {
             csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
 
             for(CSVRecord rec: csvReader) {
-                cur_id    = Integer.parseInt(rec.get("id"));
-                cur_type  = Integer.parseInt(rec.get("type"));
-                cur_sd    = rec.get("sd_type");
-                cur_upid  = Integer.parseInt(rec.get("up_id"));
-                cur_chan  = rec.get("channel");
-                cur_cost  = Integer.parseInt(rec.get("cost"));
-                cur_cap   = Integer.parseInt(rec.get("cap"));
+                cur_id        = Integer.parseInt(rec.get("id"));
+                cur_type      = Integer.parseInt(rec.get("type"));
+                cur_sd        = rec.get("sd_type");
+                cur_upid      = Integer.parseInt(rec.get("up_id"));
+                cur_chan      = rec.get("channel");
+                cur_cost      = Integer.parseInt(rec.get("cost"));
+                cur_cap       = Integer.parseInt(rec.get("cap"));
+                cur_encrypt   = rec.get("channel").toUpperCase();
 
                 // create the agent
 
@@ -546,6 +568,9 @@ public class Env extends SimState {
                 channel = Channel.find(cur_chan);
                 if( channel == null )channel = new Channel(cur_chan);
                 cur_agent.setChannel(channel);
+                
+                // set encryption
+                setEncryption(cur_agent, cur_encrypt);
 
                 // add it to the list of agents and schedule it for stepping
 
@@ -651,6 +676,29 @@ public class Env extends SimState {
         br.close();
     }
 
+    private void setEncryption(Agent a, String encrypt){
+        
+        switch(encrypt) {
+            case "PKI": 
+                a.encryption = Encrypt.PKI;
+            
+                // Generate public & private keys
+                a.privateKey = "PRI" + Integer.toString(a.own_id);
+                a.publicKey = "PUB" + Integer.toString(a.own_id);
+            
+                // Add to global list
+                publicKeys.put(a.publicKey, a.own_id);
+                privateKeys.put(a.privateKey, a.own_id);
+                availableKeys.put(a.own_id, a.publicKey);
+            
+                break;
+        
+            case "NONE": 
+                a.encryption = Encrypt.NONE;
+                break;
+        }
+    }
+    
     /**
      * Creates virtual agents from file
      */
@@ -659,7 +707,7 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int id;
-        String type, intelLevel; 
+        String type, intelLevel, encryption; 
         String[] channelList, agentList, intelList;
         Agent cur_agent, intel_agent;
         Intel cur_intel;
@@ -673,16 +721,17 @@ public class Env extends SimState {
             // Read in csv records
             for(CSVRecord rec: csvReader) {
                 id = Integer.parseInt(rec.get("id"));
-                type = rec.get("type");
+                type = rec.get("type").toUpperCase();
                 channelList = rec.get("channel").split(",",-1);
                 agentList = rec.get("agent").split(",",-1);
                 intelLevel = rec.get("intel_level");
                 intelList = rec.get("intel").split(",",-1);
+                encryption = rec.get("encryption").toUpperCase();
                 
                 // Create the virtual agent
                 switch(type) {
-                    case "adversary": 
-                        cur_agent = new Adversary(id);
+                    case "ADV_ADAM": 
+                        cur_agent = new Adv_Adam(id);
                         break;
                     default:
                         throw new RuntimeException("Unexpected agent type "+type);
@@ -706,7 +755,7 @@ public class Env extends SimState {
                         
                         // Load all from global agent list
                         for(Agent a: listAgent){
-                            cur_intel = new Intel(a, false);
+                            cur_intel = new Intel(a.own_id, false);
                             ((Virtual) cur_agent).intel.add(cur_intel);
                         }
                         break;
@@ -715,7 +764,7 @@ public class Env extends SimState {
                         // Load from intel list in file
                         for(int i = 0; i < intelList.length; i++){
                             intel_agent = Env.getAgent(Integer.parseInt(intelList[i]));
-                            cur_intel = new Intel(intel_agent, false);
+                            cur_intel = new Intel(intel_agent.own_id, false);
                             ((Virtual) cur_agent).intel.add(cur_intel);
                         }
                         break;
@@ -745,7 +794,6 @@ public class Env extends SimState {
         CSVParser csvReader;
         int id;
         double sophistication, constraint;
-        String goal, scope;
         String[] targetList, capabilityList;
         Agent a;
         
@@ -758,9 +806,7 @@ public class Env extends SimState {
             // Read in csv records
             for(CSVRecord rec: csvReader) {
                 id = Integer.parseInt(rec.get("id"));
-                goal = rec.get("goal");
                 capabilityList = rec.get("capability").split(",",-1);
-                scope = rec.get("scope");
                 targetList = rec.get("target").split(",",-1);
                 sophistication = Double.parseDouble(rec.get("sophistication"));
                 constraint = Double.parseDouble(rec.get("constraint"));
@@ -769,8 +815,6 @@ public class Env extends SimState {
                 a = Env.getAgent(id);
 
                 // Store adversary's properties
-                ((Adversary) a).goal = goal;
-                ((Adversary) a).scope = scope;
                 ((Adversary) a).sophistication = sophistication;
                 ((Adversary) a).constraint = constraint;
                 
@@ -798,7 +842,8 @@ public class Env extends SimState {
         
         BufferedReader br;
         CSVParser csvReader;
-        int pop, dos, id, p, q, key;
+        int pop, dos, id, p, q;
+        String key;
         History history;
         ArrayList<History> listHistory;
         
@@ -828,7 +873,7 @@ public class Env extends SimState {
                 history.storeQuantity(1,q);
                 
                 // Build key for hashmap
-                key = pop*1000 + dos;
+                key = Integer.toString(pop) + "|" + Integer.toString(dos);
                 
                 
                 // Add historical info to global hashmap

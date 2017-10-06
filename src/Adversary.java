@@ -2,17 +2,17 @@ import java.util.ArrayList;
 import sim.engine.SimState;
 
 /**
- * Class built for adversarial actors in the model
+ * Abstract class that extends Virtual. General purpose
+ * functionality for all adversarial subclasses. 
  *
- * 
+ * Contains functionality to probe agents in the grid
+ * and attempt to compromise their capabilities.
  */
 
- public class Adversary extends Virtual {
+ public abstract class Adversary extends Virtual {
     
     // Properties controlling adversary's actions
-    String goal;
     ArrayList<String> capability;
-    String scope;
     ArrayList<Integer> target;
     double sophistication;
     double constraint;
@@ -63,8 +63,11 @@ import sim.engine.SimState;
         
         for (Intel i: intel) {
             
+            // Retrieve agent from environment
+            Agent agent = Env.getAgent(i.agent_id);
+            
             // Attempt to compromise agent's systems
-            i.compromised = canCompromise(i.agent);
+            i.compromised = canCompromise(agent);
             
             if (i.compromised) {
                 
@@ -77,10 +80,10 @@ import sim.engine.SimState;
             else {
                 
                 // Else attempt to compromise other capabilities
-                i.interceptTo = canInterceptTo(i.agent);
-                i.interceptFrom = canInterceptFrom(i.agent);
-                i.forge = canForge(i.agent);
-                i.send = canSend(i.agent);
+                i.interceptTo = canInterceptTo(agent);
+                i.interceptFrom = canInterceptFrom(agent);
+                i.forge = canForge(agent);
+                i.send = canSend(agent);
             }           
         }
      }

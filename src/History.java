@@ -2,9 +2,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class built for storing historical information
- *
- * 
+ * Class for storing historic price and quantity data for
+ * a specific agent. Intended to be used as a single set of
+ * information stored at the global level and populated
+ * during initialization.  Used by virtual agents to 
+ * initialize their intel about known agents.
  */
 public class History {
     
