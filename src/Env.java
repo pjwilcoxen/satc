@@ -370,9 +370,9 @@ public class Env extends SimState {
 
         fileConfig = props.getProperty("netmap","netmap.csv") ;
         fileDraws  = props.getProperty("draws","testdraw.csv") ;
-        fileVirt   = props.getProperty("virtualmap","virtualmap.csv") ;
-        fileAdvs   = props.getProperty("adversary","adversary.csv") ;
-        fileHist   = props.getProperty("history","history.csv") ;
+        fileVirt   = props.getProperty("virtualmap","") ;
+        fileAdvs   = props.getProperty("adversary","") ;
+        fileHist   = props.getProperty("history","") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
@@ -398,6 +398,16 @@ public class Env extends SimState {
         } else {
            rgen_seed = Long.parseLong(seed);
            rgen = new Random(rgen_seed);
+        }
+
+        // 
+        //  Make sure that there was a virtual map if there was an 
+        //  adversary file.
+        //
+
+        if( (fileAdvs.equals("") == false) && fileVirt.equals("") ) {
+            System.out.println("Adversary file requires virtual map file");
+            System.exit(0);
         }
 
         // 
@@ -939,9 +949,9 @@ public class Env extends SimState {
     super.start();
         makeAgents(fileConfig);
         buildGrid();
-        makeVirtual(fileVirt);
-        configureAdversary(fileAdvs);
-        loadHistory(fileHist);
+        if( !fileVirt.equals("") )makeVirtual(fileVirt);
+        if( !fileAdvs.equals("") )configureAdversary(fileAdvs);
+        if( !fileHist.equals("") )loadHistory(fileHist);
     }
 
     /**
