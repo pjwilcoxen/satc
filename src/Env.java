@@ -28,7 +28,6 @@ public class Env extends SimState {
     //    fileConfig -- configuration of the network of nodes
     //    fileDraws  -- monte carlo drawings of possible traders
     //    fileVirt   -- configuration of virtual agents
-    //    fileAdvs   -- configuration of adversary behavior
     //    fileHist   -- previous price and quantity data
     //    transCost  -- transmission cost between nodes
     //    transCap   -- maximum transmission between nodes
@@ -38,7 +37,6 @@ public class Env extends SimState {
     
     private static String fileConfig ;
     private static String fileVirt ;
-    private static String fileAdvs ;
     private static String fileHist ;
     
     /**
@@ -165,16 +163,6 @@ public class Env extends SimState {
     
     // Master list of historical information across pop and dos runs
     static final HashMap<String, ArrayList<History>> globalHistory = new HashMap<>();
-        
-    // Types of encryption
-    public static enum Encrypt{
-        
-        // Public Key Infrastructure
-        PKI,
-        
-        // Public Key Infrastructure
-        NONE
-    }
     
     // Public-Private key list
     static final HashMap<String, Integer> publicKeys = new HashMap<>();
@@ -371,7 +359,6 @@ public class Env extends SimState {
         fileConfig = props.getProperty("netmap","netmap.csv") ;
         fileDraws  = props.getProperty("draws","testdraw.csv") ;
         fileVirt   = props.getProperty("virtualmap","") ;
-        fileAdvs   = props.getProperty("adversary","") ;
         fileHist   = props.getProperty("history","") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
@@ -398,16 +385,6 @@ public class Env extends SimState {
         } else {
            rgen_seed = Long.parseLong(seed);
            rgen = new Random(rgen_seed);
-        }
-
-        // 
-        //  Make sure that there was a virtual map if there was an 
-        //  adversary file.
-        //
-
-        if( (fileAdvs.equals("") == false) && fileVirt.equals("") ) {
-            System.out.println("Adversary file requires virtual map file");
-            System.exit(0);
         }
 
         // 
@@ -523,12 +500,12 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap ;
-        String cur_sd, cur_chan, cur_encrypt;
+        String cur_sd, cur_chan;
         Agent cur_agent;
-        String items[];
+        String items[], securityList[];
         Channel channel;
 
-        //read the topology of the network and build the list of agents
+        // read the topology of the network and build the list of agents
 
         try {
             br = new BufferedReader(Util.openRead(filename));
@@ -542,7 +519,8 @@ public class Env extends SimState {
                 cur_chan      = rec.get("channel");
                 cur_cost      = Integer.parseInt(rec.get("cost"));
                 cur_cap       = Integer.parseInt(rec.get("cap"));
-                cur_encrypt   = rec.get("channel").toUpperCase();
+                cur_security  = Integer.parseInt(rec.get("security"));
+                cur_secMeasures  = rec.get("secMeasures").split("|",-1);
 
                 // create the agent
 
@@ -579,8 +557,9 @@ public class Env extends SimState {
                 if( channel == null )channel = new Channel(cur_chan);
                 cur_agent.setChannel(channel);
                 
-                // set encryption
-                setEncryption(cur_agent, cur_encrypt);
+                // set security measures
+                cur_agent.security = cur_security;
+                //cur_agent.addSecurityMeasures(cur_measures);
 
                 // add it to the list of agents and schedule it for stepping
 
@@ -685,29 +664,7 @@ public class Env extends SimState {
 
         br.close();
     }
-
-    private void setEncryption(Agent a, String encrypt){
-        
-        switch(encrypt) {
-            case "PKI": 
-                a.encryption = Encrypt.PKI;
-            
-                // Generate public & private keys
-                a.privateKey = "PRI" + Integer.toString(a.own_id);
-                a.publicKey = "PUB" + Integer.toString(a.own_id);
-            
-                // Add to global list
-                publicKeys.put(a.publicKey, a.own_id);
-                privateKeys.put(a.privateKey, a.own_id);
-                availableKeys.put(a.own_id, a.publicKey);
-            
-                break;
-        
-            case "NONE": 
-                a.encryption = Encrypt.NONE;
-                break;
-        }
-    }
+                                                                                        
     
     /**
      * Creates virtual agents from file
@@ -717,8 +674,8 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int id;
-        String type, intelLevel, encryption; 
-        String[] channelList, agentList, intelList;
+        String type, intelLevel;
+        String[] channelList, agentList, intelList, securityList;
         Agent cur_agent, intel_agent;
         Intel cur_intel;
         
@@ -730,13 +687,15 @@ public class Env extends SimState {
             
             // Read in csv records
             for(CSVRecord rec: csvReader) {
-                id = Integer.parseInt(rec.get("id"));
-                type = rec.get("type").toUpperCase();
-                channelList = rec.get("channel").split(",",-1);
-                agentList = rec.get("agent").split(",",-1);
-                intelLevel = rec.get("intel_level");
-                intelList = rec.get("intel").split(",",-1);
-                encryption = rec.get("encryption").toUpperCase();
+                id             = Integer.parseInt(rec.get("id"));
+                type           = rec.get("type").toUpperCase();
+                configuration  = rec.get("configuration").split(",",-1);
+                channelList    = rec.get("channel").split(",",-1);
+                agentList      = rec.get("agent").split(",",-1);
+                intelLevel     = rec.get("intel_level");
+                intelList      = rec.get("intel").split(",",-1);
+                security       = Integer.parseInt(rec.get("security"));
+                secMeasures    = rec.get("secMeasures").split(",",-1).toUpperCase();
                 
                 // Create the virtual agent
                 switch(type) {
@@ -781,67 +740,31 @@ public class Env extends SimState {
                     case "none":
                         break;
                     default:
-                        throw new RuntimeException("Unexpected intel type "+intelLevel);
+                        throw new RuntimeException("Unexpected intel type: "+intelLevel);
+                }
+                
+                // Set security level
+                cur_agent.security = security;
+                
+                // Set security measures
+                for(int i = 0; i < secMeasures.length; i++){
+                    cur_agent.addSecurity(secMeasures[i]);
                 }
                 
                 // Add agent to the schedule for stepping
                 listAgent.add(cur_agent);
                 schedule.scheduleRepeating(cur_agent);
+                
+                // Parse agent configuration dictionary
+                for(int i = 0; i < configuration.length; i++){
+                    config = configuration[i].split(":",-1);
+                    ((Virtual) cur_agent).config.put(config[0].toLowerCase(),config[1].toLowerCase());
+                }
             }       
         }
         catch (IOException e) {
             System.out.println("Could not read network file: "+filename);
             System.exit(0);
-        }
-     }
-    
-    /**
-     * Configure adversary agents behavior
-     */
-     private void configureAdversary(String filename){
-        
-        BufferedReader br;
-        CSVParser csvReader;
-        int id;
-        double sophistication, constraint;
-        String[] targetList, capabilityList;
-        Agent a;
-        
-        try {
-            
-            // Configure csv reader
-            br = new BufferedReader(Util.openRead(filename));
-            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-            
-            // Read in csv records
-            for(CSVRecord rec: csvReader) {
-                id = Integer.parseInt(rec.get("id"));
-                capabilityList = rec.get("capability").split(",",-1);
-                targetList = rec.get("target").split(",",-1);
-                sophistication = Double.parseDouble(rec.get("sophistication"));
-                constraint = Double.parseDouble(rec.get("constraint"));
-
-                //Find adversary by id
-                a = Env.getAgent(id);
-
-                // Store adversary's properties
-                ((Adversary) a).sophistication = sophistication;
-                ((Adversary) a).constraint = constraint;
-                
-                // Load adversary's capabilities
-                for(int i = 0; i < capabilityList.length; i++){
-                    ((Adversary) a).capability.add(capabilityList[i]);
-                }
-
-                // Load adversary's targets
-                for(int i = 0; i < targetList.length; i++){
-                    ((Adversary) a).target.add(Integer.parseInt(targetList[i]));
-                }
-            }
-        }
-        catch (IOException e) {
-            System.out.println("Could not read network file: "+filename);
-            System.exit(0); 
         }
      }
     
@@ -950,7 +873,6 @@ public class Env extends SimState {
         makeAgents(fileConfig);
         buildGrid();
         if( !fileVirt.equals("") )makeVirtual(fileVirt);
-        if( !fileAdvs.equals("") )configureAdversary(fileAdvs);
         if( !fileHist.equals("") )loadHistory(fileHist);
     }
 

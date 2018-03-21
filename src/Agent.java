@@ -30,19 +30,46 @@ public abstract class Agent implements Steppable {
      */
     final ArrayList<Double[]> rPool = new ArrayList<>();
 
-    // random variables for DOS run and overall security
+    // random variables for DOS run
 
     static final int IDOS = 0;
-    static final int ISEC = 4;
 
     double rBlock;
-    double rSecure;
     
-    // Type of encryption used by the agent
-    Env.Encrypt encryption;
+    // Types of security measures supported
+    public static enum Security{
+        
+        // No security measures
+        NONE,
+        
+        // Basic security checks: timestamp, content type, etc
+        BASIC,
+        
+        // Verify sender
+        VERIFY,
+        
+        // Verify signature
+        SIGN,
+        
+        // Encrypt Message Contents
+        ENCRYPT,
+        
+        // Public key encryption
+        PKI,
+        
+        // Token exchange
+        TOKEN
+    }
+    
+    // Security measures for communication
+    final ArrayList<Security> secMeasures = new ArrayList<>();
+    
     // public and private key for encrypting/decrypting messages
     String publicKey;
     String privateKey;
+    
+    // Security level of the agent's system
+    int security;
       
     // data channel this agent uses to communicate with its parent
     
@@ -66,7 +93,6 @@ public abstract class Agent implements Steppable {
      */
     public void popInit() {
         rBlock  = runiform(IDOS)*100.0;
-        rSecure = runiform(ISEC)*100.0;
     }    
 
     /**
@@ -81,8 +107,8 @@ public abstract class Agent implements Steppable {
      *
      * @return Agent's security level on 0 to 100.
      */
-    public double getSecurity() {
-        return rSecure;
+    public int getSecurity() {
+        return security;
     }
 
     /**
@@ -91,8 +117,8 @@ public abstract class Agent implements Steppable {
      * @param strength Strength of attack on 0 to 100.
      * @return Is the agent vulnerable to the attack
      */
-    public boolean isVulnerable(double strength) {
-        return rSecure < strength;
+    public boolean isVulnerable(int strength) {
+        return security < strength;
     }
 
     /**
@@ -154,6 +180,21 @@ public abstract class Agent implements Steppable {
         Double[] pop_set = rPool.get(Env.pop-1);
         return pop_set[which];
     }
+    /**       
+     * Check if security measure is in place
+     * 
+     * @param which security measure to check
+     * @return true if security measure is supported
+     */
+    private boolean securityEnabled(Security measure) {
+        boolean supported = false;
+        for(Security s: measures){
+            if(s == measure){
+                supported = true;
+            }
+        }
+        return supported;
+    }
 
     /**
      * General agent instance
@@ -176,5 +217,37 @@ public abstract class Agent implements Steppable {
                 rArray[j] = Env.runiform();
             rPool.add(rArray);
         }
+    }
+    
+    /**       
+     * Add security measure used by agent
+     * 
+     * @param security measure to configure for agent
+     */
+    public void addSecurity(String measure) {
+        switch(measure) {
+            case "NONE":
+                secMeasures.add(Security.NONE);            
+                break;
+            case "BASIC":
+                secMeasures.add(Security.BASIC);            
+                break;
+            case "VERIFY":
+                secMeasures.add(Security.VERIFY);            
+                break;
+            case "SIGN":
+                secMeasures.add(Security.SIGN);            
+                break;
+            case "ENCRYPT":
+                secMeasures.add(Security.ENCRYPT);            
+                break;
+            case "PKI":l
+                secMeasures.add(Security.PKI);            
+                break;
+            case "TOKEN":
+                secMeasures.add(Security.TOKEN);            
+                break;
+            default:
+                throw new RuntimeException("Unexpected security measure: " + measure);                
     }
 }

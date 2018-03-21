@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Abstract class for communications-only agents that
@@ -20,8 +21,10 @@ public abstract class Virtual extends Agent {
     
     // Set of information that virtual agent has
     ArrayList<Intel> intel;
-
     
+    // Configuration parameters for virtual agent's behavior
+    HashMap<String, String> config = new HashMap<>();
+
     /**
      * Constructor
      *
@@ -88,12 +91,29 @@ public abstract class Virtual extends Agent {
     private Intel getIntel(Integer id){
         
         // Loop through intel
-        for(Intel i: intel ) {
+        for(Intel i: intel) {
             if(i.agent_id == id) {
                 return i;
             }           
         }
-        throw new RuntimeException("No intel for agent with id "+id);
+        throw new RuntimeException("No intel for agent with id " + id);
+    }
+    
+    /** 
+     * Get configuration parameter for virtual agent
+     */
+    private String getConfig(String key){
+        
+        // Attempt to get parameter
+        value = config.get(key);
+        
+        //Check if parameter exists
+        if (value == null){
+            throw new RuntimeException("No parameter named " + key + " for agent " + own_id);
+        }
+        else {
+            return value
+        }
     }
 }
 
