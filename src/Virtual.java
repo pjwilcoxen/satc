@@ -102,17 +102,17 @@ public abstract class Virtual extends Agent {
     /** 
      * Get configuration parameter for virtual agent
      */
-    private String getConfig(String key){
+    protected String getConfig(String key){
         
         // Attempt to get parameter
-        value = config.get(key);
+        String value = config.get(key);
         
         //Check if parameter exists
         if (value == null){
             throw new RuntimeException("No parameter named " + key + " for agent " + own_id);
         }
         else {
-            return value
+            return value;
         }
     }
 }

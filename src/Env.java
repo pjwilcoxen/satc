@@ -499,17 +499,17 @@ public class Env extends SimState {
     
         BufferedReader br;
         CSVParser csvReader;
-        int cur_id, cur_type, cur_upid, cur_cost, cur_cap ;
+        int cur_id, cur_type, cur_upid, cur_cost, cur_cap, cur_security;
         String cur_sd, cur_chan;
         Agent cur_agent;
-        String items[], securityList[];
+        String[] items, cur_secMeasures;
         Channel channel;
 
         // read the topology of the network and build the list of agents
 
         try {
             br = new BufferedReader(Util.openRead(filename));
-            csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
+            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
 
             for(CSVRecord rec: csvReader) {
                 cur_id        = Integer.parseInt(rec.get("id"));
@@ -520,7 +520,7 @@ public class Env extends SimState {
                 cur_cost      = Integer.parseInt(rec.get("cost"));
                 cur_cap       = Integer.parseInt(rec.get("cap"));
                 cur_security  = Integer.parseInt(rec.get("security"));
-                cur_secMeasures  = rec.get("secMeasures").split("|",-1);
+                cur_secMeasures  = rec.get("secMeasures").split(",",-1);
 
                 // create the agent
 
@@ -673,9 +673,9 @@ public class Env extends SimState {
         
         BufferedReader br;
         CSVParser csvReader;
-        int id;
+        int id, security;
         String type, intelLevel;
-        String[] channelList, agentList, intelList, securityList;
+        String[] channelList, agentList, intelList, secMeasures, configuration;
         Agent cur_agent, intel_agent;
         Intel cur_intel;
         
@@ -695,7 +695,7 @@ public class Env extends SimState {
                 intelLevel     = rec.get("intel_level");
                 intelList      = rec.get("intel").split(",",-1);
                 security       = Integer.parseInt(rec.get("security"));
-                secMeasures    = rec.get("secMeasures").split(",",-1).toUpperCase();
+                secMeasures    = rec.get("secMeasures").split(",",-1);
                 
                 // Create the virtual agent
                 switch(type) {
@@ -748,7 +748,7 @@ public class Env extends SimState {
                 
                 // Set security measures
                 for(int i = 0; i < secMeasures.length; i++){
-                    cur_agent.addSecurity(secMeasures[i]);
+                    cur_agent.addSecurity(secMeasures[i].toUpperCase());
                 }
                 
                 // Add agent to the schedule for stepping
@@ -757,7 +757,7 @@ public class Env extends SimState {
                 
                 // Parse agent configuration dictionary
                 for(int i = 0; i < configuration.length; i++){
-                    config = configuration[i].split(":",-1);
+                    String[] config = configuration[i].split(":",-1);
                     ((Virtual) cur_agent).config.put(config[0].toLowerCase(),config[1].toLowerCase());
                 }
             }       

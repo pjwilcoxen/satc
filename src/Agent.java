@@ -45,17 +45,17 @@ public abstract class Agent implements Steppable {
         // Basic security checks: timestamp, content type, etc
         BASIC,
         
-        // Verify sender
+        // Hash and verify hash
+        HASH,
+        
+        // Verify sender's digital signature
         VERIFY,
         
-        // Verify signature
+        // Add digital signature
         SIGN,
         
-        // Encrypt Message Contents
+        // Encrypt message contents
         ENCRYPT,
-        
-        // Public key encryption
-        PKI,
         
         // Token exchange
         TOKEN
@@ -63,6 +63,20 @@ public abstract class Agent implements Steppable {
     
     // Security measures for communication
     final ArrayList<Security> secMeasures = new ArrayList<>();
+    
+    // Security measures to enforce on message send and receive
+    static class Enforce {
+        ArrayList<Security> send;
+        ArrayList<Security> receive;
+
+        Enforce(ArrayList<Security> s, ArrayList<Security> r) {
+            this.send = s;
+            this.receive = r;
+        }
+    }
+    
+    // Security enforcement agreements with other agents
+    HashMap<Integer, Enforce> config = new HashMap<>();
     
     // public and private key for encrypting/decrypting messages
     String publicKey;
@@ -188,7 +202,7 @@ public abstract class Agent implements Steppable {
      */
     private boolean securityEnabled(Security measure) {
         boolean supported = false;
-        for(Security s: measures){
+        for(Security s: secMeasures){
             if(s == measure){
                 supported = true;
             }
@@ -220,34 +234,55 @@ public abstract class Agent implements Steppable {
     }
     
     /**       
-     * Add security measure used by agent
+     * Configure security measure used by agent
      * 
      * @param security measure to configure for agent
      */
     public void addSecurity(String measure) {
         switch(measure) {
             case "NONE":
+                secMeasures.clear();
                 secMeasures.add(Security.NONE);            
                 break;
             case "BASIC":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
                 secMeasures.add(Security.BASIC);            
                 break;
+            case "HASH":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
+                secMeasures.add(Security.HASH);            
+                break;
             case "VERIFY":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
                 secMeasures.add(Security.VERIFY);            
                 break;
             case "SIGN":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
                 secMeasures.add(Security.SIGN);            
                 break;
             case "ENCRYPT":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
                 secMeasures.add(Security.ENCRYPT);            
                 break;
-            case "PKI":l
-                secMeasures.add(Security.PKI);            
-                break;
             case "TOKEN":
+                if (securityEnabled(Security.NONE)){
+                    secMeasures.remove(Security.NONE);
+                }
                 secMeasures.add(Security.TOKEN);            
                 break;
             default:
                 throw new RuntimeException("Unexpected security measure: " + measure);                
+
+        }
     }
 }

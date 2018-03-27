@@ -16,7 +16,6 @@ import sim.engine.SimState;
      */
     public Adversary(int own_id) {
         super(own_id);
-        this.target = new ArrayList<Integer>();
     }
     
     /** 
@@ -88,7 +87,7 @@ import sim.engine.SimState;
      private boolean canCompromise(Agent a) {
         
         // Get adversary's capability from configuration
-        capability = Integer.parseInt(getConfig('capability'));
+        Integer capability = Integer.parseInt(((Virtual) this).getConfig("capability"));
         
         // Ensures agent meets conditions to be compromised
         if(channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(capability)) {

@@ -28,15 +28,23 @@ public class Msg {
     
     public static enum Security {
         /**
-         * Unknown message type
+         * Message includes a hash
+         */
+        HASHED,
+        /**
+         * Message has been encrypted
          */
         ENCRYPTED,
         /**
-         * Unknown message type
+         * Message has been digitally signed by the sender
          */
         SIGNED,
         /**
-         * Unknown message type
+         * A token has been issued along with the message
+         */
+        TOKEN,
+        /**
+         * No security measures are in place
          */
         NONE
     }
