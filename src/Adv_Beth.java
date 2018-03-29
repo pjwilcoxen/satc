@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import sim.engine.SimState;
 
@@ -48,6 +49,8 @@ public class Adv_Beth extends Adversary{
             
             // Repeat over intel
             for(Intel target : intel ) {
+                if (Env.curTier != target.tier)
+                    continue;
                 for(Intel child : intel) {
                     if (child.par_id == target.agent_id) {
                         if (target.send) {
