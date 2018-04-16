@@ -14,8 +14,10 @@ public class History {
     int agent_id;
     
     // Hashmaps to store historical information
-    HashMap<Integer, Integer> p = new HashMap<>();
-    HashMap<Integer, Integer> q = new HashMap<>();
+    HashMap<Integer, Integer> p    = new HashMap<>();
+    HashMap<Integer, Integer> q    = new HashMap<>();
+	HashMap<Integer, Demand> upD   = new HashMap<>();
+	HashMap<Integer, Demand> downD = new HashMap<>();
     
     // Constructor
     History(int agent_id) {
@@ -30,6 +32,16 @@ public class History {
     // Stores quantity information in hashmap
     public void storeQuantity(int period, int quantity) {
         this.q.put(period, quantity);
+    }
+	
+	// Stores up demand information in hashmap
+    public void storeUpDemand(int period, Demand d) {
+        this.upD.put(period, d);
+    }
+	
+	// Stores down demand information in hashmap
+    public void storeDownDemand(int period, Demand d) {
+        this.downD.put(period, d);
     }
     
     // Retrieves max quantity
@@ -79,5 +91,23 @@ public class History {
     // Retrieves price for a specific period
     public Integer getPrice(Integer period) {
             return p.get(period);
+    }
+	
+	// Retrieves an up demand for a specific period
+    public Demand getUpDemand(Integer period) {
+            return upD.get(period);
+    }
+	
+	// Retrieves a down demand for a specific period
+    public Demand getDownDemand(Integer period) {
+            return downD.get(period);
+    }
+	
+	// Clear out history data
+    public void clear() {
+            p.clear();
+			q.clear();
+			upD.clear();
+			downD.clear();
     }
 }

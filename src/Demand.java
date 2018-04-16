@@ -44,7 +44,7 @@ public class Demand {
      * Demand curve
      */
     public Demand() {
-        bids = new TreeMap<>();
+        bids    = new TreeMap<>();
         isUp    = false;
         cost    = 0;
         cap     = 0;
@@ -582,7 +582,7 @@ public class Demand {
         header.add("load");
         header.add("elast");
         header.add("steps");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 400; i++) {
             header.add("p" + i);
             header.add("q_min" + i);
             header.add("q_max" + i);

@@ -72,12 +72,7 @@ import java.util.ArrayList;
         }
     }
     
-    // Stores demand curve in hashmap
-    public void storeBid(int period, Demand demand) {
-        bid.put(period, demand);
-    }
-    
-    // Store p and q information in history object
+    // Store p, q and bid information in history object
     public void storeHistory(History h){
         history = h;
     }

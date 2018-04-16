@@ -38,6 +38,7 @@ public class Env extends SimState {
     private static String fileConfig ;
     private static String fileVirt ;
     private static String fileHist ;
+	private static String fileBid ;
     
     /**
      * File name for monte carlo draws
@@ -162,7 +163,7 @@ public class Env extends SimState {
     static final ArrayList<Agent> listAgent = new ArrayList<>();
     
     // Master list of historical information across pop and dos runs
-    static final HashMap<String, ArrayList<History>> globalHistory = new HashMap<>();
+    static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
     
     // Public-Private key list
     static final HashMap<String, Integer> publicKeys = new HashMap<>();
@@ -232,7 +233,7 @@ public class Env extends SimState {
     /**
      * Find and return intel list given population and dos
      */
-    public static ArrayList<History> getHistory(int pop, int dos) {
+    public static HashMap<Integer, History> getHistory(int pop, int dos) {
        
         // Create lookup key
         String key = Integer.toString(pop) + "|" + Integer.toString(dos);
@@ -360,6 +361,7 @@ public class Env extends SimState {
         fileDraws  = props.getProperty("draws","testdraw.csv") ;
         fileVirt   = props.getProperty("virtualmap","") ;
         fileHist   = props.getProperty("history","") ;
+		fileBid   = props.getProperty("bids","") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
@@ -771,62 +773,134 @@ public class Env extends SimState {
     /**
      * Loads global historical data
      */
-     private void loadHistory(String filename){
+     private void loadHistory(String histFile, String bidFile){
         
         BufferedReader br;
         CSVParser csvReader;
-        int pop, dos, id, p, q;
-        String key;
+        int pop, dos, id, p, q, q_min, q_max, steps, period;
+		Demand demand;
+        String key, tag;
         History history;
-        ArrayList<History> listHistory;
         
-        try {
-            
-            // Configure csv reader
-            br = new BufferedReader(Util.openRead(filename));
-            csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-            listHistory = new ArrayList<History>();
-            
-            // Read in csv records
-            for(CSVRecord rec: csvReader) {
-                pop = Integer.parseInt(rec.get("pop"));
-                dos = Integer.parseInt(rec.get("dos"));
-                id = Integer.parseInt(rec.get("id"));
-                p = Integer.parseInt(rec.get("p"));
-                q = Integer.parseInt(rec.get("q"));
+		// Initialize storage for history objects
+		HashMap<Integer, History> gHistory    = new HashMap<>();
+		
+		// Load history file if it exists
+		if(!fileHist.equals("")) {
+			try {
+				// Configure csv reader
+				br = new BufferedReader(Util.openRead(histFile));
+				csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+			
+				// Read in csv records
+				for(CSVRecord rec: csvReader) {
+					pop = Integer.parseInt(rec.get("pop"));
+					dos = Integer.parseInt(rec.get("dos"));
+					id = Integer.parseInt(rec.get("id"));
+					p = Integer.parseInt(rec.get("p"));
+					q = Integer.parseInt(rec.get("q"));
+					period = 1;
                 
-                /**
-                * Store information in new history object
-                *
-                * Currently there is no field in file for period
-                * Temporarily using a default of 1
-                */
-                history = new History(id);
-                history.storePrice(1,p);
-                history.storeQuantity(1,q);
-                
-                // Build key for hashmap
-                key = Integer.toString(pop) + "|" + Integer.toString(dos);
-                
-                
-                // Add historical info to global hashmap
-                if(globalHistory.containsKey(key)){
-                    listHistory.clear();
-                    listHistory.addAll(globalHistory.get(key));
-                    listHistory.add(history);
-                    globalHistory.put(key, listHistory);
-                }
-                else {
-                    listHistory.clear();
-                    listHistory.add(history);
-                    globalHistory.put(key, listHistory);
-                }
-            }
-        }
-        catch (IOException e) {
-            System.out.println("Could not read network file: "+filename);
-            System.exit(0);
-        }
+					// Build key for hashmap
+					key = Integer.toString(pop) + "|" + Integer.toString(dos);
+					gHistory.clear();
+	 
+					// Determine if data exists, if not create new
+					if(globalHistory.containsKey(key)){
+						
+						gHistory = globalHistory.get(key);
+						
+						if (gHistory.containsKey(id)) {
+							history = gHistory.get(key);
+						}
+						else {
+							history = new History(id);
+						}
+					}
+					else {
+						history = new History(id);	
+					}
+					
+					// Merge into existing global dataset
+					history.storePrice(period,p);
+					history.storeQuantity(period,q);
+					gHistory.put(id, history);
+					globalHistory.put(key, gHistory);
+				}
+			}
+			catch (IOException e) {
+				System.out.println("Could not read the history file: " + histFile);
+				System.exit(0);
+			}
+		}
+		
+		// Load bid file if it exists
+		if(!fileBid.equals("")) {
+			try {
+				// Configure csv reader
+				br = new BufferedReader(Util.openRead(bidFile));
+				csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+			
+				// Read in csv records
+				for(CSVRecord rec: csvReader) {
+					pop    = Integer.parseInt(rec.get("pop"));
+					dos    = Integer.parseInt(rec.get("dos"));
+					id     = Integer.parseInt(rec.get("id"));
+					tag    = rec.get("tag");
+					steps  = Integer.parseInt(rec.get("steps"));
+					period = 1;
+					
+					// Get bidsteps and generate demand curve
+					demand = new Demand();
+					
+					for (int i = 0; i < steps; i++) {
+						p      = Integer.parseInt(rec.get("p"     + Integer.toString(i)));
+						q_min  = Integer.parseInt(rec.get("q_min" + Integer.toString(i)));
+						q_max  = Integer.parseInt(rec.get("q_max" + Integer.toString(i)));
+						
+						demand.add(p, q_min, q_max);
+					}
+					
+					// Build key for hashmap
+					key = Integer.toString(pop) + "|" + Integer.toString(dos);
+					gHistory.clear();
+					
+					// Determine if data exists, if not create new
+					if(globalHistory.containsKey(key)){
+						
+						gHistory = globalHistory.get(key);
+						
+						if (gHistory.containsKey(id)) {
+							history = gHistory.get(key);
+						}
+						else {
+							history = new History(id);
+						}
+					}
+					else {
+						history = new History(id);	
+					}
+					
+					// Determine demand type and store
+					if (tag == "down") {
+						history.storeDownDemand(period,demand);
+					}
+					else {
+						history.storeUpDemand(period,demand);
+					}
+					
+					System.out.println("Demand Added for Agent " + Integer.toString(id));
+					
+					// Merge into existing global dataset
+					gHistory.put(id, history);
+					globalHistory.put(key, gHistory);
+				}
+			}
+			catch (IOException e) {
+				System.out.println("Could not read demand file: " + bidFile);
+				System.exit(0);
+			}
+		}
      }
     
     /**
@@ -873,7 +947,7 @@ public class Env extends SimState {
         makeAgents(fileConfig);
         buildGrid();
         if( !fileVirt.equals("") )makeVirtual(fileVirt);
-        if( !fileHist.equals("") )loadHistory(fileHist);
+        if( !fileHist.equals("") || !fileBid.equals("") )loadHistory(fileHist, fileBid);
     }
 
     /**

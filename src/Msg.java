@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Message class
  */
@@ -55,7 +57,7 @@ public class Msg {
     Types type;
     Demand demand;
     int price;
-    Security security;
+    ArrayList<Security> security = new ArrayList<>();
     String privateKey;
     String publicKey;
 
@@ -70,7 +72,7 @@ public class Msg {
         this.from       = sender.own_id;
         this.to         = to;
         this.type       = Types.NONE;
-        this.security    = Security.NONE;
+        this.security.add(Security.NONE);
     }
 
     /**
@@ -162,20 +164,33 @@ public class Msg {
     /**
      * Returns the type of security in the message
      * 
-     * @return security enum
+     * @return security list
      */
-    public Security securityLevel() {
+    public ArrayList<Security> getSecurity() {
         return security;
     }
     
+	/**
+     * Returns true if message has given security measure
+	 *
+     * @return boolean
+     */
+    public boolean hasSecurity(Security s) {
+        if (security.contains(s)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+    }
+	
     /**
      * Encrypts the message
      *
      * Uses private and public keys to encrypt the message
      */
-    public void encrypt(String pri, String pub) {
-        security = Security.ENCRYPTED;
-        this.privateKey = pri;
+    public void encrypt(String pub) {
+        security.add(Security.ENCRYPTED);
         this.publicKey = pub;
     }
     
@@ -185,7 +200,7 @@ public class Msg {
      * Uses private key to sign the message
      */
     public void sign(String pri) {
-        security = Security.SIGNED;
+        security.add(Security.SIGNED);
         this.privateKey = pri;
     }
     
@@ -195,10 +210,10 @@ public class Msg {
      * @return True if decryption was successful
      */
     
-    public boolean decrypt(String pub, String pri) {
+    public boolean decrypt(String pri) {
         
-        if (security == Security.ENCRYPTED && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey) && Env.resolvePrivate(pri) == Env.resolvePublic(publicKey)) {
-            security = Security.NONE;
+        if (security.contains(Security.ENCRYPTED) && Env.resolvePrivate(pri) == Env.resolvePublic(publicKey)) {
+            security.remove(Security.ENCRYPTED);
             return true;
         }
         else {
@@ -213,8 +228,8 @@ public class Msg {
      */
     public boolean verify(String pub) {
 
-        if (security == Security.SIGNED && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey)) {
-            security = Security.NONE;
+        if (security.contains(Security.SIGNED) && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey)) {
+            security.remove(Security.SIGNED);
             return true;
         }
         else {

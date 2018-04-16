@@ -1,0 +1,8 @@
+netmap    : netmap.csv
+virtmap   : virtmap.csv
+draws     : testdraw.csv
+history   : c2k1800_hist.csv
+bids      : c2k1800_bid.csv
+transcost : 2
+transcap  : 1800 
+seed      : 123456

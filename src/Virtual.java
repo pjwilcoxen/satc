@@ -59,7 +59,7 @@ public abstract class Virtual extends Agent {
     /** 
      * Reset at the beginning of a DOS run
      */
-    private void resetIntel(ArrayList<History> history){
+    private void resetIntel(HashMap<Integer, History> gHistory){
         
         // Loop through intel
         for(Intel i: intel ) {
@@ -69,18 +69,11 @@ public abstract class Virtual extends Agent {
                 intel.remove(i);
             }
             else {
+                // Reset p, q, and bids
+                i.history.clear();
             
-                // Reset price, quantity and bids
-                i.bid.clear();
-                i.history.p.clear();
-                i.history.q.clear();
-            
-                // Initialize p and q from global intel
-                for(History h: history) {
-                    if (h.agent_id == i.agent_id){
-                        i.storeHistory(h);
-                    }
-                }
+                // Initialize p, q and bids from global intel
+                i.storeHistory(gHistory.get(i.agent_id));
             }
         }
     }
