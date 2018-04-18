@@ -71,7 +71,7 @@ public abstract class Virtual extends Agent {
             else {
                 // Reset p, q, and bids
                 i.history.clear();
-            
+
                 // Initialize p, q and bids from global intel
                 i.storeHistory(gHistory.get(i.agent_id));
             }

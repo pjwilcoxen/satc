@@ -780,10 +780,6 @@ public class Env extends SimState {
         int pop, dos, id, p, q, q_min, q_max, steps, period;
 		Demand demand;
         String key, tag;
-        History history;
-        
-		// Initialize storage for history objects
-		HashMap<Integer, History> gHistory    = new HashMap<>();
 		
 		// Load history file if it exists
 		if(!fileHist.equals("")) {
@@ -800,24 +796,26 @@ public class Env extends SimState {
 					p = Integer.parseInt(rec.get("p"));
 					q = Integer.parseInt(rec.get("q"));
 					period = 1;
-                
+					
 					// Build key for hashmap
 					key = Integer.toString(pop) + "|" + Integer.toString(dos);
-					gHistory.clear();
-	 
+					History history;
+					HashMap<Integer, History> gHistory;
+					
 					// Determine if data exists, if not create new
 					if(globalHistory.containsKey(key)){
 						
 						gHistory = globalHistory.get(key);
 						
 						if (gHistory.containsKey(id)) {
-							history = gHistory.get(key);
+							history = gHistory.get(id);
 						}
 						else {
 							history = new History(id);
 						}
 					}
 					else {
+						gHistory = new HashMap<>();
 						history = new History(id);	
 					}
 					
@@ -863,7 +861,8 @@ public class Env extends SimState {
 					
 					// Build key for hashmap
 					key = Integer.toString(pop) + "|" + Integer.toString(dos);
-					gHistory.clear();
+					History history;
+					HashMap<Integer, History> gHistory;
 					
 					// Determine if data exists, if not create new
 					if(globalHistory.containsKey(key)){
@@ -871,13 +870,14 @@ public class Env extends SimState {
 						gHistory = globalHistory.get(key);
 						
 						if (gHistory.containsKey(id)) {
-							history = gHistory.get(key);
+							history = gHistory.get(id);
 						}
 						else {
 							history = new History(id);
 						}
 					}
 					else {
+						gHistory = new HashMap<>();
 						history = new History(id);	
 					}
 					
@@ -888,8 +888,6 @@ public class Env extends SimState {
 					else {
 						history.storeUpDemand(period,demand);
 					}
-					
-					System.out.println("Demand Added for Agent " + Integer.toString(id));
 					
 					// Merge into existing global dataset
 					gHistory.put(id, history);
