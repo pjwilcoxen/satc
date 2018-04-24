@@ -848,6 +848,8 @@ public class Env extends SimState {
 					steps  = Integer.parseInt(rec.get("steps"));
 					period = 1;
 					
+					System.out.println("Tag: " + tag);
+					
 					// Get bidsteps and generate demand curve
 					demand = new Demand();
 					
@@ -882,8 +884,9 @@ public class Env extends SimState {
 					}
 					
 					// Determine demand type and store
-					if (tag == "down") {
+					if (tag.equals("down")) {
 						history.storeDownDemand(period,demand);
+						System.out.println("DOWN DEMAND STORED FOR: " + id);
 					}
 					else {
 						history.storeUpDemand(period,demand);
