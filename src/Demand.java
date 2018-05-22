@@ -274,6 +274,7 @@ public class Demand {
         boolean needR;
         int p;
         Integer q_max;
+        Integer q_min;
         Integer last_p;
 
         assert demR != null;
@@ -307,6 +308,7 @@ public class Demand {
 
         last_p = null;
         q_max  = null;
+        q_min  = null;
 
         while( pL != null || pR != null ) {
 
@@ -315,18 +317,21 @@ public class Demand {
             if( pL != null && pR != null ) {
                 p = pL < pR ? pL : pR ;
                 q_max = l.q_max + r.q_max ;
+                q_min = l.q_min + r.q_min ;
                 needL = pL <= pR;
                 needR = pR <= pL;
             }
             else if( pR == null ) {
                 p = pL;
                 q_max = l.q_max + r.q_min ;
+                q_min = l.q_min + r.q_min ;
                 needL = true;
                 needR = false;
             }
             else {
                 p = pR;
                 q_max = l.q_min + r.q_max ;
+                q_min = l.q_min + r.q_min ;
                 needL = false;
                 needR = true;
             }
@@ -361,7 +366,7 @@ public class Demand {
 
         // last step
 
-        newD.add(last_p, q_max-100, q_max);
+        newD.add(last_p, q_min, q_max);
 
         return newD;
     }
