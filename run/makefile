@@ -25,4 +25,4 @@ check :
 restore :
 	make tidy
 	make clean
-	git checkout $(OUTS) $(TXTS)
+	git checkout $(OUTS) $(TXTS) $(NETS)
