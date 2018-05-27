@@ -29,6 +29,10 @@ public abstract class Grid extends Agent {
     int priceDn; // price reported to children
     int priceAu; // price in autarky
 
+    // this agent's actual load; set during CALC_LOADS
+    
+    int q_actual;
+    
     /**
      * Constructor for grid-connected objects
      * 
@@ -92,12 +96,9 @@ public abstract class Grid extends Agent {
     }
 
     /**
-     * Write an agent's price and quantity record to the output file
+     * Write an agent's price and actual quantity record to the output file
      */
     void writePQ() {
-        int q = 0;
-        if( this instanceof Trader )
-            q = demDn.getQ(priceDn);
-        Env.saveResult(this,priceDn,q);           
+        Env.saveResult(this,priceDn,q_actual);           
     }
 }

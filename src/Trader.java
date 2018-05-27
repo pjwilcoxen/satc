@@ -109,8 +109,11 @@ public class Trader extends Grid {
                 break;
 
             case CALC_LOADS:
+                if( gridTier != Env.curTier )
+                    return;
                 priceUp = getPrice();
                 priceDn = priceUp;
+                q_actual = demDn.getQ(priceDn);
                 writePQ();
                 break;
                 

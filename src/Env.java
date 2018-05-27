@@ -492,6 +492,11 @@ public class Env extends SimState {
                         case REPORT:
                             break;
 
+                        case CALC_LOADS:
+                            for(curTier=1 ; curTier<=maxTier ; curTier++ )
+                                do_stage(enviro,true,Stage.CALC_LOADS);
+                            break;
+
                         default:
                             do_stage(enviro,false,s);
                             break;

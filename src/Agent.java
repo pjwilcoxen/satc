@@ -1,7 +1,6 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import sim.engine.Steppable;
-import java.util.HashMap;
 
 /**
  * General purpose Agent class

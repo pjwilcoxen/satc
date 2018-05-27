@@ -43,6 +43,14 @@ public class Market extends Grid {
                 sendPriceDn();
                 break;
                 
+            case CALC_LOADS:
+                q_actual = 0;
+                for( Grid kid: children )
+                   q_actual += kid.q_actual;
+                writePQ();
+                log("act");
+                break;
+                
             default:
                 break;
         }
@@ -72,8 +80,7 @@ public class Market extends Grid {
 
          // write and log results
 
-         writePQ();
-         log();
+         log("exp");
     }
 
 
@@ -90,13 +97,17 @@ public class Market extends Grid {
     /**
      * Write a log message
      */
-    void log() {
+    void log(String type) {
         String pUp;
         int q;
         
-        q = demDn.getQ(priceDn);
         if( par_id == 0 && priceAu == -1 )
             Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
+
+        if( type.equalsIgnoreCase("exp") )
+            q = demDn.getQ(priceDn);
+        else
+            q = q_actual;
 
         Env.log.println(
             "node "+own_id+
@@ -104,7 +115,7 @@ public class Market extends Grid {
             ", p_self="+priceAu+
             ", p_up="+priceUp+
             ", p_down="+priceDn+
-            ", q_down="+q
+            ", q_"+type+"="+q
         );
     }        
 }
