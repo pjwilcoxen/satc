@@ -596,33 +596,24 @@ public class Demand {
             header.add("q_max" + i);
         }
         values = new ArrayList<>();
-        try {
-            if (Env.loadPrinter == null) {
-                loadFormat = CSVFormat.DEFAULT;
-                Env.loadPrinter = new CSVPrinter(Env.net, loadFormat);
-                Env.loadPrinter.printRecord(header);
-            }
-            values.add(Integer.toString(Env.pop));
-            values.add(Integer.toString(owner.own_id));
-            values.add(casetag);
-            values.add(Env.curDOS);
-            if (owner instanceof Trader) {
-                Trader trader = (Trader) owner;
-                values.add(trader.sd_type);
-                values.add(Double.toString(trader.load));
-                values.add(Double.toString(trader.elast));
-            } else {
-                values.add("");
-                values.add("");
-                values.add("");
-            }
-            values.add(Integer.toString(bids.size()));
-            for (String str : toStrings()) {
-                values.add(str);
-            }
-            Env.loadPrinter.printRecord(values);
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing to load file");
+        values.add(Integer.toString(Env.pop));
+        values.add(Integer.toString(owner.own_id));
+        values.add(casetag);
+        values.add(Env.curDOS);
+        if (owner instanceof Trader) {
+            Trader trader = (Trader) owner;
+            values.add(trader.sd_type);
+            values.add(Double.toString(trader.load));
+            values.add(Double.toString(trader.elast));
+        } else {
+            values.add("");
+            values.add("");
+            values.add("");
         }
+        values.add(Integer.toString(bids.size()));
+        for (String str : toStrings()) {
+            values.add(str);
+        }
+        Env.saveDemand(owner.own_id, casetag, header, values);
     }
 }

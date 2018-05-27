@@ -130,6 +130,9 @@ public class Env extends SimState {
     //
 
     static TreeMap<Integer,String> outMap = new TreeMap<>();
+    static TreeMap<String,ArrayList> demMap = new TreeMap<>();
+    static ArrayList demHeader = null;
+    static boolean doDemHeader = true;
     static boolean outHeader = true;
 
     static PrintWriter out;
@@ -143,11 +146,6 @@ public class Env extends SimState {
      * Printer for log file
      */
     public static PrintWriter log;
-    
-    /**
-     * Printer for the output file
-     */
-    public static CSVPrinter csvPrinter;
     
     /**
      * Printer for net demands
@@ -418,6 +416,12 @@ public class Env extends SimState {
         net = Util.openWrite(stem+"_net.csv");
         msg = Util.openWrite(stem+"_msg.csv");
         log = Util.openWrite(stem+"_log.txt");
+        
+        try {
+            loadPrinter = new CSVPrinter(net,CSVFormat.DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException("Error creating demand file");
+        }
 
         log.println(
            "Scenario Settings:\n" +
@@ -496,6 +500,7 @@ public class Env extends SimState {
                     
                 // write the results
 
+                printDemands();
                 printResults();
             }
         }
@@ -941,6 +946,41 @@ public class Env extends SimState {
         outMap.clear();
     }
 
+    /**
+     * Save a demand curve for printing out
+     * 
+     * @param id Agent owning the demand curve
+     * @param casetag Tag indicating case
+     * @param header Column headers for the file
+     * @param values Values describing the curve
+     */
+    public static void saveDemand(int id, String casetag, ArrayList header, ArrayList values) {
+        String key;
+        if( demHeader == null )
+            demHeader = header;
+        if( id>999999 )
+            throw new RuntimeException("Unexpectedly large id");
+        key = String.format("%6d %s",id,casetag);
+        demMap.put(key, values);
+    }
+    
+    /**
+     * Write demands to the output file
+     */
+    static void printDemands() {
+        try {
+            if( doDemHeader ) {
+                loadPrinter.printRecord(demHeader);
+                doDemHeader = false;
+            }
+            for( String key: demMap.keySet() )
+                loadPrinter.printRecord(demMap.get(key));
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to demand file");
+        }
+        demMap.clear();
+    }   
+    
     /**
      *  Start the simulation
      */
