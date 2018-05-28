@@ -61,7 +61,7 @@ public class Market extends Grid {
      */
     void buildDemDn() {
         demDn = Demand.agg(getDemands());  
-        demDn.log(this,"down");
+        demDn.log(this,Demand.Type.DOWN);
         priceAu = demDn.getEquPrice();
     }
 
@@ -89,7 +89,7 @@ public class Market extends Grid {
      */
     void sendDemUp() {
         demUp = demDn.addTrans((Grid) this);
-        demUp.log(this,"up");
+        demUp.log(this,Demand.Type.UP);
         reportDemand(demUp);
     }
 

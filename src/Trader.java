@@ -92,14 +92,14 @@ public class Trader extends Grid {
                 // build load
                 
                 demDn = drawLoad();
-                demDn.log(this,"base");
+                demDn.log(this,Demand.Type.BASE);
                 demUp = demDn; // reserved for trans adjustments
 
                 // look for one from a service provider
 
                 recDn = getOneDemand();
                 if( recDn != null ){
-                    recDn.log(this,"recdn");
+                    recDn.log(this,Demand.Type.REC);
                     demUp = recDn; // reserved for trans adjustments
                 }
                

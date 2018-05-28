@@ -130,7 +130,7 @@ public class Env extends SimState {
     //
 
     static TreeMap<Integer,String> outMap = new TreeMap<>();
-    static TreeMap<String,ArrayList> demMap = new TreeMap<>();
+    static TreeMap<Integer,ArrayList> demMap = new TreeMap<>();
     static ArrayList demHeader = null;
     static boolean doDemHeader = true;
     static boolean outHeader = true;
@@ -954,18 +954,13 @@ public class Env extends SimState {
     /**
      * Save a demand curve for printing out
      * 
-     * @param id Agent owning the demand curve
-     * @param casetag Tag indicating case
+     * @param key Integer indicating sort order
      * @param header Column headers for the file
      * @param values Values describing the curve
      */
-    public static void saveDemand(int id, String casetag, ArrayList header, ArrayList values) {
-        String key;
+    public static void saveDemand(int key, ArrayList header, ArrayList values) {
         if( demHeader == null )
             demHeader = header;
-        if( id>999999 )
-            throw new RuntimeException("Unexpectedly large id");
-        key = String.format("%6d %s",id,casetag);
         demMap.put(key, values);
     }
     
@@ -978,7 +973,7 @@ public class Env extends SimState {
                 loadPrinter.printRecord(demHeader);
                 doDemHeader = false;
             }
-            for( String key: demMap.keySet() )
+            for( Integer key: demMap.keySet() )
                 loadPrinter.printRecord(demMap.get(key));
         } catch (IOException e) {
             throw new RuntimeException("Error writing to demand file");

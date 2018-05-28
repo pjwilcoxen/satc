@@ -25,6 +25,29 @@ public class Demand {
         }
     }
     
+    /**
+     * Types of demand curve
+     */
+    
+    public static enum Type {
+        /**
+         * Basic curve for traders
+         */
+        BASE,
+        /**
+         * Market down demand
+         */
+        DOWN,
+        /**
+         * Market up demand
+         */
+        UP,
+        /**
+         * Demand received from third party
+         */
+        REC
+    }
+
     // A complete curve is a list of steps ordered by price
     
     TreeMap<Integer,Bidstep> bids;
@@ -572,10 +595,12 @@ public class Demand {
      * Print this demand to the log file
      * 
      * @param owner Agent owning this demand curve
-     * @param casetag Tag indicating DOS case
+     * @param dtype Type of demand; see Demand.Type
      */
-    public void log(Agent owner, String casetag) {
-
+    public void log(Agent owner, Type dtype ) {
+        int key;
+        String dstr;
+        
         CSVFormat loadFormat;
         ArrayList<String> header;
         ArrayList<String> values;
@@ -594,10 +619,21 @@ public class Demand {
             header.add("q_min" + i);
             header.add("q_max" + i);
         }
+        
+        key = 10*owner.own_id ;
+        switch( dtype ) {
+            case BASE: key += 0; dstr="base"; break;
+            case DOWN: key += 1; dstr="down"; break;
+            case UP  : key += 2; dstr="up"  ; break;
+            case REC : key += 3; dstr="rec" ; break;
+            default:
+                throw new RuntimeException("Unexpected demand type");
+        }
+        
         values = new ArrayList<>();
         values.add(Integer.toString(Env.pop));
         values.add(Integer.toString(owner.own_id));
-        values.add(casetag);
+        values.add(dstr);
         values.add(Env.curDOS);
         if (owner instanceof Trader) {
             Trader trader = (Trader) owner;
@@ -613,6 +649,6 @@ public class Demand {
         for (String str : toStrings()) {
             values.add(str);
         }
-        Env.saveDemand(owner.own_id, casetag, header, values);
+        Env.saveDemand(key, header, values);
     }
 }
