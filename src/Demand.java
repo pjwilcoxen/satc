@@ -176,13 +176,15 @@ public class Demand {
         pHi = bids.ceilingKey(price);
         pLo = bids.floorKey(price);
 
-        // case 1: horizontal part of a step. for backward compatibility,
-        // return q_min. eventually this should return a random number
-        // between q_min and q_max
+        // case 1: horizontal part of a step. return value closest to
+        // the vertical axis (minimum absolute value)
         
         if( pHi != null && pHi.equals(pLo) ) {
             bid = getBid(pHi);
-            return bid.q_min;
+            if( Math.abs(bid.q_min) < Math.abs(bid.q_max) )
+                return bid.q_min;
+            else
+                return bid.q_max;
         }
 
         // case 2: vertical part of a step. return q_max of pHi but 
