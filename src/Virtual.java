@@ -81,7 +81,7 @@ public abstract class Virtual extends Agent {
     /** 
      * Get intel for given agent
      */
-    private Intel getIntel(Integer id){
+    protected Intel getIntel(Integer id){
         
         // Loop through intel
         for(Intel i: intel) {

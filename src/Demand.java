@@ -96,14 +96,14 @@ public class Demand {
     /**
      * Get the bid for a given price
      */
-    private Bidstep getBid(Integer p) {
+    public Bidstep getBid(Integer p) {
         return bids.get(p);
     }
 
     /**
      * Get the bid with the price less than or equal to the given price
      */
-    private Bidstep getFloorBid(Integer p) {
+    public Bidstep getFloorBid(Integer p) {
         return bids.get(bids.floorKey(p));
     }
 
