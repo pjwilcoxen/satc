@@ -101,6 +101,13 @@ public class Demand {
     }
 
     /**
+     * Get the bid with the price less than or equal to the given price
+     */
+    private Bidstep getFloorBid(Integer p) {
+        return bids.get(bids.floorKey(p));
+    }
+
+    /**
      * Aggregate a list of demand curves
      *
      * @param dList ArrayList of Demand curves to be aggregated
