@@ -1,7 +1,6 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import sim.engine.Steppable;
-import java.util.HashMap;
 
 /**
  * General purpose Agent class
@@ -36,57 +35,10 @@ public abstract class Agent implements Steppable {
 
     double rBlock;
     
-    // Types of security measures supported
-    public static enum Security{
-        
-        // No security measures
-        NONE,
-        
-        // Basic security checks: timestamp, content type, etc
-        BASIC,
-        
-        // Hash and verify hash
-        HASH,
-        
-        // Verify sender's digital signature
-        VERIFY,
-        
-        // Add digital signature
-        SIGN,
-        
-        // Encrypt message contents
-        ENCRYPT,
-        
-        // Token exchange
-        TOKEN
-    }
-    
-    // Security measures for communication
-    final ArrayList<Security> secMeasures = new ArrayList<>();
-    
-    // Security measures to enforce on message send and receive
-    static class Enforce {
-        ArrayList<Security> send;
-        ArrayList<Security> receive;
-
-        Enforce(ArrayList<Security> s, ArrayList<Security> r) {
-            this.send = s;
-            this.receive = r;
-        }
-    }
-    
-    // Security enforcement agreements with other agents
-    HashMap<Integer, Enforce> config = new HashMap<>();
-    
-    // public and private key for encrypting/decrypting messages
-    String publicKey;
-    String privateKey;
-    
     // Security level of the agent's system
     int security;
       
     // data channel this agent uses to communicate with its parent
-    
     Channel channel;
 
     // this agent's incoming message queue
@@ -194,21 +146,6 @@ public abstract class Agent implements Steppable {
         Double[] pop_set = rPool.get(Env.pop-1);
         return pop_set[which];
     }
-    /**       
-     * Check if security measure is in place
-     * 
-     * @param which security measure to check
-     * @return true if security measure is supported
-     */
-    private boolean securityEnabled(Security measure) {
-        boolean supported = false;
-        for(Security s: secMeasures){
-            if(s == measure){
-                supported = true;
-            }
-        }
-        return supported;
-    }
 
     /**
      * General agent instance
@@ -230,59 +167,6 @@ public abstract class Agent implements Steppable {
             for(int j=0 ; j<RCOUNT ; j++)
                 rArray[j] = Env.runiform();
             rPool.add(rArray);
-        }
-    }
-    
-    /**       
-     * Configure security measure used by agent
-     * 
-     * @param security measure to configure for agent
-     */
-    public void addSecurity(String measure) {
-        switch(measure) {
-            case "NONE":
-                secMeasures.clear();
-                secMeasures.add(Security.NONE);            
-                break;
-            case "BASIC":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.BASIC);            
-                break;
-            case "HASH":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.HASH);            
-                break;
-            case "VERIFY":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.VERIFY);            
-                break;
-            case "SIGN":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.SIGN);            
-                break;
-            case "ENCRYPT":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.ENCRYPT);            
-                break;
-            case "TOKEN":
-                if (securityEnabled(Security.NONE)){
-                    secMeasures.remove(Security.NONE);
-                }
-                secMeasures.add(Security.TOKEN);            
-                break;
-            default:
-                throw new RuntimeException("Unexpected security measure: " + measure);                
-
         }
     }
 }

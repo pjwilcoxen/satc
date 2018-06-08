@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import sim.engine.SimState;
 
 /**
@@ -49,7 +50,10 @@ import sim.engine.SimState;
      */
      private void probeVulnerabilities() {
         
-        for (Intel i: intel) {
+        for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
+            
+			// Get intel object
+			Intel i = entry.getValue();
             
             // Retrieve agent from environment
             Agent agent = Env.getAgent(i.agent_id);
@@ -142,13 +146,13 @@ import sim.engine.SimState;
      * Returns true if adversary can forge messages
      *
      * Must meet two conditions
-     *  1. Adversary can forge messages or sender does not use encryption
+     *  1. Adversary can forge messages or sender does not use encryption (Encryption Measures Removed)
      *  2. Target's channel must be accessible by adversary
      */
      private boolean canForge(Agent a) {
         
         // Ensures agent meets conditions to intercept messages
-        if(a.privateKey == null && channels.contains(a.channel)) {
+        if(channels.contains(a.channel)) {
             return true;
         }
         else {
