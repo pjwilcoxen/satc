@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import sim.engine.SimState;
 
 /**
@@ -47,8 +48,11 @@ public class Adv_Adam extends Adversary{
         case PRE_AGGREGATE:
             
             // Repeat over intel
-            for(Intel i: intel ) {
-                if(i.send){
+            for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
+                Intel i = entry.getValue();
+				
+				// If Adam can send to this agent, then send false bid
+				if(i.send){
                     Msg msg = new Msg(this, i.agent_id);
                     msg.setDemand(falseBid);
                     Channel channel = Channel.find(i.channel);

@@ -1,2 +1,1 @@
-"id","type","configuration","channel","agent","intel_level","intel","security","secMeasures"
-"1001","Adv_Adam","capability:0","type1,type2","1,2,3,4,5,201","full","1,2,3,4,5,201","100","none"
+id,type,configuration,channel,agent,intel_level,intel,security

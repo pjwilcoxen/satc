@@ -38,7 +38,7 @@ public class Env extends SimState {
     private static String fileConfig ;
     private static String fileVirt ;
     private static String fileHist ;
-	private static String fileBid ;
+    private static String fileBid ;
     
     /**
      * File name for monte carlo draws
@@ -163,13 +163,7 @@ public class Env extends SimState {
     static final ArrayList<Agent> listAgent = new ArrayList<>();
     
     // Master list of historical information across pop and dos runs
-    static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
-    
-    // Public-Private key list
-    static final HashMap<String, Integer> publicKeys = new HashMap<>();
-    static final HashMap<String, Integer> privateKeys = new HashMap<>();
-    public static final HashMap<Integer, String> availableKeys = new HashMap<>();                                                                          
-   
+	static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
     /**
      * Master simulation environment 
      * 
@@ -245,44 +239,6 @@ public class Env extends SimState {
         else {     
             throw new RuntimeException("No history for population "+pop+" and dos "+dos);
         }
-    }
-    
-    /**
-     * Return agent associated with public key
-     */
-    public static Integer resolvePublic(String key) {
-       
-        // Returns agent's id if exists
-        if(publicKeys.containsKey(key)) {
-           return publicKeys.get(key);
-        }
-        else {     
-            throw new RuntimeException("No agent with private key: "+key);
-        }
-    }
-    
-    /**
-     * Return agent associated with private key
-     */
-    public static Integer resolvePrivate(String key) {
-       
-        // Returns agent's id if exists
-        if(privateKeys.containsKey(key)) {
-           return privateKeys.get(key);
-        }
-        else {     
-            throw new RuntimeException("No agent with public key: "+key);
-        }
-    }
-    
-    /**
-     * Retrieves an agent's public key
-     * 
-     * @param agent_id is the other agent's id
-     * @return Uniform random number
-     */
-    private String getPublicKey(int agent_id) {
-        return availableKeys.get(agent_id);
     }
 
     static class Draw {
@@ -361,7 +317,7 @@ public class Env extends SimState {
         fileDraws  = props.getProperty("draws","testdraw.csv") ;
         fileVirt   = props.getProperty("virtualmap","") ;
         fileHist   = props.getProperty("history","") ;
-		fileBid   = props.getProperty("bids","") ;
+        fileBid   = props.getProperty("bids","") ;
         transCost  = getIntProp(props,"transcost","1");
         transCap   = getIntProp(props,"transcap","2500");
         numPop     = getIntProp(props,"populations","10");
@@ -504,7 +460,7 @@ public class Env extends SimState {
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap, cur_security;
         String cur_sd, cur_chan;
         Agent cur_agent;
-        String[] items, cur_secMeasures;
+        String[] items;
         Channel channel;
 
         // read the topology of the network and build the list of agents
@@ -522,7 +478,6 @@ public class Env extends SimState {
                 cur_cost      = Integer.parseInt(rec.get("cost"));
                 cur_cap       = Integer.parseInt(rec.get("cap"));
                 cur_security  = Integer.parseInt(rec.get("security"));
-                cur_secMeasures  = rec.get("secMeasures").split(",",-1);
 
                 // create the agent
 
@@ -559,9 +514,8 @@ public class Env extends SimState {
                 if( channel == null )channel = new Channel(cur_chan);
                 cur_agent.setChannel(channel);
                 
-                // set security measures
+                // set security
                 cur_agent.security = cur_security;
-                //cur_agent.addSecurityMeasures(cur_measures);
 
                 // add it to the list of agents and schedule it for stepping
 
@@ -677,7 +631,7 @@ public class Env extends SimState {
         CSVParser csvReader;
         int id, security;
         String type, intelLevel;
-        String[] channelList, agentList, intelList, secMeasures, configuration;
+        String[] channelList, agentList, intelList, configuration;
         Agent cur_agent, intel_agent;
         Intel cur_intel;
         
@@ -697,7 +651,6 @@ public class Env extends SimState {
                 intelLevel     = rec.get("intel_level");
                 intelList      = rec.get("intel").split(",",-1);
                 security       = Integer.parseInt(rec.get("security"));
-                secMeasures    = rec.get("secMeasures").split(",",-1);
                 
                 // Create the virtual agent
                 switch(type) {
@@ -727,7 +680,7 @@ public class Env extends SimState {
                         // Load all from global agent list
                         for(Agent a: listAgent){
                             cur_intel = new Intel(a.own_id, false);
-                            ((Virtual) cur_agent).intel.add(cur_intel);
+                            ((Virtual) cur_agent).intel.put(id, cur_intel);
                         }
                         break;
                     case "partial":
@@ -736,7 +689,7 @@ public class Env extends SimState {
                         for(int i = 0; i < intelList.length; i++){
                             intel_agent = Env.getAgent(Integer.parseInt(intelList[i]));
                             cur_intel = new Intel(intel_agent.own_id, false);
-                            ((Virtual) cur_agent).intel.add(cur_intel);
+                            ((Virtual) cur_agent).intel.put(id, cur_intel);
                         }
                         break;
                     case "none":
@@ -747,11 +700,6 @@ public class Env extends SimState {
                 
                 // Set security level
                 cur_agent.security = security;
-                
-                // Set security measures
-                for(int i = 0; i < secMeasures.length; i++){
-                    cur_agent.addSecurity(secMeasures[i].toUpperCase());
-                }
                 
                 // Add agent to the schedule for stepping
                 listAgent.add(cur_agent);
@@ -778,130 +726,127 @@ public class Env extends SimState {
         BufferedReader br;
         CSVParser csvReader;
         int pop, dos, id, p, q, q_min, q_max, steps, period;
-		Demand demand;
+        Demand demand;
         String key, tag;
-		
-		// Load history file if it exists
-		if(!fileHist.equals("")) {
-			try {
-				// Configure csv reader
-				br = new BufferedReader(Util.openRead(histFile));
-				csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-			
-				// Read in csv records
-				for(CSVRecord rec: csvReader) {
-					pop = Integer.parseInt(rec.get("pop"));
-					dos = Integer.parseInt(rec.get("dos"));
-					id = Integer.parseInt(rec.get("id"));
-					p = Integer.parseInt(rec.get("p"));
-					q = Integer.parseInt(rec.get("q"));
-					period = 1;
-					
-					// Build key for hashmap
-					key = Integer.toString(pop) + "|" + Integer.toString(dos);
-					History history;
-					HashMap<Integer, History> gHistory;
-					
-					// Determine if data exists, if not create new
-					if(globalHistory.containsKey(key)){
-						
-						gHistory = globalHistory.get(key);
-						
-						if (gHistory.containsKey(id)) {
-							history = gHistory.get(id);
-						}
-						else {
-							history = new History(id);
-						}
-					}
-					else {
-						gHistory = new HashMap<>();
-						history = new History(id);	
-					}
-					
-					// Merge into existing global dataset
-					history.storePrice(period,p);
-					history.storeQuantity(period,q);
-					gHistory.put(id, history);
-					globalHistory.put(key, gHistory);
-				}
-			}
-			catch (IOException e) {
-				System.out.println("Could not read the history file: " + histFile);
-				System.exit(0);
-			}
-		}
-		
-		// Load bid file if it exists
-		if(!fileBid.equals("")) {
-			try {
-				// Configure csv reader
-				br = new BufferedReader(Util.openRead(bidFile));
-				csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-			
-				// Read in csv records
-				for(CSVRecord rec: csvReader) {
-					pop    = Integer.parseInt(rec.get("pop"));
-					dos    = Integer.parseInt(rec.get("dos"));
-					id     = Integer.parseInt(rec.get("id"));
-					tag    = rec.get("tag");
-					steps  = Integer.parseInt(rec.get("steps"));
-					period = 1;
-					
-					System.out.println("Tag: " + tag);
-					
-					// Get bidsteps and generate demand curve
-					demand = new Demand();
-					
-					for (int i = 0; i < steps; i++) {
-						p      = Integer.parseInt(rec.get("p"     + Integer.toString(i)));
-						q_min  = Integer.parseInt(rec.get("q_min" + Integer.toString(i)));
-						q_max  = Integer.parseInt(rec.get("q_max" + Integer.toString(i)));
-						
-						demand.add(p, q_min, q_max);
-					}
-					
-					// Build key for hashmap
-					key = Integer.toString(pop) + "|" + Integer.toString(dos);
-					History history;
-					HashMap<Integer, History> gHistory;
-					
-					// Determine if data exists, if not create new
-					if(globalHistory.containsKey(key)){
-						
-						gHistory = globalHistory.get(key);
-						
-						if (gHistory.containsKey(id)) {
-							history = gHistory.get(id);
-						}
-						else {
-							history = new History(id);
-						}
-					}
-					else {
-						gHistory = new HashMap<>();
-						history = new History(id);	
-					}
-					
-					// Determine demand type and store
-					if (tag.equals("down")) {
-						history.storeDownDemand(period,demand);
-						System.out.println("DOWN DEMAND STORED FOR: " + id);
-					}
-					else {
-						history.storeUpDemand(period,demand);
-					}
-					
-					// Merge into existing global dataset
-					gHistory.put(id, history);
-					globalHistory.put(key, gHistory);
-				}
-			}
-			catch (IOException e) {
-				System.out.println("Could not read demand file: " + bidFile);
-				System.exit(0);
-			}
-		}
+        
+        // Load history file if it exists
+        if(!fileHist.equals("")) {
+            try {
+                // Configure csv reader
+                br = new BufferedReader(Util.openRead(histFile));
+                csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+            
+                // Read in csv records
+                for(CSVRecord rec: csvReader) {
+                    pop = Integer.parseInt(rec.get("pop"));
+                    dos = Integer.parseInt(rec.get("dos"));
+                    id = Integer.parseInt(rec.get("id"));
+                    p = Integer.parseInt(rec.get("p"));
+                    q = Integer.parseInt(rec.get("q"));
+                    period = 1;
+                    
+                    // Build key for hashmap
+                    key = Integer.toString(pop) + "|" + Integer.toString(dos);
+                    History history;
+                    HashMap<Integer, History> gHistory;
+                    
+                    // Determine if data exists, if not create new
+                    if(globalHistory.containsKey(key)){
+                        
+                        gHistory = globalHistory.get(key);
+                        
+                        if (gHistory.containsKey(id)) {
+                            history = gHistory.get(id);
+                        }
+                        else {
+                            history = new History(id);
+                        }
+                    }
+                    else {
+                        gHistory = new HashMap<>();
+                        history = new History(id);    
+                    }
+                    
+                    // Merge into existing global dataset
+                    history.storePrice(period,p);
+                    history.storeQuantity(period,q);
+                    gHistory.put(id, history);
+                    globalHistory.put(key, gHistory);
+                }
+            }
+            catch (IOException e) {
+                System.out.println("Could not read the history file: " + histFile);
+                System.exit(0);
+            }
+        }
+        
+        // Load bid file if it exists
+        if(!fileBid.equals("")) {
+            try {
+                // Configure csv reader
+                br = new BufferedReader(Util.openRead(bidFile));
+                csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
+            
+                // Read in csv records
+                for(CSVRecord rec: csvReader) {
+                    pop    = Integer.parseInt(rec.get("pop"));
+                    dos    = Integer.parseInt(rec.get("dos"));
+                    id     = Integer.parseInt(rec.get("id"));
+                    tag    = rec.get("tag");
+                    steps  = Integer.parseInt(rec.get("steps"));
+                    period = 1;
+                    
+                    // Get bidsteps and generate demand curve
+                    demand = new Demand();
+                    
+                    for (int i = 0; i < steps; i++) {
+                        p      = Integer.parseInt(rec.get("p"     + Integer.toString(i)));
+                        q_min  = Integer.parseInt(rec.get("q_min" + Integer.toString(i)));
+                        q_max  = Integer.parseInt(rec.get("q_max" + Integer.toString(i)));
+                        
+                        demand.add(p, q_min, q_max);
+                    }
+                    
+                    // Build key for hashmap
+                    key = Integer.toString(pop) + "|" + Integer.toString(dos);
+                    History history;
+                    HashMap<Integer, History> gHistory;
+                    
+                    // Determine if data exists, if not create new
+                    if(globalHistory.containsKey(key)){
+                        
+                        gHistory = globalHistory.get(key);
+                        
+                        if (gHistory.containsKey(id)) {
+                            history = gHistory.get(id);
+                        }
+                        else {
+                            history = new History(id);
+                        }
+                    }
+                    else {
+                        gHistory = new HashMap<>();
+                        history = new History(id);    
+                    }
+                    
+                    // Determine demand type and store
+                    if (tag.equals("down")) {
+                        history.storeDownDemand(period,demand);
+                    }
+                    else {
+                        history.storeUpDemand(period,demand);
+                    }
+                    
+                    // Merge into existing global dataset
+                    gHistory.put(id, history);
+                    globalHistory.put(key, gHistory);
+                }
+            }
+            catch (IOException e) {
+                System.out.println("Could not read demand file: " + bidFile);
+                System.exit(0);
+            }
+        }
      }
     
     /**

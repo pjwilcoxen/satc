@@ -27,29 +27,6 @@ public class Msg {
          */
         PRICE
     };
-    
-    public static enum Security {
-        /**
-         * Message includes a hash
-         */
-        HASHED,
-        /**
-         * Message has been encrypted
-         */
-        ENCRYPTED,
-        /**
-         * Message has been digitally signed by the sender
-         */
-        SIGNED,
-        /**
-         * A token has been issued along with the message
-         */
-        TOKEN,
-        /**
-         * No security measures are in place
-         */
-        NONE
-    }
 
     Agent sender;
     int from;
@@ -57,9 +34,6 @@ public class Msg {
     Types type;
     Demand demand;
     int price;
-    ArrayList<Security> security = new ArrayList<>();
-    String privateKey;
-    String publicKey;
 
     /**
      * Message
@@ -72,7 +46,6 @@ public class Msg {
         this.from       = sender.own_id;
         this.to         = to;
         this.type       = Types.NONE;
-        this.security.add(Security.NONE);
     }
 
     /**
@@ -159,81 +132,5 @@ public class Msg {
     public int getPrice() {
         assert type == Types.PRICE;
         return price;
-    }
-    
-    /**
-     * Returns the type of security in the message
-     * 
-     * @return security list
-     */
-    public ArrayList<Security> getSecurity() {
-        return security;
-    }
-    
-	/**
-     * Returns true if message has given security measure
-	 *
-     * @return boolean
-     */
-    public boolean hasSecurity(Security s) {
-        if (security.contains(s)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-    }
-	
-    /**
-     * Encrypts the message
-     *
-     * Uses private and public keys to encrypt the message
-     */
-    public void encrypt(String pub) {
-        security.add(Security.ENCRYPTED);
-        this.publicKey = pub;
-    }
-    
-    /**
-     * Signs the message
-     *
-     * Uses private key to sign the message
-     */
-    public void sign(String pri) {
-        security.add(Security.SIGNED);
-        this.privateKey = pri;
-    }
-    
-    /**
-     * Decrypts the message
-     *
-     * @return True if decryption was successful
-     */
-    
-    public boolean decrypt(String pri) {
-        
-        if (security.contains(Security.ENCRYPTED) && Env.resolvePrivate(pri) == Env.resolvePublic(publicKey)) {
-            security.remove(Security.ENCRYPTED);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    /**
-     * Verifies the signature of the message
-     *
-     * @return True if verification was successful
-     */
-    public boolean verify(String pub) {
-
-        if (security.contains(Security.SIGNED) && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey)) {
-            security.remove(Security.SIGNED);
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }

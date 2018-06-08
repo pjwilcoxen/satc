@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract class for communications-only agents that
@@ -20,10 +21,10 @@ public abstract class Virtual extends Agent {
     ArrayList<Integer> agents;
     
     // Set of information that virtual agent has
-    ArrayList<Intel> intel;
+    HashMap<Integer, Intel> intel;
     
     // Configuration parameters for virtual agent's behavior
-    HashMap<String, String> config = new HashMap<>();
+    HashMap<String, String> config;
 
     /**
      * Constructor
@@ -35,7 +36,8 @@ public abstract class Virtual extends Agent {
         this.period = 1;
         this.channels = new ArrayList<Channel>();
         this.agents = new ArrayList<Integer>();
-        this.intel = new ArrayList<Intel>();
+		this.intel = new HashMap<>();
+		this.config = new HashMap<>();
     }
     
     /** 
@@ -62,11 +64,15 @@ public abstract class Virtual extends Agent {
     private void resetIntel(HashMap<Integer, History> gHistory){
         
         // Loop through intel
-        for(Intel i: intel ) {
+        for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
+            
+			// Get intel object and key
+			Intel i = entry.getValue();
+			Integer key = entry.getKey();
             
             // If learned during run, remove else reset
             if (i.learned) {
-                intel.remove(i);
+                intel.remove(key);
             }
             else {
                 // Reset p, q, and bids
@@ -81,15 +87,15 @@ public abstract class Virtual extends Agent {
     /** 
      * Get intel for given agent
      */
-    private Intel getIntel(Integer id){
+    protected Intel getIntel(Integer id){
         
-        // Loop through intel
-        for(Intel i: intel) {
-            if(i.agent_id == id) {
-                return i;
-            }           
+        // Check if intel exists for given agent
+        if (intel.containsKey(id)) {
+		    return intel.get(id);
         }
-        throw new RuntimeException("No intel for agent with id " + id);
+		else{
+			throw new RuntimeException("No intel for agent with id " + id);
+		}
     }
     
     /** 
