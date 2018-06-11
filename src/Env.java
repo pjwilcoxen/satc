@@ -680,7 +680,7 @@ public class Env extends SimState {
                         // Load all from global agent list
                         for(Agent a: listAgent){
                             cur_intel = new Intel(a.own_id, false);
-                            ((Virtual) cur_agent).intel.put(id, cur_intel);
+                            ((Virtual) cur_agent).intel.put(a.own_id, cur_intel);
                         }
                         break;
                     case "partial":
@@ -689,7 +689,7 @@ public class Env extends SimState {
                         for(int i = 0; i < intelList.length; i++){
                             intel_agent = Env.getAgent(Integer.parseInt(intelList[i]));
                             cur_intel = new Intel(intel_agent.own_id, false);
-                            ((Virtual) cur_agent).intel.put(id, cur_intel);
+                            ((Virtual) cur_agent).intel.put(intel_agent.own_id, cur_intel);
                         }
                         break;
                     case "none":
