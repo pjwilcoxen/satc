@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Message class
  */
@@ -25,21 +27,6 @@ public class Msg {
          */
         PRICE
     };
-    
-    public static enum Security {
-        /**
-         * Unknown message type
-         */
-        ENCRYPTED,
-        /**
-         * Unknown message type
-         */
-        SIGNED,
-        /**
-         * Unknown message type
-         */
-        NONE
-    }
 
     Agent sender;
     int from;
@@ -47,9 +34,6 @@ public class Msg {
     Types type;
     Demand demand;
     int price;
-    Security security;
-    String privateKey;
-    String publicKey;
 
     /**
      * Message
@@ -62,7 +46,6 @@ public class Msg {
         this.from       = sender.own_id;
         this.to         = to;
         this.type       = Types.NONE;
-        this.security    = Security.NONE;
     }
 
     /**
@@ -149,68 +132,5 @@ public class Msg {
     public int getPrice() {
         assert type == Types.PRICE;
         return price;
-    }
-    
-    /**
-     * Returns the type of security in the message
-     * 
-     * @return security enum
-     */
-    public Security securityLevel() {
-        return security;
-    }
-    
-    /**
-     * Encrypts the message
-     *
-     * Uses private and public keys to encrypt the message
-     */
-    public void encrypt(String pri, String pub) {
-        security = Security.ENCRYPTED;
-        this.privateKey = pri;
-        this.publicKey = pub;
-    }
-    
-    /**
-     * Signs the message
-     *
-     * Uses private key to sign the message
-     */
-    public void sign(String pri) {
-        security = Security.SIGNED;
-        this.privateKey = pri;
-    }
-    
-    /**
-     * Decrypts the message
-     *
-     * @return True if decryption was successful
-     */
-    
-    public boolean decrypt(String pub, String pri) {
-        
-        if (security == Security.ENCRYPTED && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey) && Env.resolvePrivate(pri) == Env.resolvePublic(publicKey)) {
-            security = Security.NONE;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    /**
-     * Verifies the signature of the message
-     *
-     * @return True if verification was successful
-     */
-    public boolean verify(String pub) {
-
-        if (security == Security.SIGNED && Env.resolvePublic(pub) == Env.resolvePrivate(privateKey)) {
-            security = Security.NONE;
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }

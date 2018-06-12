@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract class for communications-only agents that
@@ -19,9 +21,11 @@ public abstract class Virtual extends Agent {
     ArrayList<Integer> agents;
     
     // Set of information that virtual agent has
-    ArrayList<Intel> intel;
-
+    HashMap<Integer, Intel> intel;
     
+    // Configuration parameters for virtual agent's behavior
+    HashMap<String, String> config;
+
     /**
      * Constructor
      *
@@ -32,7 +36,8 @@ public abstract class Virtual extends Agent {
         this.period = 1;
         this.channels = new ArrayList<Channel>();
         this.agents = new ArrayList<Integer>();
-        this.intel = new ArrayList<Intel>();
+		this.intel = new HashMap<>();
+		this.config = new HashMap<>();
     }
     
     /** 
@@ -56,28 +61,25 @@ public abstract class Virtual extends Agent {
     /** 
      * Reset at the beginning of a DOS run
      */
-    private void resetIntel(ArrayList<History> history){
+    private void resetIntel(HashMap<Integer, History> gHistory){
         
         // Loop through intel
-        for(Intel i: intel ) {
+        for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
+            
+			// Get intel object and key
+			Intel i = entry.getValue();
+			Integer key = entry.getKey();
             
             // If learned during run, remove else reset
             if (i.learned) {
-                intel.remove(i);
+                intel.remove(key);
             }
             else {
-            
-                // Reset price, quantity and bids
-                i.bid.clear();
-                i.history.p.clear();
-                i.history.q.clear();
-            
-                // Initialize p and q from global intel
-                for(History h: history) {
-                    if (h.agent_id == i.agent_id){
-                        i.storeHistory(h);
-                    }
-                }
+                // Reset p, q, and bids
+                i.history.clear();
+
+                // Initialize p, q and bids from global intel
+                i.storeHistory(gHistory.get(i.agent_id));
             }
         }
     }
@@ -85,15 +87,32 @@ public abstract class Virtual extends Agent {
     /** 
      * Get intel for given agent
      */
-    private Intel getIntel(Integer id){
+    protected Intel getIntel(Integer id){
         
-        // Loop through intel
-        for(Intel i: intel ) {
-            if(i.agent_id == id) {
-                return i;
-            }           
+        // Check if intel exists for given agent
+        if (intel.containsKey(id)) {
+		    return intel.get(id);
         }
-        throw new RuntimeException("No intel for agent with id "+id);
+		else{
+			throw new RuntimeException("No intel for agent with id " + id);
+		}
+    }
+    
+    /** 
+     * Get configuration parameter for virtual agent
+     */
+    protected String getConfig(String key){
+        
+        // Attempt to get parameter
+        String value = config.get(key);
+        
+        //Check if parameter exists
+        if (value == null){
+            throw new RuntimeException("No parameter named " + key + " for agent " + own_id);
+        }
+        else {
+            return value;
+        }
     }
 }
 

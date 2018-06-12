@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import sim.engine.SimState;
 
 /**
@@ -10,23 +11,12 @@ import sim.engine.SimState;
  */
 
  public abstract class Adversary extends Virtual {
-    
-    // Properties controlling adversary's actions
-    ArrayList<String> capability;
-    ArrayList<Integer> target;
-    double sophistication;
-    double constraint;
-    
-    
+       
     /**
      * Constructor
-     *
-     * 
      */
     public Adversary(int own_id) {
         super(own_id);
-        this.capability = new ArrayList<String>();
-        this.target = new ArrayList<Integer>();
     }
     
     /** 
@@ -36,7 +26,6 @@ import sim.engine.SimState;
     public void popInit() {
         super.popInit();
         probeVulnerabilities();
-        
     }
 
     /** 
@@ -61,7 +50,10 @@ import sim.engine.SimState;
      */
      private void probeVulnerabilities() {
         
-        for (Intel i: intel) {
+        for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
+            
+			// Get intel object
+			Intel i = entry.getValue();
             
             // Retrieve agent from environment
             Agent agent = Env.getAgent(i.agent_id);
@@ -92,18 +84,19 @@ import sim.engine.SimState;
      * Returns true if adversary can compromise agent's system
      *
      * Must meet four conditions
-     *  1. Adversary must be able to control other systems
-     *  2. Target's channel must be accessible by adversary
-     *  3. Target itself must be accessible by adversary
-     *  4. Target must have a lower security than the adversary's sophistication
+     *  1. Target's channel must be accessible by adversary
+     *  2. Target itself must be accessible by adversary
+     *  3. Target must have a lower security than the adversary's capability
      */
      private boolean canCompromise(Agent a) {
         
+        // Get adversary's capability from configuration
+        Integer capability = Integer.parseInt(((Virtual) this).getConfig("capability"));
+        
         // Ensures agent meets conditions to be compromised
-        if(capability.contains("control") && channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(sophistication)) {
+        if(channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(capability)) {
             a.channel.divert_from(a.own_id, this.own_id);
             a.channel.divert_to(a.own_id, this.own_id);
-
             return true;
         }
         else {
@@ -115,14 +108,13 @@ import sim.engine.SimState;
      * Returns true if adversary can intercept messages to an agent
      *
      * Must meet three conditions
-     *  1. Adversary must be able to intercept messages by recepient
-     *  2. Target's channel must be accessible by adversary
-     *  3. Target itself must be accessible by adversary
+     *  1. Target's channel must be accessible by adversary
+     *  2. Target itself must be accessible by adversary
      */
      private boolean canInterceptTo(Agent a) {
         
         // Ensures agent meets conditions to intercept messages
-        if(capability.contains("interceptTo") && channels.contains(a.channel) && agents.contains(a.own_id)) {
+        if(channels.contains(a.channel) && agents.contains(a.own_id)) {
             a.channel.divert_to(a.own_id, this.own_id);
             return true;
         }
@@ -135,14 +127,13 @@ import sim.engine.SimState;
      * Returns true if adversary can intercept messages from an agent
      *
      * Must meet three conditions
-     *  1. Adversary must be able to intercept messages by sender
-     *  2. Target's channel must be accessible by adversary
-     *  3. Target itself must be accessible by adversary
+     *  1. Target's channel must be accessible by adversary
+     *  2. Target itself must be accessible by adversary
      */
      private boolean canInterceptFrom(Agent a) {
         
         // Ensures agent meets conditions to intercept messages
-        if(capability.contains("interceptFrom") && channels.contains(a.channel) && agents.contains(a.own_id)) {
+        if(channels.contains(a.channel) && agents.contains(a.own_id)) {
             a.channel.divert_from(a.own_id, this.own_id);
             return true;
         }
@@ -155,13 +146,13 @@ import sim.engine.SimState;
      * Returns true if adversary can forge messages
      *
      * Must meet two conditions
-     *  1. Adversary can forge messages or sender does not use encryption
+     *  1. Adversary can forge messages or sender does not use encryption (Encryption Measures Removed)
      *  2. Target's channel must be accessible by adversary
      */
      private boolean canForge(Agent a) {
         
         // Ensures agent meets conditions to intercept messages
-        if((capability.contains("forge") || a.privateKey == null) && channels.contains(a.channel)) {
+        if(channels.contains(a.channel)) {
             return true;
         }
         else {

@@ -29,22 +29,16 @@ public abstract class Agent implements Steppable {
      */
     final ArrayList<Double[]> rPool = new ArrayList<>();
 
-    // random variables for DOS run and overall security
+    // random variables for DOS run
 
     static final int IDOS = 0;
-    static final int ISEC = 4;
 
     double rBlock;
-    double rSecure;
     
-    // Type of encryption used by the agent
-    Env.Encrypt encryption;
-    // public and private key for encrypting/decrypting messages
-    String publicKey;
-    String privateKey;
+    // Security level of the agent's system
+    int security;
       
     // data channel this agent uses to communicate with its parent
-    
     Channel channel;
 
     // this agent's incoming message queue
@@ -65,7 +59,6 @@ public abstract class Agent implements Steppable {
      */
     public void popInit() {
         rBlock  = runiform(IDOS)*100.0;
-        rSecure = runiform(ISEC)*100.0;
     }    
 
     /**
@@ -80,8 +73,8 @@ public abstract class Agent implements Steppable {
      *
      * @return Agent's security level on 0 to 100.
      */
-    public double getSecurity() {
-        return rSecure;
+    public int getSecurity() {
+        return security;
     }
 
     /**
@@ -90,8 +83,8 @@ public abstract class Agent implements Steppable {
      * @param strength Strength of attack on 0 to 100.
      * @return Is the agent vulnerable to the attack
      */
-    public boolean isVulnerable(double strength) {
-        return rSecure < strength;
+    public boolean isVulnerable(int strength) {
+        return security < strength;
     }
 
     /**
