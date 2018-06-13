@@ -118,7 +118,7 @@ public class Demand {
     /**
      * Get the bid for a given price
      */
-    private Bidstep getBid(Integer p) {
+    public Bidstep getBid(Integer p) {
         Bidstep step = bids.get(p);
         if( step == null )
             throw new RuntimeException("No bid exists for given price");
