@@ -1,0 +1,8 @@
+netmap      : netmap_darth.csv
+virtualmap  : virtualmap_darth.csv
+draws       : testdraw.csv
+history     : c2k1800_darth_hist.csv
+bids        : c2k1800_darth_bid.csv
+transcost   : 2
+transcap    : 1800 
+seed        : 123456
