@@ -3,6 +3,22 @@
 Simulator for analysis of the cybersecurity implications of 
 highly distributed electricity markets.
 
+## Adversary
+
+TBD
+
+### Adv_Adam
+
+TBD
+
+### Adv_Beth
+
+TBD
+
+### Adv_Darth
+
+TBD
+
 ## Agent
 
 Agent is an abstract class that provides basic features for entities that 
@@ -56,6 +72,14 @@ simulation.
 
 Abstract class for grid-connected agents (that is, agents through
 which power can flow).  Has two subclasses: __Trader__ and __Market__.
+
+## History
+
+TBD 
+
+## Intel
+
+TBD
 
 ## Market
 
