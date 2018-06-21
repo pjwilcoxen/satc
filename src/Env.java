@@ -11,7 +11,7 @@ import org.apache.commons.csv.*;
 import sim.engine.SimState;
 
 /**
- * Main simulation environment 
+ * Main simulation environment
  */
 public class Env extends SimState {
 
@@ -34,28 +34,28 @@ public class Env extends SimState {
     //    seed       -- seed for RNG or else absent or "none"
     //    numPop     -- number of populations to draw
     //
-    
+
     private static String fileConfig ;
     private static String fileVirt ;
     private static String fileHist ;
     private static String fileBid ;
-    
+
     /**
      * File name for monte carlo draws
      */
     protected static String fileDraws ;
-    
+
     /**
      * Default transmission cost
      */
     protected static int transCost = 1 ;
-    
+
     /**
      * Default transmission capacity
      */
     protected static int transCap  = 2500 ;
-    
-    /** 
+
+    /**
      * Default number of populations
      */
     protected static int numPop    = 10 ;
@@ -72,7 +72,7 @@ public class Env extends SimState {
      * Stages per simulation
      */
     public static enum Stage {
-       /** 
+       /**
         * Service providers send information to clients
         */
        SERVICE_SEND,
@@ -87,7 +87,7 @@ public class Env extends SimState {
        /**
         * Aggregate and send demand up for each tier
         */
-       AGGREGATE, 
+       AGGREGATE,
        /**
         * Hook for virtual agents prior to REPORT for each tier
         */
@@ -95,13 +95,13 @@ public class Env extends SimState {
        /**
         * Report price to child nodes for each tier
         */
-       REPORT, 
+       REPORT,
        /**
         * Traders determine actual loads
         */
-       CALC_LOADS 
+       CALC_LOADS
     };
-    
+
     /**
      * Current stage
      */
@@ -111,13 +111,13 @@ public class Env extends SimState {
      * Lists of agents to block under DOS runs
      */
     public static final ArrayList<Integer> blockList = new ArrayList<>();
-    
+
     /**
      * List of DOS runs desired
      */
     public static String dos_runs[];
-    
-    /** 
+
+    /**
      * Current DOS run
      */
     public static String curDOS;
@@ -137,15 +137,15 @@ public class Env extends SimState {
     static PrintWriter out;
     static PrintWriter net;
     static PrintWriter msg;
-   
+
     static int maxTier;
     static int curTier;
-    
+
     /**
      * Printer for log file
      */
     public static PrintWriter log;
-    
+
     /**
      * Printer for net demands
      */
@@ -155,16 +155,16 @@ public class Env extends SimState {
     /**
      * Master list of agents
      *
-     * Keep as an ArrayList to allow them to be initialized in 
+     * Keep as an ArrayList to allow them to be initialized in
      * a known order.
      */
     static final ArrayList<Agent> listAgent = new ArrayList<>();
-    
+
     // Master list of historical information across pop and dos runs
 	static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
     /**
-     * Master simulation environment 
-     * 
+     * Master simulation environment
+     *
      * @param seed Seed for the random number generator
      */
     public Env(long seed) {
@@ -178,27 +178,27 @@ public class Env extends SimState {
 
     /**
      * Centralized random number generator
-     * 
+     *
      * Can be initialized with a specified seed
-     * 
+     *
      * @return Uniform random number
      */
     public static double runiform() {
        return rgen.nextDouble() ;
     }
-    
+
     /**
      * Get the current population number
-     * 
+     *
      * @return Number of this population
      */
     static public int getPop() {
         return pop;
     }
-    
+
     /**
      * Look up a property and return an integer
-     * 
+     *
      * @param prop Properties object
      * @param key  Key to look up
      * @param def  Default to use if key is absent
@@ -211,7 +211,7 @@ public class Env extends SimState {
 
     /**
      * Find and return an agent given its id
-     * 
+     *
      * @param own_id ID number of the agent
      * @return Agent's instance
      */
@@ -221,20 +221,20 @@ public class Env extends SimState {
                 return a;
        throw new RuntimeException("No agent with id "+own_id);
     }
-    
+
     /**
      * Find and return intel list given population and dos
      */
     public static HashMap<Integer, History> getHistory(int pop, int dos) {
-       
+
         // Create lookup key
         String key = Integer.toString(pop) + "|" + Integer.toString(dos);
-       
+
         // Returns array if history exists for pop/dos run
         if(globalHistory.containsKey(key)) {
            return globalHistory.get(key);
         }
-        else {     
+        else {
             throw new RuntimeException("No history for population "+pop+" and dos "+dos);
         }
     }
@@ -247,18 +247,18 @@ public class Env extends SimState {
     static ArrayList<Draw> drawListD = new ArrayList<>();
     static ArrayList<Draw> drawListS = new ArrayList<>();
 
-    /** 
+    /**
      * Add an agent to a block list
-     * 
+     *
      * @param own_id ID of agent that should be blocked
      */
     public static void setBlock(int own_id) {
        blockList.add(own_id);
-    }   
+    }
 
     /**
      * Check whether an agent is on a block list
-     * 
+     *
      * @param run DOS run of interest
      * @param agent Agent to be checked
      * @return True if the agent is blocked in the indicated DOS run
@@ -269,7 +269,7 @@ public class Env extends SimState {
 
     /**
      * Check whether an agent is on a block list
-     * 
+     *
      * @param from ID of apparent sender
      * @return True if the agent is blocked in the indicated DOS run
      */
@@ -279,11 +279,11 @@ public class Env extends SimState {
 
     /**
      * Entry point for the simulation
-     * 
+     *
      * @param args Command line arguments
      */
     public static void main(String[] args) {
-        
+
         String fileProps;
         String seed;
         String stem;
@@ -301,7 +301,7 @@ public class Env extends SimState {
         fileProps = args[0] ;
         props = new Properties() ;
         try {
-           props.load(Util.openRead(fileProps)); 
+           props.load(Util.openRead(fileProps));
         } catch (IOException ex) {
            System.out.println("Error reading the property file");
            System.exit(0);
@@ -330,20 +330,20 @@ public class Env extends SimState {
         for(int i=0 ; i<dos_runs.length ; i++)
             dos_runs[i] = dos_runs[i].trim();
 
-        // 
+        //
         //  Set up the random number generator, allowing for a fixed
         //  seed if we want repeatability
         //
 
         if( seed.equals("none") || seed.equals("") ) {
-           rgen_seed = -1; 
+           rgen_seed = -1;
            rgen = new Random();
         } else {
            rgen_seed = Long.parseLong(seed);
            rgen = new Random(rgen_seed);
         }
 
-        // 
+        //
         //  Open and initialize output and log files
         //
 
@@ -369,7 +369,7 @@ public class Env extends SimState {
            "   DOS runs: "+String.join(",",dos_runs)
            );
 
-        // 
+        //
         //  Create an instance of the simulator and run the simulation.
         //  Iterate over the number of populations requested and, within
         //  that, over the event stages.
@@ -389,7 +389,7 @@ public class Env extends SimState {
                 a.popInit();
 
             Channel.divert_clear();
-            
+
             // run DOS scenarios
 
             for(String dos: dos_runs) {
@@ -405,7 +405,7 @@ public class Env extends SimState {
 
                 // now step through the run
 
-                for( Stage s : Stage.values() ) 
+                for( Stage s : Stage.values() )
                     switch( s ) {
                         case PRE_AGGREGATE:
                             for(curTier=2 ; curTier<=maxTier ; curTier++ ) {
@@ -423,7 +423,7 @@ public class Env extends SimState {
                                 do_stage(enviro,true,Stage.REPORT);
                             }
                             break;
-                        
+
                         case REPORT:
                             break;
 
@@ -437,34 +437,34 @@ public class Env extends SimState {
                             break;
 
                     }
-                    
+
                 // write the results
 
                 printDemands();
                 printResults();
             }
         }
-        
+
         enviro.finish();
     }
-    
-    /** 
+
+    /**
      * Carry out a particular stage and log it in the process
      */
     static void do_stage(Env e, boolean showTier, Stage s) {
-        if( showTier) 
+        if( showTier)
             log.println("*** tier "+curTier+" "+s);
         else
             log.println("*** "+s);
         stageNow = s;
         e.schedule.step(e);
     }
-    
+
     /**
      * Create agents based on the input network map
      */
     private void makeAgents(String filename) {
-    
+
         BufferedReader br;
         CSVParser csvReader;
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap, cur_security;
@@ -492,23 +492,23 @@ public class Env extends SimState {
                 // create the agent
 
                 switch( cur_type ) {
-                    case 1: 
-                    case 2: 
+                    case 1:
+                    case 2:
                         cur_agent = new Market(cur_upid,cur_id);
                         break;
-                    case 3: 
+                    case 3:
                         cur_agent = new Trader(cur_upid,cur_id,cur_sd);
                         break;
                     default:
                         throw new RuntimeException("Unexpected agent type "+cur_type);
                 }
 
-                // if this is a Grid agent, save transmission parameters, 
+                // if this is a Grid agent, save transmission parameters,
                 // overriding with global versions, if they were given
-                
+
                 if( cur_agent instanceof Grid ) {
                     Grid grid_agent = (Grid) cur_agent;
-                    
+
                     grid_agent.cost = cur_cost;
                     if( props.getProperty("transcost") != null )
                         grid_agent.cost = transCost ;
@@ -517,13 +517,13 @@ public class Env extends SimState {
                     if( props.getProperty("transcap") != null )
                         grid_agent.cap  = transCap;
                 }
-                
+
                 // set its channel
 
                 channel = Channel.find(cur_chan);
                 if( channel == null )channel = new Channel(cur_chan);
                 cur_agent.setChannel(channel);
-                
+
                 // set security
                 cur_agent.security = cur_security;
 
@@ -531,7 +531,7 @@ public class Env extends SimState {
 
                 listAgent.add(cur_agent);
                 schedule.scheduleRepeating(cur_agent);
-            } 
+            }
 
         br.close();
         }
@@ -547,14 +547,14 @@ public class Env extends SimState {
         ArrayList<Grid> gridList = new ArrayList<>();
         ArrayList<String> Err = new ArrayList<>();
         String where;
-        
-        for( Agent a : listAgent ) 
+
+        for( Agent a : listAgent )
             if( a instanceof Grid )
                 gridList.add((Grid) a);
-        
-        // tell parents about their children 
 
-        for (Grid g : gridList) 
+        // tell parents about their children
+
+        for (Grid g : gridList)
             if( g.par_id != 0 ) {
                 Agent par = Env.getAgent(g.par_id);
                 if( par instanceof Grid )
@@ -562,7 +562,7 @@ public class Env extends SimState {
                 else
                     Err.add("parent of "+g.own_id+" is not a grid agent");
             }
-       
+
         // set grid tiers for future reference
 
         maxTier = 0;
@@ -574,7 +574,7 @@ public class Env extends SimState {
         // check configuration
 
         for(Grid g: gridList) {
-            
+
             if( g instanceof Trader ) {
                 where = "trader "+g.own_id+" ";
                 if( g.getTier() != 1 )
@@ -597,7 +597,7 @@ public class Env extends SimState {
 
             assert false;
         }
-        
+
         if( !Err.isEmpty() ) {
             for(String s: Err)
                 System.out.println("configuration error: "+s);
@@ -616,7 +616,7 @@ public class Env extends SimState {
 
         br = new BufferedReader(Util.openRead(Env.fileDraws));
         csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
- 
+
         for(CSVRecord rec: csvReader) {
             draw = new Draw();
             sd_type    = rec.get("type");
@@ -626,17 +626,17 @@ public class Env extends SimState {
                drawListD.add(draw);
             else
                drawListS.add(draw);
-        } 
+        }
 
         br.close();
     }
-                                                                                        
-    
+
+
     /**
      * Creates virtual agents from file
      */
      private void makeVirtual(String filename){
-        
+
         BufferedReader br;
         CSVParser csvReader;
         int id, security;
@@ -644,13 +644,13 @@ public class Env extends SimState {
         String[] channelList, agentList, intelList, configuration;
         Agent cur_agent, intel_agent;
         Intel cur_intel;
-        
+
         try {
-            
+
             // Configure the csv reader
             br = new BufferedReader(Util.openRead(filename));
             csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-            
+
             // Read in csv records
             for(CSVRecord rec: csvReader) {
                 id             = Integer.parseInt(rec.get("id"));
@@ -661,11 +661,14 @@ public class Env extends SimState {
                 intelLevel     = rec.get("intel_level");
                 intelList      = rec.get("intel").split(",",-1);
                 security       = Integer.parseInt(rec.get("security"));
-                
+
                 // Create the virtual agent
                 switch(type) {
-                    case "ADV_ADAM": 
+                    case "ADV_ADAM":
                         cur_agent = new Adv_Adam(id);
+                        break;
+                    case "ADV_BETH":
+                        cur_agent = new Adv_Beth(id);
                         break;
                     case "ADV_DARTH":
                         cur_agent = new Adv_Darth(id);
@@ -673,23 +676,23 @@ public class Env extends SimState {
                     default:
                         throw new RuntimeException("Unexpected agent type "+type);
                 }
-                
+
                 // Load agent's channel list
                 for(int i = 0; i < channelList.length; i++){
                     ((Virtual) cur_agent).channels.add(Channel.find(channelList[i]));
                 }
-                
+
                 // Load agent's access list
                 for(int i = 0; i < agentList.length; i++){
-                    
+
                     ((Virtual) cur_agent).agents.add(Integer.parseInt(agentList[i]));
-                    
+
                 }
-                
+
                 // Load agent's intel list
                 switch(intelLevel) {
                     case "full":
-                        
+
                         // Load all from global agent list
                         for(Agent a: listAgent){
                             cur_intel = new Intel(a.own_id, false);
@@ -697,7 +700,7 @@ public class Env extends SimState {
                         }
                         break;
                     case "partial":
-                        
+
                         // Load from intel list in file
                         for(int i = 0; i < intelList.length; i++){
                             intel_agent = Env.getAgent(Integer.parseInt(intelList[i]));
@@ -710,45 +713,45 @@ public class Env extends SimState {
                     default:
                         throw new RuntimeException("Unexpected intel type: "+intelLevel);
                 }
-                
+
                 // Set security level
                 cur_agent.security = security;
-                
+
                 // Add agent to the schedule for stepping
                 listAgent.add(cur_agent);
                 schedule.scheduleRepeating(cur_agent);
-                
+
                 // Parse agent configuration dictionary
                 for(int i = 0; i < configuration.length; i++){
                     String[] config = configuration[i].split(":",-1);
                     ((Virtual) cur_agent).config.put(config[0].toLowerCase(),config[1].toLowerCase());
                 }
-            }       
+            }
         }
         catch (IOException e) {
             System.out.println("Could not read network file: "+filename);
             System.exit(0);
         }
      }
-    
+
     /**
      * Loads global historical data
      */
      private void loadHistory(String histFile, String bidFile){
-        
+
         BufferedReader br;
         CSVParser csvReader;
         int pop, dos, id, p, q, q_min, q_max, steps, period;
         Demand demand;
         String key, tag;
-        
+
         // Load history file if it exists
         if(!fileHist.equals("")) {
             try {
                 // Configure csv reader
                 br = new BufferedReader(Util.openRead(histFile));
                 csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-            
+
                 // Read in csv records
                 for(CSVRecord rec: csvReader) {
                     pop = Integer.parseInt(rec.get("pop"));
@@ -757,17 +760,17 @@ public class Env extends SimState {
                     p = Integer.parseInt(rec.get("p"));
                     q = Integer.parseInt(rec.get("q"));
                     period = 1;
-                    
+
                     // Build key for hashmap
                     key = Integer.toString(pop) + "|" + Integer.toString(dos);
                     History history;
                     HashMap<Integer, History> gHistory;
-                    
+
                     // Determine if data exists, if not create new
                     if(globalHistory.containsKey(key)){
-                        
+
                         gHistory = globalHistory.get(key);
-                        
+
                         if (gHistory.containsKey(id)) {
                             history = gHistory.get(id);
                         }
@@ -777,9 +780,9 @@ public class Env extends SimState {
                     }
                     else {
                         gHistory = new HashMap<>();
-                        history = new History(id);    
+                        history = new History(id);
                     }
-                    
+
                     // Merge into existing global dataset
                     history.storePrice(period,p);
                     history.storeQuantity(period,q);
@@ -792,14 +795,14 @@ public class Env extends SimState {
                 System.exit(0);
             }
         }
-        
+
         // Load bid file if it exists
         if(!fileBid.equals("")) {
             try {
                 // Configure csv reader
                 br = new BufferedReader(Util.openRead(bidFile));
                 csvReader = CSVFormat.DEFAULT.withQuote('"').withHeader().withIgnoreHeaderCase().parse(br);
-            
+
                 // Read in csv records
                 for(CSVRecord rec: csvReader) {
                     pop    = Integer.parseInt(rec.get("pop"));
@@ -808,28 +811,28 @@ public class Env extends SimState {
                     tag    = rec.get("tag");
                     steps  = Integer.parseInt(rec.get("steps"));
                     period = 1;
-                    
+
                     // Get bidsteps and generate demand curve
                     demand = new Demand();
-                    
+
                     for (int i = 0; i < steps; i++) {
                         p      = Integer.parseInt(rec.get("p"     + Integer.toString(i)));
                         q_min  = Integer.parseInt(rec.get("q_min" + Integer.toString(i)));
                         q_max  = Integer.parseInt(rec.get("q_max" + Integer.toString(i)));
-                        
+
                         demand.add(p, q_min, q_max);
                     }
-                    
+
                     // Build key for hashmap
                     key = Integer.toString(pop) + "|" + Integer.toString(dos);
                     History history;
                     HashMap<Integer, History> gHistory;
-                    
+
                     // Determine if data exists, if not create new
                     if(globalHistory.containsKey(key)){
-                        
+
                         gHistory = globalHistory.get(key);
-                        
+
                         if (gHistory.containsKey(id)) {
                             history = gHistory.get(id);
                         }
@@ -839,9 +842,9 @@ public class Env extends SimState {
                     }
                     else {
                         gHistory = new HashMap<>();
-                        history = new History(id);    
+                        history = new History(id);
                     }
-                    
+
                     // Determine demand type and store
                     if (tag.equals("down")) {
                         history.storeDownDemand(period,demand);
@@ -849,7 +852,7 @@ public class Env extends SimState {
                     else {
                         history.storeUpDemand(period,demand);
                     }
-                    
+
                     // Merge into existing global dataset
                     gHistory.put(id, history);
                     globalHistory.put(key, gHistory);
@@ -861,11 +864,11 @@ public class Env extends SimState {
             }
         }
      }
-    
+
     /**
      * Save results for printing out
-     * 
-     * @param agent Agent 
+     *
+     * @param agent Agent
      * @param p Price
      * @param q Quantity
      */
@@ -949,5 +952,5 @@ public class Env extends SimState {
        log.close();
        net.close();
     }
- 
+
 }
