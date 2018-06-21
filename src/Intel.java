@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 
 /**
@@ -75,5 +76,53 @@ import java.util.ArrayList;
     // Store p, q and bid information in history object
     public void storeHistory(History h){
         history = h;
+    }
+    
+    /** Pairs all parent nodes with their children give a list of intel
+     * 
+     * @param intel: set of intel to analyze
+     * @return an ArrayList, where it's elements are ArrayLists, where the first element is the parent node, followed by its children
+     *         an ArrayList of one element represents a node without any children (possibly remove feature?) <- fixed
+     */
+    static ArrayList<ArrayList<Intel>> getFamily(HashMap<Integer, Intel> intel){
+    	ArrayList<ArrayList<Intel>> list = new ArrayList<ArrayList<Intel>>();
+    	for(Map.Entry<Integer,Intel> parent : intel.entrySet()) {
+    		ArrayList<Intel> family = new ArrayList<Intel>();
+    		Intel p = parent.getValue();
+    		family.add(p);
+            for(Map.Entry<Integer,Intel> child: intel.entrySet()) {
+            	Intel c = child.getValue();
+                if (c.par_id == p.agent_id) {
+                    family.add(c);
+                }
+            }
+            list.add(family);
+        }
+    	for(int i = 0 ; i < list.size() ; i++) {
+    		if(list.get(i).size() == 1)
+    			list.remove(i);
+    	}
+    	return list;
+    }
+    
+    /** Functions the same as getFamily, but only returns a parent along with the first child getFamily2 finds
+     * 
+     * @param intel: set of intel to analyze
+     * @return an ArrayList where its elements are arrays, where the first element is the parent, and the second is the child
+     */
+    static ArrayList<Intel[]> getFamily2(HashMap<Integer,Intel> intel){
+    	ArrayList<Intel[]> list = new ArrayList<Intel[]>();
+    	for(Map.Entry<Integer,Intel> parent : intel.entrySet()) {
+    		Intel p = parent.getValue();
+            for(Map.Entry<Integer,Intel> child: intel.entrySet()) {
+            	Intel c = child.getValue();
+                if (c.par_id == p.agent_id) {
+                	Intel[] family = {p,c};
+                    list.add(family);
+                    break;
+                }
+            }
+        }
+    	return list;
     }
 }
