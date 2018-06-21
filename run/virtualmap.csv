@@ -1,2 +1,2 @@
 id,type,configuration,channel,agent,intel_level,intel,security,secMeasures
-1005,Adv_Beth,capability:0,"type1,type2,type3","1,2,3,116,120,201",partial,"1,2,3,116,120,201",100,none
+1001,Adv_Beth,capability:0,"type1,type2,type3","1,2,3,116,120,201",partial,"1,2,3,116,120,201",100,none
