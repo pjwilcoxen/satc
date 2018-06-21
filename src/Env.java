@@ -874,12 +874,14 @@ public class Env extends SimState {
            String results;
            int block;
            String draw;
+           String cstring;
 
            block = isBlocked(curDOS,agent) ? 1 : 0;
            draw  = String.format("%.1f",agent.rBlock);
 
            key     = agent.own_id;
-           results = draw+","+block+","+p+","+q;
+           cstring = ((Grid) agent).getConstr();
+           results = draw+","+block+","+p+","+q+","+cstring;
 
            outMap.put(key,results);
     }
@@ -889,7 +891,7 @@ public class Env extends SimState {
      */
     static void printResults() {
         if( outHeader ) {
-            out.println("pop,dos,id,rblock,blocked,p,q");
+            out.println("pop,dos,id,rblock,blocked,p,q,upcon");
             outHeader = false;
         }
         for(int key: outMap.keySet() )

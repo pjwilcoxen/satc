@@ -62,6 +62,27 @@ public class Demand {
     Integer max_wtp;
     Integer pcap_lo;
 
+    // Is the upstream transmission constraint binding?
+    // Set in getPriceDn() when determining price for this
+    // node's children.
+
+    static enum constrType {
+        /**
+         * No constraint
+         */
+         N,
+        /**
+         * At maximum supply
+         */
+         S,
+        /**
+         * At maximum demand
+         */
+         D
+    }
+
+    constrType constr;
+
     /**
      * Demand curve
      */
@@ -74,6 +95,7 @@ public class Demand {
         min_wta = null;
         max_wtp = null;
         pcap_lo = null;
+        constr  = constrType.N;
     }
 
     /**
@@ -246,8 +268,10 @@ public class Demand {
         // case 1: selling. at or above the constraint on upstream sales.
         // return the downstream price associated with the constraint
 
-        if( has_s && pcap_hi != null && pUp >= pcap_hi )
+        if( has_s && pcap_hi != null && pUp >= pcap_hi ) {
+            constr = constrType.S;
             return pcap_hi - cost;
+        }
 
         // case 2: selling. above minimum wta. assume selling and
         // return the downstream price associated with pUp
@@ -287,6 +311,7 @@ public class Demand {
         // case 7: buying. at or below the constraint on demand. return
         // the downstream price associated with the constraint
 
+        constr = constrType.D;
         return pcap_lo + cost;
     }
 
