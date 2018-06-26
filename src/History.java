@@ -12,6 +12,9 @@ public class History {
     
     // Variables to store agent information
     int agent_id;
+
+    // Hashmap to store agent constraint type
+    HashMap<Integer, Demand.constrType> constr = new HashMap<>();
     
     // Hashmaps to store historical information
     HashMap<Integer, Integer> p    = new HashMap<>();
@@ -102,7 +105,17 @@ public class History {
     public Demand getDownDemand(Integer period) {
             return downD.get(period);
     }
-	
+
+    // Stores the constraint value in the hashmap
+    public void storeConstr(Integer period, String constraint) {
+        this.constr.put(period, Demand.constrType.valueOf(constraint));
+    }
+
+    // Return a string indicating the constraint of this agent
+    public String getConstr(Integer period) {
+        return this.constr.get(period).toString();
+    }
+
 	// Clear out history data
     public void clear() {
             p.clear();

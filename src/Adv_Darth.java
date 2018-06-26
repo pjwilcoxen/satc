@@ -56,7 +56,9 @@ public class Adv_Darth extends Adversary{
             int targetCap = targetIntel.cap;
             History targetHistory = targetIntel.history;
 
-            if (targetHistory.upD.get(period).getFloorBid(targetPrice - targetCost).q_max == targetCap) {
+
+            //if (targetHistory.upD.get(period).getFloorBid(targetPrice - targetCost).q_max == targetCap) {
+            if (targetHistory.getConstr(period).equals("D")) {
                 System.out.println("Attack Triggered!");
 
                 // Generate false bid

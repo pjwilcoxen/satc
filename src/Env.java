@@ -741,6 +741,7 @@ public class Env extends SimState {
         int pop, dos, id, p, q, q_min, q_max, steps, period;
         Demand demand;
         String key, tag;
+        String constr;
         
         // Load history file if it exists
         if(!fileHist.equals("")) {
@@ -756,6 +757,7 @@ public class Env extends SimState {
                     id = Integer.parseInt(rec.get("id"));
                     p = Integer.parseInt(rec.get("p"));
                     q = Integer.parseInt(rec.get("q"));
+                    constr = rec.get("upcon");
                     period = 1;
                     
                     // Build key for hashmap
@@ -783,6 +785,7 @@ public class Env extends SimState {
                     // Merge into existing global dataset
                     history.storePrice(period,p);
                     history.storeQuantity(period,q);
+                    history.storeConstr(period, constr);
                     gHistory.put(id, history);
                     globalHistory.put(key, gHistory);
                 }
