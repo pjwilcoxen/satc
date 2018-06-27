@@ -670,6 +670,9 @@ public class Env extends SimState {
                     case "ADV_DARTH":
                         cur_agent = new Adv_Darth(id);
                         break;
+                    case "ADV_ELVIRA":
+                        cur_agent = new Adv_Elvira(id);
+                        break;
                     default:
                         throw new RuntimeException("Unexpected agent type "+type);
                 }
