@@ -91,6 +91,8 @@ public class Adv_Elvira extends Adversary{
                 System.out.println("Attack Triggered!");
 
                 // Generate false bid
+                // TODO: check arraylist
+                eachShift = Math.round(shift / compromisedAgents.get(targetId).size());
                 for (Integer traderId : compromisedAgents.get(targetId)) {
                     Intel trader = getIntel(traderId);
                     Demand fakeDemand = new Demand();
@@ -99,6 +101,30 @@ public class Adv_Elvira extends Adversary{
                         fakeDemand.add(bidPrice,
                                        trader.history.upD.get(period).getBid(bidPrice).q_min - eachShift,
                                        trader.history.upD.get(period).getBid(bidPrice).q_max - eachShift);
+                    }
+
+                    Msg msg = new Msg(this, targetId);
+                    msg.setDemand(fakeDemand);
+                    Channel channel = Channel.find(trader.channel);
+                    assert channel != null;
+                    channel.send(msg);
+                }
+
+            } else if (targetHistory.getConstr(period).equals("S")) {
+                System.out.println("Attack Triggered!");
+
+                // Generate false bid
+                eachShift = Math.round(shift / compromisedAgents.get(targetId).size());
+                //System.out.println(eachShift);
+                for (Integer traderId : compromisedAgents.get(targetId)) {
+                    Intel trader = getIntel(traderId);
+                    //System.out.println(trader.agent_id);
+                    Demand fakeDemand = new Demand();
+
+                    for (int bidPrice : trader.history.upD.get(period).bids.keySet()) {
+                        fakeDemand.add(bidPrice,
+                                       trader.history.upD.get(period).getBid(bidPrice).q_min + eachShift,
+                                       trader.history.upD.get(period).getBid(bidPrice).q_max + eachShift);
                     }
 
                     Msg msg = new Msg(this, targetId);
