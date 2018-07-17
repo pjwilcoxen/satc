@@ -19,8 +19,8 @@ public class History {
     // Hashmaps to store historical information
     HashMap<Integer, Integer> p    = new HashMap<>();
     HashMap<Integer, Integer> q    = new HashMap<>();
-	HashMap<Integer, Demand> upD   = new HashMap<>();
-	HashMap<Integer, Demand> downD = new HashMap<>();
+    HashMap<Integer, Demand> upD   = new HashMap<>();
+    HashMap<Integer, Demand> downD = new HashMap<>();
     
     // Constructor
     History(int agent_id) {
@@ -75,15 +75,15 @@ public class History {
     
     // Retrieves average quantity
     public double getAvgQ() {
-        Integer sum = null;
-        Integer i = 0;
+        int sum = 0;
+        int i = 0;
         
         for (Map.Entry<Integer, Integer> entry : q.entrySet()) {
             
             sum += entry.getValue();
             i++;
         }
-        return sum/i;
+        return sum/(double) i;
     }
     
     // Retrieves quantity for a specific period
@@ -119,8 +119,8 @@ public class History {
 	// Clear out history data
     public void clear() {
             p.clear();
-			q.clear();
-			upD.clear();
-			downD.clear();
+            q.clear();
+            upD.clear();
+            downD.clear();
     }
 }

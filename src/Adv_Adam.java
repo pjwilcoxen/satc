@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Map;
 import sim.engine.SimState;
 
@@ -13,6 +12,8 @@ public class Adv_Adam extends Adversary{
     
     /**
      * Constructor
+     * 
+     * @param own_id Agent's id
      */
     public Adv_Adam(int own_id) {
         super(own_id);
