@@ -1,2 +1,0 @@
-id,type,configuration,channel,agent,intel_level,intel,security,secMeasures
-1001,Adv_Elvira,"capability:100,target:201,shift:100","type1,type2","1,2,4,5,191,193,194,196,202,203",full,"191,202,203",100,none
