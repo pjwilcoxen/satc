@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import sim.engine.SimState;
 
 /**
@@ -12,6 +11,8 @@ public class Adv_Darth extends Adversary{
     
     /**
      * Constructor
+     * 
+     * @param own_id Agent's id
      */
     public Adv_Darth(int own_id) {
         super(own_id);
@@ -51,11 +52,7 @@ public class Adv_Darth extends Adversary{
             int targetId = Integer.parseInt(config.get("target"));
 
             Intel targetIntel = getIntel(targetId);
-            int targetPrice = targetIntel.history.p.get(period);
-            int targetCost = targetIntel.cost;
-            int targetCap = targetIntel.cap;
             History targetHistory = targetIntel.history;
-
 
             //if (targetHistory.upD.get(period).getFloorBid(targetPrice - targetCost).q_max == targetCap) {
             if (targetHistory.getConstr(period).equals("D")) {
@@ -68,8 +65,8 @@ public class Adv_Darth extends Adversary{
 
                     for (int bidPrice : trader.history.upD.get(period).bids.keySet()) {
                         fakeDemand.add(bidPrice,
-                                       trader.history.upD.get(period).getBid(bidPrice).q_min - shift,
-                                       trader.history.upD.get(period).getBid(bidPrice).q_max - shift);
+                                       trader.history.upD.get(period).getBidMin(bidPrice) - shift,
+                                       trader.history.upD.get(period).getBidMax(bidPrice) - shift);
                     }
 
                     Msg msg = new Msg(this, targetId);
