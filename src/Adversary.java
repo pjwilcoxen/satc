@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Map;
 import sim.engine.SimState;
 
@@ -14,6 +13,8 @@ import sim.engine.SimState;
        
     /**
      * Constructor
+     * 
+     * @param own_id Agent's id
      */
     public Adversary(int own_id) {
         super(own_id);
@@ -52,8 +53,8 @@ import sim.engine.SimState;
         
         for(Map.Entry<Integer,Intel> entry: intel.entrySet()) {
             
-			// Get intel object
-			Intel i = entry.getValue();
+            // Get intel object
+            Intel i = entry.getValue();
             
             // Retrieve agent from environment
             Agent agent = Env.getAgent(i.agent_id);
@@ -94,14 +95,7 @@ import sim.engine.SimState;
         Integer capability = Integer.parseInt(((Virtual) this).getConfig("capability"));
         
         // Ensures agent meets conditions to be compromised
-        if(channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(capability)) {
-            a.channel.divert_from(a.own_id, this.own_id);
-            a.channel.divert_to(a.own_id, this.own_id);
-            return true;
-        }
-        else {
-            return false;
-        }
+        return channels.contains(a.channel) && agents.contains(a.own_id) && a.isVulnerable(capability) ;
      }
      
      /** 
@@ -112,15 +106,7 @@ import sim.engine.SimState;
      *  2. Target itself must be accessible by adversary
      */
      private boolean canInterceptTo(Agent a) {
-        
-        // Ensures agent meets conditions to intercept messages
-        if(channels.contains(a.channel) && agents.contains(a.own_id)) {
-            a.channel.divert_to(a.own_id, this.own_id);
-            return true;
-        }
-        else {
-            return false;
-        }
+        return channels.contains(a.channel) && agents.contains(a.own_id) ;
      }
      
      /** 
@@ -131,15 +117,7 @@ import sim.engine.SimState;
      *  2. Target itself must be accessible by adversary
      */
      private boolean canInterceptFrom(Agent a) {
-        
-        // Ensures agent meets conditions to intercept messages
-        if(channels.contains(a.channel) && agents.contains(a.own_id)) {
-            a.channel.divert_from(a.own_id, this.own_id);
-            return true;
-        }
-        else {
-            return false;
-        }
+        return channels.contains(a.channel) && agents.contains(a.own_id) ;
      }
      
      /** 
@@ -150,14 +128,7 @@ import sim.engine.SimState;
      *  2. Target's channel must be accessible by adversary
      */
      private boolean canForge(Agent a) {
-        
-        // Ensures agent meets conditions to intercept messages
-        if(channels.contains(a.channel)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return channels.contains(a.channel) ;
      }
      
      /** 
@@ -167,14 +138,7 @@ import sim.engine.SimState;
      *  1. Target's channel must be accessible by adversary
      */
      private boolean canSend(Agent a) {
-        
-        // Ensures agent meets conditions to intercept messages
-        if(channels.contains(a.channel)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return channels.contains(a.channel) ;
      }
 }
 
