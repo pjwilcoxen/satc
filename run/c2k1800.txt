@@ -3,3 +3,4 @@ draws     : testdraw.csv
 transcost : 2
 transcap  : 1800 
 seed      : 123456
+debug     : 1
