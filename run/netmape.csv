@@ -93,7 +93,7 @@ id,type,sd_type,up_id,channel,cost,cap,security,secMeasures
 92,3,S,201,type2,1,2000,100,none
 93,3,S,201,type3,1,2000,100,none
 94,3,S,201,type1,1,2000,100,none
-95,3,S,201,type2,1,2000,100,none
+95,3,S,201,type2,1,2000,50,none
 96,3,S,201,type3,1,2000,100,none
 97,3,S,201,type1,1,2000,100,none
 98,3,S,201,type2,1,2000,100,none
