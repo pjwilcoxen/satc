@@ -7,8 +7,9 @@ import sim.engine.SimState;
  */
 public class Adv_Darth extends Adversary{
 
-    boolean do_attack;
-    Channel diversionChannel;
+    private int shift = 0;
+    private boolean do_attack;
+    private Channel diversionChannel;
 
     /**
      * Constructor
@@ -50,10 +51,14 @@ public class Adv_Darth extends Adversary{
         targetHistory = targetIntel.history;
         targetConstr = targetHistory.getConstr(period);
 
-        do_attack = (targetConstr.equals("D")) && traderIntel.compromised;
+        do_attack = (targetConstr.equals("D") || targetConstr.equals("S")) && traderIntel.compromised;
         if (do_attack) {
             diversionChannel = Env.getAgent(traderId).channel;
             diversionChannel.divert_from(traderId, this.own_id);
+
+            shift = Integer.parseInt(config.get("shift"));
+            if (targetConstr.equals("S"))
+                shift = -shift;
         }
     }
     
@@ -68,10 +73,7 @@ public class Adv_Darth extends Adversary{
         switch (Env.stageNow) {
 
         case PRE_AGGREGATE:
-            int shift;
             Demand fakeDemand = new Demand();
-
-            shift = Integer.parseInt(config.get("shift"));
 
             if (do_attack) {
                 System.out.println("Attack Triggered!");
