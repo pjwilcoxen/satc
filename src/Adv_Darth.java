@@ -7,8 +7,9 @@ import sim.engine.SimState;
  */
 public class Adv_Darth extends Adversary{
 
-    Demand falseBid = new Demand();
-    
+    boolean do_attack;
+    Channel diversionChannel;
+
     /**
      * Constructor
      * 
@@ -16,7 +17,6 @@ public class Adv_Darth extends Adversary{
      */
     public Adv_Darth(int own_id) {
         super(own_id);
-        falseBid.add(1,-1000,1000);
     }
     
     /** 
@@ -33,6 +33,28 @@ public class Adv_Darth extends Adversary{
     @Override
     public void runInit() {
         super.runInit();
+
+        int traderId;
+        Intel traderIntel;
+
+        int targetId;
+        Intel targetIntel;
+        History targetHistory;
+        String targetConstr;
+
+        traderId = Integer.parseInt(config.get("trader"));
+        traderIntel = getIntel(traderId);
+
+        targetId = Integer.parseInt(config.get("target"));
+        targetIntel = getIntel(targetId);
+        targetHistory = targetIntel.history;
+        targetConstr = targetHistory.getConstr(period);
+
+        do_attack = (targetConstr.equals("D")) && traderIntel.compromised;
+        if (do_attack) {
+            diversionChannel = Env.getAgent(traderId).channel;
+            diversionChannel.divert_from(traderId, this.own_id);
+        }
     }
     
     /**
@@ -46,39 +68,35 @@ public class Adv_Darth extends Adversary{
         switch (Env.stageNow) {
 
         case PRE_AGGREGATE:
-            int period = 1;
-            int shift = Integer.parseInt(config.get("shift"));
-            int traderId = Integer.parseInt(config.get("trader"));
-            int targetId = Integer.parseInt(config.get("target"));
+            int shift;
+            Demand fakeDemand = new Demand();
 
-            Intel targetIntel = getIntel(targetId);
-            History targetHistory = targetIntel.history;
+            shift = Integer.parseInt(config.get("shift"));
 
-            //if (targetHistory.upD.get(period).getFloorBid(targetPrice - targetCost).q_max == targetCap) {
-            if (targetHistory.getConstr(period).equals("D")) {
+            if (do_attack) {
                 System.out.println("Attack Triggered!");
 
                 // Generate false bid
-                Intel trader = getIntel(traderId);
-                if (trader.compromised) {
-                    Demand fakeDemand = new Demand();
+                int traderId = Integer.parseInt(config.get("trader"));
+                Intel traderIntel = getIntel(traderId);
+                Demand histDemand = traderIntel.history.upD.get(period);
 
-                    for (int bidPrice : trader.history.upD.get(period).bids.keySet()) {
-                        fakeDemand.add(bidPrice,
-                                       trader.history.upD.get(period).getBidMin(bidPrice) - shift,
-                                       trader.history.upD.get(period).getBidMax(bidPrice) - shift);
-                    }
-
-                    Msg msg = new Msg(this, targetId);
-                    msg.setDemand(fakeDemand);
-                    Channel channel = Channel.find(trader.channel);
-                    assert channel != null;
-                    channel.send(msg);
+                for (int bidPrice : histDemand.bids.keySet()) {
+                    fakeDemand.add(bidPrice,
+                                   histDemand.getBidMin(bidPrice) - shift,
+                                   histDemand.getBidMax(bidPrice) - shift);
                 }
+
+                int targetId = Integer.parseInt(config.get("target"));
+                Msg msg = new Msg(this, targetId);
+                msg.setDemand(fakeDemand);
+                msg.setFrom(traderId);
+
+                diversionChannel.inject(msg);
+
             } else {
                 System.out.println("No Attack Triggered!");
             }
-
 
             break;
             
