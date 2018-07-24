@@ -1,5 +1,5 @@
 RUNS = c2k1800 c2k1800d c2k1800e1 c2k1800e2 c2k1800e3 \
-       c2k2500 c2k2000 c2k3000 c5k2500 
+       c2k2500 c2k2000 c2k3000 c5k2500 c2k1800d_s c2k1800e1_s
 
 OUTS = $(addsuffix _out.csv, $(RUNS))
 NETS = $(addsuffix _net.csv, $(RUNS))
