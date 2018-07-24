@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import sim.engine.SimState;
 
 /**
@@ -8,14 +7,17 @@ import sim.engine.SimState;
  */
 public class Adv_Darth extends Adversary{
 
-    Demand falseBid = new Demand();
-    
+    private int shift = 0;
+    private boolean do_attack;
+    private Channel diversionChannel;
+
     /**
      * Constructor
+     * 
+     * @param own_id Agent's id
      */
     public Adv_Darth(int own_id) {
         super(own_id);
-        falseBid.add(1,-1000,1000);
     }
     
     /** 
@@ -32,6 +34,32 @@ public class Adv_Darth extends Adversary{
     @Override
     public void runInit() {
         super.runInit();
+
+        int traderId;
+        Intel traderIntel;
+
+        int targetId;
+        Intel targetIntel;
+        History targetHistory;
+        String targetConstr;
+
+        traderId = Integer.parseInt(config.get("trader"));
+        traderIntel = getIntel(traderId);
+
+        targetId = Integer.parseInt(config.get("target"));
+        targetIntel = getIntel(targetId);
+        targetHistory = targetIntel.history;
+        targetConstr = targetHistory.getConstr(period);
+
+        do_attack = (targetConstr.equals("D") || targetConstr.equals("S")) && traderIntel.compromised;
+        if (do_attack) {
+            diversionChannel = Env.getAgent(traderId).channel;
+            diversionChannel.divert_from(traderId, this.own_id);
+
+            shift = Integer.parseInt(config.get("shift"));
+            if (targetConstr.equals("S"))
+                shift = -shift;
+        }
     }
     
     /**
@@ -45,43 +73,32 @@ public class Adv_Darth extends Adversary{
         switch (Env.stageNow) {
 
         case PRE_AGGREGATE:
-            int period = 1;
-            int shift = Integer.parseInt(config.get("shift"));
-            int traderId = Integer.parseInt(config.get("trader"));
-            int targetId = Integer.parseInt(config.get("target"));
+            Demand fakeDemand = new Demand();
 
-            Intel targetIntel = getIntel(targetId);
-            int targetPrice = targetIntel.history.p.get(period);
-            int targetCost = targetIntel.cost;
-            int targetCap = targetIntel.cap;
-            History targetHistory = targetIntel.history;
-
-
-            //if (targetHistory.upD.get(period).getFloorBid(targetPrice - targetCost).q_max == targetCap) {
-            if (targetHistory.getConstr(period).equals("D")) {
+            if (do_attack) {
                 System.out.println("Attack Triggered!");
 
                 // Generate false bid
-                Intel trader = getIntel(traderId);
-                if (trader.compromised) {
-                    Demand fakeDemand = new Demand();
+                int traderId = Integer.parseInt(config.get("trader"));
+                Intel traderIntel = getIntel(traderId);
+                Demand histDemand = traderIntel.history.upD.get(period);
 
-                    for (int bidPrice : trader.history.upD.get(period).bids.keySet()) {
-                        fakeDemand.add(bidPrice,
-                                       trader.history.upD.get(period).getBid(bidPrice).q_min - shift,
-                                       trader.history.upD.get(period).getBid(bidPrice).q_max - shift);
-                    }
-
-                    Msg msg = new Msg(this, targetId);
-                    msg.setDemand(fakeDemand);
-                    Channel channel = Channel.find(trader.channel);
-                    assert channel != null;
-                    channel.send(msg);
+                for (int bidPrice : histDemand.bids.keySet()) {
+                    fakeDemand.add(bidPrice,
+                                   histDemand.getBidMin(bidPrice) - shift,
+                                   histDemand.getBidMax(bidPrice) - shift);
                 }
+
+                int targetId = Integer.parseInt(config.get("target"));
+                Msg msg = new Msg(this, targetId);
+                msg.setDemand(fakeDemand);
+                msg.setFrom(traderId);
+
+                diversionChannel.inject(msg);
+
             } else {
                 System.out.println("No Attack Triggered!");
             }
-
 
             break;
             

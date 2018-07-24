@@ -1,8 +1,5 @@
 netmap     : netmap.csv
 draws      : testdraw.csv
-virtualmap : virtualmap.csv
-adversary  : adversary.csv
-history	  : c2k2000_hist.csv
 transcost  : 2
 transcap   : 2000 
 seed       : 123456
