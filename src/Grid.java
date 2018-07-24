@@ -101,4 +101,17 @@ public abstract class Grid extends Agent {
     void writePQ() {
         Env.saveResult(this,priceDn,q_actual);           
     }
+
+    /**
+     * Return a string indicating whether this agent's upstream link is
+     * at capacity. Agents without upstream demands (currently Traders)
+     * are never considered constrained.
+     * 
+     * @return String showing upstream constraint status
+     */
+    String getConstr() {
+        if( demUp == null )return Demand.constrType.N.toString();
+        return demUp.constr.toString();
+    }
+
 }

@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.Iterator;
 import static java.lang.Math.pow;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 /**
  * Class for holding and manipulating net demand curves
@@ -15,7 +14,6 @@ public class Demand {
      * One step of a demand or supply curve
      */
     static class Bidstep {
-        int p;
         int q_min;
         int q_max;
 
@@ -24,11 +22,11 @@ public class Demand {
             this.q_max = q_max;
         }
     }
-    
+
     /**
      * Types of demand curve
      */
-    
+
     public static enum Type {
         /**
          * Basic curve for traders
@@ -45,11 +43,15 @@ public class Demand {
         /**
          * Demand received from third party
          */
-        REC
+        REC,
+        /**
+         * False demand created by an adversary
+         */
+        FAKE
     }
 
     // A complete curve is a list of steps ordered by price
-    
+
     TreeMap<Integer,Bidstep> bids;
 
     // Transmission parameters if this is an upstream curve
@@ -61,6 +63,27 @@ public class Demand {
     Integer min_wta;
     Integer max_wtp;
     Integer pcap_lo;
+
+    // Is the upstream transmission constraint binding?
+    // Set in getPriceDn() when determining price for this
+    // node's children.
+
+    static enum constrType {
+        /**
+         * No constraint
+         */
+         N,
+        /**
+         * At maximum supply
+         */
+         S,
+        /**
+         * At maximum demand
+         */
+         D
+    }
+
+    constrType constr;
 
     /**
      * Demand curve
@@ -74,6 +97,7 @@ public class Demand {
         min_wta = null;
         max_wtp = null;
         pcap_lo = null;
+        constr  = constrType.N;
     }
 
     /**
@@ -99,7 +123,7 @@ public class Demand {
 
     /**
      * List of prices in this curve
-     * 
+     *
      * @return Set of prices in ascending order
      */
     public Set<Integer> prices() {
@@ -108,7 +132,7 @@ public class Demand {
 
     /**
      * No bids?
-     * 
+     *
      * @return True if the curve has no bids
      */
     public boolean isEmpty() {
@@ -117,21 +141,43 @@ public class Demand {
 
     /**
      * Get the bid for a given price
+     * 
+     * @param p Price
+     * @return Bidstep for the price 
      */
-    public Bidstep getBid(Integer p) {
+    private Bidstep getBid(Integer p) {
         Bidstep step = bids.get(p);
         if( step == null )
             throw new RuntimeException("No bid exists for given price");
         return step;
     }
-
+    
     /**
-     * Get the bid with the price less than or equal to the given price
+     * Get q_min for a given price
+     * 
+     * @param p Price
+     * @return q_min for the step
      */
-    public Bidstep getFloorBid(Integer p) {
-        return bids.get(bids.floorKey(p));
+    public int getBidMin(Integer p) {
+        Bidstep step = bids.get(p);
+        if( step == null )
+            throw new RuntimeException("No bid exists for given price");
+        return step.q_min;
     }
 
+    /**
+     * Get q_max for a given price
+     * 
+     * @param p Price
+     * @return q_max for the step
+     */
+    public int getBidMax(Integer p) {
+        Bidstep step = bids.get(p);
+        if( step == null )
+            throw new RuntimeException("No bid exists for given price");
+        return step.q_max;
+    }
+    
     /**
      * Aggregate a list of demand curves
      *
@@ -142,17 +188,18 @@ public class Demand {
         Demand newD = null;
         if( dList.isEmpty() )
             throw new RuntimeException("Empty list in Demand.agg");
-        for(Demand curD: dList) 
+        Util.debug("Demands to sum: "+dList.size());
+        for(Demand curD: dList)
             newD = aggTwo(newD,curD);
         return newD;
     }
-     
+
     /**
      * Build a list of strings representing the bid
-     * 
+     *
      * Within each bid the strings will be p, q_min, q_max.
-     * 
-     * @return List of strings representing bids 
+     *
+     * @return List of strings representing bids
      */
     public ArrayList<String> toStrings() {
         ArrayList<String> slist = new ArrayList<>();
@@ -160,14 +207,14 @@ public class Demand {
             slist.add(Integer.toString(p));
             slist.add(Integer.toString(bid.q_min));
             slist.add(Integer.toString(bid.q_max));
-        }); 
+        });
         return slist;
     }
 
     /**
      * Calculate the net demand at a given price
-     * 
-     * @param price Price 
+     *
+     * @param price Price
      * @return Quantity
      */
     public int getQ(int price) {
@@ -185,7 +232,7 @@ public class Demand {
 
         // case 1: horizontal part of a step. return value closest to
         // the vertical axis (minimum absolute value)
-        
+
         if( pHi != null && pHi.equals(pLo) ) {
             bid = getBid(pHi);
             if( Math.abs(bid.q_min) < Math.abs(bid.q_max) )
@@ -194,42 +241,42 @@ public class Demand {
                 return bid.q_max;
         }
 
-        // case 2: vertical part of a step. return q_max of pHi but 
+        // case 2: vertical part of a step. return q_max of pHi but
         // it will be the same as q_min of pLo
-        
-        if( pHi != null && pLo != null ) {       
+
+        if( pHi != null && pLo != null ) {
             bid = getBid(pHi);
             return bid.q_max;
         }
 
         // case 3: below the first bid: return q_max of the lowest bid.
-        // assumes that there's an implied step down to p=0 from the 
-        // rightmost point on either a demand, net demand or pure supply 
+        // assumes that there's an implied step down to p=0 from the
+        // rightmost point on either a demand, net demand or pure supply
         // curve.
-        
-        if( pLo == null ) {       
+
+        if( pLo == null ) {
             bid = getBid(pHi);
             return bid.q_max;
         }
 
         // case 4: above the last bid: return q_min of the highest bid.
-        // assumes that either a demand or a supply curve continue 
+        // assumes that either a demand or a supply curve continue
         // up indefinitely from the last left-most point.
-        
+
         bid = getBid(pLo);
         return bid.q_min;
     }
 
     /**
-     * Find the actual price for the end users 
+     * Find the actual price for the end users
      *
      * Includes transaction cost and capacity limit. Must be applied
      * to an upstream demand curve.
-     * 
+     *
      * @param pUp Tentative price
      * @return Actual price
      */
-    public int getPriceDn(int pUp) { 
+    public int getPriceDn(int pUp) {
         boolean has_s;
         boolean has_d;
 
@@ -237,7 +284,7 @@ public class Demand {
 
         if( pUp <= -1 )
             return -1;
-        
+
         has_s = min_wta != null;
         has_d = max_wtp != null;
 
@@ -246,33 +293,35 @@ public class Demand {
         // case 1: selling. at or above the constraint on upstream sales.
         // return the downstream price associated with the constraint
 
-        if( has_s && pcap_hi != null && pUp >= pcap_hi )
+        if( has_s && pcap_hi != null && pUp >= pcap_hi ) {
+            constr = constrType.S;
             return pcap_hi - cost;
+        }
 
         // case 2: selling. above minimum wta. assume selling and
         // return the downstream price associated with pUp
 
-        if( has_s && pUp > min_wta ) 
+        if( has_s && pUp > min_wta )
             return pUp - cost;
-        
-        // case 3: no trade. supply only and below min wta. return 
+
+        // case 3: no trade. supply only and below min wta. return
         // the downstream selling price
 
         if( has_s && !has_d )
             return pUp - cost;
 
-        // if we're here there must have a demand portion. assert 
-        // that and then don't check for it 
+        // if we're here there must have a demand portion. assert
+        // that and then don't check for it
 
         assert has_d;
 
-        // case 4: no trade. in the zone between min_wta and 
+        // case 4: no trade. in the zone between min_wta and
         // max_wtp where q will be zero
 
         if( has_s && pUp >= max_wtp && pUp <= min_wta)
             return (max_wtp + min_wta)/2;
-       
-        // case 5: no trade. above max_wtp. return downstream 
+
+        // case 5: no trade. above max_wtp. return downstream
         // buying price
 
         if( pUp > max_wtp )
@@ -281,18 +330,19 @@ public class Demand {
         // case 6: buying. below max_wta and above the demand cap.
         // return the downstream price
 
-        if( pcap_lo == null || pUp > pcap_lo ) 
+        if( pcap_lo == null || pUp > pcap_lo )
             return pUp + cost;
 
         // case 7: buying. at or below the constraint on demand. return
         // the downstream price associated with the constraint
 
+        constr = constrType.D;
         return pcap_lo + cost;
     }
 
     /**
      * Aggregate two curves
-     * 
+     *
      * @param demL Left demand curve
      * @param demR Right demand curve
      * @return New demand curve
@@ -312,22 +362,22 @@ public class Demand {
         Integer last_p;
 
         assert demR != null;
-        
+
         newD = new Demand();
-        
-        // special case for convenience in agg: left demand is null 
+
+        // special case for convenience in agg: left demand is null
         // and right demand is not; make newD identical to demR
-        
+
         if( demL == null ) {
-            demR.bids.forEach( (pL,bid) -> { 
-                newD.add(pL,bid); 
+            demR.bids.forEach( (pL,bid) -> {
+                newD.add(pL,bid);
             });
             return newD;
         }
-        
+
         if( demL.isEmpty() || demR.isEmpty() )return newD;
 
-        // 
+        //
         // combine bids until we run off the top of both curves
         //
 
@@ -371,7 +421,7 @@ public class Demand {
             }
 
             newD.add(p,0,q_max);
-            
+
             // fix q_min on the previous step and save it
 
             if( last_p != null )
@@ -380,8 +430,8 @@ public class Demand {
             last_p = p;
 
             // pull next needed bids
-            
-            if( needL ) 
+
+            if( needL )
                 if( iterL.hasNext() ) {
                     pL = iterL.next();
                     l = demL.getBid(pL);
@@ -389,7 +439,7 @@ public class Demand {
                 else
                     pL = null;
 
-            if( needR ) 
+            if( needR )
                 if( iterR.hasNext() ) {
                     pR = iterR.next();
                     r = demR.getBid(pR);
@@ -404,29 +454,29 @@ public class Demand {
 
         return newD;
     }
-    
+
     /**
      * Create demand curves based on initial load, elasticity, and number of steps
-     * 
+     *
      * @param trader Trader whose demand we're building
      * @return New demand curve
      */
     public static Demand makeDemand(Trader trader) {
         return do_make("D",trader);
     }
-    
+
     /**
      * Create supply curves with reverse quantities in comparison to demand curve
-     * 
+     *
      * @param trader Trader whose supply we're building
      * @return New demand
      */
     public static Demand makeSupply(Trader trader) {
         return do_make("S",trader);
     }
-  
+
     /**
-     * Build a demand or supply curve 
+     * Build a demand or supply curve
      */
     private static Demand do_make(String type, Trader trader) {
         Demand newD;
@@ -443,11 +493,11 @@ public class Demand {
         int    steps  = trader.steps;
         double rPrice = trader.rPrice;
 
-        makeS = type.equals("S"); 
-        sign  = makeS ? -1 : 1 ;       
-        
+        makeS = type.equals("S");
+        sign  = makeS ? -1 : 1 ;
+
         int iniprice = 40 + (int) (rPrice * 12 - 6);
-        
+
         int p0 = iniprice/steps;
         int p1 = iniprice*2/steps;
 
@@ -456,16 +506,16 @@ public class Demand {
 
         // first step
         newD.add(p0, q2, q1);
-        
+
         // create the steps below the price=40
-        
+
         for(int i=1 ; i<steps ; i++){
             p1 = iniprice*(i+1)/steps;
             q1 = q2;
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             newD.add(p1, q2, q1);
         }
-        
+
         // create twice the number of steps above price=40
 
         for(int i=1 ; i<2*steps ; i++){
@@ -474,16 +524,16 @@ public class Demand {
             q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
             newD.add(p1, q2, q1);
         }
-        
+
         return newD;
     }
 
-    /** 
+    /**
      * Find an equilibrium price for a net demand curve
-     * 
-     * Returns the highest price with a nonnegative q_max and a 
+     *
+     * Returns the highest price with a nonnegative q_max and a
      * negative q_min; otherwise return -1.
-     * 
+     *
      * @return The equilibrium price for this net demand curve
      */
     public int getEquPrice() {
@@ -491,7 +541,7 @@ public class Demand {
             Bidstep bid = getBid(p);
 
             // case 1: crossing is a horizontal segment
-            
+
             if( bid.q_min < 0 && bid.q_max > 0 )
                 return p;
 
@@ -501,19 +551,19 @@ public class Demand {
             // eventually this should return the midpoint between
             // the upper and lower prices
             //
-            
+
             if( bid.q_max == 0 )
                 return p;
         }
-        
+
         // curve doesn't cross the y axis
-        
+
         return -1;
     }
 
     /**
      * Adjust aggregate demand for transmission parameters
-     * 
+     *
      * @param agent Grid agent
      * @return New demand curve
      */
@@ -524,7 +574,7 @@ public class Demand {
         int cap;
         int q_min;
         int q_max;
-        
+
         cost = agent.cost;
         cap  = agent.cap;
 
@@ -540,7 +590,7 @@ public class Demand {
             old   = getBid(p);
             q_min = old.q_min;
             q_max = old.q_max;
- 
+
             // skip it if it's beyond the cap on either side
 
             if( q_min >  cap )continue;
@@ -582,8 +632,8 @@ public class Demand {
 
         // find the deadband prices
         //
-        // done this way for backward compatibility.  eventually needs 
-        // to be more robust: it relies on there being at most one 
+        // done this way for backward compatibility.  eventually needs
+        // to be more robust: it relies on there being at most one
         // crossing, and the curve having a negative slope.
         //
 
@@ -602,14 +652,14 @@ public class Demand {
 
     /**
      * Print this demand to the log file
-     * 
+     *
      * @param owner Agent owning this demand curve
      * @param dtype Type of demand; see Demand.Type
      */
     public void log(Agent owner, Type dtype ) {
         int key;
         String dstr;
-        
+
         CSVFormat loadFormat;
         ArrayList<String> header;
         ArrayList<String> values;
@@ -628,17 +678,18 @@ public class Demand {
             header.add("q_min" + i);
             header.add("q_max" + i);
         }
-        
+
         key = 10*owner.own_id ;
         switch( dtype ) {
             case BASE: key += 0; dstr="base"; break;
             case DOWN: key += 1; dstr="down"; break;
             case UP  : key += 2; dstr="up"  ; break;
             case REC : key += 3; dstr="rec" ; break;
+            case FAKE: key += 4; dstr="fake"; break;
             default:
                 throw new RuntimeException("Unexpected demand type");
         }
-        
+
         values = new ArrayList<>();
         values.add(Integer.toString(Env.pop));
         values.add(Integer.toString(owner.own_id));

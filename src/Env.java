@@ -33,6 +33,7 @@ public class Env extends SimState {
     //    transCap   -- maximum transmission between nodes
     //    seed       -- seed for RNG or else absent or "none"
     //    numPop     -- number of populations to draw
+    //    debug      -- if 1 write debugging messages to sysout
     //
 
     private static String fileConfig ;
@@ -161,7 +162,7 @@ public class Env extends SimState {
     static final ArrayList<Agent> listAgent = new ArrayList<>();
 
     // Master list of historical information across pop and dos runs
-	static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
+    static final HashMap<String, HashMap<Integer, History>> globalHistory = new HashMap<>();
     /**
      * Master simulation environment
      *
@@ -224,6 +225,10 @@ public class Env extends SimState {
 
     /**
      * Find and return intel list given population and dos
+     * 
+     * @param pop Population
+     * @param dos DOS run
+     * @return Intel objects for the corresponding run
      */
     public static HashMap<Integer, History> getHistory(int pop, int dos) {
 
@@ -244,6 +249,7 @@ public class Env extends SimState {
        double load;
        double elast;
     }
+
     static ArrayList<Draw> drawListD = new ArrayList<>();
     static ArrayList<Draw> drawListS = new ArrayList<>();
 
@@ -253,7 +259,7 @@ public class Env extends SimState {
      * @param own_id ID of agent that should be blocked
      */
     public static void setBlock(int own_id) {
-       blockList.add(own_id);
+        blockList.add(own_id);
     }
 
     /**
@@ -264,7 +270,7 @@ public class Env extends SimState {
      * @return True if the agent is blocked in the indicated DOS run
      */
     public static boolean isBlocked(String run, Agent agent) {
-       return blockList.contains(agent.own_id);
+        return blockList.contains(agent.own_id);
     }
 
     /**
@@ -274,7 +280,7 @@ public class Env extends SimState {
      * @return True if the agent is blocked in the indicated DOS run
      */
     public static boolean isBlocked(int from) {
-       return blockList.contains(from);
+        return blockList.contains(from);
     }
 
     /**
@@ -288,6 +294,7 @@ public class Env extends SimState {
         String seed;
         String stem;
         int ext;
+        int debug;
         double cutoff;
         String dosprop;
 
@@ -321,6 +328,7 @@ public class Env extends SimState {
         numPop     = getIntProp(props,"populations","10");
         seed       = props.getProperty("seed","none");
         dosprop    = props.getProperty("dos","0,1,5,10");
+        debug      = getIntProp(props,"debug","0");
 
         //
         //  Unpack the DOS specification
@@ -351,7 +359,13 @@ public class Env extends SimState {
         net = Util.openWrite(stem+"_net.csv");
         msg = Util.openWrite(stem+"_msg.csv");
         log = Util.openWrite(stem+"_log.txt");
-        
+
+        //
+        //  Turn on debugging if requested
+        //
+
+        Util.setDebug(debug);
+
         try {
             loadPrinter = new CSVPrinter(net,CSVFormat.DEFAULT);
         } catch (IOException e) {
@@ -388,11 +402,13 @@ public class Env extends SimState {
             for(Agent a: listAgent)
                 a.popInit();
 
-            Channel.divert_clear();
-
             // run DOS scenarios
 
             for(String dos: dos_runs) {
+
+                // reset any diversions created by adversaries
+
+                Channel.divert_clear();
 
                 // initialize for DOS runs; agents figure out if they're blocked
 
@@ -673,6 +689,9 @@ public class Env extends SimState {
                     case "ADV_DARTH":
                         cur_agent = new Adv_Darth(id);
                         break;
+                    case "ADV_ELVIRA":
+                        cur_agent = new Adv_Elvira(id);
+                        break;
                     default:
                         throw new RuntimeException("Unexpected agent type "+type);
                 }
@@ -684,9 +703,7 @@ public class Env extends SimState {
 
                 // Load agent's access list
                 for(int i = 0; i < agentList.length; i++){
-
                     ((Virtual) cur_agent).agents.add(Integer.parseInt(agentList[i]));
-
                 }
 
                 // Load agent's intel list
@@ -744,6 +761,7 @@ public class Env extends SimState {
         int pop, dos, id, p, q, q_min, q_max, steps, period;
         Demand demand;
         String key, tag;
+        String constr;
 
         // Load history file if it exists
         if(!fileHist.equals("")) {
@@ -759,6 +777,7 @@ public class Env extends SimState {
                     id = Integer.parseInt(rec.get("id"));
                     p = Integer.parseInt(rec.get("p"));
                     q = Integer.parseInt(rec.get("q"));
+                    constr = rec.get("upcon");
                     period = 1;
 
                     // Build key for hashmap
@@ -786,6 +805,7 @@ public class Env extends SimState {
                     // Merge into existing global dataset
                     history.storePrice(period,p);
                     history.storeQuantity(period,q);
+                    history.storeConstr(period, constr);
                     gHistory.put(id, history);
                     globalHistory.put(key, gHistory);
                 }
@@ -877,12 +897,16 @@ public class Env extends SimState {
            String results;
            int block;
            String draw;
+           String cstring;
 
+           assert agent instanceof Grid ;
+           
            block = isBlocked(curDOS,agent) ? 1 : 0;
            draw  = String.format("%.1f",agent.rBlock);
 
            key     = agent.own_id;
-           results = draw+","+block+","+p+","+q;
+           cstring = ((Grid) agent).getConstr();
+           results = draw+","+block+","+p+","+q+","+cstring;
 
            outMap.put(key,results);
     }
@@ -892,7 +916,7 @@ public class Env extends SimState {
      */
     static void printResults() {
         if( outHeader ) {
-            out.println("pop,dos,id,rblock,blocked,p,q");
+            out.println("pop,dos,id,rblock,blocked,p,q,upcon");
             outHeader = false;
         }
         for(int key: outMap.keySet() )
@@ -902,7 +926,7 @@ public class Env extends SimState {
 
     /**
      * Save a demand curve for printing out
-     * 
+     *
      * @param key Integer indicating sort order
      * @param header Column headers for the file
      * @param values Values describing the curve
@@ -912,7 +936,7 @@ public class Env extends SimState {
             demHeader = header;
         demMap.put(key, values);
     }
-    
+
     /**
      * Write demands to the output file
      */
@@ -928,8 +952,8 @@ public class Env extends SimState {
             throw new RuntimeException("Error writing to demand file");
         }
         demMap.clear();
-    }   
-    
+    }
+
     /**
      *  Start the simulation
      */
