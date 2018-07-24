@@ -4,4 +4,4 @@ draws      : testdraw.csv
 transcost  : 2
 transcap   : 1800
 seed       : 123456
-history    : c2k1800d_hist.csv
+history    : c2k1800_out.csv
