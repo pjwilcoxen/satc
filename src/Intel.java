@@ -85,9 +85,9 @@ import java.util.ArrayList;
      *         an ArrayList of one element represents a node without any children (possibly remove feature?) <- fixed
      */
     static ArrayList<ArrayList<Intel>> getFamily(HashMap<Integer, Intel> intel){
-    	ArrayList<ArrayList<Intel>> list = new ArrayList<ArrayList<Intel>>();
+    	ArrayList<ArrayList<Intel>> list = new ArrayList<>();
     	for(Map.Entry<Integer,Intel> parent : intel.entrySet()) {
-    		ArrayList<Intel> family = new ArrayList<Intel>();
+    		ArrayList<Intel> family = new ArrayList<>();
     		Intel p = parent.getValue();
     		family.add(p);
             for(Map.Entry<Integer,Intel> child: intel.entrySet()) {
@@ -111,7 +111,7 @@ import java.util.ArrayList;
      * @return an ArrayList where its elements are arrays, where the first element is the parent, and the second is the child
      */
     static ArrayList<Intel[]> getFamily2(HashMap<Integer,Intel> intel){
-    	ArrayList<Intel[]> list = new ArrayList<Intel[]>();
+    	ArrayList<Intel[]> list = new ArrayList<>();
     	for(Map.Entry<Integer,Intel> parent : intel.entrySet()) {
     		Intel p = parent.getValue();
             for(Map.Entry<Integer,Intel> child: intel.entrySet()) {

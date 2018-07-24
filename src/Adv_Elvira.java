@@ -120,7 +120,7 @@ public class Adv_Elvira extends Adversary {
             //
         
             for (Intel i : intel.values()) {
-                if (i.compromised & i.par_id == targetId) {
+                if (i.compromised && (i.par_id == targetId)) {
                     fi = new ForgeInfo(i.agent_id,i.par_id);
                     fi.sup_con = targetConstr.equals("S");
                     fi.tier    = i.tier + 1 ;

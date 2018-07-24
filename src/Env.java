@@ -679,22 +679,7 @@ public class Env extends SimState {
                 security       = Integer.parseInt(rec.get("security"));
 
                 // Create the virtual agent
-                switch(type) {
-                    case "ADV_ADAM":
-                        cur_agent = new Adv_Adam(id);
-                        break;
-                    case "ADV_BETH":
-                        cur_agent = new Adv_Beth(id);
-                        break;
-                    case "ADV_DARTH":
-                        cur_agent = new Adv_Darth(id);
-                        break;
-                    case "ADV_ELVIRA":
-                        cur_agent = new Adv_Elvira(id);
-                        break;
-                    default:
-                        throw new RuntimeException("Unexpected agent type "+type);
-                }
+                cur_agent = Virtual.makeAgent(type,id);
 
                 // Load agent's channel list
                 for(int i = 0; i < channelList.length; i++){

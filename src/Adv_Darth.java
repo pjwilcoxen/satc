@@ -94,6 +94,8 @@ public class Adv_Darth extends Adversary{
                 msg.setDemand(fakeDemand);
                 msg.setFrom(traderId);
 
+                assert diversionChannel != null ;
+                        
                 diversionChannel.inject(msg);
 
             } else {

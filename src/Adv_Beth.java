@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Map;
 import sim.engine.SimState;
 
 /**
@@ -50,7 +49,7 @@ public class Adv_Beth extends Adversary{
             // Repeat over intel
         	
         	ArrayList<Intel[]> list = Intel.getFamily2(intel); //Get list of parent/child pairs
-        	if(list.size() == 0)
+        	if(list.isEmpty())
         		throw new RuntimeException("No intel availible");
         	Intel target = list.get(0)[0]; //Instantiate parent
         	Intel child = list.get(0)[1]; //Instantiate child
