@@ -43,6 +43,8 @@ public abstract class Virtual extends Agent {
              return new Adv_Darth(id);
           case "ADV_ELVIRA":
              return new Adv_Elvira(id);
+          case "ADV_FAUST":
+             return new Adv_Faust(id);
           default:
              throw new RuntimeException("Unexpected agent type "+type);
        }

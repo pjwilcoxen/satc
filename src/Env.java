@@ -98,6 +98,10 @@ public class Env extends SimState {
         */
        REPORT,
        /**
+        * Hook for virtual agents prior to CALC_LOADS for each tier
+        */
+       PRE_CALC_LOADS,
+       /**
         * Traders determine actual loads
         */
        CALC_LOADS
