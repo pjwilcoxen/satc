@@ -32,6 +32,7 @@ node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 0, p_self=27, p_up=80, p_down=70, q_exp=-1759
 node 202, DOS 0, p_self=241, p_up=80, p_down=82, q_exp=1794
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=27, p_up=80, p_down=70, q_act=-1777
@@ -62,10 +63,11 @@ node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 1, p_self=241, p_up=80, p_down=82, q_exp=1794
 node 201, DOS 1, p_self=27, p_up=80, p_down=70, q_exp=-1759
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 1, p_self=241, p_up=80, p_down=82, q_act=1894
 node 201, DOS 1, p_self=27, p_up=80, p_down=70, q_act=-1777
+node 202, DOS 1, p_self=241, p_up=80, p_down=82, q_act=1894
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_act=117
 diversions cleared
@@ -80,8 +82,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 96
 Demands to sum: 98
+Demands to sum: 96
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -92,6 +94,7 @@ node 203, DOS 5, p_self=76, p_up=0, p_down=76, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 5, p_self=231, p_up=76, p_down=78, q_exp=1798
 node 201, DOS 5, p_self=28, p_up=76, p_down=72, q_exp=-1757
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=231, p_up=76, p_down=78, q_act=1966
@@ -122,6 +125,7 @@ node 203, DOS 10, p_self=83, p_up=0, p_down=83, q_exp=-10
 *** tier 2 REPORT
 node 202, DOS 10, p_self=259, p_up=83, p_down=85, q_exp=1790
 node 201, DOS 10, p_self=32, p_up=83, p_down=81, q_exp=-1744
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=259, p_up=83, p_down=85, q_act=1851
@@ -152,12 +156,13 @@ Demands to sum: 2
 node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=208, p_up=80, p_down=82, q_exp=1771
 node 201, DOS 0, p_self=27, p_up=80, p_down=71, q_exp=-1755
+node 202, DOS 0, p_self=208, p_up=80, p_down=82, q_exp=1771
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=27, p_up=80, p_down=71, q_act=-1759
 node 202, DOS 0, p_self=208, p_up=80, p_down=82, q_act=1919
+node 201, DOS 0, p_self=27, p_up=80, p_down=71, q_act=-1759
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_act=160
 diversions cleared
@@ -184,6 +189,7 @@ node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 1, p_self=208, p_up=80, p_down=82, q_exp=1771
 node 201, DOS 1, p_self=26, p_up=80, p_down=70, q_exp=-1754
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 1, p_self=208, p_up=80, p_down=82, q_act=1919
@@ -202,8 +208,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 96
 Demands to sum: 97
+Demands to sum: 96
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -214,10 +220,11 @@ node 203, DOS 5, p_self=74, p_up=0, p_down=74, q_exp=-7
 *** tier 2 REPORT
 node 202, DOS 5, p_self=194, p_up=74, p_down=76, q_exp=1727
 node 201, DOS 5, p_self=28, p_up=74, p_down=72, q_exp=-1620
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 5, p_self=194, p_up=74, p_down=76, q_act=1971
 node 201, DOS 5, p_self=28, p_up=74, p_down=72, q_act=-1819
+node 202, DOS 5, p_self=194, p_up=74, p_down=76, q_act=1971
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=74, p_up=0, p_down=74, q_act=152
 diversions cleared
@@ -238,8 +245,9 @@ Demands to sum: 2
 node 203, DOS 10, p_self=75, p_up=0, p_down=75, q_exp=21
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=198, p_up=75, p_down=77, q_exp=1619
 node 201, DOS 10, p_self=29, p_up=75, p_down=73, q_exp=-1601
+node 202, DOS 10, p_self=198, p_up=75, p_down=77, q_exp=1619
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=198, p_up=75, p_down=77, q_act=1949
@@ -270,12 +278,13 @@ Demands to sum: 2
 node 203, DOS 0, p_self=93, p_up=0, p_down=93, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=29, p_up=93, p_down=74, q_exp=-1761
 node 202, DOS 0, p_self=296, p_up=93, p_down=95, q_exp=1781
+node 201, DOS 0, p_self=29, p_up=93, p_down=74, q_exp=-1761
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=29, p_up=93, p_down=74, q_act=-1767
 node 202, DOS 0, p_self=296, p_up=93, p_down=95, q_act=1906
+node 201, DOS 0, p_self=29, p_up=93, p_down=74, q_act=-1767
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=93, p_up=0, p_down=93, q_act=139
 diversions cleared
@@ -290,8 +299,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 100
 Demands to sum: 98
+Demands to sum: 100
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -300,8 +309,9 @@ Demands to sum: 2
 node 203, DOS 1, p_self=88, p_up=0, p_down=88, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=289, p_up=88, p_down=90, q_exp=1769
 node 201, DOS 1, p_self=29, p_up=88, p_down=74, q_exp=-1761
+node 202, DOS 1, p_self=289, p_up=88, p_down=90, q_exp=1769
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 1, p_self=289, p_up=88, p_down=90, q_act=1966
@@ -330,12 +340,13 @@ Demands to sum: 2
 node 203, DOS 5, p_self=97, p_up=0, p_down=97, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=342, p_up=97, p_down=99, q_exp=1798
 node 201, DOS 5, p_self=28, p_up=97, p_down=74, q_exp=-1795
+node 202, DOS 5, p_self=342, p_up=97, p_down=99, q_exp=1798
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 5, p_self=28, p_up=97, p_down=74, q_act=-1767
 node 202, DOS 5, p_self=342, p_up=97, p_down=99, q_act=1812
+node 201, DOS 5, p_self=28, p_up=97, p_down=74, q_act=-1767
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=97, p_up=0, p_down=97, q_act=45
 diversions cleared
@@ -350,8 +361,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 blocked
 *** tier 2 AGGREGATE
-Demands to sum: 93
 Demands to sum: 90
+Demands to sum: 93
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -362,10 +373,11 @@ node 203, DOS 10, p_self=93, p_up=0, p_down=93, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 10, p_self=335, p_up=93, p_down=95, q_exp=1775
 node 201, DOS 10, p_self=27, p_up=93, p_down=76, q_exp=-1771
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 10, p_self=27, p_up=93, p_down=76, q_act=-1864
 node 202, DOS 10, p_self=335, p_up=93, p_down=95, q_act=1906
+node 201, DOS 10, p_self=27, p_up=93, p_down=76, q_act=-1864
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=93, p_up=0, p_down=93, q_act=42
 
@@ -392,12 +404,13 @@ Demands to sum: 2
 node 203, DOS 0, p_self=79, p_up=0, p_down=79, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=27, p_up=79, p_down=72, q_exp=-1724
 node 202, DOS 0, p_self=239, p_up=79, p_down=81, q_exp=1778
+node 201, DOS 0, p_self=27, p_up=79, p_down=72, q_exp=-1724
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=27, p_up=79, p_down=72, q_act=-1737
 node 202, DOS 0, p_self=239, p_up=79, p_down=81, q_act=1878
+node 201, DOS 0, p_self=27, p_up=79, p_down=72, q_act=-1737
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=79, p_up=0, p_down=79, q_act=141
 diversions cleared
@@ -422,8 +435,9 @@ Demands to sum: 2
 node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=27, p_up=79, p_down=72, q_exp=-1724
 node 202, DOS 1, p_self=239, p_up=79, p_down=81, q_exp=1778
+node 201, DOS 1, p_self=27, p_up=79, p_down=72, q_exp=-1724
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 1, p_self=239, p_up=79, p_down=81, q_act=1878
@@ -452,12 +466,13 @@ Demands to sum: 2
 node 203, DOS 5, p_self=73, p_up=0, p_down=73, q_exp=-3
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=222, p_up=73, p_down=75, q_exp=1797
 node 201, DOS 5, p_self=25, p_up=73, p_down=71, q_exp=-1772
+node 202, DOS 5, p_self=222, p_up=73, p_down=75, q_exp=1797
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 5, p_self=25, p_up=73, p_down=71, q_act=-1675
 node 202, DOS 5, p_self=222, p_up=73, p_down=75, q_act=2068
+node 201, DOS 5, p_self=25, p_up=73, p_down=71, q_act=-1675
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=73, p_up=0, p_down=73, q_act=393
 diversions cleared
@@ -480,6 +495,7 @@ node 203, DOS 10, p_self=74, p_up=0, p_down=74, q_exp=-41
 *** tier 2 REPORT
 node 202, DOS 10, p_self=221, p_up=74, p_down=76, q_exp=1716
 node 201, DOS 10, p_self=25, p_up=74, p_down=72, q_exp=-1617
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=221, p_up=74, p_down=76, q_act=1979
@@ -510,8 +526,9 @@ Demands to sum: 2
 node 203, DOS 0, p_self=78, p_up=0, p_down=78, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=28, p_up=78, p_down=71, q_exp=-1787
 node 202, DOS 0, p_self=184, p_up=78, p_down=80, q_exp=1747
+node 201, DOS 0, p_self=28, p_up=78, p_down=71, q_exp=-1787
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 0, p_self=184, p_up=78, p_down=80, q_act=1926
@@ -540,12 +557,13 @@ Demands to sum: 2
 node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_exp=1784
 node 201, DOS 1, p_self=28, p_up=80, p_down=71, q_exp=-1787
+node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_exp=1784
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=28, p_up=80, p_down=71, q_act=-1800
 node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_act=1804
+node 201, DOS 1, p_self=28, p_up=80, p_down=71, q_act=-1800
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_act=4
 diversions cleared
@@ -560,8 +578,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 98
 Demands to sum: 97
+Demands to sum: 98
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -570,8 +588,9 @@ Demands to sum: 2
 node 203, DOS 5, p_self=92, p_up=0, p_down=92, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=243, p_up=92, p_down=94, q_exp=1794
 node 201, DOS 5, p_self=29, p_up=92, p_down=75, q_exp=-1771
+node 202, DOS 5, p_self=243, p_up=92, p_down=94, q_exp=1794
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=243, p_up=92, p_down=94, q_act=1588
@@ -600,12 +619,13 @@ Demands to sum: 2
 node 203, DOS 10, p_self=88, p_up=0, p_down=88, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=240, p_up=88, p_down=91, q_exp=1786
 node 201, DOS 10, p_self=30, p_up=88, p_down=76, q_exp=-1741
+node 202, DOS 10, p_self=240, p_up=88, p_down=91, q_exp=1786
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 10, p_self=30, p_up=88, p_down=76, q_act=-1927
 node 202, DOS 10, p_self=240, p_up=88, p_down=91, q_act=1606
+node 201, DOS 10, p_self=30, p_up=88, p_down=76, q_act=-1927
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=88, p_up=0, p_down=88, q_act=-321
 
@@ -634,6 +654,7 @@ node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 0, p_self=251, p_up=83, p_down=85, q_exp=1727
 node 201, DOS 0, p_self=25, p_up=83, p_down=76, q_exp=-1757
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=25, p_up=83, p_down=76, q_act=-1762
@@ -662,8 +683,9 @@ Demands to sum: 2
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=247, p_up=82, p_down=85, q_exp=1696
 node 201, DOS 1, p_self=27, p_up=82, p_down=80, q_exp=-1800
+node 202, DOS 1, p_self=247, p_up=82, p_down=85, q_exp=1696
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=27, p_up=82, p_down=80, q_act=-1919
@@ -677,8 +699,8 @@ dos 5 dropped [40, 73, 88, 98, 139, 152]
 *** tier 2 PRE_AGGREGATE
 No attack: no constrained markets
 *** tier 2 AGGREGATE
-Demands to sum: 98
 Demands to sum: 96
+Demands to sum: 98
 *** tier 3 PRE_AGGREGATE
 No attack: no constrained markets
 *** tier 3 AGGREGATE
@@ -688,8 +710,9 @@ Demands to sum: 2
 node 203, DOS 5, p_self=86, p_up=0, p_down=86, q_exp=31
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_exp=1711
 node 201, DOS 5, p_self=29, p_up=86, p_down=84, q_exp=-1690
+node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_exp=1711
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_act=1782
@@ -703,8 +726,8 @@ dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142
 *** tier 2 PRE_AGGREGATE
 No attack: no constrained markets
 *** tier 2 AGGREGATE
-Demands to sum: 88
 Demands to sum: 92
+Demands to sum: 88
 *** tier 3 PRE_AGGREGATE
 No attack: no constrained markets
 *** tier 3 AGGREGATE
@@ -716,10 +739,11 @@ node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_exp=7
 *** tier 2 REPORT
 node 201, DOS 10, p_self=25, p_up=84, p_down=82, q_exp=-1744
 node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_exp=1715
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_act=1822
 node 201, DOS 10, p_self=25, p_up=84, p_down=82, q_act=-1944
+node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_act=1822
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_act=-122
 
@@ -746,12 +770,13 @@ Demands to sum: 2
 node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=206, p_up=80, p_down=82, q_exp=1758
 node 201, DOS 0, p_self=28, p_up=80, p_down=74, q_exp=-1789
+node 202, DOS 0, p_self=206, p_up=80, p_down=82, q_exp=1758
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 0, p_self=206, p_up=80, p_down=82, q_act=1934
 node 201, DOS 0, p_self=28, p_up=80, p_down=74, q_act=-1802
+node 202, DOS 0, p_self=206, p_up=80, p_down=82, q_act=1934
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_act=132
 diversions cleared
@@ -776,8 +801,9 @@ Demands to sum: 2
 node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=28, p_up=79, p_down=74, q_exp=-1789
 node 202, DOS 1, p_self=201, p_up=79, p_down=81, q_exp=1798
+node 201, DOS 1, p_self=28, p_up=79, p_down=74, q_exp=-1789
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 1, p_self=201, p_up=79, p_down=81, q_act=1968
@@ -806,8 +832,9 @@ Demands to sum: 2
 node 203, DOS 5, p_self=74, p_up=0, p_down=74, q_exp=-3
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=28, p_up=74, p_down=72, q_exp=-1739
 node 202, DOS 5, p_self=190, p_up=74, p_down=76, q_exp=1766
+node 201, DOS 5, p_self=28, p_up=74, p_down=72, q_exp=-1739
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=190, p_up=74, p_down=76, q_act=2024
@@ -836,12 +863,13 @@ Demands to sum: 2
 node 203, DOS 10, p_self=74, p_up=0, p_down=74, q_exp=13
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=26, p_up=74, p_down=72, q_exp=-1724
 node 202, DOS 10, p_self=207, p_up=74, p_down=76, q_exp=1727
+node 201, DOS 10, p_self=26, p_up=74, p_down=72, q_exp=-1724
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 10, p_self=207, p_up=74, p_down=76, q_act=2024
 node 201, DOS 10, p_self=26, p_up=74, p_down=72, q_act=-1735
+node 202, DOS 10, p_self=207, p_up=74, p_down=76, q_act=2024
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=74, p_up=0, p_down=74, q_act=289
 
@@ -868,12 +896,13 @@ Demands to sum: 2
 node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=241, p_up=83, p_down=85, q_exp=1776
 node 201, DOS 0, p_self=29, p_up=83, p_down=68, q_exp=-1667
+node 202, DOS 0, p_self=241, p_up=83, p_down=85, q_exp=1776
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=29, p_up=83, p_down=68, q_act=-1683
 node 202, DOS 0, p_self=241, p_up=83, p_down=85, q_act=1894
+node 201, DOS 0, p_self=29, p_up=83, p_down=68, q_act=-1683
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_act=211
 diversions cleared
@@ -898,8 +927,9 @@ Demands to sum: 2
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=235, p_up=82, p_down=84, q_exp=1770
 node 201, DOS 1, p_self=29, p_up=82, p_down=69, q_exp=-1777
+node 202, DOS 1, p_self=235, p_up=82, p_down=84, q_exp=1770
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=29, p_up=82, p_down=69, q_act=-1802
@@ -928,8 +958,9 @@ Demands to sum: 2
 node 203, DOS 5, p_self=76, p_up=0, p_down=76, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=224, p_up=76, p_down=79, q_exp=1788
 node 201, DOS 5, p_self=27, p_up=76, p_down=67, q_exp=-1793
+node 202, DOS 5, p_self=224, p_up=76, p_down=79, q_exp=1788
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 5, p_self=27, p_up=76, p_down=67, q_act=-1643
@@ -948,8 +979,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 88
 Demands to sum: 91
+Demands to sum: 88
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -958,8 +989,9 @@ Demands to sum: 2
 node 203, DOS 10, p_self=63, p_up=0, p_down=63, q_exp=-22
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=24, p_up=63, p_down=61, q_exp=-1749
 node 202, DOS 10, p_self=216, p_up=63, p_down=65, q_exp=1778
+node 201, DOS 10, p_self=24, p_up=63, p_down=61, q_exp=-1749
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=216, p_up=63, p_down=65, q_act=2218
@@ -992,10 +1024,11 @@ node 203, DOS 0, p_self=89, p_up=0, p_down=89, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 0, p_self=248, p_up=89, p_down=91, q_exp=1798
 node 201, DOS 0, p_self=28, p_up=89, p_down=75, q_exp=-1684
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=28, p_up=89, p_down=75, q_act=-1693
 node 202, DOS 0, p_self=248, p_up=89, p_down=91, q_act=1898
+node 201, DOS 0, p_self=28, p_up=89, p_down=75, q_act=-1693
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=89, p_up=0, p_down=89, q_act=205
 diversions cleared
@@ -1010,8 +1043,8 @@ injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 50
 injected message from 193 delivered
 *** tier 2 AGGREGATE
-Demands to sum: 98
 Demands to sum: 97
+Demands to sum: 98
 *** tier 3 PRE_AGGREGATE
 *** tier 3 AGGREGATE
 Demands to sum: 2
@@ -1020,12 +1053,13 @@ Demands to sum: 2
 node 203, DOS 1, p_self=91, p_up=0, p_down=91, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=299, p_up=91, p_down=93, q_exp=1799
 node 201, DOS 1, p_self=31, p_up=91, p_down=81, q_exp=-1788
+node 202, DOS 1, p_self=299, p_up=91, p_down=93, q_exp=1799
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=31, p_up=91, p_down=81, q_act=-2060
 node 202, DOS 1, p_self=299, p_up=91, p_down=93, q_act=1885
+node 201, DOS 1, p_self=31, p_up=91, p_down=81, q_act=-2060
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=91, p_up=0, p_down=91, q_act=-175
 diversions cleared
@@ -1052,6 +1086,7 @@ node 203, DOS 5, p_self=89, p_up=0, p_down=89, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 5, p_self=27, p_up=89, p_down=76, q_exp=-1776
 node 202, DOS 5, p_self=294, p_up=89, p_down=91, q_exp=1799
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=294, p_up=89, p_down=91, q_act=1898
@@ -1082,6 +1117,7 @@ node 203, DOS 10, p_self=82, p_up=0, p_down=82, q_exp=32
 *** tier 2 REPORT
 node 202, DOS 10, p_self=269, p_up=82, p_down=84, q_exp=1763
 node 201, DOS 10, p_self=29, p_up=82, p_down=80, q_exp=-1748
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=29, p_up=82, p_down=80, q_act=-1986
@@ -1114,6 +1150,7 @@ node 203, DOS 0, p_self=82, p_up=0, p_down=82, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 0, p_self=26, p_up=82, p_down=69, q_exp=-1783
 node 202, DOS 0, p_self=215, p_up=82, p_down=84, q_exp=1793
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 0, p_self=215, p_up=82, p_down=84, q_act=1893
@@ -1144,10 +1181,11 @@ node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 1, p_self=27, p_up=80, p_down=74, q_exp=-1778
 node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_exp=1777
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_act=1930
 node 201, DOS 1, p_self=27, p_up=80, p_down=74, q_act=-1922
+node 202, DOS 1, p_self=207, p_up=80, p_down=82, q_act=1930
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_act=8
 diversions cleared
@@ -1174,10 +1212,11 @@ node 203, DOS 5, p_self=85, p_up=0, p_down=85, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 5, p_self=27, p_up=85, p_down=75, q_exp=-1793
 node 202, DOS 5, p_self=222, p_up=85, p_down=87, q_exp=1776
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 5, p_self=27, p_up=85, p_down=75, q_act=-1977
 node 202, DOS 5, p_self=222, p_up=85, p_down=87, q_act=1854
+node 201, DOS 5, p_self=27, p_up=85, p_down=75, q_act=-1977
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=85, p_up=0, p_down=85, q_act=-123
 diversions cleared
@@ -1204,6 +1243,7 @@ node 203, DOS 10, p_self=87, p_up=0, p_down=87, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 10, p_self=223, p_up=87, p_down=89, q_exp=1775
 node 201, DOS 10, p_self=27, p_up=87, p_down=79, q_exp=-1754
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=223, p_up=87, p_down=89, q_act=1826

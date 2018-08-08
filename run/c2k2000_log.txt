@@ -22,10 +22,11 @@ node 203, DOS 0, p_self=75, p_up=0, p_down=75, q_exp=-27
 *** tier 2 REPORT
 node 201, DOS 0, p_self=27, p_up=75, p_down=73, q_exp=-1928
 node 202, DOS 0, p_self=254, p_up=75, p_down=77, q_exp=1973
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 0, p_self=254, p_up=75, p_down=77, q_act=1994
 node 201, DOS 0, p_self=27, p_up=75, p_down=73, q_act=-1942
+node 202, DOS 0, p_self=254, p_up=75, p_down=77, q_act=1994
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=75, p_up=0, p_down=75, q_act=52
 dos 1 dropped []
@@ -42,10 +43,11 @@ node 203, DOS 1, p_self=75, p_up=0, p_down=75, q_exp=-27
 *** tier 2 REPORT
 node 202, DOS 1, p_self=254, p_up=75, p_down=77, q_exp=1973
 node 201, DOS 1, p_self=27, p_up=75, p_down=73, q_exp=-1928
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=27, p_up=75, p_down=73, q_act=-1942
 node 202, DOS 1, p_self=254, p_up=75, p_down=77, q_act=1994
+node 201, DOS 1, p_self=27, p_up=75, p_down=73, q_act=-1942
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=75, p_up=0, p_down=75, q_act=52
 dos 5 dropped [31, 38, 87, 94, 170, 189]
@@ -60,12 +62,13 @@ dos 5 dropped [31, 38, 87, 94, 170, 189]
 node 203, DOS 5, p_self=77, p_up=0, p_down=77, q_exp=13
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=249, p_up=77, p_down=79, q_exp=1869
 node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_exp=-1885
+node 202, DOS 5, p_self=249, p_up=77, p_down=79, q_exp=1869
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_act=-2023
 node 202, DOS 5, p_self=249, p_up=77, p_down=79, q_act=1953
+node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_act=-2023
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=77, p_up=0, p_down=77, q_act=-70
 dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
@@ -80,8 +83,9 @@ dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
 node 203, DOS 10, p_self=83, p_up=0, p_down=83, q_exp=-12
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=269, p_up=83, p_down=85, q_exp=1840
 node 201, DOS 10, p_self=32, p_up=83, p_down=81, q_exp=-1744
+node 202, DOS 10, p_self=269, p_up=83, p_down=85, q_exp=1840
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=32, p_up=83, p_down=81, q_act=-2182
@@ -102,12 +106,13 @@ dos 0 dropped []
 node 203, DOS 0, p_self=75, p_up=0, p_down=75, q_exp=-15
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 0, p_self=219, p_up=75, p_down=77, q_exp=1949
 node 201, DOS 0, p_self=27, p_up=75, p_down=73, q_exp=-1919
+node 202, DOS 0, p_self=219, p_up=75, p_down=77, q_exp=1949
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 0, p_self=219, p_up=75, p_down=77, q_act=1949
 node 201, DOS 0, p_self=27, p_up=75, p_down=73, q_act=-1930
+node 202, DOS 0, p_self=219, p_up=75, p_down=77, q_act=1949
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=75, p_up=0, p_down=75, q_act=19
 dos 1 dropped [12, 18]
@@ -122,12 +127,13 @@ dos 1 dropped [12, 18]
 node 203, DOS 1, p_self=74, p_up=0, p_down=74, q_exp=-42
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 1, p_self=219, p_up=74, p_down=76, q_exp=1952
 node 201, DOS 1, p_self=26, p_up=74, p_down=72, q_exp=-1880
+node 202, DOS 1, p_self=219, p_up=74, p_down=76, q_exp=1952
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 1, p_self=219, p_up=74, p_down=76, q_act=1971
 node 201, DOS 1, p_self=26, p_up=74, p_down=72, q_act=-1819
+node 202, DOS 1, p_self=219, p_up=74, p_down=76, q_act=1971
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=74, p_up=0, p_down=74, q_act=152
 dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
@@ -144,6 +150,7 @@ node 203, DOS 5, p_self=76, p_up=0, p_down=76, q_exp=-8
 *** tier 2 REPORT
 node 201, DOS 5, p_self=28, p_up=76, p_down=74, q_exp=-1779
 node 202, DOS 5, p_self=208, p_up=76, p_down=78, q_exp=1817
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 5, p_self=28, p_up=76, p_down=74, q_act=-1971
@@ -164,6 +171,7 @@ node 203, DOS 10, p_self=75, p_up=0, p_down=75, q_exp=21
 *** tier 2 REPORT
 node 201, DOS 10, p_self=29, p_up=75, p_down=73, q_exp=-1601
 node 202, DOS 10, p_self=198, p_up=75, p_down=77, q_exp=1619
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 10, p_self=198, p_up=75, p_down=77, q_act=1949
@@ -186,6 +194,7 @@ node 203, DOS 0, p_self=86, p_up=0, p_down=86, q_exp=0
 *** tier 2 REPORT
 node 201, DOS 0, p_self=29, p_up=86, p_down=80, q_exp=-1937
 node 202, DOS 0, p_self=317, p_up=86, p_down=88, q_exp=1991
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=29, p_up=86, p_down=80, q_act=-1949
@@ -204,8 +213,9 @@ dos 1 dropped [124, 181]
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_exp=28
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=29, p_up=82, p_down=80, q_exp=-1937
 node 202, DOS 1, p_self=306, p_up=82, p_down=84, q_exp=1962
+node 201, DOS 1, p_self=29, p_up=82, p_down=80, q_exp=-1937
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=29, p_up=82, p_down=80, q_act=-1949
@@ -224,8 +234,9 @@ dos 5 dropped [34, 124, 160, 181, 193]
 node 203, DOS 5, p_self=87, p_up=0, p_down=87, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=358, p_up=87, p_down=89, q_exp=1988
 node 201, DOS 5, p_self=28, p_up=87, p_down=80, q_exp=-1971
+node 202, DOS 5, p_self=358, p_up=87, p_down=89, q_exp=1988
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=358, p_up=87, p_down=89, q_act=1984
@@ -246,6 +257,7 @@ node 203, DOS 10, p_self=83, p_up=0, p_down=83, q_exp=45
 *** tier 2 REPORT
 node 202, DOS 10, p_self=349, p_up=83, p_down=85, q_exp=1954
 node 201, DOS 10, p_self=27, p_up=83, p_down=81, q_exp=-1920
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=27, p_up=83, p_down=81, q_act=-2013
@@ -268,6 +280,7 @@ node 203, DOS 0, p_self=76, p_up=0, p_down=76, q_exp=32
 *** tier 2 REPORT
 node 202, DOS 0, p_self=255, p_up=76, p_down=78, q_exp=1927
 node 201, DOS 0, p_self=27, p_up=76, p_down=74, q_exp=-1917
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=27, p_up=76, p_down=74, q_act=-1922
@@ -286,8 +299,9 @@ dos 1 dropped []
 node 203, DOS 1, p_self=76, p_up=0, p_down=76, q_exp=32
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=27, p_up=76, p_down=74, q_exp=-1917
 node 202, DOS 1, p_self=255, p_up=76, p_down=78, q_exp=1927
+node 201, DOS 1, p_self=27, p_up=76, p_down=74, q_exp=-1917
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=27, p_up=76, p_down=74, q_act=-1922
@@ -306,8 +320,9 @@ dos 5 dropped [21, 60, 63, 135, 158, 174]
 node 203, DOS 5, p_self=74, p_up=0, p_down=74, q_exp=62
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=240, p_up=74, p_down=76, q_exp=1868
 node 201, DOS 5, p_self=25, p_up=74, p_down=72, q_exp=-1835
+node 202, DOS 5, p_self=240, p_up=74, p_down=76, q_exp=1868
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=240, p_up=74, p_down=76, q_act=1979
@@ -328,6 +343,7 @@ node 203, DOS 10, p_self=74, p_up=0, p_down=74, q_exp=-41
 *** tier 2 REPORT
 node 202, DOS 10, p_self=221, p_up=74, p_down=76, q_exp=1716
 node 201, DOS 10, p_self=25, p_up=74, p_down=72, q_exp=-1617
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=25, p_up=74, p_down=72, q_act=-1737
@@ -350,6 +366,7 @@ node 203, DOS 0, p_self=78, p_up=0, p_down=78, q_exp=28
 *** tier 2 REPORT
 node 201, DOS 0, p_self=28, p_up=78, p_down=76, q_exp=-1913
 node 202, DOS 0, p_self=189, p_up=78, p_down=80, q_exp=1847
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 0, p_self=189, p_up=78, p_down=80, q_act=1926
@@ -368,8 +385,9 @@ dos 1 dropped [107, 192]
 node 203, DOS 1, p_self=78, p_up=0, p_down=78, q_exp=-37
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=28, p_up=78, p_down=76, q_exp=-1913
 node 202, DOS 1, p_self=215, p_up=78, p_down=80, q_exp=1963
+node 201, DOS 1, p_self=28, p_up=78, p_down=76, q_exp=-1913
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 1, p_self=215, p_up=78, p_down=80, q_act=1926
@@ -388,8 +406,9 @@ dos 5 dropped [24, 78, 107, 192, 197]
 node 203, DOS 5, p_self=84, p_up=0, p_down=84, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 5, p_self=29, p_up=84, p_down=79, q_exp=-1998
 node 202, DOS 5, p_self=256, p_up=84, p_down=86, q_exp=1973
+node 201, DOS 5, p_self=29, p_up=84, p_down=79, q_exp=-1998
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=256, p_up=84, p_down=86, q_act=1690
@@ -410,6 +429,7 @@ node 203, DOS 10, p_self=83, p_up=0, p_down=83, q_exp=-6
 *** tier 2 REPORT
 node 202, DOS 10, p_self=251, p_up=83, p_down=85, q_exp=1979
 node 201, DOS 10, p_self=30, p_up=83, p_down=81, q_exp=-1949
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=30, p_up=83, p_down=81, q_act=-2145
@@ -430,12 +450,13 @@ dos 0 dropped []
 node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_exp=18
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=25, p_up=83, p_down=81, q_exp=-1919
 node 202, DOS 0, p_self=265, p_up=83, p_down=85, q_exp=1827
+node 201, DOS 0, p_self=25, p_up=83, p_down=81, q_exp=-1919
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 0, p_self=265, p_up=83, p_down=85, q_act=1934
 node 201, DOS 0, p_self=25, p_up=83, p_down=81, q_act=-1930
+node 202, DOS 0, p_self=265, p_up=83, p_down=85, q_act=1934
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_act=4
 dos 1 dropped [98, 152]
@@ -452,10 +473,11 @@ node 203, DOS 1, p_self=83, p_up=0, p_down=83, q_exp=-34
 *** tier 2 REPORT
 node 202, DOS 1, p_self=265, p_up=83, p_down=85, q_exp=1796
 node 201, DOS 1, p_self=27, p_up=83, p_down=81, q_exp=-1807
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=27, p_up=83, p_down=81, q_act=-1930
 node 202, DOS 1, p_self=265, p_up=83, p_down=85, q_act=1934
+node 201, DOS 1, p_self=27, p_up=83, p_down=81, q_act=-1930
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=83, p_up=0, p_down=83, q_act=4
 dos 5 dropped [40, 73, 88, 98, 139, 152]
@@ -472,10 +494,11 @@ node 203, DOS 5, p_self=86, p_up=0, p_down=86, q_exp=31
 *** tier 2 REPORT
 node 201, DOS 5, p_self=29, p_up=86, p_down=84, q_exp=-1690
 node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_exp=1711
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_act=1782
 node 201, DOS 5, p_self=29, p_up=86, p_down=84, q_act=-2030
+node 202, DOS 5, p_self=264, p_up=86, p_down=88, q_act=1782
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=86, p_up=0, p_down=86, q_act=-248
 dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142, 152, 169, 175, 197]
@@ -490,12 +513,13 @@ dos 10 dropped [3, 9, 23, 29, 30, 40, 49, 53, 73, 88, 94, 98, 102, 109, 139, 142
 node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_exp=7
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=25, p_up=84, p_down=82, q_exp=-1744
 node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_exp=1715
+node 201, DOS 10, p_self=25, p_up=84, p_down=82, q_exp=-1744
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_act=1822
 node 201, DOS 10, p_self=25, p_up=84, p_down=82, q_act=-1944
+node 202, DOS 10, p_self=287, p_up=84, p_down=86, q_act=1822
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_act=-122
 
@@ -514,6 +538,7 @@ node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_exp=12
 *** tier 2 REPORT
 node 202, DOS 0, p_self=217, p_up=80, p_down=82, q_exp=1858
 node 201, DOS 0, p_self=28, p_up=80, p_down=78, q_exp=-1928
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=28, p_up=80, p_down=78, q_act=-1929
@@ -532,12 +557,13 @@ dos 1 dropped [150]
 node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_exp=-30
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=28, p_up=79, p_down=77, q_exp=-1852
 node 202, DOS 1, p_self=217, p_up=79, p_down=81, q_exp=1898
+node 201, DOS 1, p_self=28, p_up=79, p_down=77, q_exp=-1852
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=28, p_up=79, p_down=77, q_act=-1857
 node 202, DOS 1, p_self=217, p_up=79, p_down=81, q_act=1968
+node 201, DOS 1, p_self=28, p_up=79, p_down=77, q_act=-1857
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_act=111
 dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
@@ -554,10 +580,11 @@ node 203, DOS 5, p_self=77, p_up=0, p_down=77, q_exp=15
 *** tier 2 REPORT
 node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_exp=-1832
 node 202, DOS 5, p_self=201, p_up=77, p_down=79, q_exp=1837
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_act=-1825
 node 202, DOS 5, p_self=201, p_up=77, p_down=79, q_act=1995
+node 201, DOS 5, p_self=28, p_up=77, p_down=75, q_act=-1825
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=77, p_up=0, p_down=77, q_act=170
 dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
@@ -572,12 +599,13 @@ dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141,
 node 203, DOS 10, p_self=76, p_up=0, p_down=76, q_exp=-6
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=217, p_up=76, p_down=78, q_exp=1811
 node 201, DOS 10, p_self=26, p_up=76, p_down=74, q_exp=-1787
+node 202, DOS 10, p_self=217, p_up=76, p_down=78, q_exp=1811
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 10, p_self=217, p_up=76, p_down=78, q_act=2005
 node 201, DOS 10, p_self=26, p_up=76, p_down=74, q_act=-1802
+node 202, DOS 10, p_self=217, p_up=76, p_down=78, q_act=2005
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=76, p_up=0, p_down=76, q_act=203
 
@@ -594,12 +622,13 @@ dos 0 dropped []
 node 203, DOS 0, p_self=77, p_up=0, p_down=77, q_exp=0
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 0, p_self=29, p_up=77, p_down=72, q_exp=-1935
 node 202, DOS 0, p_self=256, p_up=77, p_down=79, q_exp=1997
+node 201, DOS 0, p_self=29, p_up=77, p_down=72, q_exp=-1935
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 0, p_self=29, p_up=77, p_down=72, q_act=-1940
 node 202, DOS 0, p_self=256, p_up=77, p_down=79, q_act=1998
+node 201, DOS 0, p_self=29, p_up=77, p_down=72, q_act=-1940
 *** tier 3 CALC_LOADS
 node 203, DOS 0, p_self=77, p_up=0, p_down=77, q_act=58
 dos 1 dropped [49, 53, 92, 153]
@@ -616,6 +645,7 @@ node 203, DOS 1, p_self=75, p_up=0, p_down=75, q_exp=-23
 *** tier 2 REPORT
 node 201, DOS 1, p_self=29, p_up=75, p_down=73, q_exp=-1954
 node 202, DOS 1, p_self=250, p_up=75, p_down=77, q_exp=1977
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=29, p_up=75, p_down=73, q_act=-2008
@@ -634,8 +664,9 @@ dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
 node 203, DOS 5, p_self=71, p_up=0, p_down=71, q_exp=-16
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 5, p_self=241, p_up=71, p_down=73, q_exp=1984
 node 201, DOS 5, p_self=27, p_up=71, p_down=69, q_exp=-1954
+node 202, DOS 5, p_self=241, p_up=71, p_down=73, q_exp=1984
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 5, p_self=241, p_up=71, p_down=73, q_act=2093
@@ -656,10 +687,11 @@ node 203, DOS 10, p_self=64, p_up=0, p_down=64, q_exp=-11
 *** tier 2 REPORT
 node 202, DOS 10, p_self=219, p_up=64, p_down=66, q_exp=1850
 node 201, DOS 10, p_self=24, p_up=64, p_down=62, q_exp=-1849
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 10, p_self=24, p_up=64, p_down=62, q_act=-1541
 node 202, DOS 10, p_self=219, p_up=64, p_down=66, q_act=2215
+node 201, DOS 10, p_self=24, p_up=64, p_down=62, q_act=-1541
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=64, p_up=0, p_down=64, q_act=674
 
@@ -678,6 +710,7 @@ node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_exp=0
 *** tier 2 REPORT
 node 202, DOS 0, p_self=269, p_up=83, p_down=85, q_exp=1990
 node 201, DOS 0, p_self=28, p_up=83, p_down=80, q_exp=-1986
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 0, p_self=28, p_up=83, p_down=80, q_act=-1986
@@ -696,8 +729,9 @@ dos 1 dropped [92, 94, 124, 159, 192]
 node 203, DOS 1, p_self=89, p_up=0, p_down=89, q_exp=-10
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 1, p_self=31, p_up=89, p_down=87, q_exp=-1957
 node 202, DOS 1, p_self=313, p_up=89, p_down=91, q_exp=1963
+node 201, DOS 1, p_self=31, p_up=89, p_down=87, q_exp=-1957
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 1, p_self=31, p_up=89, p_down=87, q_act=-2219
@@ -718,10 +752,11 @@ node 203, DOS 5, p_self=83, p_up=0, p_down=83, q_exp=-12
 *** tier 2 REPORT
 node 202, DOS 5, p_self=313, p_up=83, p_down=85, q_exp=1988
 node 201, DOS 5, p_self=27, p_up=83, p_down=81, q_exp=-1967
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 5, p_self=313, p_up=83, p_down=85, q_act=1990
 node 201, DOS 5, p_self=27, p_up=83, p_down=81, q_act=-2060
+node 202, DOS 5, p_self=313, p_up=83, p_down=85, q_act=1990
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=83, p_up=0, p_down=83, q_act=-70
 dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
@@ -736,12 +771,13 @@ dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 
 node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_exp=5
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 201, DOS 10, p_self=29, p_up=84, p_down=82, q_exp=-1839
 node 202, DOS 10, p_self=293, p_up=84, p_down=86, q_exp=1833
+node 201, DOS 10, p_self=29, p_up=84, p_down=82, q_exp=-1839
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 10, p_self=293, p_up=84, p_down=86, q_act=1980
 node 201, DOS 10, p_self=29, p_up=84, p_down=82, q_act=-2086
+node 202, DOS 10, p_self=293, p_up=84, p_down=86, q_act=1980
 *** tier 3 CALC_LOADS
 node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_act=-106
 
@@ -760,6 +796,7 @@ node 203, DOS 0, p_self=78, p_up=0, p_down=78, q_exp=9
 *** tier 2 REPORT
 node 202, DOS 0, p_self=219, p_up=78, p_down=80, q_exp=1955
 node 201, DOS 0, p_self=26, p_up=78, p_down=76, q_exp=-1991
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 202, DOS 0, p_self=219, p_up=78, p_down=80, q_act=2005
@@ -780,10 +817,11 @@ node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_exp=18
 *** tier 2 REPORT
 node 201, DOS 1, p_self=27, p_up=79, p_down=77, q_exp=-1903
 node 202, DOS 1, p_self=218, p_up=79, p_down=81, q_exp=1909
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 201, DOS 1, p_self=27, p_up=79, p_down=77, q_act=-2059
 node 202, DOS 1, p_self=218, p_up=79, p_down=81, q_act=1943
+node 201, DOS 1, p_self=27, p_up=79, p_down=77, q_act=-2059
 *** tier 3 CALC_LOADS
 node 203, DOS 1, p_self=79, p_up=0, p_down=79, q_act=-116
 dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
@@ -800,10 +838,11 @@ node 203, DOS 5, p_self=81, p_up=0, p_down=81, q_exp=27
 *** tier 2 REPORT
 node 202, DOS 5, p_self=223, p_up=81, p_down=83, q_exp=1947
 node 201, DOS 5, p_self=27, p_up=81, p_down=79, q_exp=-1920
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
-node 202, DOS 5, p_self=223, p_up=81, p_down=83, q_act=1911
 node 201, DOS 5, p_self=27, p_up=81, p_down=79, q_act=-2109
+node 202, DOS 5, p_self=223, p_up=81, p_down=83, q_act=1911
 *** tier 3 CALC_LOADS
 node 203, DOS 5, p_self=81, p_up=0, p_down=81, q_act=-198
 dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
@@ -818,8 +857,9 @@ dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189,
 node 203, DOS 10, p_self=85, p_up=0, p_down=85, q_exp=18
 *** tier 2 PRE_REPORT
 *** tier 2 REPORT
-node 202, DOS 10, p_self=243, p_up=85, p_down=87, q_exp=1932
 node 201, DOS 10, p_self=27, p_up=85, p_down=83, q_exp=-1942
+node 202, DOS 10, p_self=243, p_up=85, p_down=87, q_exp=1932
+*** PRE_CALC_LOADS
 *** tier 1 CALC_LOADS
 *** tier 2 CALC_LOADS
 node 201, DOS 10, p_self=27, p_up=85, p_down=83, q_act=-2305

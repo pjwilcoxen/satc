@@ -110,6 +110,6 @@ public class Adv_Faust extends Adversary{
                 Channel.find(channelList.get(msg.to)).inject(msg);
             }
         }
-        //this.msgs.clear();
+        this.msgs.clear();
     }
 }
