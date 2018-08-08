@@ -102,20 +102,21 @@ public class Market extends Grid {
         int q;
         
         if( par_id == 0 && priceAu == -1 )
-            Env.log.println("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS);
+            Env.log.print("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS+"\n");
 
         if( type.equalsIgnoreCase("exp") )
             q = demDn.getQ(priceDn);
         else
             q = q_actual;
 
-        Env.log.println(
+        Env.log.print(
             "node "+own_id+
             ", DOS "+Env.curDOS+
             ", p_self="+priceAu+
             ", p_up="+priceUp+
             ", p_down="+priceDn+
-            ", q_"+type+"="+q
+            ", q_"+type+"="+q+
+            "\n"
         );
     }        
 }

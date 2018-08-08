@@ -39,7 +39,7 @@ public class Channel {
         this.name = name;
         channelList.put(name,this);
         if( initLog ) {
-            Env.msg.println(LOGHEADER);
+            Env.msg.print(LOGHEADER+"\n");
             initLog = false;
         }
     }
@@ -91,26 +91,26 @@ public class Channel {
         who = name+","+msg.logString()+",";
 
         if( Env.isBlocked(msg.from) ) {
-            Env.msg.println(who+"blocked");
+            Env.msg.print(who+"blocked\n");
             return;
         }
 
         if( divertFrom.containsKey(msg.from) ) {
             new_id = divertFrom.get(msg.from);
-            Env.msg.println(who+"diverted (from) to "+new_id);
+            Env.msg.print(who+"diverted (from) to "+new_id+"\n");
             Env.getAgent(new_id).deliver(msg);
             return;
         }
 
         if( divertTo.containsKey(msg.to) ) {
             new_id = divertTo.get(msg.to);
-            Env.msg.println(who+"diverted (to) to "+new_id);
+            Env.msg.print(who+"diverted (to) to "+new_id+"\n");
             Env.getAgent(new_id).deliver(msg);
             return;
         }
 
         Env.getAgent(msg.to).deliver(msg);
-        Env.msg.println(who+"delivered");
+        Env.msg.print(who+"delivered\n");
     }
 
     /**
@@ -121,12 +121,12 @@ public class Channel {
     public void inject(Msg msg) {
         String who = name+","+msg.logString()+",";
         if( Env.isBlocked(msg.from) ) {
-            Env.msg.println(who+"blocked");
+            Env.msg.print(who+"blocked\n");
             Util.debug("injected message from "+msg.from+" blocked");
         }
         else {
             Env.getAgent(msg.to).deliver(msg);
-            Env.msg.println(who+"injected");
+            Env.msg.print(who+"injected\n");
             Util.debug("injected message from "+msg.from+" delivered");
         }
     }

@@ -76,7 +76,7 @@ public class Adv_Darth extends Adversary{
             Demand fakeDemand = new Demand();
 
             if (do_attack) {
-                System.out.println("Attack Triggered!");
+                System.out.print("Attack Triggered!\n");
 
                 // Generate false bid
                 int traderId = Integer.parseInt(config.get("trader"));
@@ -99,7 +99,7 @@ public class Adv_Darth extends Adversary{
                 diversionChannel.inject(msg);
 
             } else {
-                System.out.println("No Attack Triggered!");
+                System.out.print("No Attack Triggered!\n");
             }
 
             break;

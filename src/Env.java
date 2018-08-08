@@ -303,9 +303,9 @@ public class Env extends SimState {
         String dosprop;
 
         if( args.length != 1 ) {
-            System.out.println("Error: expected 1 argument but found "+args.length+".");
-            System.out.println(USAGE);
-            System.out.println("Versions: Env="+Env.VER+", Agent="+Agent.VER);
+            System.out.print("Error: expected 1 argument but found "+args.length+".\n");
+            System.out.print(USAGE+"\n");
+            System.out.print("Versions: Env="+Env.VER+", Agent="+Agent.VER+"\n");
             System.exit(0);
         }
 
@@ -314,7 +314,7 @@ public class Env extends SimState {
         try {
            props.load(Util.openRead(fileProps));
         } catch (IOException ex) {
-           System.out.println("Error reading the property file");
+           System.out.print("Error reading the property file\n");
            System.exit(0);
         }
 
@@ -376,7 +376,7 @@ public class Env extends SimState {
             throw new RuntimeException("Error creating demand file");
         }
 
-        log.println(
+        log.print(
            "Scenario Settings:\n" +
            "   Network map: "+fileConfig+"\n"+
            "   Draws of agents: "+fileDraws+"\n"+
@@ -384,7 +384,7 @@ public class Env extends SimState {
            "   Transmission cap: "+transCap+"\n"+
            "   Populations: "+numPop+"\n"+
            "   Seed imposed: "+seed+"\n"+
-           "   DOS runs: "+String.join(",",dos_runs)
+           "   DOS runs: "+String.join(",",dos_runs)+"\n"
            );
 
         //
@@ -398,8 +398,8 @@ public class Env extends SimState {
         enviro.start();
 
         for( pop=1 ; pop<=numPop ; pop++ ) {
-            System.out.println("Starting population "+pop);
-            log.println("\n*** population "+pop);
+            System.out.print("Starting population "+pop+"\n");
+            log.print("\n*** population "+pop+"\n");
 
             // initialize for this population
 
@@ -421,7 +421,7 @@ public class Env extends SimState {
                 for(Agent a: listAgent)
                     a.runInit();
 
-                log.println("dos "+curDOS+" dropped "+blockList);
+                log.print("dos "+curDOS+" dropped "+blockList+"\n");
 
                 // now step through the run
 
@@ -473,9 +473,9 @@ public class Env extends SimState {
      */
     static void do_stage(Env e, boolean showTier, Stage s) {
         if( showTier)
-            log.println("*** tier "+curTier+" "+s);
+            log.print("*** tier "+curTier+" "+s+"\n");
         else
-            log.println("*** "+s);
+            log.print("*** "+s+"\n");
         stageNow = s;
         e.schedule.step(e);
     }
@@ -620,7 +620,7 @@ public class Env extends SimState {
 
         if( !Err.isEmpty() ) {
             for(String s: Err)
-                System.out.println("configuration error: "+s);
+                System.out.print("configuration error: "+s+"\n");
             throw new RuntimeException("Fatal configuration errors");
         }
     }
@@ -735,7 +735,7 @@ public class Env extends SimState {
             }
         }
         catch (IOException e) {
-            System.out.println("Could not read network file: "+filename);
+            System.out.print("Could not read network file: "+filename+"\n");
             System.exit(0);
         }
      }
@@ -800,7 +800,7 @@ public class Env extends SimState {
                 }
             }
             catch (IOException e) {
-                System.out.println("Could not read the history file: " + histFile);
+                System.out.print("Could not read the history file: " + histFile+"\n");
                 System.exit(0);
             }
         }
@@ -868,7 +868,7 @@ public class Env extends SimState {
                 }
             }
             catch (IOException e) {
-                System.out.println("Could not read demand file: " + bidFile);
+                System.out.print("Could not read demand file: " + bidFile+"\n");
                 System.exit(0);
             }
         }
@@ -905,11 +905,11 @@ public class Env extends SimState {
      */
     static void printResults() {
         if( outHeader ) {
-            out.println("pop,dos,id,rblock,blocked,p,q,upcon");
+            out.print("pop,dos,id,rblock,blocked,p,q,upcon\n");
             outHeader = false;
         }
         for(int key: outMap.keySet() )
-            out.println(pop+","+curDOS+","+key+","+outMap.get(key));
+            out.print(pop+","+curDOS+","+key+","+outMap.get(key)+"\n");
         outMap.clear();
     }
 
@@ -960,7 +960,7 @@ public class Env extends SimState {
      */
     @Override
     public void finish() {
-       System.out.println("Simulation complete");
+       System.out.print("Simulation complete\n");
        out.close();
        log.close();
        net.close();

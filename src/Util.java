@@ -24,7 +24,7 @@ public class Util {
      * @param msg Message to write on standard output
      */
     public static void debug(String msg) {
-        if( do_dbg )Env.log.println(msg);
+        if( do_dbg )Env.log.print(msg+"\n");
     }
 
     /**
