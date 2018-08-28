@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import sim.engine.SimState;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Agent representing an end user or supplier
  */
-public class Trader extends Grid {
+public abstract class Trader extends Grid {
 
     /**
      * Maximum number of steps in each generated bid
@@ -15,12 +17,6 @@ public class Trader extends Grid {
      * Actual number of steps used, for reference
      */
     int steps;
-
-    // initial load and elasticity and type from monte carlo file
-
-    double load;
-    double elast;
-    String sd_type;
 
     // manage randomization
 
@@ -41,11 +37,9 @@ public class Trader extends Grid {
      * 
      * @param up_id   ID of parent node
      * @param own_id  Own ID
-     * @param sd_type Supply or demand type
      */
-    public Trader(int up_id,int own_id, String sd_type) {
-        super(up_id,own_id);
-        this.sd_type = sd_type;
+    public Trader(int up_id, int own_id) {
+        super(up_id, own_id);
     }
 
     /** 
@@ -54,8 +48,6 @@ public class Trader extends Grid {
     @Override 
     public void popInit() {
         super.popInit();
-        load      = 0;
-        elast     = 0;
         steps     = 0;
         demDn    = null;
         rDraw     = runiform(IDRAW);
@@ -125,40 +117,7 @@ public class Trader extends Grid {
     /**
      * Build the agent's net demand curve
      */
-    private Demand drawLoad() {
- 
-        Demand newD;
-        Env.Draw draw;
-        int max = 9858; 
-        int rand;
-        int row;
-        
-        // generate a random number of input lines to skip
-        // max was originally hard-coded and is left that 
-        // way for compatibility
-
-        rand = (int)(rDraw * max);
-        
-        if( sd_type.equals("D") )
-           draw = Env.drawListD.get(rand);
-        else
-           draw = Env.drawListS.get(rand);
-        
-        // parameters to use in constructing this curve
-
-        load  = draw.load;
-        elast = draw.elast;
-        steps = (int) (rStep * MAXSTEP + 2);
-
-        //call draw function based on the type of end user
-
-        if (sd_type.equals("D")) 
-            newD = Demand.makeDemand(this);
-        else 
-            newD = Demand.makeSupply(this);
-        
-        return newD;
-    }
+    protected abstract Demand drawLoad();
     
     /** 
      * Get a demand curve sent by a service provider
@@ -172,6 +131,21 @@ public class Trader extends Grid {
        if( dList.size() == 1 )
            return dList.get(0);
        return null;
+    }
+
+    /**
+     * Read the list of draws of random agent characteristics
+     */
+    public static void readDraws() throws FileNotFoundException, IOException {
+        switch(Env.agentType) {
+        case MONTE:
+            TraderMonte.readDraws();
+            break;
+        case PECAN:
+            break;
+        default:
+            break;
+        }
     }
 }
 

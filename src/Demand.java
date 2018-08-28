@@ -456,79 +456,6 @@ public class Demand {
     }
 
     /**
-     * Create demand curves based on initial load, elasticity, and number of steps
-     *
-     * @param trader Trader whose demand we're building
-     * @return New demand curve
-     */
-    public static Demand makeDemand(Trader trader) {
-        return do_make("D",trader);
-    }
-
-    /**
-     * Create supply curves with reverse quantities in comparison to demand curve
-     *
-     * @param trader Trader whose supply we're building
-     * @return New demand
-     */
-    public static Demand makeSupply(Trader trader) {
-        return do_make("S",trader);
-    }
-
-    /**
-     * Build a demand or supply curve
-     */
-    private static Demand do_make(String type, Trader trader) {
-        Demand newD;
-        boolean makeS;
-        int sign;
-
-        newD = new Demand();
-
-        // get information about the trader; make local copies
-        // for slightly greater clarity in calculations
-
-        double elast  = trader.elast;
-        double load   = trader.load;
-        int    steps  = trader.steps;
-        double rPrice = trader.rPrice;
-
-        makeS = type.equals("S");
-        sign  = makeS ? -1 : 1 ;
-
-        int iniprice = 40 + (int) (rPrice * 12 - 6);
-
-        int p0 = iniprice/steps;
-        int p1 = iniprice*2/steps;
-
-        int q1=(int)(sign*load*pow((double)p0/iniprice,elast));
-        int q2=(int)(sign*load*pow((double)p1/iniprice,elast));
-
-        // first step
-        newD.add(p0, q2, q1);
-
-        // create the steps below the price=40
-
-        for(int i=1 ; i<steps ; i++){
-            p1 = iniprice*(i+1)/steps;
-            q1 = q2;
-            q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
-            newD.add(p1, q2, q1);
-        }
-
-        // create twice the number of steps above price=40
-
-        for(int i=1 ; i<2*steps ; i++){
-            p1 = iniprice + 360*i/(2*steps);
-            q1 = q2;
-            q2 = (int)(sign*load*pow((double)p1/iniprice,elast));
-            newD.add(p1, q2, q1);
-        }
-
-        return newD;
-    }
-
-    /**
      * Find an equilibrium price for a net demand curve
      *
      * Returns the highest price with a nonnegative q_max and a
@@ -669,9 +596,6 @@ public class Demand {
         header.add("id");
         header.add("tag");
         header.add("dos");
-        header.add("sd_type");
-        header.add("load");
-        header.add("elast");
         header.add("steps");
         for (int i = 0; i < 400; i++) {
             header.add("p" + i);
@@ -695,16 +619,6 @@ public class Demand {
         values.add(Integer.toString(owner.own_id));
         values.add(dstr);
         values.add(Env.curDOS);
-        if (owner instanceof Trader) {
-            Trader trader = (Trader) owner;
-            values.add(trader.sd_type);
-            values.add(Double.toString(trader.load));
-            values.add(Double.toString(trader.elast));
-        } else {
-            values.add("");
-            values.add("");
-            values.add("");
-        }
         values.add(Integer.toString(bids.size()));
         for (String str : toStrings()) {
             values.add(str);

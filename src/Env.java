@@ -70,6 +70,16 @@ public class Env extends SimState {
     private static long rgen_seed = -1;
 
     /**
+     * Agent Types
+     */
+    public static enum AgentTypes {
+        MONTE,
+        PECAN
+    }
+
+    public static AgentTypes agentType = AgentTypes.MONTE;
+
+    /**
      * Stages per simulation
      */
     public static enum Stage {
@@ -175,7 +185,7 @@ public class Env extends SimState {
     public Env(long seed) {
         super( rgen_seed != -1 ? rgen_seed : seed );
         try {
-            readDraws();
+            Trader.readDraws();
         } catch (IOException e) {
            throw new RuntimeException("Could not read file of draws");
         }
@@ -247,15 +257,6 @@ public class Env extends SimState {
             throw new RuntimeException("No history for population "+pop+" and dos "+dos);
         }
     }
-
-    static class Draw {
-       int n;
-       double load;
-       double elast;
-    }
-
-    static ArrayList<Draw> drawListD = new ArrayList<>();
-    static ArrayList<Draw> drawListS = new ArrayList<>();
 
     /**
      * Add an agent to a block list
@@ -333,6 +334,7 @@ public class Env extends SimState {
         seed       = props.getProperty("seed","none");
         dosprop    = props.getProperty("dos","0,1,5,10");
         debug      = getIntProp(props,"debug","0");
+        agentType  = AgentTypes.valueOf(props.getProperty("agenttype", "MONTE"));
 
         //
         //  Unpack the DOS specification
@@ -517,7 +519,7 @@ public class Env extends SimState {
                         cur_agent = new Market(cur_upid,cur_id);
                         break;
                     case 3:
-                        cur_agent = new Trader(cur_upid,cur_id,cur_sd);
+                        cur_agent = new TraderMonte(cur_upid,cur_id,cur_sd);
                         break;
                     default:
                         throw new RuntimeException("Unexpected agent type "+cur_type);
@@ -624,33 +626,6 @@ public class Env extends SimState {
             throw new RuntimeException("Fatal configuration errors");
         }
     }
-
-    /**
-     * Read the list of draws of random agent characteristics
-     */
-    private void readDraws() throws FileNotFoundException, IOException {
-        BufferedReader br;
-        CSVParser csvReader;
-        Draw draw;
-        String sd_type;
-
-        br = new BufferedReader(Util.openRead(Env.fileDraws));
-        csvReader = CSVFormat.DEFAULT.withHeader().withIgnoreHeaderCase().parse(br);
-
-        for(CSVRecord rec: csvReader) {
-            draw = new Draw();
-            sd_type    = rec.get("type");
-            draw.load  = Double.parseDouble(rec.get("load"));
-            draw.elast = Double.parseDouble(rec.get("elast"));
-            if( sd_type.equals("D") )
-               drawListD.add(draw);
-            else
-               drawListS.add(draw);
-        }
-
-        br.close();
-    }
-
 
     /**
      * Creates virtual agents from file
