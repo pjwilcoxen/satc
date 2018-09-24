@@ -47,6 +47,7 @@ sent by the target. Then injects the DEMAND message back to the channel without 
 modification, but tampers the price info in the PRICE message and injects it back 
 to the channel before traders calculate loads. 
 
+
 ## Agent
 
 Agent is an abstract class that provides basic features for entities that 
@@ -103,11 +104,21 @@ which power can flow).  Has two subclasses: __Trader__ and __Market__.
 
 ## History
 
-TBD 
+A __History__ object stores historic price and quantity data for a specific 
+agent. Provides several methods used to store and retrieve demand, 
+price, quantity, and constraint information. The simulator can load historic 
+data from preset history file before it runs. Adversaries can extract 
+relevant information from history object to build fake demand curves 
+and then perform attacks.
 
 ## Intel
 
-TBD
+Stores a virtual agent's information about another agent within the grid. 
+Contains functionality to store an agent's 
+grid-level (transmission cost, price, parent, children, tier), 
+historic (price, quantity, bid), and some status (compromised, interceptTo, 
+interceptFrom, forge, send ,learned) information. Can also 
+retrieve max/min/avg information regarding p and q.
 
 ## Market
 
@@ -130,10 +141,22 @@ features to be implemented:
 
 ## Trader
 
-Represents end users or suppliers.  __Trader__ nodes have upstream parents 
-that are __Market__ nodes.  They submit __Demand__ objects to their parent
-__Market__ nodes and then receive prices back.  Final demand or supply 
-results from the prices received.
+Abstract class for end agents. __Trader__ nodes have upstream parents
+that are __Market__ nodes.  They submit __Demand__ objects 
+to their parent __Market__ nodes and then receive prices back. 
+Final demand or supply results from the prices received. 
+
+Provides method __getOneDemand()__ to retrieve demand, static method 
+__readDraws()__ to load draws from history files, and abstract method 
+__drawLoad()__ to build the agent's demand curve.
+
+Has subclass: __TraderMonte__.
+
+### TraderMonte
+
+A __TraderMonte__ object represents the trader under Monte Carlo mode. 
+Has two types: end users and suppliers. Implements method __drawLoad()__, 
+and provides method __readDraws()__.
 
 ## Util
 
