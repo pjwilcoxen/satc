@@ -1,0 +1,338 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=black,
+}
+
+\begin{document}
+
+\tableofcontents
+
+%% Overview
+\newpage
+
+\section{Overview}
+
+%% Input
+\section{Input}
+
+%% Input - netmap.csv
+\subsection{netmap.csv}
+
+Short introduction to netmap.csv \\
+
+\noindent
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    id & TBD \\ \hline
+    type & TBD \\ \hline
+    sd\_type & TBD \\ \hline
+    up\_id & TBD \\ \hline
+    channel & TBD \\ \hline
+    cost & TBD \\ \hline
+    cap & TBD \\ \hline
+    security & TBD \\ \hline
+\end{tabular}
+
+\bigskip
+\noindent
+Example:
+
+\bigskip
+\noindent
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{value} \\ \hline
+    id & 1 \\ \hline
+    type & 3 \\ \hline
+    sd\_type & D \\ \hline
+    up\_id & 201 \\ \hline
+    channel & type1 \\ \hline
+    cost & 1 \\ \hline
+    cap & 2000 \\ \hline
+    security & 100 \\ \hline
+\end{tabular}
+
+%% Input - virtualmap.csv
+\subsection{virtualmap.csv}
+
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    id & TBD \\ \hline
+    type & TBD \\ \hline
+    configuration & TBD \\ \hline
+    channel & TBD \\ \hline
+    agent & TBD \\ \hline
+    intel\_level & TBD \\ \hline
+    intel & TBD \\ \hline
+    security & TBD \\ \hline
+\end{tabular}
+
+%% Input - testdraw.csv
+\subsection{testdraw.csv}
+
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    n & TBD \\ \hline
+    type & TBD \\ \hline
+    load & TBD \\ \hline
+    elast & TBD \\ \hline
+\end{tabular}
+
+%% Output
+\section{Output}
+
+%% Output - Run configuration files
+\subsection{Run Configuration Files}
+
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    netmap & TBD \\ \hline
+    virtualmap & TBD \\ \hline
+    draws & TBD \\ \hline
+    history & TBD \\ \hline
+    bids & TBD \\ \hline
+    transcost & TBD \\ \hline
+    transcap & TBD \\ \hline
+    seed & TBD \\ \hline
+    debug & TBD \\ \hline
+\end{tabular}
+
+%% Output - Log files
+\subsection{Log Files}
+
+%% Output - Net demand files / debugging files
+\subsection{Net Demand Files / Debugging Files}
+
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    pop & TBD \\ \hline
+    id & TBD \\ \hline
+    tag & TBD \\ \hline
+    dos & TBD \\ \hline
+    steps & TBD \\ \hline
+    p & TBD \\ \hline
+    q\_min & TBD \\ \hline
+    q\_max & TBD \\ \hline
+\end{tabular}
+
+%% Output - Output files
+\subsection{Output Files}
+
+\begin{tabular} {| l | l |}
+    \hline
+    \textbf{column} & \textbf{meaning} \\ \hline
+    pop & TBD \\ \hline
+    dos & TBD \\ \hline
+    id & TBD \\ \hline
+    rblock & TBD \\ \hline
+    blocked & TBD \\ \hline
+    p & TBD \\ \hline
+    q & TBD \\ \hline
+    upcon & TBD \\ \hline
+\end{tabular}
+
+%% Running
+\section{Running}
+
+%% Running - Build
+\subsection {Build}
+
+%% Running - Run
+\subsection {Run}
+
+%% Objects
+\section{Objects}
+
+%% Object - Adversary
+\subsection{Adversary} \mbox{}
+
+Adversary is an abstract class for virtual agents who try to disrupt the
+power grid. It has several subclasses that can perform different
+kinds of attacks.
+
+\paragraph{Adv\_Adam} \mbox{}
+
+An \textbf{Adv\_Adam} object can send false bids to the other nodes inside the grid. 
+It looks up the \textbf{Intel} hash map and picks all the target nodes that be 
+connected to. Then constructs the false bid and sends the bid to the targets.
+
+\paragraph{Adv\_Beth} \mbox{}
+
+\textbf{Adv\_Beth} class is the promoted version for \textbf{Adv\_Adam} class. It has all 
+the functionalities provided by \textbf{Adv\_Adam} as well as to forge credentials 
+and to decipt the recipient with that.
+
+\paragraph{Adv\_Darth} \mbox{}
+
+An \textbf{Adv\_Darth} object is able to attack the market with constrained tranmission 
+to their upstream nodes. It is supposed to have compromised one trader from the 
+target market. It first intercepts all messages sent by the compromised trader. 
+Then extracts the trader's historical demands. Shifts the demand curve by the attacker 
+customized distance. Finally injects the fake demands back into the channel and these 
+demands will be sent to the target market. 
+
+\paragraph{Adv\_Elvira} \mbox{}
+
+\textbf{Adv\_Elvira} performs similar behavior to \textbf{Adv\_Darth}. We suppose that \textbf{Adv\_Elvira}
+has compromised several traders instead of only one. Then it performs the attack from 
+all of these compromised traders, and shifts all their demand curves by a smaller value, 
+with a total shift distance that equals to the attacker customized distance. Compared 
+with the \textbf{Darth}, \textbf{Elvira} performs the attack more softly but with more traders to achieve 
+the same result, which means it has less possbility to be discovered by the anomalous data 
+detection.
+
+\paragraph{Adv\_Faust} \mbox{}
+
+An \textbf{Adv\_Faust} object listens the target market channel and intercepts messages 
+sent by the target. Then injects the DEMAND message back to the channel without any
+modification, but tampers the price info in the PRICE message and injects it back 
+to the channel before traders calculate loads. 
+
+%% Object - Agent
+\subsection{Agent} \mbox{}
+
+Agent is an abstract class that provides basic features for entities that 
+communicate.  It has two subclasses: \textbf{Grid}, for agents actually connected
+to the power grid, and \textbf{Virtual}, for agents that only have communication 
+links.
+
+%% Object - Channel
+\subsection{Channel} \mbox{}
+
+A \textbf{Channel} object is communications channel.  An arbitrary number are 
+allowed and they can have different properties.  Each agent has a specific 
+Channel that it uses to communicate with its upstream parent node.  A Channel 
+is used to by one agent to send Msg objects to another.
+
+Each Channel has one main method, \textbf{send()}.  It looks up the sender and 
+recipient from the corresponding fields of the Msg object it is given and checks 
+whether random denial of service filtering applies to the sender.  If so, 
+the message is dropped. Otherwise, as long as the message is not diverted (discussed
+below) it is passed to the recipient via the recipient's \textbf{deliver()} method.
+
+Three hooks are available to support man in the middle attacks and other 
+interventions.  Message diversions can be set up via each channel's 
+\textbf{divert\_to()} and \textbf{divert\_from()} methods. The first diverts all 
+messages sent \textit{to} a given node and the second diverts all messages sent
+*by* a given node. The \textit{from} diversion is processed first and when both 
+apply to a given message it takes precedence.  Messages can be reinserted 
+downstream from the diversions via the channel's \textbf{inject()} method.  Future 
+features to be implemented:
+
+\begin{itemize}
+  \item{Random DOS loss rates that can vary by channel}
+  \item{VPN channels that prohibit diversions}
+  \item{Authentication of senders}
+  \item{Authentication of recipients -- blocking \textbf{divert\_to()}}
+\end{itemize}
+
+%% Object - Demand
+\subsection{Demand} \mbox{}
+
+A \textbf{Demand} object holds a net demand curve expressed as a list of steps.
+Positive quantities indicate demand and negative quantites indicate supply.
+\textbf{Trader} nodes send \textbf{Demand} objects to \textbf{Market} nodes.  Lower tier 
+\textbf{Market} nodes send aggregated \textbf{Demand} objects to higher-tier \textbf{Market} 
+nodes.  In all cases the curves are sent via \textbf{Msg} objects.
+
+%% Object - Env
+\subsection{Env} \mbox{}
+
+The \textbf{Env} object represents the environment under which the simulation
+is running.  It includes various global variables and is also responsible
+for loading data, configuring the network of \textbf{Agent} nodes, 
+the \textbf{Channel} objects they use to communicate, and then starting the
+simulation.
+
+%% Object - Grid
+\subsection{Grid} \mbox{}
+
+Abstract class for grid-connected agents (that is, agents through
+which power can flow).  Has two subclasses: \textbf{Trader} and \textbf{Market}.
+
+%% Object - History
+\subsection{History} \mbox{}
+
+A \textbf{History} object stores historic price and quantity data for a specific 
+agent. Provides several methods used to store and retrieve demand, 
+price, quantity, and constraint information. The simulator can load historic 
+data from preset history file before it runs. Adversaries can extract 
+relevant information from history object to build fake demand curves 
+and then perform attacks.
+
+%% Object - Intel
+\subsection{Intel} \mbox{}
+
+Stores a virtual agent's information about another agent within the grid. 
+Contains functionality to store an agent's 
+grid-level (transmission cost, price, parent, children, tier), 
+historic (price, quantity, bid), and some status (compromised, interceptTo, 
+interceptFrom, forge, send ,learned) information. Can also 
+retrieve max/min/avg information regarding p and q.
+
+%% Object - Market
+\subsection{Market} \mbox{}
+
+Represents a market.  Aggregates demands by child nodes, which can be 
+\textbf{Trader} or other \textbf{Market} nodes. If the node has a parent, it adjusts 
+the aggregate demand for transmission costs and capacity to the parent
+and passes the adjusted demand up.  If the node does not have a parent, 
+it determines the equilibrium price.  Market nodes receive prices from 
+upstream, adjust them for transmission parameters, and then pass them 
+down to child nodes.
+
+%% Object - Msg
+\subsection{Msg} \mbox{}
+
+A single message from one agent to another.  At the moment, two types of 
+messages can be sent: one with a \textbf{Demand} object and one with a 
+price.  All \textbf{Msg} objects are passed via \textbf{Channel} objects. Future 
+features to be implemented:
+
+\begin{itemize}
+  \item{Encryption that prevents reading by diverters}
+  \item{Signing that prevents spoofing the sender}
+\end{itemize}
+
+%% Object - Trader
+\subsection{Trader} \mbox{}
+
+Abstract class for end agents. \textbf{Trader} nodes have upstream parents
+that are \textbf{Market} nodes.  They submit \textbf{Demand} objects 
+to their parent \textbf{Market} nodes and then receive prices back. 
+Final demand or supply results from the prices received. 
+
+Provides method \textbf{getOneDemand()} to retrieve demand, static method 
+\textbf{readDraws()} to load draws from history files, and abstract method 
+\textbf{drawLoad()} to build the agent's demand curve.
+
+Has subclass: \textbf{TraderMonte}.
+
+\paragraph{TraderMonte} \mbox{}
+
+A \textbf{TraderMonte} object represents the trader under Monte Carlo mode. 
+Has two types: end users and suppliers. Implements method \textbf{drawLoad()}, 
+and provides method \textbf{readDraws()}.
+
+%% Object - Util
+\subsection{Util} \mbox{}
+
+A utility class that includes a few general purpose methods for opening
+files with built-in exception handling.
+
+%% Object - Virtual
+\subsection{Virtual} \mbox{}
+
+Abstract class for agents connected to the communications network but not
+connected directly to the power grid.  
+
+\end{document}
