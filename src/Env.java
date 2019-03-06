@@ -650,11 +650,11 @@ public class Env extends SimState {
             for(CSVRecord rec: csvReader) {
                 id             = Integer.parseInt(rec.get("id"));
                 type           = rec.get("type").toUpperCase();
-                configuration  = rec.get("configuration").split(",",-1);
-                channelList    = rec.get("channel").split(",",-1);
-                agentList      = rec.get("agent").split(",",-1);
+                configuration  = rec.get("configuration").split("\\|",-1);
+                channelList    = rec.get("channel").split("\\|",-1);
+                agentList      = rec.get("agent").split("\\|",-1);
                 intelLevel     = rec.get("intel_level");
-                intelList      = rec.get("intel").split(",",-1);
+                intelList      = rec.get("intel").split("\\|",-1);
                 security       = Integer.parseInt(rec.get("security"));
 
                 // Create the virtual agent

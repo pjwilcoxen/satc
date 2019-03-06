@@ -1,2 +1,2 @@
 id,type,configuration,channel,agent,intel_level,intel,security
-1001,Adv_Faust,"capability:100,target:202,reduction:30","type1,type2","202",full,"202",100
+1001,Adv_Faust,"capability:100|target:202|reduction:30","type1|type2","202",full,"202",100
