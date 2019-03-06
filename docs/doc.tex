@@ -8,6 +8,7 @@
     urlcolor=cyan,
 }
 
+\usepackage{float}
 \usepackage{listings}
 \usepackage{color}
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -32,7 +33,10 @@
     showtabs=false,                  
     tabsize=2
 }
-\lstset{style=mystyle}
+\lstset{
+    style=mystyle,
+    escapeinside={(*}{*)}    
+}
 
 \title {SaTC Reference Manual}
 \author {A}
@@ -123,23 +127,25 @@ Then you can follow the steps below to run the simulation:
 Run configuration files provides environment configurations for the simulator, 
 describing environmental information that will be used in the simulation. 
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{option} & \textbf{meaning} & \textbf{} \\ \hline
-    netmap & Path of the grid agent configuration file. & Required \\ \hline
-    virtualmap & Path of the virtual agent configuration file. & Optional \\ \hline
-    draws & Path of the draw file. & Required \\ \hline
-    history & Path of the historical output file. & Optional \\ \hline
-    bids & Path of the bid file. & Optional \\ \hline
-    transcost & Transmission cost between nodes. & Optional \\ \hline
-    transcap & Maximum transmission between nodes. & Optional \\ \hline
-    seed & Seed for random number generator. & Required \\ \hline
-    debug & Debugging flag (0, 1, default: 0). & Required \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Run configuration file options}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{option} & \textbf{meaning} & \textbf{type} \\ \hline
+            netmap & Path of the grid agent configuration file. & Required \\ \hline
+            virtualmap & Path of the virtual agent configuration file. & Optional \\ \hline
+            draws & Path of the draw file. & Required \\ \hline
+            history & Path of the historical output file. & Optional \\ \hline
+            bids & Path of the bid file. & Optional \\ \hline
+            transcost & Transmission cost between nodes. & Optional \\ \hline
+            transcap & Maximum transmission between nodes. & Optional \\ \hline
+            seed & Seed for random number generator. & Optional \\ \hline
+            debug & Debugging flag (0, 1, default: 0). & Optional \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
 \noindent
 Note that if you set the `transcost' and `transcap' in the run configuration file, 
 then their values will be appied to all the grid agents in the market. 
@@ -177,34 +183,22 @@ Debugging messages will also be enabled in this simulation.
 \paragraph{Example}
 The following example is from the configuration file `c2k1800d.txt'. 
 This file is used for simulation with adversary `Adv\_Darth'. 
-You have to specify `virtualmap', `history', and `bids' files 
+Note that you have to specify `virtualmap', `history', and `bids' files 
 for the adversary `Darth'. 
 
 \bigskip
 \noindent
 \begin{lstlisting}
 netmap      : netmapd.csv
-virtualmap  : virtualmapd.csv
+(*\bfseries virtualmap \hspace{0.36cm}  :  virtualmapd.csv*)
 draws       : testdraw.csv
-history     : c2k1800_out.csv
-bids        : c2k1800_net.csv
+(*\bfseries history \hspace{1.07cm}    : c2k1800\_out.csv*)
+(*\bfseries bids \hspace{1.58cm}       : c2k1800\_net.csv*)
 transcost   : 2
 transcap    : 1800 
 seed        : 123456
 debug       : 1
 \end{lstlisting}
-
-\bigskip
-\noindent
-Note that compared with the previous example, this configuration file 
-contains three more options: 
-\begin{itemize}
-    \item{virtualmap : virtualmapd.csv}
-    \item{history    : c2k1800\_out.csv}    
-    \item{bids       : c2k1800\_net.csv}
-\end{itemize}
-These options indicate the path to the `virtualmap' file, `history' file, 
-and `bids' file, respectively.
 
 %% Input
 \section{Input}
@@ -217,49 +211,49 @@ and `bids' file, respectively.
 `Netmap' file provides grid agent configuration for the simulator, 
 describing details of each grid agent in the electricity market. 
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{column} & \textbf{meaning} \\ \hline
-    id & Unique identifier of the grid agent. \\ \hline
-    type & 
-    \vtop{\hbox{\strut Grid agent's role in the electricity market. } 
-    \hbox{\strut (1: Level 1 market, top level; 2: Level 2 market; 3: Traders.) }} \\ \hline
-    sd\_type & Grid agent's type as supplier (S) or consumer (D). \\ \hline
-    up\_id & ID of the upstreaming node that the current node connects to.\\ \hline
-    channel & Communication channel used by the current node. \\ \hline
-    cost & Transmission cost. \\ \hline
-    cap & Transmission capacity. \\ \hline
-    security & Security level (0-100) of the current grid agent. \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Netmap file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            type & 
+            \vtop{\hbox{\strut Grid agent's role in the electricity market. } 
+            \hbox{\strut (1: Level 1 market, top level; 2: Level 2 market; 3: Traders.) }} \\ \hline
+            sd\_type & Grid agent's type as supplier (S) or consumer (D). \\ \hline
+            up\_id & ID of the upstreaming node that the current node connects to.\\ \hline
+            channel & Communication channel used by the current node. \\ \hline
+            cost & Transmission cost. \\ \hline
+            cap & Transmission capacity. \\ \hline
+            security & Security level (0-100) of the current grid agent. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
-\noindent
 \paragraph{Example}
 The following example is the configuration of node 1: \\
 \begin{lstlisting}
 1,3,D,201,type1,1,2000,100
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
-
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaing} \\ \hline
-    id & 1 & This grid agent's id is 1. \\ \hline
-    type & 3 & This grid agent is a trader working on the level 3. \\ \hline
-    sd\_type & D & This grid agent is a consumer. \\ \hline
-    up\_id & 201 & This grid agent connects to upstreaming node 201. \\ \hline
-    channel & type1 & This grid agent is using type1 channel. \\ \hline
-    cost & 1 & The transmission cost on this wire is 1. \\ \hline
-    cap & 2000 & The transmission capacity of this wire is 2000. \\ \hline
-    security & 100 & This grid agent's security level is 100. \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Configuration of node 1 in netmap.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaing} \\ \hline
+            id & 1 & This grid agent's id is 1. \\ \hline
+            type & 3 & This grid agent is a trader working on the level 3. \\ \hline
+            sd\_type & D & This grid agent is a consumer. \\ \hline
+            up\_id & 201 & This grid agent connects to upstreaming node 201. \\ \hline
+            channel & type1 & This grid agent is using type1 channel. \\ \hline
+            cost & 1 & The transmission cost on this wire is 1. \\ \hline
+            cap & 2000 & The transmission capacity of this wire is 2000. \\ \hline
+            security & 100 & This grid agent's security level is 100. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 %% Input - virtualmap.csv
 \subsection{virtualmap.csv}
@@ -268,69 +262,75 @@ Explanation:
 `Virtualmap' file provides virtual agent configuration for the simulator, 
 describing details of each virtual agent in the electricity market. 
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{column} & \textbf{meaning} \\ \hline
-    id & Unique identifier of virtual agents. \\ \hline
-    type & 
-    \vtop{\hbox{\strut Virtual agent type, including Adv\_Adam, Adv\_Beth, } 
-    \hbox{\strut Adv\_Darth, Adv\_Elvira, Adv\_Faust. }} \\ \hline
-    configuration & Configuration parameters for virtual agent's behavior. \\ \hline
-    channel & Communication channels the virtual agent has access to. \\ \hline
-    agent & ID of grid agents that virtual agent has access to. \\ \hline
-    intel\_level & 
-    \vtop{\hbox{\strut How much information the virtual agent has. }
-    \hbox{\strut `full' means the virtual agent has intel from all the grid agents. }
-    \hbox{\strut `partial' means the virtual agent has intel from the grid agents} 
-    \hbox{\strut in its intel set. }} \\ \hline
-    intel & Set of information that virtual agent has \\ \hline
-    security & KC \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Virtualmap file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            id & Unique identifier of virtual agents. \\ \hline
+            type & 
+            \vtop{\hbox{\strut Virtual agent type, including Adv\_Adam, Adv\_Beth, } 
+            \hbox{\strut Adv\_Darth, Adv\_Elvira, Adv\_Faust. }} \\ \hline
+            configuration & 
+            \vtop{\hbox{\strut Configuration parameters for virtual agent's behavior. }
+            \hbox{\strut Please see below. }} \\ \hline
+            channel & Communication channels the virtual agent has access to. \\ \hline
+            agent & ID of grid agents that virtual agent has access to. \\ \hline
+            intel\_level & 
+            \vtop{\hbox{\strut How much information the virtual agent has. }
+            \hbox{\strut `full' means the virtual agent has intel from all the grid agents. }
+            \hbox{\strut `partial' means the virtual agent has intel from the grid agents} 
+            \hbox{\strut in its intel set. }} \\ \hline
+            intel & Set of information that virtual agent has \\ \hline
+            security & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 \bigskip
 \noindent
 The table below introduces configuration parameters used by virtual agents. 
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{configuration} & \textbf{meaning} \\ \hline
+\begin{table}[H]
+    \caption{Configuration options}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{option} & \textbf{meaning} \\ \hline
 
-    capability & 
-    \vtop{\hbox{\strut Integer. Used by adversaries. }
-    \hbox{\strut It represents an adversary's capability to compromise grid agents. }
-    \hbox{\strut An adversary can only compromise those grid agents with }
-    \hbox{\strut a lower security than the adversary's capability. }} \\ \hline
+            capability & 
+            \vtop{\hbox{\strut Integer. Required for all adversaries. }
+            \hbox{\strut It represents an adversary's capability to compromise grid agents. }
+            \hbox{\strut An adversary can only compromise those grid agents with }
+            \hbox{\strut a lower security than the adversary's capability. }} \\ \hline
 
-    target & 
-    \vtop{\hbox{\strut Integer, market agent's ID. }
-    \hbox{\strut Used by adversaries: Adv\_Darth, Adv\_Elvira, and Adv\_Faust. }
-    \hbox{\strut It indicates the market that will be attacked. }} \\ \hline
+            target & 
+            \vtop{\hbox{\strut Integer, market agent's ID. }
+            \hbox{\strut Required by adversaries: Adv\_Darth, Adv\_Elvira, and Adv\_Faust. }
+            \hbox{\strut It indicates the market that will be attacked. }} \\ \hline
 
-    trader &
-    \vtop{\hbox{\strut Integer, trader agent's ID. }
-    \hbox{\strut Used by the adversary Adv\_Darth. }
-    \hbox{\strut It indicates the trader that will be compromised for attack. }} \\ \hline 
+            trader &
+            \vtop{\hbox{\strut Integer, trader agent's ID. }
+            \hbox{\strut Required by the adversary Adv\_Darth. }
+            \hbox{\strut It indicates the trader that will be compromised for attack. }} \\ \hline 
 
-    shift &
-    \vtop{\hbox{\strut Integer. }
-    \hbox{\strut Used by adversaries: Adv\_Darth, Adv\_Elvira. }
-    \hbox{\strut PW }} \\ \hline
+            shift &
+            \vtop{\hbox{\strut Integer. }
+            \hbox{\strut Required by adversaries: Adv\_Darth, Adv\_Elvira. }
+            \hbox{\strut PW }} \\ \hline
 
-    reduction &
-    \vtop{\hbox{\strut Integer. Range 1-99. }
-    \hbox{\strut Used by the adversary Adv\_Faust. }
-    \hbox{\strut It indicates the percentage amount by which the bids price }
-    \hbox{\strut will be decreased when the adversary forges fake messages.}} \\ \hline
-\end{tabular}
+            reduction &
+            \vtop{\hbox{\strut Integer. Range 1-99. }
+            \hbox{\strut Required by the adversary Adv\_Faust. }
+            \hbox{\strut It indicates the percentage amount by which the bids price }
+            \hbox{\strut will be decreased when the adversary forges fake messages.}} \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
-\noindent
 \paragraph{Example}
-The following example is the configurations of virtual agent 
+The following example is the configuration of virtual agent 
 `Adv\_Beth' from file `virtualmapb.csv'. 
 \bigskip
 \noindent
@@ -338,39 +338,36 @@ The following example is the configurations of virtual agent
 1001,Adv_Beth,capability:0,"type1,type2,type3","1,2,3,4,5,201",partial,"1,2,3,4,5,201",100
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
+\begin{table}[H]
+    \caption{Configuration of Adv\_Beth in virtualmapb.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Beth & This virtual agent is adversary `Adv\_Beth'. \\ \hline
+            configuration & capability:0 &
+            \vtop{\hbox{\strut This virtual agent's capability is 0, which means}
+            \hbox{\strut it is not able to compromise any grid agent.}} \\ \hline
+            channel & type1,type2,type3 & 
+            \vtop{\hbox{\strut This virtual agent has access to the type1, }
+            \hbox{\strut type2, and type3 communication channel.}} \\ \hline
+            agent & 1,2,3,4,5,201 & 
+            \vtop{\hbox{\strut This virtual agent has access to the }
+            \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
+            intel\_level & partial & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from the grid agents inside its intel set.}} \\ \hline
+            intel & 1,2,3,4,5,201 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
-    id & 1001 & This virtual agent's id is 1001. \\ \hline
-    type & Adv\_Beth & This virtual agent is adversary `Adv\_Beth'. \\ \hline
-    configuration & capability:0 &
-    \vtop{\hbox{\strut This virtual agent's capability is 0, which means}
-    \hbox{\strut it is not able to compromise any grid agent.}} \\ \hline
-    channel & type1,type2,type3 & 
-    \vtop{\hbox{\strut This virtual agent has access to the type1, }
-    \hbox{\strut type2, and type3 communication channel.}} \\ \hline
-    agent & 1,2,3,4,5,201 & 
-    \vtop{\hbox{\strut This virtual agent has access to the }
-    \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
-    intel\_level & partial & 
-    \vtop{\hbox{\strut This virtual agent is able to obtain intel }
-    \hbox{\strut from the grid agents inside its intel set.}} \\ \hline
-    intel & 1,2,3,4,5,201 & 
-    \vtop{\hbox{\strut This virtual agent has information from the }
-    \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
-    security & 100 & KC \\ \hline
-\end{tabular}
-
-\bigskip
-\noindent
 \paragraph{Example}
-The following example is the configurations of virtual agent 
+The following example is the configuration of virtual agent 
 `Adv\_Darth' from file `virtualmapd.csv'. 
 \bigskip
 \noindent
@@ -378,46 +375,43 @@ The following example is the configurations of virtual agent
 1001,Adv_Darth,"capability:100,target:202,trader:191,shift:100","type1,type2","191",full,"191,202,203",100,none
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
+\begin{table}[H]
+    \caption{Configuration of Adv\_Darth in virtualmapd.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Darth & This virtual agent is adversary `Adv\_Darth'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut trader:191,}
+            \hbox{\strut shift:100}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut This virtual agent will try to compromise trader 191. }
+            \hbox{\strut The demand curve will be shifted by 100. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 191,202,203 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 191, 202, and 203.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
-    id & 1001 & This virtual agent's id is 1001. \\ \hline
-    type & Adv\_Darth & This virtual agent is adversary `Adv\_Darth'. \\ \hline
-    configuration 
-    & 
-    \vtop{\hbox{\strut capability:100,}
-    \hbox{\strut target:202,}
-    \hbox{\strut trader:191,}
-    \hbox{\strut shift:100}}
-    &
-    \vtop{\hbox{\strut This virtual agent's capability is 100. }
-    \hbox{\strut This virtual agent will attack market agent 202. }
-    \hbox{\strut This virtual agent will try to compromise trader 191. }
-    \hbox{\strut The demand curve will be shifted by 100. }} \\
-    \hline
-    channel & type1,type2 & 
-    \vtop{\hbox{\strut This virtual agent has access to the  }
-    \hbox{\strut type1 and type2 communication channel.}} \\ \hline
-    agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
-    intel\_level & full & 
-    \vtop{\hbox{\strut This virtual agent is able to obtain intel }
-    \hbox{\strut from all the grid agents.}} \\ \hline
-    intel & 191,202,203 & 
-    \vtop{\hbox{\strut This virtual agent has information from the }
-    \hbox{\strut grid agents 191, 202, and 203.}} \\ \hline
-    security & 100 & KC \\ \hline
-\end{tabular}
-
-\bigskip
-\noindent
 \paragraph{Example}
-The following example is the configurations of virtual agent 
+The following example is the configuration of virtual agent 
 `Adv\_Elvira' from file `virtualmape1.csv'. 
 \bigskip
 \noindent
@@ -425,44 +419,41 @@ The following example is the configurations of virtual agent
 1001,Adv_Elvira,"capability:100,target:202,shift:100","type1,type2",191,full,"191,202",100,none
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
+\begin{table}[H]
+    \caption{Configuration of Adv\_Elvira in virtualmape1.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Elvira & This virtual agent is adversary `Adv\_Elvira'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut shift:100}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut The demand curve will be shifted by 100. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 191,202 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 191 and 202.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
-    id & 1001 & This virtual agent's id is 1001. \\ \hline
-    type & Adv\_Elvira & This virtual agent is adversary `Adv\_Elvira'. \\ \hline
-    configuration 
-    & 
-    \vtop{\hbox{\strut capability:100,}
-    \hbox{\strut target:202,}
-    \hbox{\strut shift:100}}
-    &
-    \vtop{\hbox{\strut This virtual agent's capability is 100. }
-    \hbox{\strut This virtual agent will attack market agent 202. }
-    \hbox{\strut The demand curve will be shifted by 100. }} \\
-    \hline
-    channel & type1,type2 & 
-    \vtop{\hbox{\strut This virtual agent has access to the  }
-    \hbox{\strut type1 and type2 communication channel.}} \\ \hline
-    agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
-    intel\_level & full & 
-    \vtop{\hbox{\strut This virtual agent is able to obtain intel }
-    \hbox{\strut from all the grid agents.}} \\ \hline
-    intel & 191,202 & 
-    \vtop{\hbox{\strut This virtual agent has information from the }
-    \hbox{\strut grid agents 191 and 202.}} \\ \hline
-    security & 100 & KC \\ \hline
-\end{tabular}
-
-\bigskip
-\noindent
 \paragraph{Example}
-The following example is the configurations of virtual agent 
+The following example is the configuration of virtual agent 
 `Adv\_Faust' from file `virtualmapf.csv'. 
 \bigskip
 \noindent
@@ -470,51 +461,55 @@ The following example is the configurations of virtual agent
 1001,Adv_Faust,"capability:100,target:202,reduction:30","type1,type2","202",full,"202",100,none
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
-
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
-    id & 1001 & This virtual agent's id is 1001. \\ \hline
-    type & Adv\_Faust & This virtual agent is adversary `Adv\_Faust'. \\ \hline
-    configuration 
-    & 
-    \vtop{\hbox{\strut capability:100,}
-    \hbox{\strut target:202,}
-    \hbox{\strut reduction:30}}
-    &
-    \vtop{\hbox{\strut This virtual agent's capability is 100. }
-    \hbox{\strut This virtual agent will attack market agent 202. }
-    \hbox{\strut Bid prices will be decreased by 30\%. }} \\
-    \hline
-    channel & type1,type2 & 
-    \vtop{\hbox{\strut This virtual agent has access to the  }
-    \hbox{\strut type1 and type2 communication channel.}} \\ \hline
-    agent & 202 & This virtual agent has access to the grid agent 202. \\ \hline
-    intel\_level & full & 
-    \vtop{\hbox{\strut This virtual agent is able to obtain intel }
-    \hbox{\strut from all the grid agents.}} \\ \hline
-    intel & 202 & This virtual agent has information from the agent 202. \\ \hline
-    security & 100 & KC \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Configuration of Adv\_Faust in virtualmapf.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Faust & This virtual agent is adversary `Adv\_Faust'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut reduction:30}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut Bid prices will be decreased by 30\%. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 202 & This virtual agent has access to the grid agent 202. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 202 & This virtual agent has information from the agent 202. \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 
 %% Input - testdraw.csv
 \subsection{testdraw.csv}
 \label{subsec:input_testdraw}
 
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{column} & \textbf{meaning} \\ \hline
-    n & PW \\ \hline
-    type & PW \\ \hline
-    load & PW \\ \hline
-    elast & PW \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Draw file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            n & PW \\ \hline
+            type & PW \\ \hline
+            load & PW \\ \hline
+            elast & PW \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 %% Output
 \section{Output}
@@ -538,20 +533,23 @@ It contains:
 \subsection{Net Demand Files / Debugging Files}
 \label{subsec:output_netdemand}
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{column} & \textbf{meaning} \\ \hline
-    pop & PW \\ \hline
-    id & Unique identifier of the grid agent. \\ \hline
-    tag & PW \\ \hline
-    dos & PW \\ \hline
-    steps & Demand steps the grid agent has in one dos from each population. \\ \hline
-    p & Price of the current demand step. \\ \hline
-    q\_min & Minimum quantity of the current demand step. \\ \hline
-    q\_max & Maximum quantity of the current demand step. \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Net demand file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            pop & PW \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            tag & PW \\ \hline
+            dos & PW \\ \hline
+            steps & Demand steps the grid agent has in one dos from each population. \\ \hline
+            p & Price of the current demand step. \\ \hline
+            q\_min & Minimum quantity of the current demand step. \\ \hline
+            q\_max & Maximum quantity of the current demand step. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 %% Output - Output files
 \subsection{Output Files}
@@ -560,22 +558,25 @@ It contains:
 `Output' file records grid agent's price, actual quantity, upstreaming transmission constraint, 
 and some other runtime information after each simulation. 
 
-\bigskip
-\noindent
-\begin{tabular} {| l | l |}
-    \hline
-    \textbf{column} & \textbf{meaning} \\ \hline
-    pop & PW \\ \hline
-    dos & PW \\ \hline
-    id & Unique identifier of the grid agent. \\ \hline
-    rblock & PW \\ \hline
-    blocked & PW \\ \hline
-    p & Grid agent's price record after one simulation. \\ \hline
-    q & Grid agent's actual quantity record after one simulation. \\ \hline
-    upcon & 
-    \vtop{\hbox{\strut If the grid agent's upstream transmission is binding or not.} 
-    \hbox{\strut (N: No constraint; S: At maximum supply; D: At maximum demand.) }} \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{Output file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            pop & PW \\ \hline
+            dos & PW \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            rblock & PW \\ \hline
+            blocked & PW \\ \hline
+            p & Grid agent's price record after one simulation. \\ \hline
+            q & Grid agent's actual quantity record after one simulation. \\ \hline
+            upcon & 
+            \vtop{\hbox{\strut If the grid agent's upstream transmission is binding or not.} 
+            \hbox{\strut (N: No constraint; S: At maximum supply; D: At maximum demand.) }} \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 \bigskip
 \noindent
@@ -587,24 +588,23 @@ The following example is an output record from the output file `c2k1800\_out.csv
 1,0,1,41.3,0,70,40,N
 \end{lstlisting}
 
-\bigskip
-\noindent
-Explanation: 
-
-\bigskip
-\noindent
-\begin{tabular} {| l | l | l |}
-    \hline
-    \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
-    pop & 1 & This record comes from population 1. \\ \hline
-    dos & 0 & This record got after dos 0. \\ \hline
-    id & 1 & This record belongs to the grid agent 1. \\ \hline
-    rblock & 41.3 & PW \\ \hline
-    blocked & 0 & PW \\ \hline
-    p & 70 & The price of grid agent 1 is 70. \\ \hline
-    q & 40 & The actual quantity of grid agent 1 is 40. \\ \hline
-    upcon & N & No constraint exists in the upstream transmission. \\ \hline
-\end{tabular}
+\begin{table}[H]
+    \caption{A record from output file ck21800\_out.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            pop & 1 & This record comes from population 1. \\ \hline
+            dos & 0 & This record got after dos 0. \\ \hline
+            id & 1 & This record belongs to the grid agent 1. \\ \hline
+            rblock & 41.3 & PW \\ \hline
+            blocked & 0 & PW \\ \hline
+            p & 70 & The price of grid agent 1 is 70. \\ \hline
+            q & 40 & The actual quantity of grid agent 1 is 40. \\ \hline
+            upcon & N & No constraint exists in the upstream transmission. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 %% Modeling Framework
 \section{Modeling Framework}
