@@ -1,0 +1,921 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=black,
+    urlcolor=cyan,
+}
+
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{
+    style=mystyle,
+    escapeinside={(*}{*)}    
+}
+
+\title {SaTC Reference Manual}
+\author {A}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+
+%% Overview
+\newpage
+
+\section{Overview}
+
+%% Installation
+\section {Installation} 
+\label{sec:installation}
+
+SaTC project depends on two external libraries: 
+
+\begin{itemize}
+    \item{\textbf{commons-csv-1.4.jar}} \\
+        Commons CSV reads and writes files in variations of the Comma Separated Value (CSV) format. 
+        More details can be found on the project official website: 
+        \href{https://commons.apache.org/proper/commons-csv/}{Commons CSV Home}
+    \item{\textbf{mason.19.jar}} \\
+        SaTC project uses the MASON discrete event simulation framework to manage steps happening 
+        in the dynamic distributed market simulator. 
+        More details can be found on the project official website: 
+        \href{https://cs.gmu.edu/~eclab/projects/mason/}{Mason}
+\end{itemize}
+
+\noindent
+To build the SaTC project: 
+
+\begin{itemize}
+    \item{If you have the build tool `make', }
+    you can use the command line to enter the directory `src' and then execute the command `make.' 
+    \item{If you do not have any tool that is able to process `makefile', }
+    you need execute the following commands manually: 
+
+    \begin{enumerate}
+        \item{Launch the command line and change the working directory to the directory `src'.}
+        \item{Execute the following command to compile the java code: } 
+            \begin{center}
+                \lstinline[language=bash]!javac -cp '../lib/*;.' $*.java!
+            \end{center}
+        \item{Generate the java archive file with the following command: }
+            \begin{center}
+                \lstinline[language=bash]!jar cvfm market.jar manifest.txt *.class!
+            \end{center}
+        \item{After running the commands above, you can obtain the archive file `market.jar' in the `src' directory.}
+    \end{enumerate}
+
+\end{itemize}
+
+%% Running
+\section{Running} 
+\label{sec:running}
+
+\subsection{Run the Simulation}
+\label{subsec:running_runsimulation}
+
+You should build the SaTC project firstly before running the simulator. 
+Build reference can be found in the section `\hyperref[sec:installation]{Installation}'. 
+
+\bigskip
+\noindent
+If you have built the SaTC project successfully, 
+you should be able to find a Java archive file `market.jar' in the directory `src'. 
+Then you can follow the steps below to run the simulation:
+
+\begin{enumerate}
+    \item{Launch the command line and change the working directory to the directory `run'.}
+    \item{Execute the following command: }
+        \begin{center}
+            \lstinline[language=bash]!java -jar ../src/market.jar <run_configuration_file>!
+        \end{center}
+        More details about the run configuration files can be found in the section: 
+        \hyperref[subsec:running_runconfig]{Run Configuration Files}
+\end{enumerate}
+
+%% Running - Run configuration files
+\subsection{Run Configuration Files}
+\label{subsec:running_runconfig}
+
+Run configuration files provides environment configurations for the simulator, 
+describing environmental information that will be used in the simulation. 
+
+\begin{table}[H]
+    \caption{Run configuration file options}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{option} & \textbf{meaning} & \textbf{type} \\ \hline
+            netmap & Path of the grid agent configuration file. & Required \\ \hline
+            virtualmap & Path of the virtual agent configuration file. & Optional \\ \hline
+            draws & Path of the draw file. & Required \\ \hline
+            history & Path of the historical output file. & Optional \\ \hline
+            bids & Path of the bid file. & Optional \\ \hline
+            transcost & Transmission cost between nodes. & Optional \\ \hline
+            transcap & Maximum transmission between nodes. & Optional \\ \hline
+            seed & Seed for random number generator. & Optional \\ \hline
+            debug & Debugging flag (0, 1, default: 0). & Optional \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\noindent
+Note that if you set the `transcost' and `transcap' in the run configuration file, 
+then their values will be appied to all the grid agents in the market. 
+Cost and capacity settings for individual agent in the file `netmap.csv' will be ignored. 
+
+\bigskip
+\noindent
+\paragraph{Example}
+The following example is from the configuration file `c2k1800.txt'.  
+This file is used for simulation without any adversary. 
+In this case, you do not need specify `virtualmap', `history', and `bids' files 
+since these files are only used by virtual agents. 
+
+\bigskip
+\noindent
+\begin{lstlisting}
+netmap    : netmap.csv
+draws     : testdraw.csv
+transcost : 2
+transcap  : 1800 
+seed      : 123456
+debug     : 1
+\end{lstlisting}
+
+\bigskip
+\noindent
+This configuration file indicates that `netmap.csv' and `testdraw.csv' in the current directory 
+will be used as grid agent configuration and draw file, respectively. 
+Transmission cost between two nodes will be 2 and maximum transmission between two nodes will be 1800. 
+`123456' will work as seed for random number generator. 
+Debugging messages will also be enabled in this simulation.  
+
+\bigskip
+\noindent
+\paragraph{Example}
+The following example is from the configuration file `c2k1800d.txt'. 
+This file is used for simulation with adversary `Adv\_Darth'. 
+Note that you have to specify `virtualmap', `history', and `bids' files 
+for the adversary `Darth'. 
+
+\bigskip
+\noindent
+\begin{lstlisting}
+netmap      : netmapd.csv
+(*\bfseries virtualmap \hspace{0.36cm}  :  virtualmapd.csv*)
+draws       : testdraw.csv
+(*\bfseries history \hspace{1.07cm}    : c2k1800\_out.csv*)
+(*\bfseries bids \hspace{1.58cm}       : c2k1800\_net.csv*)
+transcost   : 2
+transcap    : 1800 
+seed        : 123456
+debug       : 1
+\end{lstlisting}
+
+%% Input
+\section{Input}
+\label{sec:input}
+
+%% Input - netmap.csv
+\subsection{netmap.csv} 
+\label{subsec:input_netmap}
+
+`Netmap' file provides grid agent configuration for the simulator, 
+describing details of each grid agent in the electricity market. 
+
+\begin{table}[H]
+    \caption{Netmap file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            type & 
+            \vtop{\hbox{\strut Grid agent's role in the electricity market. } 
+            \hbox{\strut (1: Level 1 market, top level; 2: Level 2 market; 3: Traders.) }} \\ \hline
+            sd\_type & Grid agent's type as supplier (S) or consumer (D). \\ \hline
+            up\_id & ID of the upstreaming node that the current node connects to.\\ \hline
+            channel & Communication channel used by the current node. \\ \hline
+            cost & Transmission cost. \\ \hline
+            cap & Transmission capacity. \\ \hline
+            security & Security level (0-100) of the current grid agent. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\paragraph{Example}
+The following example is the configuration of node 1: \\
+\begin{lstlisting}
+1,3,D,201,type1,1,2000,100
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{Configuration of node 1 in netmap.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaing} \\ \hline
+            id & 1 & This grid agent's id is 1. \\ \hline
+            type & 3 & This grid agent is a trader working on the level 3. \\ \hline
+            sd\_type & D & This grid agent is a consumer. \\ \hline
+            up\_id & 201 & This grid agent connects to upstreaming node 201. \\ \hline
+            channel & type1 & This grid agent is using type1 channel. \\ \hline
+            cost & 1 & The transmission cost on this wire is 1. \\ \hline
+            cap & 2000 & The transmission capacity of this wire is 2000. \\ \hline
+            security & 100 & This grid agent's security level is 100. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+%% Input - virtualmap.csv
+\subsection{virtualmap.csv}
+\label{subsec:input_virtualmap}
+
+`Virtualmap' file provides virtual agent configuration for the simulator, 
+describing details of each virtual agent in the electricity market. 
+
+\begin{table}[H]
+    \caption{Virtualmap file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            id & Unique identifier of virtual agents. \\ \hline
+            type & 
+            \vtop{\hbox{\strut Virtual agent type, including Adv\_Adam, Adv\_Beth, } 
+            \hbox{\strut Adv\_Darth, Adv\_Elvira, Adv\_Faust. }} \\ \hline
+            configuration & 
+            \vtop{\hbox{\strut Configuration parameters for virtual agent's behavior. }
+            \hbox{\strut Please see below. }} \\ \hline
+            channel & Communication channels the virtual agent has access to. \\ \hline
+            agent & ID of grid agents that virtual agent has access to. \\ \hline
+            intel\_level & 
+            \vtop{\hbox{\strut How much information the virtual agent has. }
+            \hbox{\strut `full' means the virtual agent has intel from all the grid agents. }
+            \hbox{\strut `partial' means the virtual agent has intel from the grid agents} 
+            \hbox{\strut in its intel set. }} \\ \hline
+            intel & Set of information that virtual agent has \\ \hline
+            security & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\bigskip
+\noindent
+The table below introduces configuration parameters used by virtual agents. 
+
+\begin{table}[H]
+    \caption{Configuration options}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{option} & \textbf{meaning} \\ \hline
+
+            capability & 
+            \vtop{\hbox{\strut Integer. Required for all adversaries. }
+            \hbox{\strut It represents an adversary's capability to compromise grid agents. }
+            \hbox{\strut An adversary can only compromise those grid agents with }
+            \hbox{\strut a lower security than the adversary's capability. }} \\ \hline
+
+            target & 
+            \vtop{\hbox{\strut Integer, market agent's ID. }
+            \hbox{\strut Required by adversaries: Adv\_Darth, Adv\_Elvira, and Adv\_Faust. }
+            \hbox{\strut It indicates the market that will be attacked. }} \\ \hline
+
+            trader &
+            \vtop{\hbox{\strut Integer, trader agent's ID. }
+            \hbox{\strut Required by the adversary Adv\_Darth. }
+            \hbox{\strut It indicates the trader that will be compromised for attack. }} \\ \hline 
+
+            shift &
+            \vtop{\hbox{\strut Integer. }
+            \hbox{\strut Required by adversaries: Adv\_Darth, Adv\_Elvira. }
+            \hbox{\strut PW }} \\ \hline
+
+            reduction &
+            \vtop{\hbox{\strut Integer. Range 1-99. }
+            \hbox{\strut Required by the adversary Adv\_Faust. }
+            \hbox{\strut It indicates the percentage amount by which the bids price }
+            \hbox{\strut will be decreased when the adversary forges fake messages.}} \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\paragraph{Example}
+The following example is the configuration of virtual agent 
+`Adv\_Beth' from file `virtualmapb.csv'. 
+\bigskip
+\noindent
+\begin{lstlisting}
+1001,Adv_Beth,capability:0,"type1,type2,type3","1,2,3,4,5,201",partial,"1,2,3,4,5,201",100
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{Configuration of Adv\_Beth in virtualmapb.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Beth & This virtual agent is adversary `Adv\_Beth'. \\ \hline
+            configuration & capability:0 &
+            \vtop{\hbox{\strut This virtual agent's capability is 0, which means}
+            \hbox{\strut it is not able to compromise any grid agent.}} \\ \hline
+            channel & type1,type2,type3 & 
+            \vtop{\hbox{\strut This virtual agent has access to the type1, }
+            \hbox{\strut type2, and type3 communication channel.}} \\ \hline
+            agent & 1,2,3,4,5,201 & 
+            \vtop{\hbox{\strut This virtual agent has access to the }
+            \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
+            intel\_level & partial & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from the grid agents inside its intel set.}} \\ \hline
+            intel & 1,2,3,4,5,201 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 1, 2, 3, 4, 5, and 201.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\paragraph{Example}
+The following example is the configuration of virtual agent 
+`Adv\_Darth' from file `virtualmapd.csv'. 
+\bigskip
+\noindent
+\begin{lstlisting}
+1001,Adv_Darth,"capability:100,target:202,trader:191,shift:100","type1,type2","191",full,"191,202,203",100,none
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{Configuration of Adv\_Darth in virtualmapd.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Darth & This virtual agent is adversary `Adv\_Darth'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut trader:191,}
+            \hbox{\strut shift:100}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut This virtual agent will try to compromise trader 191. }
+            \hbox{\strut The demand curve will be shifted by 100. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 191,202,203 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 191, 202, and 203.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\paragraph{Example}
+The following example is the configuration of virtual agent 
+`Adv\_Elvira' from file `virtualmape1.csv'. 
+\bigskip
+\noindent
+\begin{lstlisting}
+1001,Adv_Elvira,"capability:100,target:202,shift:100","type1,type2",191,full,"191,202",100,none
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{Configuration of Adv\_Elvira in virtualmape1.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Elvira & This virtual agent is adversary `Adv\_Elvira'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut shift:100}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut The demand curve will be shifted by 100. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 191 & This virtual agent has access to the grid agent 191. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 191,202 & 
+            \vtop{\hbox{\strut This virtual agent has information from the }
+            \hbox{\strut grid agents 191 and 202.}} \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\paragraph{Example}
+The following example is the configuration of virtual agent 
+`Adv\_Faust' from file `virtualmapf.csv'. 
+\bigskip
+\noindent
+\begin{lstlisting}
+1001,Adv_Faust,"capability:100,target:202,reduction:30","type1,type2","202",full,"202",100,none
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{Configuration of Adv\_Faust in virtualmapf.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            id & 1001 & This virtual agent's id is 1001. \\ \hline
+            type & Adv\_Faust & This virtual agent is adversary `Adv\_Faust'. \\ \hline
+            configuration 
+            & 
+            \vtop{\hbox{\strut capability:100,}
+            \hbox{\strut target:202,}
+            \hbox{\strut reduction:30}}
+            &
+            \vtop{\hbox{\strut This virtual agent's capability is 100. }
+            \hbox{\strut This virtual agent will attack market agent 202. }
+            \hbox{\strut Bid prices will be decreased by 30\%. }} \\
+            \hline
+            channel & type1,type2 & 
+            \vtop{\hbox{\strut This virtual agent has access to the  }
+            \hbox{\strut type1 and type2 communication channel.}} \\ \hline
+            agent & 202 & This virtual agent has access to the grid agent 202. \\ \hline
+            intel\_level & full & 
+            \vtop{\hbox{\strut This virtual agent is able to obtain intel }
+            \hbox{\strut from all the grid agents.}} \\ \hline
+            intel & 202 & This virtual agent has information from the agent 202. \\ \hline
+            security & 100 & KC \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+
+%% Input - testdraw.csv
+\subsection{testdraw.csv}
+\label{subsec:input_testdraw}
+
+\begin{table}[H]
+    \caption{Draw file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            n & PW \\ \hline
+            type & PW \\ \hline
+            load & PW \\ \hline
+            elast & PW \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+%% Output
+\section{Output}
+\label{sec:output}
+
+%% Output - Log files
+\subsection{Log Files}
+\label{subsec:output_log}
+
+A log file records all the messages reported by the simulator during runtime. 
+It contains: 
+\begin{itemize}
+    \item{Configuration of this scenario.}
+    \item{Steps that have been reached in each population.}
+    \item{Results after each population.}
+    \item{Bids dropped in each population.}
+    \item{Some other debugging messages.}
+\end{itemize}
+
+%% Output - Net demand files / debugging files
+\subsection{Net Demand Files / Debugging Files}
+\label{subsec:output_netdemand}
+
+\begin{table}[H]
+    \caption{Net demand file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            pop & PW \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            tag & PW \\ \hline
+            dos & PW \\ \hline
+            steps & Demand steps the grid agent has in one dos from each population. \\ \hline
+            p & Price of the current demand step. \\ \hline
+            q\_min & Minimum quantity of the current demand step. \\ \hline
+            q\_max & Maximum quantity of the current demand step. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+%% Output - Output files
+\subsection{Output Files}
+\label{subsec:output_output}
+
+`Output' file records grid agent's price, actual quantity, upstreaming transmission constraint, 
+and some other runtime information after each simulation. 
+
+\begin{table}[H]
+    \caption{Output file columns explanation}
+    \begin{center}
+        \begin{tabular} {| l | l |}
+            \hline
+            \textbf{column} & \textbf{meaning} \\ \hline
+            pop & PW \\ \hline
+            dos & PW \\ \hline
+            id & Unique identifier of the grid agent. \\ \hline
+            rblock & PW \\ \hline
+            blocked & PW \\ \hline
+            p & Grid agent's price record after one simulation. \\ \hline
+            q & Grid agent's actual quantity record after one simulation. \\ \hline
+            upcon & 
+            \vtop{\hbox{\strut If the grid agent's upstream transmission is binding or not.} 
+            \hbox{\strut (N: No constraint; S: At maximum supply; D: At maximum demand.) }} \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\bigskip
+\noindent
+\paragraph{Example}
+The following example is an output record from the output file `c2k1800\_out.csv'.
+\bigskip
+\noindent
+\begin{lstlisting}
+1,0,1,41.3,0,70,40,N
+\end{lstlisting}
+
+\begin{table}[H]
+    \caption{A record from output file ck21800\_out.csv}
+    \begin{center}
+        \begin{tabular} {| l | l | l |}
+            \hline
+            \textbf{column} & \textbf{value} & \textbf{meaning} \\ \hline
+            pop & 1 & This record comes from population 1. \\ \hline
+            dos & 0 & This record got after dos 0. \\ \hline
+            id & 1 & This record belongs to the grid agent 1. \\ \hline
+            rblock & 41.3 & PW \\ \hline
+            blocked & 0 & PW \\ \hline
+            p & 70 & The price of grid agent 1 is 70. \\ \hline
+            q & 40 & The actual quantity of grid agent 1 is 40. \\ \hline
+            upcon & N & No constraint exists in the upstream transmission. \\ \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+%% Modeling Framework
+\section{Modeling Framework}
+\label{sec:modeling}
+
+%% Modeling Framework - Simulation Environment
+\subsection{Simulation Environment} \mbox{}
+
+Simulator firstly loads run configurations into the simulation environment. 
+\hyperref[subsec:objects_env]{`Env'} object will check settings from the configuration file, 
+then initiate agents in the market model using corresponding data files. 
+
+Environment is also responsible for storing critical variables and information for the simulation. 
+Some of them are defined as `static' in order that these data can be shared with other objects. 
+
+Stage change is also controlled by the environment. 
+It starts up the simulation from the stage SERVICE\_SEND, then to the stage TRADER\_SEND, PRE\_AGGREGATE, 
+AGGREGATE, PRE\_REPORT, REPORT, PRE\_CALC\_LOADS and the simulation eventually terminates at the stage CALC\_LOADS. 
+
+Different kinds of agents work in different stages: 
+\begin{itemize} 
+    \item{\textbf{Trader agents}} send demand messages to the upstream market during the stage TRADER\_SEND, 
+    and receive price messages and determine the loads during the stage CALC\_LOADS. 
+    \item{\textbf{Market agents}} aggregate demand messages from the downstream agents and 
+    send it to the upstream market at the stage AGGREGATE. 
+    Then they will receive price messages from the upstream market and report the price to downstream agents 
+    during the stage REPORT. 
+    And they also calculate the actual loads during the stage CALC\_LOADS.
+    \item{\textbf{Adversaries}} can hook into the `PRE' stages to intercept the channels and send fake messages. 
+    These `PRE' stages happen before the corresponding stages and are only used to simulate attack behaviors.
+\end{itemize}
+
+More details can be found in the section `\hyperref[subsec:objects_env]{Env}'. 
+
+// Env
+
+%% Modeling Framework - Traders and Markets
+\subsection{Traders and Markets} \mbox{}
+
+Traders and markets are grid agent nodes connected by both physical connections and virtual connections. 
+Trader agent can work as a demander to consume electricity or as a supplier to provide electricity. 
+Traders interact with their upstream market using communication channels. 
+
+Market agent is responsible for demand aggregation and electricity rates determination. 
+There are several tiers of market agents in the model: 
+\begin{itemize}
+    \item{\textbf{Root market agent}} calculates the electricity price based on the demand messages 
+    from the downstream child agents. 
+    \item{\textbf{Intermediate market agent}} utilizes the price message from its upstream market and 
+    other transmission parameters, such as transmission cost and capacity limit, 
+    to determine the actual price, and sends the actual price to downstream child agents.  
+\end{itemize}
+
+More details can be found in the section `\hyperref[subsec:objects_trader]{Trader}', 
+`\hyperref[subsec:objects_market]{Market}', and `\hyperref[subsec:objects_demand]{Demand}'. 
+
+// Trader, market, demand, net demands 
+
+%% Modeling Framework - Price Determination
+\subsection{Price Determination} \mbox{}
+
+Transmission costs, congestion, aggregation, population
+
+%% Modeling Framework - Communications
+\subsection{Communications} \mbox{}
+
+Each grid agent in the market model does not only has physical connection to 
+its upstream market agent but also has a virtual connection, which is called communication channel, 
+with the upstream object. 
+Note that this is not applied to the market agent on the top level since it does not have an upstream market agent. 
+
+The physical connection is used to simulate transmission lines and 
+the communication channel is for transmitting messages between grid agents and the upstream markets. 
+Three types of communication channels are being used in the simulation: type1, type2, and type3 channel. 
+Virtual agents are able to connect with the market and send messages through communication channels as well.
+
+There are three kinds of messages transmitted through channels: empty, demand, and price message. 
+Demand messages are sent by a grid agent to its upstream market. 
+Price messages come from upstream market to downstream agents. 
+
+More details can be found in the section `\hyperref[subsec:objects_channel]{Channel}' and
+`\hyperref[subsec:objects_msg]{Msg}'. 
+
+// Channel, msg 
+
+%% Modeling Framework - DoS
+\subsection{DoS} \mbox{}
+
+DoS is the abbreviation standing for the term, `Denial of Service'. 
+We simulate this process by randomly dropping bids during message transmission through channels. 
+The percentage of the dropped bids is given by the configuration file. 
+Note that this attack is more severe in the real world with a higher bids dropped rate.
+
+%% Modeling Framework - Adversaries
+\subsection{Adversaries} \mbox{}
+
+A virtual agent is a special market node that does not have physical connections to other grid agents 
+but is able to build virtual connections with grid agents through communication channels. 
+
+Adversary is a kind of virtual agent that can access senstive information and 
+perform attacks based on these information. 
+They can access historical bids, demands data, and other intel from some grid agents, 
+and even compromise the grid agent. 
+They can also interfere the system by intercepting the channels and steal runtime information, 
+such as message being transmitted in the channel. 
+Then they utilize these information to forge messages and spread the fake messages 
+in the market to destruct the electricity and price control. 
+
+More details can be found in the section `\hyperref[subsec:objects_adversary]{Adversary}', 
+`\hyperref[subsec:objects_history]{History}', and `\hyperref[subsec:objects_intel]{Intel}'. 
+
+// History, intel
+
+%% Objects
+\section{Objects Reference}
+\label{sec:objects}
+
+%% Objects - Adversary
+\subsection{Adversary} \mbox{}
+\label{subsec:objects_adversary}
+
+Adversary is an abstract class for virtual agents who try to disrupt the
+power grid. It has several subclasses that can perform different
+kinds of attacks.
+
+\paragraph{Adv\_Adam} \mbox{}
+
+An \textbf{Adv\_Adam} object can send false bids to the other nodes inside the grid. 
+It looks up the \textbf{Intel} hash map and picks all the target nodes that be 
+connected to. Then constructs the false bid and sends the bid to the targets.
+
+\paragraph{Adv\_Beth} \mbox{}
+
+\textbf{Adv\_Beth} class is the promoted version for \textbf{Adv\_Adam} class. It has all 
+the functionalities provided by \textbf{Adv\_Adam} as well as to forge credentials 
+and to decipt the recipient with that.
+
+\paragraph{Adv\_Darth} \mbox{}
+
+An \textbf{Adv\_Darth} object is able to attack the market with constrained transmission 
+to their upstream nodes. It is supposed to have compromised one trader from the 
+target market. It first intercepts all messages sent by the compromised trader. 
+Then extracts the trader's historical demands. Shifts the demand curve by the attacker 
+customized distance. Finally injects the fake demands back into the channel and these 
+demands will be sent to the target market. 
+
+\paragraph{Adv\_Elvira} \mbox{}
+
+\textbf{Adv\_Elvira} performs similar behavior to \textbf{Adv\_Darth}. We suppose that \textbf{Adv\_Elvira}
+has compromised several traders instead of only one. Then it performs the attack from 
+all of these compromised traders, and shifts all their demand curves by a smaller value, 
+with a total shift distance that equals to the attacker customized distance. Compared 
+with the \textbf{Darth}, \textbf{Elvira} performs the attack more softly but with more traders to achieve 
+the same result, which means it has less possbility to be discovered by the anomalous data 
+detection.
+
+\paragraph{Adv\_Faust} \mbox{}
+
+An \textbf{Adv\_Faust} object listens the target market channel and intercepts messages 
+sent by the target. Then injects the DEMAND message back to the channel without any
+modification, but tampers the price info in the PRICE message and injects it back 
+to the channel before traders calculate loads. 
+
+%% Objects - Agent
+\subsection{Agent} \mbox{}
+\label{subsec:objects_agent}
+
+Agent is an abstract class that provides basic features for entities that 
+communicate.  It has two subclasses: \textbf{Grid}, for agents actually connected
+to the power grid, and \textbf{Virtual}, for agents that only have communication 
+links.
+
+%% Objects - Channel
+\subsection{Channel} \mbox{}
+\label{subsec:objects_channel}
+
+A \textbf{Channel} object is communications channel.  An arbitrary number are 
+allowed and they can have different properties.  Each agent has a specific 
+Channel that it uses to communicate with its upstream parent node.  A Channel 
+is used to by one agent to send Msg objects to another.
+
+Each Channel has one main method, \textbf{send()}.  It looks up the sender and 
+recipient from the corresponding fields of the Msg object it is given and checks 
+whether random denial of service filtering applies to the sender.  If so, 
+the message is dropped. Otherwise, as long as the message is not diverted (discussed
+below) it is passed to the recipient via the recipient's \textbf{deliver()} method.
+
+Three hooks are available to support man in the middle attacks and other 
+interventions.  Message diversions can be set up via each channel's 
+\textbf{divert\_to()} and \textbf{divert\_from()} methods. The first diverts all 
+messages sent \textit{to} a given node and the second diverts all messages sent
+*by* a given node. The \textit{from} diversion is processed first and when both 
+apply to a given message it takes precedence.  Messages can be reinserted 
+downstream from the diversions via the channel's \textbf{inject()} method.  Future 
+features to be implemented:
+
+\begin{itemize}
+  \item{Random DOS loss rates that can vary by channel}
+  \item{VPN channels that prohibit diversions}
+  \item{Authentication of senders}
+  \item{Authentication of recipients -- blocking \textbf{divert\_to()}}
+\end{itemize}
+
+%% Objects - Demand
+\subsection{Demand} \mbox{}
+\label{subsec:objects_demand}
+
+A \textbf{Demand} object holds a net demand curve expressed as a list of steps.
+Positive quantities indicate demand and negative quantites indicate supply.
+\textbf{Trader} nodes send \textbf{Demand} objects to \textbf{Market} nodes.  Lower tier 
+\textbf{Market} nodes send aggregated \textbf{Demand} objects to higher-tier \textbf{Market} 
+nodes.  In all cases the curves are sent via \textbf{Msg} objects.
+
+%% Objects - Env
+\subsection{Env} \mbox{}
+\label{subsec:objects_env}
+
+The \textbf{Env} object represents the environment under which the simulation
+is running.  It includes various global variables and is also responsible
+for loading data, configuring the network of \textbf{Agent} nodes, 
+the \textbf{Channel} objects they use to communicate, and then starting the
+simulation.
+
+%% Objects - Grid
+\subsection{Grid} \mbox{}
+\label{subsec:objects_grid}
+
+Abstract class for grid-connected agents (that is, agents through
+which power can flow).  Has two subclasses: \textbf{Trader} and \textbf{Market}.
+
+%% Object - History
+\subsection{History} \mbox{}
+\label{subsec:objects_history}
+
+A \textbf{History} object stores historic price and quantity data for a specific 
+agent. Provides several methods used to store and retrieve demand, 
+price, quantity, and constraint information. The simulator can load historic 
+data from preset history file before it runs. Adversaries can extract 
+relevant information from history object to build fake demand curves 
+and then perform attacks.
+
+%% Object - Intel
+\subsection{Intel} \mbox{}
+\label{subsec:objects_intel}
+
+Stores a virtual agent's information about another agent within the grid. 
+Contains functionality to store an agent's 
+grid-level (transmission cost, price, parent, children, tier), 
+historic (price, quantity, bid), and some status (compromised, interceptTo, 
+interceptFrom, forge, send ,learned) information. Can also 
+retrieve max/min/avg information regarding p and q.
+
+%% Object - Market
+\subsection{Market} \mbox{}
+\label{subsec:objects_market}
+
+Represents a market.  Aggregates demands by child nodes, which can be 
+\textbf{Trader} or other \textbf{Market} nodes. If the node has a parent, it adjusts 
+the aggregate demand for transmission costs and capacity to the parent
+and passes the adjusted demand up.  If the node does not have a parent, 
+it determines the equilibrium price.  Market nodes receive prices from 
+upstream, adjust them for transmission parameters, and then pass them 
+down to child nodes.
+
+%% Object - Msg
+\subsection{Msg} \mbox{}
+\label{subsec:objects_msg}
+
+A single message from one agent to another.  At the moment, two types of 
+messages can be sent: one with a \textbf{Demand} object and one with a 
+price.  All \textbf{Msg} objects are passed via \textbf{Channel} objects. Future 
+features to be implemented:
+
+\begin{itemize}
+  \item{Encryption that prevents reading by diverters}
+  \item{Signing that prevents spoofing the sender}
+\end{itemize}
+
+%% Object - Trader
+\subsection{Trader} \mbox{}
+\label{subsec:objects_trader}
+
+Abstract class for end agents. \textbf{Trader} nodes have upstream parents
+that are \textbf{Market} nodes.  They submit \textbf{Demand} objects 
+to their parent \textbf{Market} nodes and then receive prices back. 
+Final demand or supply results from the prices received. 
+
+Provides method \textbf{getOneDemand()} to retrieve demand, static method 
+\textbf{readDraws()} to load draws from history files, and abstract method 
+\textbf{drawLoad()} to build the agent's demand curve.
+
+Has subclass: \textbf{TraderMonte}.
+
+\paragraph{TraderMonte} \mbox{}
+
+A \textbf{TraderMonte} object represents the trader under Monte Carlo mode. 
+Has two types: end users and suppliers. Implements method \textbf{drawLoad()}, 
+and provides method \textbf{readDraws()}.
+
+%% Objects - Util
+\subsection{Util} \mbox{}
+\label{subsec:objects_util}
+
+A utility class that includes a few general purpose methods for opening
+files with built-in exception handling.
+
+%% Objects - Virtual
+\subsection{Virtual} \mbox{}
+\label{subsec:obejcts_virtual}
+
+Abstract class for agents connected to the communications network but not
+connected directly to the power grid.  
+
+\end{document}
