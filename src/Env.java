@@ -653,9 +653,13 @@ public class Env extends SimState {
                 configuration  = rec.get("configuration").split("\\|",-1);
                 channelList    = rec.get("channel").split("\\|",-1);
                 agentList      = rec.get("agent").split("\\|",-1);
-                intelLevel     = rec.get("intel_level");
                 intelList      = rec.get("intel").split("\\|",-1);
                 security       = Integer.parseInt(rec.get("security"));
+                if (rec.get("intel").equals("*") || rec.get("intel").equals("all")) {
+                    intelLevel = "full";
+                } else {
+                    intelLevel = "partial";
+                }
 
                 // Create the virtual agent
                 cur_agent = Virtual.makeAgent(type,id);
