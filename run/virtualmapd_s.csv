@@ -1,2 +1,2 @@
-id,type,configuration,channel,agent,intel_level,intel,security
-1001,Adv_Darth,"capability:100|target:201|trader:95|shift:100","type1|type2","95",full,"95|201|203",100
+id,type,configuration,channel,agent,intel,security
+1001,Adv_Darth,capability:100|target:201|trader:95|shift:100,type1|type2,95,95|201,100

@@ -10,18 +10,18 @@ Scenario Settings:
 *** population 1
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -44,18 +44,18 @@ node 202, DOS 0, p_self=245, p_up=82, p_down=85, q_act=1851
 node 203, DOS 0, p_self=82, p_up=0, p_down=82, q_act=74
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -78,18 +78,18 @@ node 202, DOS 1, p_self=245, p_up=82, p_down=85, q_act=1851
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_act=74
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [31, 38, 87, 94, 170, 189]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 98
 Demands to sum: 96
@@ -112,18 +112,18 @@ node 201, DOS 5, p_self=28, p_up=78, p_down=73, q_act=-1942
 node 203, DOS 5, p_self=78, p_up=0, p_down=78, q_act=-14
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [31, 38, 51, 87, 91, 94, 96, 98, 170, 171, 189, 190, 193]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 blocked
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 95
 Demands to sum: 92
@@ -148,18 +148,18 @@ node 203, DOS 10, p_self=85, p_up=0, p_down=85, q_act=-354
 *** population 2
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -182,18 +182,18 @@ node 201, DOS 0, p_self=28, p_up=81, p_down=72, q_act=-1819
 node 203, DOS 0, p_self=81, p_up=0, p_down=81, q_act=47
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [12, 18]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 98
@@ -216,18 +216,18 @@ node 201, DOS 1, p_self=26, p_up=81, p_down=71, q_act=-1759
 node 203, DOS 1, p_self=81, p_up=0, p_down=81, q_act=107
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [12, 18, 81, 86, 103, 126, 159]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 97
 Demands to sum: 96
@@ -279,18 +279,18 @@ node 203, DOS 10, p_self=75, p_up=0, p_down=75, q_act=19
 *** population 3
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -313,18 +313,18 @@ node 201, DOS 0, p_self=29, p_up=94, p_down=75, q_act=-1826
 node 203, DOS 0, p_self=94, p_up=0, p_down=94, q_act=50
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [124, 181]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 98
 Demands to sum: 100
@@ -347,18 +347,18 @@ node 201, DOS 1, p_self=29, p_up=89, p_down=75, q_act=-1826
 node 203, DOS 1, p_self=89, p_up=0, p_down=89, q_act=102
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [34, 124, 160, 181, 193]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 blocked
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 96
 Demands to sum: 99
@@ -381,18 +381,18 @@ node 201, DOS 5, p_self=28, p_up=98, p_down=74, q_act=-1767
 node 203, DOS 5, p_self=98, p_up=0, p_down=98, q_act=21
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [12, 24, 34, 42, 47, 87, 99, 110, 124, 128, 160, 164, 169, 181, 185, 193, 198]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 blocked
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 90
 Demands to sum: 93
@@ -417,18 +417,18 @@ node 203, DOS 10, p_self=93, p_up=0, p_down=93, q_act=-12
 *** population 4
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -451,18 +451,18 @@ node 201, DOS 0, p_self=28, p_up=81, p_down=72, q_act=-1737
 node 203, DOS 0, p_self=81, p_up=0, p_down=81, q_act=126
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -485,18 +485,18 @@ node 201, DOS 1, p_self=28, p_up=81, p_down=72, q_act=-1737
 node 203, DOS 1, p_self=81, p_up=0, p_down=81, q_act=126
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [21, 60, 63, 135, 158, 174]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 97
 Demands to sum: 97
@@ -548,18 +548,18 @@ node 203, DOS 10, p_self=74, p_up=0, p_down=74, q_act=242
 *** population 5
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -582,18 +582,18 @@ node 201, DOS 0, p_self=29, p_up=78, p_down=73, q_act=-1826
 node 203, DOS 0, p_self=78, p_up=0, p_down=78, q_act=100
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [107, 192]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 98
@@ -616,18 +616,18 @@ node 201, DOS 1, p_self=29, p_up=82, p_down=73, q_act=-1826
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_act=-116
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [24, 78, 107, 192, 197]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 97
 Demands to sum: 98
@@ -650,18 +650,18 @@ node 201, DOS 5, p_self=30, p_up=94, p_down=76, q_act=-1927
 node 203, DOS 5, p_self=94, p_up=0, p_down=94, q_act=-366
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [17, 24, 78, 95, 107, 141, 192, 197]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 blocked
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 96
 Demands to sum: 96
@@ -686,18 +686,18 @@ node 203, DOS 10, p_self=92, p_up=0, p_down=92, q_act=-339
 *** population 6
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -720,18 +720,18 @@ node 202, DOS 0, p_self=261, p_up=83, p_down=85, q_act=1934
 node 203, DOS 0, p_self=83, p_up=0, p_down=83, q_act=95
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [98, 152]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 99
 Demands to sum: 99
@@ -810,18 +810,18 @@ node 203, DOS 10, p_self=84, p_up=0, p_down=84, q_act=-122
 *** population 7
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -844,18 +844,18 @@ node 202, DOS 0, p_self=217, p_up=80, p_down=82, q_act=1934
 node 203, DOS 0, p_self=80, p_up=0, p_down=80, q_act=109
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [150]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 99
 Demands to sum: 100
@@ -878,18 +878,18 @@ node 201, DOS 1, p_self=29, p_up=80, p_down=75, q_act=-1825
 node 203, DOS 1, p_self=80, p_up=0, p_down=80, q_act=109
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [3, 37, 61, 84, 101, 127, 134, 150]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 96
 Demands to sum: 96
@@ -912,18 +912,18 @@ node 201, DOS 5, p_self=28, p_up=76, p_down=74, q_act=-1802
 node 203, DOS 5, p_self=76, p_up=0, p_down=76, q_act=203
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [3, 23, 36, 37, 48, 61, 65, 84, 89, 101, 127, 128, 131, 134, 141, 150, 185, 195]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 91
 Demands to sum: 91
@@ -948,18 +948,18 @@ node 203, DOS 10, p_self=75, p_up=0, p_down=75, q_act=247
 *** population 8
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -982,18 +982,18 @@ node 201, DOS 0, p_self=30, p_up=85, p_down=69, q_act=-1802
 node 203, DOS 0, p_self=85, p_up=0, p_down=85, q_act=64
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [49, 53, 92, 153]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 97
 Demands to sum: 99
@@ -1016,18 +1016,18 @@ node 202, DOS 1, p_self=241, p_up=83, p_down=85, q_act=1894
 node 203, DOS 1, p_self=83, p_up=0, p_down=83, q_act=92
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [28, 30, 45, 49, 53, 56, 62, 92, 153, 164, 175]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 92
 Demands to sum: 97
@@ -1050,18 +1050,18 @@ node 202, DOS 5, p_self=232, p_up=78, p_down=80, q_act=1990
 node 203, DOS 5, p_self=78, p_up=0, p_down=78, q_act=307
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [5, 28, 29, 30, 39, 45, 49, 53, 56, 58, 62, 92, 107, 117, 121, 153, 164, 172, 175, 179, 184]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 91
 Demands to sum: 88
@@ -1086,18 +1086,18 @@ node 203, DOS 10, p_self=64, p_up=0, p_down=64, q_act=764
 *** population 9
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -1120,18 +1120,18 @@ node 201, DOS 0, p_self=29, p_up=91, p_down=75, q_act=-1693
 node 203, DOS 0, p_self=91, p_up=0, p_down=91, q_act=192
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [92, 94, 124, 159, 192]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 97
 Demands to sum: 98
@@ -1154,18 +1154,18 @@ node 201, DOS 1, p_self=31, p_up=96, p_down=82, q_act=-2086
 node 203, DOS 1, p_self=96, p_up=0, p_down=96, q_act=-312
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [15, 18, 24, 27, 29, 92, 94, 124, 131, 159, 160, 192]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 95
 Demands to sum: 93
@@ -1188,18 +1188,18 @@ node 201, DOS 5, p_self=27, p_up=91, p_down=76, q_act=-1859
 node 203, DOS 5, p_self=91, p_up=0, p_down=91, q_act=26
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [12, 15, 18, 24, 27, 29, 56, 86, 92, 93, 94, 104, 119, 124, 131, 159, 160, 165, 174, 192]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 91
 Demands to sum: 89
@@ -1224,18 +1224,18 @@ node 203, DOS 10, p_self=83, p_up=0, p_down=83, q_act=-70
 *** population 10
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 0 dropped []
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 100
 Demands to sum: 100
@@ -1258,18 +1258,18 @@ node 201, DOS 0, p_self=27, p_up=85, p_down=70, q_act=-1831
 node 203, DOS 0, p_self=85, p_up=0, p_down=85, q_act=23
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 1 dropped [75, 124]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 99
 Demands to sum: 99
@@ -1292,18 +1292,18 @@ node 202, DOS 1, p_self=215, p_up=82, p_down=84, q_act=1893
 node 203, DOS 1, p_self=82, p_up=0, p_down=82, q_act=-84
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 5 dropped [46, 55, 67, 75, 124, 151, 189, 199]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 96
 Demands to sum: 96
@@ -1326,18 +1326,18 @@ node 201, DOS 5, p_self=28, p_up=87, p_down=76, q_act=-2000
 node 203, DOS 5, p_self=87, p_up=0, p_down=87, q_act=-174
 diversions cleared
 divert_from 95 -> 1001
-divert_from 191 -> 1001
 divert_from 193 -> 1001
+divert_from 191 -> 1001
 dos 10 dropped [30, 34, 46, 48, 55, 58, 67, 70, 71, 75, 105, 124, 151, 165, 189, 192, 199]
 *** SERVICE_SEND
 *** TRADER_SEND
 *** tier 2 PRE_AGGREGATE
 message injected to 201 from 1001 as 95, shift -33
 injected message from 95 delivered
-message injected to 202 from 1001 as 191, shift 33
-injected message from 191 delivered
 message injected to 202 from 1001 as 193, shift 33
 injected message from 193 delivered
+message injected to 202 from 1001 as 191, shift 33
+injected message from 191 delivered
 *** tier 2 AGGREGATE
 Demands to sum: 93
 Demands to sum: 90
