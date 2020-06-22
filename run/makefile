@@ -1,4 +1,4 @@
-RUNS = c2k1800 c2k1800b c2k1800d c2k1800e1 c2k1800e2 c2k1800e3 \
+RUNS = c2k1800 c2k1800a c2k1800b c2k1800d c2k1800e1 c2k1800e2 c2k1800e3 \
        c2k2500 c2k2000 c2k3000 c5k2500 c2k1800d_s c2k1800e1_s c2k1800f
 
 OUTS = $(addsuffix _out.csv, $(RUNS))
