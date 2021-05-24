@@ -1,3 +1,6 @@
+#  makefile for market.jar
+#  note: requires gnu make extensions
+
 CLASSES = *.java
 
 SEP = :
