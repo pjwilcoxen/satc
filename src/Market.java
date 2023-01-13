@@ -1,13 +1,13 @@
 import sim.engine.SimState;
 
-/** 
+/**
  * Markets aggregate demands and find equilibrium prices
  */
 public class Market extends Grid {
 
     /**
      * General market object
-     * 
+     *
      * @param up_id Parent node's ID
      * @param own_id Own ID
      */
@@ -16,7 +16,7 @@ public class Market extends Grid {
         demDn = null;
         demUp = null;
     }
-    
+
     /**
      * Actions based on current simulation step
      *
@@ -34,7 +34,7 @@ public class Market extends Grid {
                 break;
 
             case REPORT:
-                if( par_id == 0 ) 
+                if( par_id == 0 )
                     priceDn = priceAu;
                 else {
                     priceUp = getPrice();
@@ -42,7 +42,7 @@ public class Market extends Grid {
                 }
                 sendPriceDn();
                 break;
-                
+
             case CALC_LOADS:
                 q_actual = 0;
                 for( Grid kid: children )
@@ -50,7 +50,7 @@ public class Market extends Grid {
                 writePQ();
                 log("act");
                 break;
-                
+
             default:
                 break;
         }
@@ -60,7 +60,7 @@ public class Market extends Grid {
      * Retrieve demands from children and aggregate them
      */
     void buildDemDn() {
-        demDn = Demand.agg(getDemands());  
+        demDn = Demand.agg(getDemands());
         demDn.log(this,Demand.Type.DOWN);
         priceAu = demDn.getEquPrice();
     }
@@ -98,9 +98,8 @@ public class Market extends Grid {
      * Write a log message
      */
     void log(String type) {
-        String pUp;
         int q;
-        
+
         if( par_id == 0 && priceAu == -1 )
             Env.log.print("No equilibrium at root node "+own_id+" for DOS run: "+Env.curDOS+"\n");
 
@@ -118,5 +117,5 @@ public class Market extends Grid {
             ", q_"+type+"="+q+
             "\n"
         );
-    }        
+    }
 }

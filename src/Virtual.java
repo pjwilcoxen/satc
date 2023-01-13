@@ -26,7 +26,7 @@ public abstract class Virtual extends Agent {
     // Configuration parameters for virtual agent's behavior
     HashMap<String, String> config;
 
-    /** 
+    /**
      * Find and create a virtual agent of a specific type
      *
      * @param type Type of agent to construct
@@ -36,15 +36,15 @@ public abstract class Virtual extends Agent {
     public static Agent makeAgent(String type,int id) {
        switch(type) {
           case "ADV_ADAM":
-             return new Adv_Adam(id);
+             return new AdvAdam(id);
           case "ADV_BETH":
-             return new Adv_Beth(id);
+             return new AdvBeth(id);
           case "ADV_DARTH":
-             return new Adv_Darth(id);
+             return new AdvDarth(id);
           case "ADV_ELVIRA":
-             return new Adv_Elvira(id);
+             return new AdvElvira(id);
           case "ADV_FAUST":
-             return new Adv_Faust(id);
+             return new AdvFaust(id);
           default:
              throw new RuntimeException("Unexpected agent type "+type);
        }
@@ -135,4 +135,3 @@ public abstract class Virtual extends Agent {
         return value;
     }
 }
-

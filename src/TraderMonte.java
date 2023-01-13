@@ -27,7 +27,7 @@ public class TraderMonte extends Trader {
 
     /**
      * TraderMonte agent
-     * 
+     *
      * @param up_id   ID of parent node
      * @param own_id  Own ID
      * @param sd_type Supply or demand type
@@ -37,10 +37,10 @@ public class TraderMonte extends Trader {
         this.sd_type = sd_type;
     }
 
-    /** 
+    /**
      * Initialize for a new population
      */
-    @Override 
+    @Override
     public void popInit() {
         super.popInit();
         load      = 0;
@@ -54,21 +54,20 @@ public class TraderMonte extends Trader {
     protected Demand drawLoad() {
         Demand newD;
         Draw draw;
-        int max = 9858; 
+        int max = 9858;
         int rand;
-        int row;
-        
+
         // generate a random number of input lines to skip
-        // max was originally hard-coded and is left that 
+        // max was originally hard-coded and is left that
         // way for compatibility
 
         rand = (int)(rDraw * max);
-        
+
         if( sd_type.equals("D") )
             draw = drawListD.get(rand);
         else
             draw = drawListS.get(rand);
-        
+
         // parameters to use in constructing this curve
 
         load  = draw.load;

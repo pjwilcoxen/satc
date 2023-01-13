@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
-import static java.lang.Math.pow;
-import org.apache.commons.csv.CSVFormat;
 
 /**
  * Class for holding and manipulating net demand curves
@@ -141,9 +139,9 @@ public class Demand {
 
     /**
      * Get the bid for a given price
-     * 
+     *
      * @param p Price
-     * @return Bidstep for the price 
+     * @return Bidstep for the price
      */
     private Bidstep getBid(Integer p) {
         Bidstep step = bids.get(p);
@@ -151,10 +149,10 @@ public class Demand {
             throw new RuntimeException("No bid exists for given price");
         return step;
     }
-    
+
     /**
      * Get q_min for a given price
-     * 
+     *
      * @param p Price
      * @return q_min for the step
      */
@@ -167,7 +165,7 @@ public class Demand {
 
     /**
      * Get q_max for a given price
-     * 
+     *
      * @param p Price
      * @return q_max for the step
      */
@@ -177,7 +175,7 @@ public class Demand {
             throw new RuntimeException("No bid exists for given price");
         return step.q_max;
     }
-    
+
     /**
      * Aggregate a list of demand curves
      *
@@ -351,7 +349,6 @@ public class Demand {
         Iterator<Integer> iterL;
         Iterator<Integer> iterR;
         Demand newD;
-        Bidstep new_bid;
         Bidstep l;
         Bidstep r;
         boolean needL;
@@ -587,7 +584,6 @@ public class Demand {
         int key;
         String dstr;
 
-        CSVFormat loadFormat;
         ArrayList<String> header;
         ArrayList<String> values;
 

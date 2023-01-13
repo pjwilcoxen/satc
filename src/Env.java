@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -144,8 +143,8 @@ public class Env extends SimState {
     //
 
     static TreeMap<Integer,String> outMap = new TreeMap<>();
-    static TreeMap<Integer,ArrayList> demMap = new TreeMap<>();
-    static ArrayList demHeader = null;
+    static TreeMap<Integer,ArrayList<String>> demMap = new TreeMap<>();
+    static ArrayList<String> demHeader = null;
     static boolean doDemHeader = true;
     static boolean outHeader = true;
 
@@ -239,7 +238,7 @@ public class Env extends SimState {
 
     /**
      * Find and return intel list given population and dos
-     * 
+     *
      * @param pop Population
      * @param dos DOS run
      * @return Intel objects for the corresponding run
@@ -300,7 +299,6 @@ public class Env extends SimState {
         String stem;
         int ext;
         int debug;
-        double cutoff;
         String dosprop;
 
         if( args.length != 1 ) {
@@ -492,7 +490,6 @@ public class Env extends SimState {
         int cur_id, cur_type, cur_upid, cur_cost, cur_cap, cur_security;
         String cur_sd, cur_chan;
         Agent cur_agent;
-        String[] items;
         Channel channel;
 
         // read the topology of the network and build the list of agents
@@ -868,7 +865,7 @@ public class Env extends SimState {
            String cstring;
 
            assert agent instanceof Grid ;
-           
+
            block = isBlocked(curDOS,agent) ? 1 : 0;
            draw  = String.format("%.1f",agent.rBlock);
 
@@ -899,7 +896,7 @@ public class Env extends SimState {
      * @param header Column headers for the file
      * @param values Values describing the curve
      */
-    public static void saveDemand(int key, ArrayList header, ArrayList values) {
+    public static void saveDemand(int key, ArrayList<String> header, ArrayList<String> values) {
         if( demHeader == null )
             demHeader = header;
         demMap.put(key, values);

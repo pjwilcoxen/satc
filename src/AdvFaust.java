@@ -1,14 +1,12 @@
 import sim.engine.SimState;
 import java.util.HashMap;
-import java.util.ArrayList;
-
 
 /**
  * Class that extends Adversary.  Implements an malicious
- * actor that sends false bids indiscriminately.  Does 
+ * actor that sends false bids indiscriminately.  Does
  * not hide their own identity
  */
-public class Adv_Faust extends Adversary{
+public class AdvFaust extends Adversary{
     private boolean do_attack;
     private int reduction = 0;
 
@@ -19,22 +17,22 @@ public class Adv_Faust extends Adversary{
 
     /**
      * Constructor
-     * 
+     *
      * @param own_id Agent's id
      */
-    public Adv_Faust(int own_id) {
+    public AdvFaust(int own_id) {
         super(own_id);
     }
-    
-    /** 
+
+    /**
      * Initialize for a new population
      */
-    @Override 
+    @Override
     public void popInit() {
         super.popInit();
     }
 
-    /** 
+    /**
      * Reset at the beginning of a DOS run
      */
     @Override
@@ -52,7 +50,7 @@ public class Adv_Faust extends Adversary{
             do_attack = true;
 
             //  Set message diversion
-          
+
             Channel.find(targetIntel.channel).divert_from(targetId, this.own_id);
             channelList.put(targetIntel.par_id, targetIntel.channel);
 
@@ -94,8 +92,8 @@ public class Adv_Faust extends Adversary{
      *
      * Inject DEMAND message to the channel without any change.
      * Inject PRICE message after decrease the price by reduction%.
-     * 
-     * @param reduction 
+     *
+     * @param reduction
      */
     private void injectMsg(int reduction) {
         for (Msg msg : this.msgs) {

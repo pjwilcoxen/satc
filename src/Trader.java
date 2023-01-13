@@ -34,7 +34,7 @@ public abstract class Trader extends Grid {
 
     /**
      * Trader agent
-     * 
+     *
      * @param up_id   ID of parent node
      * @param own_id  Own ID
      */
@@ -42,10 +42,10 @@ public abstract class Trader extends Grid {
         super(up_id, own_id);
     }
 
-    /** 
+    /**
      * Initialize for a new population
      */
-    @Override 
+    @Override
     public void popInit() {
         super.popInit();
         steps     = 0;
@@ -55,14 +55,14 @@ public abstract class Trader extends Grid {
         rPrice    = runiform(IPRICE);
     }
 
-    /** 
+    /**
      * Reset at the beginning of a DOS run
      */
     @Override
     public void runInit() {
         super.runInit();
         double cutoff = Double.parseDouble(Env.curDOS);
-        if( rBlock < cutoff ) 
+        if( rBlock < cutoff )
             Env.setBlock(own_id);
         recDn = null;
     }
@@ -74,15 +74,13 @@ public abstract class Trader extends Grid {
      */
     @Override
     public void step(SimState state) {
-        int q;
-        Demand recD;
 
         switch (Env.stageNow) {
 
             case TRADER_SEND:
-                
+
                 // build load
-                
+
                 demDn = drawLoad();
                 demDn.log(this,Demand.Type.BASE);
                 demUp = demDn; // reserved for trans adjustments
@@ -94,7 +92,7 @@ public abstract class Trader extends Grid {
                     recDn.log(this,Demand.Type.REC);
                     demUp = recDn; // reserved for trans adjustments
                 }
-               
+
                 // send it
 
                 reportDemand(demUp);
@@ -108,7 +106,7 @@ public abstract class Trader extends Grid {
                 q_actual = demDn.getQ(priceDn);
                 writePQ();
                 break;
-                
+
             default:
                 break;
         }
@@ -118,10 +116,10 @@ public abstract class Trader extends Grid {
      * Build the agent's net demand curve
      */
     protected abstract Demand drawLoad();
-    
-    /** 
+
+    /**
      * Get a demand curve sent by a service provider
-     * 
+     *
      * @return Demand curve or null if none was present
      */
     Demand getOneDemand() {
@@ -148,4 +146,3 @@ public abstract class Trader extends Grid {
         }
     }
 }
-
